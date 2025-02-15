@@ -1,0 +1,84 @@
+---
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    install_recommends: false
+    pkg:
+      - autoconf
+      - automake
+      - build-essential
+      - ccache
+      - cmake
+      - cpufrequtils
+      - doxygen
+      - ethtool
+      - g++
+      - git
+      - inetutils-tools
+      - libboost-all-dev
+      - libncurses5
+      - libncurses5-dev
+      - libusb-1.0-0
+      - libusb-1.0-0-dev
+      - libusb-dev
+      - python3-dev
+      - python3-mako
+      - python3-numpy
+      - python3-requests
+      - python3-scipy
+      - python3-setuptools
+      - python3-ruamel.yaml
+    state: present
+  become: true
+
+- name: Clone USRP Hardware Driver
+  ansible.builtin.git:
+    repo: "https://github.com/EttusResearch/uhd.git"
+    clone: true
+    dest: "./uhd/{{ hostvars[inventory_hostname].uhd_version }}"
+    version: "{{ hostvars[inventory_hostname].uhd_version }}"
+  become: false
+
+- name: Create Symlink
+  ansible.builtin.file:
+    src: "~/uhd/{{ hostvars[inventory_hostname].uhd_version }}"
+    dest: "~/uhd/current-version"
+    state: link
+  become: false
+
+- name: Compile UHD - prepare build
+  ansible.builtin.file:
+    dest: uhd/current-version/host/build
+    state: directory
+  become: false
+
+- name: Compile UHD - cmake
+  ansible.builtin.command:
+    chdir: uhd/current-version/host/build
+    cmd: cmake ../
+  become: false
+
+- name: Compile UHD - make
+  ansible.builtin.make:
+    chdir: uhd/current-version/host/build
+    jobs: "{{ ansible_facts['processor_vcpus'] }}"
+  become: false
+
+- name: Compile UHD - make test
+  ansible.builtin.make:
+    chdir: uhd/current-version/host/build
+    target: test
+    jobs: "{{ ansible_facts['processor_vcpus'] }}"
+  become: false
+
+# - name: Compile UHD - make install
+#   ansible.builtin.make:
+#     chdir: uhd/current-version/host/build
+#     target: install
+#   become: true
+
+# - name: Compile UHD - setup library path
+#   ansible.builtin.command:
+#     cmd: ldconfig
+#   become: true
+

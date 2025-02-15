@@ -1,0 +1,10 @@
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    install_recommends: false
+    pkg:
+      - uhubctl               # Used to powercycle the modem
+      - tcpdump
+    state: present
+  become: true
+

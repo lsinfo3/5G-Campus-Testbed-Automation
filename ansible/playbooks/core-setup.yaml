@@ -1,0 +1,17 @@
+---
+
+- name: Install core
+  hosts: 5g-core
+  tasks:
+    # INFO: debug print all available facts
+    # - name: Print all available facts
+    #   ansible.builtin.debug:
+    #     var: ansible_facts
+    - name: install mongo
+      ansible.builtin.include_role:
+        name: MongoDB
+        tasks_from: main.yaml
+    - name: install srs ran
+      ansible.builtin.include_role:
+        name: Open5GS
+        tasks_from: main.yaml

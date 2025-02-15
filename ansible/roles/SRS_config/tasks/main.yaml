@@ -1,0 +1,59 @@
+---
+
+- name: "Edit srsRAN config: read config to variable"
+  ansible.builtin.slurp:
+    path: "{{ gnb_srs_config_path }}"
+  register: gnb_srs_config_content
+
+- name: "Edit srsRAN config: parse variable to dict"
+  ansible.builtin.set_fact:
+    gnb_srs_config: "{{ gnb_srs_config_content['content'] | b64decode | from_yaml }}"
+
+- name: "PRINT SRS CONFIG"
+  ansible.builtin.debug:
+    msg:
+    - "{{ gnb_srs_config }}"
+
+- name: "PRINT SRS CONFIG1"
+  ansible.builtin.debug:
+    msg:
+    - "{{ gnb_srs_config.cell_cfg.tdd_ul_dl_cfg.dl_ul_tx_period }}"
+- name: "PRINT SRS CONFIG2"
+  ansible.builtin.debug:
+    msg:
+    - "{{ item.tdd_config.tdd_dl_ul_tx_period }}"
+
+    # Update fact is fucked, better try this: https://stackoverflow.com/a/67379573
+- name: "Edit srsRAN config: update config"
+  ansible.utils.update_fact:
+     updates:
+       - path: gnb_srs_config.cell_cfg.tdd_ul_dl_cfg.dl_ul_tx_period
+         value: "{{tdd_dl_ul_tx_period}}"
+       - path: gnb_srs_config.cell_cfg.tdd_ul_dl_cfg.nof_dl_slots
+         value: "{{tdd_dl_slots}}"
+       - path: gnb_srs_config.cell_cfg.tdd_ul_dl_cfg.nof_dl_symbols
+         value: "{{tdd_dl_symbols}}"
+       - path: gnb_srs_config.cell_cfg.tdd_ul_dl_cfg.nof_ul_slots
+         value: "{{tdd_ul_slots}}"
+       - path: gnb_srs_config.cell_cfg.tdd_ul_dl_cfg.nof_ul_symbols
+         value: "{{tdd_ul_symbols}}"
+  register: gnb_srs_config_updated
+  vars:  # temporary variables so we can actually cast to int # TODO: well, it doesn't work..
+      # TODO: try these options next: https://stackoverflow.com/questions/69109062/cant-set-ansible-fact-as-integer https://serverfault.com/questions/1030350/converting-string-to-integer-in-ansible-playbook/1165629#1165629
+     tdd_dl_ul_tx_period: "{{ item.tdd_config.tdd_dl_ul_tx_period | int }}"
+     tdd_dl_slots:        "{{ item.tdd_config.tdd_dl_slots |int }}"
+     tdd_dl_symbols:      "{{ item.tdd_config.tdd_dl_symbols |int }}"
+     tdd_ul_slots:        "{{ item.tdd_config.tdd_ul_slots |int }}"
+     tdd_ul_symbols:      "{{ item.tdd_config.tdd_ul_symbols |int }}"
+
+
+
+- name: "PRINT SRS CONFIG"
+  ansible.builtin.debug:
+    msg:
+    - "{{ gnb_srs_config_updated }}"
+
+- name: Write config back
+  ansible.builtin.copy:
+     content: "{{ gnb_srs_config_updated.gnb_srs_config | to_nice_yaml }}"
+     dest: "{{ gnb_srs_config_path }}"

@@ -1,0 +1,62 @@
+---
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    install_recommends: false
+    pkg:
+       - cmake
+       - make
+       - gcc
+       - g++
+       - pkg-config
+       - libfftw3-dev
+       - libmbedtls-dev
+       - libsctp-dev
+       - libyaml-cpp-dev
+       - libgtest-dev
+    state: present
+  become: true
+
+- name: Clone SRS RAN
+  ansible.builtin.git:
+    repo: "https://github.com/srsRAN/srsRAN_Project.git"
+    clone: true
+    dest: "~/srsRAN/"
+  become: false
+
+- name: Compile SRS RAN - prepare build
+  ansible.builtin.file:
+    dest: ~/srsRAN/build
+    state: directory
+  become: false
+
+- name: Compile SRS RAN - cmake
+  ansible.builtin.command:
+    chdir: ~/srsRAN/build
+    cmd: cmake ../
+  become: false
+
+- name: Compile SRS RAN - make
+  ansible.builtin.make:
+    chdir: ~/srsRAN/build
+    jobs: "{{ ansible_facts['processor_vcpus'] }}"
+  become: false
+
+- name: Compile SRS RAN - make test
+  ansible.builtin.make:
+    chdir: ~/srsRAN/build
+    target: test
+    jobs: "{{ ansible_facts['processor_vcpus'] }}"
+  become: false
+
+  # - name: Compile SRS RAN - make install
+  #   ansible.builtin.make:
+  #     chdir: ~/srsRAN/build
+  #     target: install
+  #   become: true
+
+  # - name: Compile SRS RAN - setup library path
+  #   ansible.builtin.command:
+  #     cmd: ldconfig
+  #   become: true
+

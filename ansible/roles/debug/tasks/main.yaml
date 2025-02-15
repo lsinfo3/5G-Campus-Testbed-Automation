@@ -1,0 +1,41 @@
+
+
+- name: "{{ item.identifier }}: Print(tdd_config)"
+  ansible.builtin.debug:
+    msg:
+    - "{{ item.tdd_config }}"
+
+# - name: "{{ item.identifier }}: combine lists"
+#   ansible.builtin.set_fact:
+#     combined_params: "{{ system.fixed_params + item }}"
+
+- name: "{{ item.identifier }}: Print(combined_params)"
+  ansible.builtin.debug:
+    msg:
+    - "{{ system.fixed_params | ansible.builtin.combine( item ) }}"
+
+- name: "{{ item.identifier }}: Print(null)"
+  ansible.builtin.debug:
+    msg:
+    - ""
+
+- name: Run role
+  ansible.builtin.include_role:
+    name: SRS_config
+
+
+- name: "{{ item.identifier }}: Copy to local: make dir"
+  ansible.builtin.file:
+     path: "{{ system.pcap_dump }}/{{ system.identifier }}/"
+     state: directory
+  delegate_to: localhost
+
+- name: "{{ item.identifier }}: Copy to local: copy"
+  ansible.builtin.copy:
+     content: "{{ system.fixed_params | ansible.builtin.combine( item ) }}"
+     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}.yaml"
+  delegate_to: localhost
+
+- name: sleep 20s
+  ansible.builtin.shell: |
+     sleep 20

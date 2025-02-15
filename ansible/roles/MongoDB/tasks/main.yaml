@@ -1,0 +1,40 @@
+---
+
+# INFO: this task installs MongoDB v6.0
+# MongoDB 6.0 (and above) requires a CPU with AVX support
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    install_recommends: false
+    pkg:
+      - gnupg
+    state: present
+  become: true
+
+- name: Check if mongodb gpg file exists
+  ansible.builtin.stat:
+    path: /usr/share/keyrings/mongodb-server-6.0.gpg
+  register: mongodb_gpg_file
+  become: true
+
+- name: Add mongodb v6 repo
+  ansible.builtin.shell: |
+     curl -fsSL https://pgp.mongodb.com/server-6.0.asc | gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg --dearmor
+     echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+  become: true
+  when: mongodb_gpg_file.stat.exists == False
+
+- name: Install mongodb
+  ansible.builtin.apt:
+    update_cache: true
+    pkg:
+      - mongodb-org
+    state: present
+  become: true
+
+- name: Enable mongod
+  ansible.builtin.service:
+     name: mongod
+     enabled: true
+     state: "started"
+  become: true

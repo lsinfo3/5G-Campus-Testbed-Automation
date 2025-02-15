@@ -1,0 +1,10 @@
+__pycache__
+dumps
+dumps__
+dumps_c80
+dumps_60s_0.001
+*.parquet
+*.pcap
+*.pcap.gz
+*.csv
+*.csv.gz

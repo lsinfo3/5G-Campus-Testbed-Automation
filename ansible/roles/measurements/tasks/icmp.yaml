@@ -1,0 +1,21 @@
+---
+
+# INFO: this task runs the ping traffic generation
+
+# - name: Ping
+#   ansible.builtin.shell: |
+#     ip a ; exit 1
+#   become: false
+
+- name: Ping
+  ansible.builtin.command:
+     argv:
+        - ping
+        - -I
+        - wwan0
+        - -i
+        - "{{ icmp_intervall }}"
+        - -c
+        - "{{ icmp_count }}"
+        - "10.45.0.1"
+  become: true
