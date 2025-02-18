@@ -7,6 +7,9 @@ import os
 import json
 import binascii
 
+# TODO: handle ipv6 in all branches
+# TODO: combine gtp and non gtp parser?
+
 def parse_pcap_gtp(infile, outfile, udpport = 6363):
     t0 = time.time()
     pktid = 0

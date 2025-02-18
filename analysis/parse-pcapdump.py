@@ -1,5 +1,6 @@
 import packetparser as pp
 import os
+import time
 import multiprocessing as mp
 
 """ Read ansible pcap dump. Parse pcaps and extract relevant data. Write csvs back """
@@ -37,9 +38,12 @@ def pp_wrapper(infile:str):
 # print(runs)
 # print(pcaps)
 
+start = time.time()
 with mp.Pool(8) as p:
     for log in p.imap_unordered(pp_wrapper,get_pcap_paths()):
         print(log)
+
+print(f"Took {time.time()-start}s")
 
 
 
