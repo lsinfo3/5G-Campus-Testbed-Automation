@@ -1,16 +1,21 @@
 import argparse
-import csv
 import dpkt
 import socket
 import time
 import gzip
+import os
+import json
+import binascii
 
 def parse_pcap_gtp(infile, outfile, udpport = 6363):
     t0 = time.time()
-    print(infile)
     pktid = 0
 
-    non_echo_icmp = 0
+    icmps = {
+            "echo":0,
+            "unreachable":0
+            }
+    ipv6_pkts=0
     # Open the pcap file
     if infile.endswith(".gz"):
         open_file = lambda :gzip.open(infile, 'rb')
@@ -20,21 +25,23 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
         pcap = dpkt.pcap.Reader(f)
 
         # Open the CSV file for writing
-        with open(outfile, 'w', newline='') as csv_file:
-            writer = csv.writer(csv_file)
-
-            # Write the header row
-            writer.writerow(['Timestamp', 'SourceIPOuter', 'DestinationIPOuter', 'SourceIPInner', 'DestinationIPInner',
-                             'PacketSize', 'SeqNum'])
+        if outfile.endswith(".gz"):
+            write_file = lambda : gzip.open(outfile, 'wt')
+        else:
+            write_file = lambda : open(outfile, 'w')
+        with write_file() as csv_file:
+            csv_file.write('Timestamp, SourceIPOuter, DestinationIPOuter, SourceIPInner, DestinationIPInner, PacketSize, SeqNum')
 
             # Iterate through each packet in the pcap file
             # for timestamp, buf in pcap:
             while True:
                 try:
                     (timestamp, buf) = next(pcap)
-                except Exception as e:
-                    print(e)
+                except StopIteration:
                     break
+                except Exception as e:
+                    print(f"Can't parse pcap! File:{infile} : {type(e).__name__}{e}")
+                    raise e
 
                 # print(pktid)
                 pktid = pktid + 1
@@ -42,10 +49,12 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
                 try:
                     eth = dpkt.ethernet.Ethernet(buf)
                 except Exception as e:
-                    print(e)
+                    print(f"Can't parse ethernet frame: {e}")
                     break
 
                 # Extract the IP and transport layer information
+                # if not hasattr(eth, 'data') and not isinstance(eth.data, dpkt.ip.IP):
+                #     continue
                 if isinstance(eth.data, dpkt.ip.IP):
                     ip_outer = eth.data
                     if isinstance(ip_outer.data, dpkt.udp.UDP) or isinstance(ip_outer.data, dpkt.icmp.ICMP):
@@ -57,56 +66,39 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
                                 try:
                                     ip_inner = dpkt.ip.IP(ip_outer.data.data[16:])
                                 except Exception as e:
-                                    print(e)
+                                    print(f"Can't parse ip frame: {e}")
                                     continue
-                                src_ip_inner = socket.inet_ntoa(ip_inner.src)
-                                dst_ip_inner = socket.inet_ntoa(ip_inner.dst)
 
                                 # Convert IP addresses from binary to string format
                                 src_ip_outer = socket.inet_ntoa(ip_outer.src)
                                 dst_ip_outer = socket.inet_ntoa(ip_outer.dst)
 
-                                if isinstance(ip_inner.data, dpkt.udp.UDP)or isinstance(ip_inner.data, dpkt.icmp.ICMP):
-                                    if isinstance(ip_inner.data, dpkt.udp.UDP) and ip_inner.data.dport not in [udpport]:
-                                        continue
-                                    if isinstance(ip_inner.data, dpkt.udp.UDP):
-                                        seqnum = ip_inner.data.data.decode().replace("X", "").replace("a", "")
-                                    elif isinstance(ip_inner.data, dpkt.icmp.ICMP):
-                                        icmp = ip_inner.data
-                                        if hasattr(icmp, 'echo'):
-                                            echo = icmp.echo
-                                        else:
-                                            non_echo_icmp+=1
-                                            continue
-                                        # print(icmp.data)
-                                        # print(echo)
-                                        # print('ICMP: type:%d code:%d checksum:%d data: %s\n' % (icmp.type, icmp.code, icmp.sum, repr(icmp.data)))
-                                        seqnum = echo.seq
+                                ret = handle_inner_ipv4(ip_inner, udpport)
+                                icmps["echo"]+=ret["icmps"]["echo"]
+                                icmps["unreachable"]+=ret["icmps"]["unreachable"]
+                                if ret["skip"]:
+                                    continue
 
-
-                                        # Write the information to the CSV file
-                                    writer.writerow([
-                                        timestamp,
-                                        src_ip_outer,
-                                        dst_ip_outer,
-                                        src_ip_inner,
-                                        dst_ip_inner,
-                                        ip_outer.len + 14,
-                                        seqnum
-                                    ])
-
+                                # Write the information to the CSV file
+                                csv_file.write(f"\n{timestamp},{src_ip_outer},{dst_ip_outer},{ret["ip_src"]},{ret["ip_dst"]},{ip_outer.len+14},{ret["seqnum"]}")
                     else:
                         continue
-
-    print(f"Took {time.time() - t0:.2f} sec, captured {pktid} pkts and {non_echo_icmp} Non-echo icmp!")
+    # logging
+    status_dict = { "file":f"{os.path.basename(os.path.dirname(infile)) +"/"+ os.path.basename(infile)}", "time":f"{time.time() - t0:.2f}",
+                   "pkts":f"{pktid}", "icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
+    return json.dumps(status_dict)
 
 
 def parse_pcap_ip(infile, outfile, offset = 0, udpport = 6363):
     t0 = time.time()
-    print(infile)
     pktid = 0
 
-    non_echo_icmp=0
+    icmps = {
+            "echo":0,
+            "unreachable":0
+            }
+    ipv6_pkts=0
+
     # Open the pcap file
     if infile.endswith(".gz"):
         open_file = lambda :gzip.open(infile, 'rb')
@@ -116,65 +108,78 @@ def parse_pcap_ip(infile, outfile, offset = 0, udpport = 6363):
         pcap = dpkt.pcap.Reader(f)
 
         # Open the CSV file for writing
-        with open(outfile, 'w', newline='') as csv_file:
-            writer = csv.writer(csv_file)
+        if outfile.endswith(".gz"):
+            write_file = lambda : gzip.open(outfile, 'wt')
+        else:
+            write_file = lambda : open(outfile, 'w')
+        with write_file() as csv_file:
+            csv_file.write('Timestamp, SourceIPOuter, DestinationIPOuter, SourceIPInner, DestinationIPInner, PacketSize, SeqNum')
 
-            # Write the header row
-            writer.writerow(['Timestamp', 'SourceIPOuter', 'DestinationIPOuter', 'SourceIPInner', 'DestinationIPInner',
-                             'PacketSize', 'SeqNum'])
-
-            # Iterate through each packet in the pcap file
-            # for timestamp, buf in pcap:
             while True:
                 try:
                     (timestamp, buf) = next(pcap)
-                except Exception as e:
-                    print(e)
+                except StopIteration:
                     break
+                except Exception as e:
+                    print(f"Can't parse pcap! File:{infile} : {type(e).__name__}{e}")
+                    raise e
 
                 pktid = pktid + 1
-                # print(pktid)
-
-                # if len(buf) <= 64:
-                #     continue
 
                 try:
                     ip_pkt = dpkt.ip.IP(buf[offset:])
                 except Exception as e:
-                    print(f"Can't get ip frame: {e}")
+                    try:
+                        ip6_pkt = dpkt.ip6.IP6(buf[offset:])
+                        ipv6_pkts +=1
+                        continue
+                    except Exception as ee:
+                        print(f"Can't get ip frame({pktid}): {e}; {ee}")
+                        break
+
+                # Handle ip packet; udpports, buffer -> ip_src/dst, seqnum, icmps
+                ret = handle_inner_ipv4(ip_pkt, udpport)
+                icmps["echo"]+=ret["icmps"]["echo"]
+                icmps["unreachable"]+=ret["icmps"]["unreachable"]
+                if ret["skip"]:
                     continue
 
-                if isinstance(ip_pkt.data, dpkt.udp.UDP) or isinstance(ip_pkt.data, dpkt.icmp.ICMP):
-                    ip_src = socket.inet_ntoa(ip_pkt.src)
-                    ip_dst = socket.inet_ntoa(ip_pkt.dst)
+                csv_file.write(f"\n{timestamp},NA,NA,{ret["ip_src"]},{ret["ip_dst"]},{ip_pkt.len},{ret["seqnum"]}")
 
-                    if isinstance(ip_pkt.data, dpkt.udp.UDP) and ip_pkt.data.dport not in [udpport]:
-                        continue
-                    if isinstance(ip_pkt.data, dpkt.udp.UDP):
-                        seqnum = ip_pkt.data.data.decode().replace("X", "").replace("a", "")
-                    elif isinstance(ip_pkt.data, dpkt.icmp.ICMP):
-                        icmp = ip_pkt.data
-                        if hasattr(icmp, 'echo'):
-                            echo = icmp.echo
-                        else:
-                            non_echo_icmp+=1
-                            continue
-                        # print(icmp.data)
-                        # print(echo)
-                        # print('ICMP: type:%d code:%d checksum:%d data: %s\n' % (icmp.type, icmp.code, icmp.sum, repr(icmp.data)))
-                        seqnum = echo.seq
+    # logging
+    status_dict = { "file":f"{os.path.basename(os.path.dirname(infile)) +"/"+ os.path.basename(infile)}", "time":f"{time.time() - t0:.2f}",
+                   "pkts":f"{pktid}", "icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
+    return json.dumps(status_dict)
 
-                    writer.writerow([
-                        timestamp,
-                        'NA',
-                        'NA',
-                        ip_src,
-                        ip_dst,
-                        ip_pkt.len,
-                        seqnum
-                    ])
+def handle_inner_ipv4(ip_pkt, udpport):
+    ret = {"ip_src":None, "ip_dst":None, "skip": False, "seqnum":0, "icmps":{"echo":0,"unreachable":0}}
+    if isinstance(ip_pkt.data, dpkt.udp.UDP) or isinstance(ip_pkt.data, dpkt.icmp.ICMP):
+        ret["ip_src"] = socket.inet_ntoa(ip_pkt.src)
+        ret["ip_dst"] = socket.inet_ntoa(ip_pkt.dst)
 
-    print(f"Took {time.time() - t0:.2f} sec, captured {pktid} pkts and {non_echo_icmp} Non-echo icmp!")
+        if isinstance(ip_pkt.data, dpkt.udp.UDP) and ip_pkt.data.dport not in [udpport]:
+            ret["skip"] = True
+            return ret
+        if isinstance(ip_pkt.data, dpkt.udp.UDP):
+            ret["seqnum"] = ip_pkt.data.data.decode().replace("X", "").replace("a", "")
+        elif isinstance(ip_pkt.data, dpkt.icmp.ICMP):
+            icmp = ip_pkt.data
+            if hasattr(icmp, 'echo'):
+                echo = icmp.echo
+                ret["seqnum"] = echo.seq
+                ret["icmps"]["echo"]=1
+            elif hasattr(icmp, 'unreach'):
+                ret["icmps"]["unreachable"]=1
+                ret["skip"] = True
+                return ret
+            else:
+                icmp.pprint()
+                raise ValueError(f"Unknown ICMP packet received!")
+        else:
+            ret["skip"] = True
+    else:
+        ret["skip"] = True
+    return ret
 
 # Example call: python3 packet-parser.py --infile 20240103132615_gw.pcap --outfile foo.csv --mode ipvlan --content udp
 if __name__ == '__main__':

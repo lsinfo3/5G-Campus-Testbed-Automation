@@ -5,7 +5,7 @@ import multiprocessing as mp
 """ Read ansible pcap dump. Parse pcaps and extract relevant data. Write csvs back """
 
 
-ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
+ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps/"
 
 
 def get_pcap_paths():
@@ -23,14 +23,13 @@ def pp_wrapper(infile:str):
     if outfile.endswith(".gz"):
         outfile = outfile[:-3]
     outfile = outfile[:-5] # strip .pcap
+
     if infile.endswith("gnb.pcap") or infile.endswith("gnb.pcap.gz"):
-        pp.parse_pcap_gtp(infile=infile, outfile=outfile+".csv", udpport=DEFAULT_PORT)
+        return pp.parse_pcap_gtp(infile=infile, outfile=outfile+".csv.gz", udpport=DEFAULT_PORT)
     elif infile.endswith("ue.pcap") or infile.endswith("ue.pcap.gz"):
-        pp.parse_pcap_ip(infile=infile, outfile=outfile+".csv", udpport=DEFAULT_PORT)
+        return pp.parse_pcap_ip(infile=infile, outfile=outfile+".csv.gz", udpport=DEFAULT_PORT)
     else:
         raise ValueError(f"Wrong pcap format: {infile}")
-
-
 
 
 
@@ -39,7 +38,8 @@ def pp_wrapper(infile:str):
 # print(pcaps)
 
 with mp.Pool(8) as p:
-    p.map(pp_wrapper,get_pcap_paths())
+    for log in p.imap_unordered(pp_wrapper,get_pcap_paths()):
+        print(log)
 
 
 

@@ -9,8 +9,10 @@ import os
 
 
 
-ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_c80/"
-ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
+ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
+ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps/"
+plot_dir = ansible_dump
+
 def get_pcap_paths():
     test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
     runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
@@ -24,7 +26,7 @@ def plot_per_setup():
     df = pd.read_parquet(f"{ansible_dump}/all_runs.parquet")
     print(df)
 
-    plots.simple_line_plot(df=df, filename="simple-line",
+    plots.simple_line_plot(df=df, filename=f"{plot_dir}/simple-line",
             labels={"y":"delay [s]", "x":"tdd dl slots", "color":"tdd period"},
             aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%", x="tdd_config__tdd_dl_slots", color="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
             errorbars=True
@@ -32,25 +34,25 @@ def plot_per_setup():
 
     df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__scapy_iat == '0.01'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename="boxplots-0.35h-0.01s",
+    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-0.35h-0.01s",
                           labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
                           aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
                           )
     df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__scapy_iat == '0.001'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename="boxplots-0.35h-0.001s",
+    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-0.35h-0.001s",
                           labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
                           aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
                           )
     df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__scapy_iat == '0.01'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename="boxplots-0.35h-0.01s",
+    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-0.35h-0.01s",
             labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
             aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
             )
     df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__scapy_iat == '0.001'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename="boxplots-0.35h-0.001s",
+    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-0.35h-0.001s",
             labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
             aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
             )
