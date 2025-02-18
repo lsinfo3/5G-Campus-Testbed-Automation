@@ -3,11 +3,19 @@ import plots
 import pandas as pd
 import plotnine as p9
 import argparse
+import os
+
+
 
 
 
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_c80/"
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
+def get_pcap_paths():
+    test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
+    runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
+    pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
+    return pcaps
 
 
 
@@ -21,14 +29,35 @@ def plot_per_setup():
             aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%", x="tdd_config__tdd_dl_slots", color="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
             errorbars=True
             )
-    plots.box_plot_manual(df=df.query("distance_vertical_in_m == 0"), filename="boxplots-0h",
+
+    df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__scapy_iat == '0.01'")
+    print(df_plot)
+    plots.box_plot_manual(df=df_plot, filename="boxplots-0.35h-0.01s",
+                          labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                          aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                          )
+    df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__scapy_iat == '0.001'")
+    print(df_plot)
+    plots.box_plot_manual(df=df_plot, filename="boxplots-0.35h-0.001s",
+                          labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                          aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                          )
+    df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__scapy_iat == '0.01'")
+    print(df_plot)
+    plots.box_plot_manual(df=df_plot, filename="boxplots-0.35h-0.01s",
             labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
             aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
             )
-    plots.box_plot_manual(df=df.query("distance_vertical_in_m == 0.35"), filename="boxplots-0.35h",
+    df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__scapy_iat == '0.001'")
+    print(df_plot)
+    plots.box_plot_manual(df=df_plot, filename="boxplots-0.35h-0.001s",
             labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
             aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
             )
+
+def plot_per_run(pcaps):
+    for p in pcaps:
+        print(os.path.dirname(p))
 
 
 
@@ -37,7 +66,11 @@ def plot_per_setup():
 
 
 if __name__ == "__main__":
-    plot_per_setup()
+    # plot_per_setup()
+    plot_per_run(get_pcap_paths())
+
+
+
     ## parser = argparse.ArgumentParser(
     ##     prog="create test configuration",
     ##     description="Create .yaml file which contains all variables need for ansible"

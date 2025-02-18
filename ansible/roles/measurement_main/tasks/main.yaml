@@ -95,13 +95,41 @@
      cmd: sleep 2
   become: false
 
+
+# INFO: ensure route to core is set? wrong routes were set before
+# TODO: hardcoded ip addr :/
+- name: Delete old route
+  ansible.builtin.shell: |
+     ip route del 10.45.0.0/24 dev {{ system.fixed_params.interface_ue }} || true
+  become: true
+- name: Create new route
+  ansible.builtin.shell: |
+     ip route add 10.45.0.0/24 dev {{ system.fixed_params.interface_ue }}
+  become: true
+
+
 - name: '"{{ item.identifier }}": run ping role'
   ansible.builtin.include_role:
-    name: measurements
+    name: traffic-generation
     tasks_from: icmp.yaml
   vars:
     icmp_intervall: "{{ item.traffic_config.icmp_intervall }}"
     icmp_count: "{{ item.traffic_config.icmp_count }}"
+  when: item.traffic_config.traffic_type== 'ping'
+- name: '"{{ item.identifier }}": run udp scapy traffic gen role'
+  ansible.builtin.include_role:
+    name: traffic-generation
+    tasks_from: scapy.yaml
+  vars:
+    tg_proto: "{{ item.traffic_config.scapy_proto }}"
+    tg_dist: "{{ item.traffic_config.scapy_dist }}"
+    tg_iat: "{{ item.traffic_config.scapy_iat }}"
+    tg_size: "{{ item.traffic_config.scapy_size }}"
+    tg_count: "{{ item.traffic_config.scapy_count }}"
+    tg_ip: "{{ item.traffic_config.scapy_ip }}"
+    tg_port: "{{ item.traffic_config.scapy_port }}"
+    tg_burst: "{{ item.traffic_config.scapy_burst }}"
+  when: item.traffic_config.traffic_type == 'scapy'
 
 - name: '"{{ item.identifier }}": wait for gnb tcpdump'
   ansible.builtin.async_status:

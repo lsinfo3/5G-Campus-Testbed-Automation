@@ -1,0 +1,392 @@
+system:
+    pcap_dump: ../dumps/
+    identifier: 110219ae
+    fixed_params:
+        distance_horizontal_in_m: 0.5
+        distance_vertical_in_m: 0.35
+        gnb_antenna_inclanation_in_degree: 90
+        gnb_antenna_rotation_in_degree: 0
+        ue_antenna_inclanation_in_degree: 90
+        ue_antenna_rotation_in_degree: 0
+        modem: SIM8200EA-M2 5G HAT
+        interface_ue: wwan0
+        interface_gnb: eno1
+run_to_run_variation:
+-   identifier: 110219ae__0
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.01'
+        scapy_size: small
+        scapy_count: '6000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 110219ae__1
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.01'
+        scapy_size: small
+        scapy_count: '6000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 5
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 4
+        tdd_ul_symbols: 7
+-   identifier: 110219ae__2
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.01'
+        scapy_size: small
+        scapy_count: '6000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 110219ae__3
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.01'
+        scapy_size: small
+        scapy_count: '6000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 110219ae__4
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.01'
+        scapy_size: small
+        scapy_count: '6000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 6
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 3
+        tdd_ul_symbols: 4
+-   identifier: 110219ae__5
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.01'
+        scapy_size: small
+        scapy_count: '6000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 110219ae__6
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.01'
+        scapy_size: small
+        scapy_count: '6000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 4
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 12
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 0
+-   identifier: 110219ae__7
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.01'
+        scapy_size: small
+        scapy_count: '6000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 4
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 7
+        tdd_dl_symbols: 12
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 0
+-   identifier: 110219ae__8
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.01'
+        scapy_size: small
+        scapy_count: '6000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 4
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 15
+        tdd_dl_symbols: 12
+        tdd_ul_slots: 4
+        tdd_ul_symbols: 0
+-   identifier: 110219ae__9
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 110219ae__10
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 5
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 4
+        tdd_ul_symbols: 7
+-   identifier: 110219ae__11
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 110219ae__12
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 110219ae__13
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 6
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 3
+        tdd_ul_symbols: 4
+-   identifier: 110219ae__14
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 110219ae__15
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 4
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 12
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 0
+-   identifier: 110219ae__16
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 4
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 7
+        tdd_dl_symbols: 12
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 0
+-   identifier: 110219ae__17
+    run: 1
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 4
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 15
+        tdd_dl_symbols: 12
+        tdd_ul_slots: 4
+        tdd_ul_symbols: 0

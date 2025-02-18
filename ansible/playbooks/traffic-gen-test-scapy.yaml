@@ -1,0 +1,28 @@
+---
+
+- name: Generate traffic
+  hosts: 5g-gnb
+  vars:
+    gnb_srs_config_path: "/home/gnb/srsRAN-configs/gnb_rf_b200_tdd_n78_20mhz.yml"
+    gnb_srs_logfile_path: "/tmp/gnb.log"
+    gnb_srs_binary: "/home/gnb/srsRAN_Project/build/apps/gnb/gnb"
+
+  pre_tasks:
+    - name: include test configuration
+      include_vars: ../first-tests-0.35h.yaml
+
+
+  tasks:
+     - name: 'run udp scapy traffic gen role'
+       ansible.builtin.include_role:
+         name: traffic-generation
+         tasks_from: scapy.yaml
+       vars:
+         tg_proto: "udp"
+         tg_dist: "det"
+         tg_iat: "0.01"
+         tg_size: "small"
+         tg_count: "6000"
+         tg_ip: "10.45.0.1"
+         tg_port: "3344"
+         tg_burst: "1"

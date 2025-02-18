@@ -1,4 +1,5 @@
 import yaml
+import copy
 import argparse
 import hashlib
 
@@ -12,6 +13,7 @@ system = {
     "identifier":0
     }
 
+# TODO:  Should different types of traffic generation result in the same identifier=hash?
 fixed_params = {
     "distance_horizontal_in_m": 0.5,
     "distance_vertical_in_m": 0.35,
@@ -27,11 +29,23 @@ fixed_params = {
 run_to_run_params_default = {
     "identifier" : 0,
     "run": 1,
+    #     "traffic_config": {                     # TODO: build_traffic_config function
+    #         "traffic_type" : "ping",
+    #         "traffic_duration": 60,
+    #         "icmp_intervall": 0.01,
+    #         "icmp_count": 6000
+    #     },
     "traffic_config": {                     # TODO: build_traffic_config function
-        "traffic_type" : "ping",
+        "traffic_type" : "scapy",
         "traffic_duration": 60,
-        "icmp_intervall": 0.01,
-        "icmp_count": 6000
+        "scapy_proto": "udp",
+        "scapy_dist": "det",
+        "scapy_iat": "0.01",
+        "scapy_size": "small",
+        "scapy_count": "6000",
+        "scapy_ip": "10.45.0.1",
+        "scapy_port": "3344",
+        "scapy_burst": "1",
     },
     "tdd_config": {
         "tdd_dl_ul_ratio": 2,
@@ -92,8 +106,7 @@ def build_tdd_config(period=10, ratio=2, dl_symbols = 8, ul_symbols = 4, min_fle
     return tdd_config
 
 def new_per_run_config_base():
-    # r = run_to_run_params_default.copy()
-    r = dict(run_to_run_params_default) # Deep copy via constructor
+    r = copy.deepcopy(run_to_run_params_default)
     global GLOBAL_COUNTER
     r["identifier"] = f"{dict_to_small_hash(fixed_params)}__{GLOBAL_COUNTER}"
     GLOBAL_COUNTER+=1
@@ -105,6 +118,16 @@ def new_per_run_config_base():
 def create_param_combinations():
     c = []
 
+    run_to_run_params_default["traffic_config"]["scapy_iat"]="0.01"
+    run_to_run_params_default["traffic_config"]["scapy_count"]="6000"
+    for ratio in [1, 2, 4]:
+        for period_length in [5, 10, 20]:
+            r = new_per_run_config_base()
+            r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+            c.append(r)
+
+    run_to_run_params_default["traffic_config"]["scapy_iat"]="0.001"
+    run_to_run_params_default["traffic_config"]["scapy_count"]="60000"
     for ratio in [1, 2, 4]:
         for period_length in [5, 10, 20]:
             r = new_per_run_config_base()

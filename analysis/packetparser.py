@@ -9,6 +9,8 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
     t0 = time.time()
     print(infile)
     pktid = 0
+
+    non_echo_icmp = 0
     # Open the pcap file
     if infile.endswith(".gz"):
         open_file = lambda :gzip.open(infile, 'rb')
@@ -71,7 +73,11 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
                                         seqnum = ip_inner.data.data.decode().replace("X", "").replace("a", "")
                                     elif isinstance(ip_inner.data, dpkt.icmp.ICMP):
                                         icmp = ip_inner.data
-                                        echo = icmp.echo
+                                        if hasattr(icmp, 'echo'):
+                                            echo = icmp.echo
+                                        else:
+                                            non_echo_icmp+=1
+                                            continue
                                         # print(icmp.data)
                                         # print(echo)
                                         # print('ICMP: type:%d code:%d checksum:%d data: %s\n' % (icmp.type, icmp.code, icmp.sum, repr(icmp.data)))
@@ -92,13 +98,15 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
                     else:
                         continue
 
-    print("Took %.2fsec" % (time.time() - t0))
+    print(f"Took {time.time() - t0:.2f} sec, captured {pktid} pkts and {non_echo_icmp} Non-echo icmp!")
 
 
 def parse_pcap_ip(infile, outfile, offset = 0, udpport = 6363):
     t0 = time.time()
     print(infile)
     pktid = 0
+
+    non_echo_icmp=0
     # Open the pcap file
     if infile.endswith(".gz"):
         open_file = lambda :gzip.open(infile, 'rb')
@@ -146,7 +154,11 @@ def parse_pcap_ip(infile, outfile, offset = 0, udpport = 6363):
                         seqnum = ip_pkt.data.data.decode().replace("X", "").replace("a", "")
                     elif isinstance(ip_pkt.data, dpkt.icmp.ICMP):
                         icmp = ip_pkt.data
-                        echo = icmp.echo
+                        if hasattr(icmp, 'echo'):
+                            echo = icmp.echo
+                        else:
+                            non_echo_icmp+=1
+                            continue
                         # print(icmp.data)
                         # print(echo)
                         # print('ICMP: type:%d code:%d checksum:%d data: %s\n' % (icmp.type, icmp.code, icmp.sum, repr(icmp.data)))
@@ -162,7 +174,7 @@ def parse_pcap_ip(infile, outfile, offset = 0, udpport = 6363):
                         seqnum
                     ])
 
-    print("Took %.2fsec" % (time.time() - t0))
+    print(f"Took {time.time() - t0:.2f} sec, captured {pktid} pkts and {non_echo_icmp} Non-echo icmp!")
 
 # Example call: python3 packet-parser.py --infile 20240103132615_gw.pcap --outfile foo.csv --mode ipvlan --content udp
 if __name__ == '__main__':

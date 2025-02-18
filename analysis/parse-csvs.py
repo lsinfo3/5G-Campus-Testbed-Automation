@@ -22,6 +22,8 @@ pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and
 
 
 def handle_ping_run(run_directory: str):
+    # TODO: one more layer of redirection: don't aggregate in this function, instead return the prepared df (so it can be used on a per file bases!)
+    # TODO: better(?): write combined df to file
     gnb_rec = [f.path for f in os.scandir(run_directory) if f.path.endswith("gnb.csv") or f.path.endswith("gnb.csv.gz")]
     if len(gnb_rec) != 1:
         raise ValueError(f"Expected exactly 1 file like 'xyz_gnb.csv[.gz]' but found {len(gnb_rec)}")
@@ -78,17 +80,18 @@ def handle_ping_run(run_directory: str):
 
     # TODO: vv
     # drop incomplete sets of packets
-    max_seq = max([int(df_ue["SeqNum"].max()), int(df_gnb["SeqNum"].max())])
-    drops = []
-    for i in range(max_seq+1):
-        if len(df_ue.query(f"SeqNum == {i}")) != 2 or len(df_gnb.query(f"SeqNum == {i}")) != 2:
-            df_ue.drop(df_ue[df_ue.SeqNum == i].index, inplace = True)
-            df_gnb.drop(df_gnb[df_gnb.SeqNum == i].index, inplace = True)
-            drops.append(i)
-    df_ue.reset_index(inplace=True, drop=True)
-    df_gnb.reset_index(inplace=True, drop=True)
-    if len(drops) > 0:
-        print(f"Dropped {len(drops)} entries from df! {drops}")
+    # FIXME: only for icmp!
+    # max_seq = max([int(df_ue["SeqNum"].max()), int(df_gnb["SeqNum"].max())])
+    # drops = []
+    # for i in range(max_seq+1):
+    #     if len(df_ue.query(f"SeqNum == {i}")) != 2 or len(df_gnb.query(f"SeqNum == {i}")) != 2:
+    #         df_ue.drop(df_ue[df_ue.SeqNum == i].index, inplace = True)
+    #         df_gnb.drop(df_gnb[df_gnb.SeqNum == i].index, inplace = True)
+    #         drops.append(i)
+    # df_ue.reset_index(inplace=True, drop=True)
+    # df_gnb.reset_index(inplace=True, drop=True)
+    # if len(drops) > 0:
+    #     print(f"Dropped {len(drops)} entries from df! {drops}")
 
 
     if len(df_ue) != len(df_gnb):
@@ -99,21 +102,38 @@ def handle_ping_run(run_directory: str):
         df_ue.to_csv(f"./debug_{os.path.basename(run_directory)}_ue.csv")
         df_gnb.to_csv(f"./debug_{os.path.basename(run_directory)}_gnb.csv")
 
-
+    # Iterate through both dataframes
     for idx, row in df_ue.iterrows():
+        # if row["type"] == "request":
+        #     assert(df_gnb.iloc[idx]["SeqNum"] == row["SeqNum"])
+        #     assert(df_gnb.iloc[idx]["type"] == row["type"])
+        #     delay = df_gnb.iloc[idx]["Timestamp"] - row["Timestamp"]
+        # elif row["type"] == "response":
+        #     assert(df_gnb.iloc[idx]["SeqNum"] == row["SeqNum"])
+        #     assert(df_gnb.iloc[idx]["type"] == row["type"])
+        #     delay = row["Timestamp"] - df_gnb.iloc[idx]["Timestamp"]
+        # else:
+        #     raise ValueError
         if row["type"] == "request":
-            assert(df_gnb.iloc[idx]["SeqNum"] == row["SeqNum"])
-            assert(df_gnb.iloc[idx]["type"] == row["type"])
-            delay = df_gnb.iloc[idx]["Timestamp"] - row["Timestamp"]
+            gnb_rows = df_gnb.loc[(df_gnb["SeqNum"] == row["SeqNum"]) & (df_gnb["type"] == "request")]
+            assert(len(gnb_rows) <= 1)
+            if len(gnb_rows) == 1:
+                delay = (gnb_rows.head(1)["Timestamp"] - row["Timestamp"]).iloc[0]
+            else:
+                delay = np.nan
         elif row["type"] == "response":
-            assert(df_gnb.iloc[idx]["SeqNum"] == row["SeqNum"])
-            assert(df_gnb.iloc[idx]["type"] == row["type"])
-            delay = row["Timestamp"] - df_gnb.iloc[idx]["Timestamp"]
+            gnb_rows = df_gnb.loc[(df_gnb["SeqNum"] == row["SeqNum"]) & (df_gnb["type"] == "response")]
+            assert(len(gnb_rows) <= 1)
+            if len(gnb_rows) == 1:
+                delay = (row["Timestamp"] - gnb_rows.head(1)["Timestamp"]).iloc[0]
+            else:
+                delay = np.nan
         else:
             raise ValueError
         df_ue.loc[idx, "delay"] = delay
 
-    df = pd.concat([df_ue, df_gnb])
+    df_ue.dropna(subset=["delay"], inplace=True)
+    # df = pd.concat([df_ue, df_gnb])
     df = pd.concat([df_ue])
     df.to_csv("test.csv", index=False)
     print(df)
@@ -135,20 +155,26 @@ def handle_ping_run(run_directory: str):
 
     ret = df.groupby("type").describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
 
+
+
     for s in relevant_stats:
         metrics[f"delay__{s}"] = ret["delay"][s].loc["request"]
     metrics["direction"] = "Ul"
     ret1 = {**metrics, **config}
-    for s in relevant_stats:
-        metrics[f"delay__{s}"] = ret["delay"][s].loc["response"]
-    metrics["direction"] = "Dl"
-    ret2 = {**metrics, **config}
+    # TODO: Do we have upstream und downstream simultaneously?
+    if len(df.loc[df["type"] == "response"]) > 0:
+        for s in relevant_stats:
+            metrics[f"delay__{s}"] = ret["delay"][s].loc["response"]
+        metrics["direction"] = "Dl"
+        ret2 = {**metrics, **config}
+        print(metrics)
+        print("")
+        return [ret1, ret2]
     print(metrics)
+    print("")
+    return ret1
 
-    print("")
-    print("")
-    print("")
-    return [ret1, ret2]
+
 
 
 
@@ -172,6 +198,7 @@ print(final_df)
 print(final_df)
 
 final_df.to_parquet(f"{ansible_dump}/all_runs.parquet")
+final_df.to_csv(f"{ansible_dump}/all_runs.csv.gz", compression="gzip")
 
 
 

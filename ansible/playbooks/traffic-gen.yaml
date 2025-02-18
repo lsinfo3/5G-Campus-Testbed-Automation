@@ -9,7 +9,7 @@
 
   pre_tasks:
     - name: include test configuration
-      include_vars: ../first-tests-0.35h.yaml
+      include_vars: ../first-tests-0.35h-scapy.yaml
 
 
   tasks:
