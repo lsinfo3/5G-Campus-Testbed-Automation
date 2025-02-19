@@ -13,7 +13,6 @@ import binascii
 def parse_pcap_gtp(infile, outfile, udpport = 6363):
     t0 = time.time()
     pktid = 0
-
     icmps = {
             "echo":0,
             "unreachable":0
@@ -33,7 +32,7 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
         else:
             write_file = lambda : open(outfile, 'w')
         with write_file() as csv_file:
-            csv_file.write('Timestamp, SourceIPOuter, DestinationIPOuter, SourceIPInner, DestinationIPInner, PacketSize, SeqNum')
+            csv_file.write('Timestamp,SourceIPOuter,DestinationIPOuter,SourceIPInner,DestinationIPInner,PacketSize,SeqNum')
 
             # Iterate through each packet in the pcap file
             # for timestamp, buf in pcap:
@@ -85,7 +84,10 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
                                 # Write the information to the CSV file
                                 csv_file.write(f"\n{timestamp},{src_ip_outer},{dst_ip_outer},{ret["ip_src"]},{ret["ip_dst"]},{ip_outer.len+14},{ret["seqnum"]}")
                     else:
+                        print("Error2")
                         continue
+                else:
+                    print("Error1")
     # logging
     status_dict = { "file":f"{os.path.basename(os.path.dirname(infile)) +"/"+ os.path.basename(infile)}", "time":f"{time.time() - t0:.2f}",
                    "pkts":f"{pktid}", "icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
@@ -116,7 +118,7 @@ def parse_pcap_ip(infile, outfile, offset = 0, udpport = 6363):
         else:
             write_file = lambda : open(outfile, 'w')
         with write_file() as csv_file:
-            csv_file.write('Timestamp, SourceIPOuter, DestinationIPOuter, SourceIPInner, DestinationIPInner, PacketSize, SeqNum')
+            csv_file.write('Timestamp,SourceIPOuter,DestinationIPOuter,SourceIPInner,DestinationIPInner,PacketSize,SeqNum')
 
             while True:
                 try:
@@ -160,7 +162,9 @@ def handle_inner_ipv4(ip_pkt, udpport):
         ret["ip_src"] = socket.inet_ntoa(ip_pkt.src)
         ret["ip_dst"] = socket.inet_ntoa(ip_pkt.dst)
 
-        if isinstance(ip_pkt.data, dpkt.udp.UDP) and ip_pkt.data.dport not in [udpport]:
+        # Check if udp src or dst port is the specified port
+        if isinstance(ip_pkt.data, dpkt.udp.UDP) and set([ip_pkt.data.dport,ip_pkt.data.sport]).difference([udpport]) == set([ip_pkt.data.dport, ip_pkt.data.sport]) :
+            print("Skip")
             ret["skip"] = True
             return ret
         if isinstance(ip_pkt.data, dpkt.udp.UDP):

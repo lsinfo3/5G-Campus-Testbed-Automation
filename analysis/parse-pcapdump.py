@@ -20,6 +20,8 @@ def get_pcap_paths():
 DEFAULT_PORT=3344
 
 def pp_wrapper(infile:str):
+    # if not "110219ae__0" in infile:
+    #     return f"skipped: {infile}"
     outfile = infile
     if outfile.endswith(".gz"):
         outfile = outfile[:-3]

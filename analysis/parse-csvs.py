@@ -3,6 +3,7 @@ import multiprocessing as mp
 import pandas as pd
 import numpy as np
 import yaml
+import time
 
 
 """ Read CSVs in ansible pcap dump. Extract and aggregate data. Write back one parquet file """
@@ -67,79 +68,65 @@ def handle_ping_run(run_directory: str):
     indexer = lambda d:d["type"] == "response"
     df_gnb.loc[indexer,"IAT"] = df_gnb.loc[indexer,"Timestamp"] - df_gnb.loc[indexer,"Timestamp"].shift(1)
 
-    min_max_seq = min([int(df_ue["SeqNum"].max()), int(df_gnb["SeqNum"].max())])
-    df_gnb= df_gnb[df_gnb["SeqNum"] < min_max_seq]
-    print(f"Max: {min_max_seq}")
-
-    len_before = len(df_ue)
-    df_ue= df_ue[df_ue["SeqNum"] < min_max_seq]
-    len_after = len(df_ue)
-    print(f"New length: {len_after}, dropping {len_before-len_after} entries")
-    print(df_ue)
-    print(df_gnb)
-
-    # TODO: vv
-    # drop incomplete sets of packets
-    # FIXME: only for icmp!
-    # max_seq = max([int(df_ue["SeqNum"].max()), int(df_gnb["SeqNum"].max())])
-    # drops = []
-    # for i in range(max_seq+1):
-    #     if len(df_ue.query(f"SeqNum == {i}")) != 2 or len(df_gnb.query(f"SeqNum == {i}")) != 2:
-    #         df_ue.drop(df_ue[df_ue.SeqNum == i].index, inplace = True)
-    #         df_gnb.drop(df_gnb[df_gnb.SeqNum == i].index, inplace = True)
-    #         drops.append(i)
-    # df_ue.reset_index(inplace=True, drop=True)
-    # df_gnb.reset_index(inplace=True, drop=True)
-    # if len(drops) > 0:
-    #     print(f"Dropped {len(drops)} entries from df! {drops}")
+    ## wird nicht mehr gebraucht wenn wir die set.symmetric_difference bestimmen
+    ## min_max_seq = min([int(df_ue["SeqNum"].max()), int(df_gnb["SeqNum"].max())])
+    ## df_gnb= df_gnb[df_gnb["SeqNum"] < min_max_seq]
+    ## print(f"Max: {min_max_seq}")
+    ##
+    ## len_before = len(df_ue)
+    ## df_ue= df_ue[df_ue["SeqNum"] < min_max_seq]
+    ## len_after = len(df_ue)
+    ## print(f"New length: {len_after}, dropping {len_before-len_after} entries")
+    ## print(df_ue)
+    ## print(df_gnb)
 
 
-    if len(df_ue) != len(df_gnb):
-        print("WARNING: Dumping to csv")
-        print("WARNING: Dumping to csv")
-        print("WARNING: Dumping to csv")
-        print("WARNING: Dumping to csv")
-        df_ue.to_csv(f"./debug_{os.path.basename(run_directory)}_ue.csv")
-        df_gnb.to_csv(f"./debug_{os.path.basename(run_directory)}_gnb.csv")
+    # find missing seqnums,
+    missing_pkts = 0
+    for direction in set(df_ue["type"].unique()) | set(df_ue["type"].unique()):
+        seqnums_ue = df_ue.query(f"type == '{direction}'")["SeqNum"]
+        seqnums_gnb = df_gnb.query(f"type == '{direction}'")["SeqNum"]
+        missing_seqnums = set(seqnums_ue).symmetric_difference(seqnums_gnb)
+        for df in [df_ue,df_gnb]:
+            indexes_to_drop = df.loc[(df["SeqNum"].isin(missing_seqnums)) & (df["type"] == direction)].index
+            missing_pkts += len(indexes_to_drop)
+            df.drop(indexes_to_drop, inplace=True)
+        print(f"{run_directory}({direction}) missing: {missing_seqnums}")
+        # Verify both dataframes have the same sequence numbers
+        ue_seqs = df_ue.query(f"type == '{direction}'")["SeqNum"]
+        gnb_seqs = df_gnb.query(f"type == '{direction}'")["SeqNum"]
+        assert(set(ue_seqs).symmetric_difference(set(range(ue_seqs.min(),ue_seqs.max()+1))) == set(gnb_seqs).symmetric_difference(set(range(gnb_seqs.min(),gnb_seqs.max()+1))))
 
-    # Iterate through both dataframes
-    for idx, row in df_ue.iterrows():
-        # if row["type"] == "request":
-        #     assert(df_gnb.iloc[idx]["SeqNum"] == row["SeqNum"])
-        #     assert(df_gnb.iloc[idx]["type"] == row["type"])
-        #     delay = df_gnb.iloc[idx]["Timestamp"] - row["Timestamp"]
-        # elif row["type"] == "response":
-        #     assert(df_gnb.iloc[idx]["SeqNum"] == row["SeqNum"])
-        #     assert(df_gnb.iloc[idx]["type"] == row["type"])
-        #     delay = row["Timestamp"] - df_gnb.iloc[idx]["Timestamp"]
-        # else:
-        #     raise ValueError
-        if row["type"] == "request":
-            gnb_rows = df_gnb.loc[(df_gnb["SeqNum"] == row["SeqNum"]) & (df_gnb["type"] == "request")]
-            assert(len(gnb_rows) <= 1)
-            if len(gnb_rows) == 1:
-                delay = (gnb_rows.head(1)["Timestamp"] - row["Timestamp"]).iloc[0]
-            else:
-                delay = np.nan
-        elif row["type"] == "response":
-            gnb_rows = df_gnb.loc[(df_gnb["SeqNum"] == row["SeqNum"]) & (df_gnb["type"] == "response")]
-            assert(len(gnb_rows) <= 1)
-            if len(gnb_rows) == 1:
-                delay = (row["Timestamp"] - gnb_rows.head(1)["Timestamp"]).iloc[0]
-            else:
-                delay = np.nan
-        else:
-            raise ValueError
-        df_ue.loc[idx, "delay"] = delay
+    print(f"dropped {missing_pkts} pkts")
+    print(f"len ue: {len(df_ue)}, len gnb: {len(df_gnb)}")
+    # print(f"ue-req: {set(df_ue.query("type == 'request'")["SeqNum"]).symmetric_difference(set(range(df_ue.query("type == 'request'")["SeqNum"].min(),df_ue.query("type == 'request'")['SeqNum'].max()+1)))}")
+    # print(f"ue-res: {set(df_ue.query("type == 'response'")["SeqNum"]).symmetric_difference(set(range(df_ue.query("type == 'response'")["SeqNum"].min(),df_ue.query("type == 'response'")['SeqNum'].max()+1)))}")
+    # print(f"gnb-req: {set(df_gnb.query("type == 'request'")["SeqNum"]).symmetric_difference(set(range(df_gnb.query("type == 'request'")["SeqNum"].min(),df_gnb.query("type == 'request'")['SeqNum'].max()+1)))}")
+    # print(f"gnb-res: {set(df_gnb.query("type == 'response'")["SeqNum"]).symmetric_difference(set(range(df_gnb.query("type == 'response'")["SeqNum"].min(),df_gnb.query("type == 'response'")['SeqNum'].max()+1)))}")
+    df_gnb.sort_values(by=["SeqNum", "type"], ignore_index=True, inplace=True)
+    df_ue.sort_values(by=["SeqNum", "type"], ignore_index=True, inplace=True)
+    assert(len(df_ue) == len(df_gnb))
+    assert(df_ue["SeqNum"].equals(df_gnb["SeqNum"]))
+
+    df_ue.loc[(df_ue["type"] == 'request'),"delay"] = df_gnb.loc[(df_gnb["type"] == 'request'),"Timestamp"] - df_ue.loc[(df_ue["type"] == 'request'),"Timestamp"]
+    df_ue.loc[(df_ue["type"] == 'response'),"delay"] = df_ue.loc[(df_ue["type"] == 'response'),"Timestamp"] - df_gnb.loc[(df_gnb["type"] == 'response'),"Timestamp"]
+
+
 
     df_ue.dropna(subset=["delay"], inplace=True)
     # df = pd.concat([df_ue, df_gnb])
     df = pd.concat([df_ue])
-    df.to_csv("test.csv", index=False)
-    print(df)
-    print(df_ue.head())
-    print(df_gnb.head())
-    print(df.dtypes)
+
+
+    df.to_csv(f"{run_directory}/combined.csv.gz", index=False,compression="gzip")
+
+
+
+
+    # print(df)
+    # print(df_ue.head())
+    # print(df_gnb.head())
+    # print(df.dtypes)
 
 
     metrics_default = {
@@ -167,18 +154,21 @@ def handle_ping_run(run_directory: str):
             metrics[f"delay__{s}"] = ret["delay"][s].loc["response"]
         metrics["direction"] = "Dl"
         ret2 = {**metrics, **config}
-        print(metrics)
-        print("")
+        # print(metrics)
+        # print("")
         return [ret1, ret2]
-    print(metrics)
-    print("")
+    # print(metrics)
+    # print("")
     return ret1
 
 
 
 
 
+start = time.time()
 
+# runs = runs[:1]
+print(runs)
 with mp.Pool(8) as p:
     returns = p.map(handle_ping_run, runs)
 
@@ -191,14 +181,11 @@ for r in returns:
 
 
 final_df = pd.DataFrame.from_records(records)
-print(final_df.columns)
-print(final_df.loc[:,["tdd_config__tdd_dl_ul_ratio","tdd_config__tdd_dl_ul_tx_period" ]])
-print(final_df)
-print(final_df)
 print(final_df)
 
 final_df.to_parquet(f"{ansible_dump}/all_runs.parquet")
 final_df.to_csv(f"{ansible_dump}/all_runs.csv.gz", compression="gzip")
+print(f"Took {time.time()-start}s")
 
 
 
