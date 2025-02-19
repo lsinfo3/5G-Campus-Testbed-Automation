@@ -4,6 +4,7 @@ import pandas as pd
 import plotnine as p9
 import argparse
 import os
+import multiprocessing as mp
 
 
 
@@ -17,6 +18,10 @@ def get_pcap_paths():
     test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
     runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
     pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
+
+    pcaps = [os.path.dirname(p) for p in pcaps]
+    pcaps = list(set(pcaps))
+    pcaps = [f"{p}/combined.csv.gz" for p in pcaps]
     return pcaps
 
 
@@ -57,9 +62,23 @@ def plot_per_setup():
             aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
             )
 
-def plot_per_run(pcaps):
-    for p in pcaps:
-        print(os.path.dirname(p))
+
+def plot_per_run(p: str):
+    df = pd.read_csv(p)
+    plots.simple_line_plot(df=df.query("SeqNum > 1000 and SeqNum < 1100"), filename=f"{os.path.dirname(p)}/delay-timeline",
+            labels={"y":"delay [s]", "x":"sequence number [#]", "color":"type"},
+            aesthetics=p9.aes(y="delay", x="SeqNum", color="type"),
+            errorbars=False
+            )
+    plots.simple_line_plot(df=df.query("SeqNum > 1000 and SeqNum < 1100"), filename=f"{os.path.dirname(p)}/iat-timeline",
+            labels={"y":"IAT [s]", "x":"sequence number [#]", "color":"type"},
+            aesthetics=p9.aes(y="IAT", x="SeqNum", color="type"),
+            errorbars=False
+            )
+
+def plots_per_run_mp(pcaps):
+    with mp.Pool(8) as p:
+        returns = p.map(plot_per_run, get_pcap_paths())
 
 
 
@@ -69,7 +88,7 @@ def plot_per_run(pcaps):
 
 if __name__ == "__main__":
     # plot_per_setup()
-    plot_per_run(get_pcap_paths())
+    plots_per_run_mp(get_pcap_paths())
 
 
 

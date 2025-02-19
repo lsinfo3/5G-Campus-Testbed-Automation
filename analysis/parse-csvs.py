@@ -1,4 +1,5 @@
 import os
+import sys
 import multiprocessing as mp
 import pandas as pd
 import numpy as np
@@ -103,8 +104,8 @@ def handle_ping_run(run_directory: str):
     # print(f"ue-res: {set(df_ue.query("type == 'response'")["SeqNum"]).symmetric_difference(set(range(df_ue.query("type == 'response'")["SeqNum"].min(),df_ue.query("type == 'response'")['SeqNum'].max()+1)))}")
     # print(f"gnb-req: {set(df_gnb.query("type == 'request'")["SeqNum"]).symmetric_difference(set(range(df_gnb.query("type == 'request'")["SeqNum"].min(),df_gnb.query("type == 'request'")['SeqNum'].max()+1)))}")
     # print(f"gnb-res: {set(df_gnb.query("type == 'response'")["SeqNum"]).symmetric_difference(set(range(df_gnb.query("type == 'response'")["SeqNum"].min(),df_gnb.query("type == 'response'")['SeqNum'].max()+1)))}")
-    df_gnb.sort_values(by=["SeqNum", "type"], ignore_index=True, inplace=True)
-    df_ue.sort_values(by=["SeqNum", "type"], ignore_index=True, inplace=True)
+    df_gnb.sort_values(by=["type", "SeqNum"], ignore_index=True, inplace=True)
+    df_ue.sort_values(by=["type", "SeqNum"], ignore_index=True, inplace=True)
     assert(len(df_ue) == len(df_gnb))
     assert(df_ue["SeqNum"].equals(df_gnb["SeqNum"]))
 
