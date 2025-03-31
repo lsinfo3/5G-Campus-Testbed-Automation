@@ -1,0 +1,38 @@
+---
+
+# TODO: fresh copy of config template?
+
+- name: "Edit OAI RAN config:"
+  block:
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '      nrofDownlinkSlots'
+      line: "      nrofDownlinkSlots                                             = {{ item.tdd_config.tdd_dl_slots |int }};"
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '      nrofDownlinkSymbols'
+      line: "      nrofDownlinkSymbols                                           = {{ item.tdd_config.tdd_dl_symbols |int }};"
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '      nrofUplinkSlots'
+      line: "      nrofUplinkSlots                                               = {{ item.tdd_config.tdd_ul_slots |int }};"
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '      nrofUplinkSymbols'
+      line: "      nrofUplinkSymbols                                             = {{ item.tdd_config.tdd_ul_symbols |int }};"
+
+- when: item.tdd_config.tdd_dl_ul_tx_period == 5
+  ansible.builtin.lineinfile:
+    path: "{{ gnb_oai_config_path }}"
+    search_string: '      dl_UL_TransmissionPeriodicity'
+    line: "      dl_UL_TransmissionPeriodicity                                 = 5;"
+- when: item.tdd_config.tdd_dl_ul_tx_period == 10
+  ansible.builtin.lineinfile:
+    path: "{{ gnb_oai_config_path }}"
+    search_string: '      dl_UL_TransmissionPeriodicity'
+    line: "      dl_UL_TransmissionPeriodicity                                 = 6;"
+- when: item.tdd_config.tdd_dl_ul_tx_period == 20
+  ansible.builtin.lineinfile:
+    path: "{{ gnb_oai_config_path }}"
+    search_string: '      dl_UL_TransmissionPeriodicity'
+    line: "      dl_UL_TransmissionPeriodicity                                 = 7;"

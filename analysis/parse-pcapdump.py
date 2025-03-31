@@ -6,7 +6,8 @@ import multiprocessing as mp
 """ Read ansible pcap dump. Parse pcaps and extract relevant data. Write csvs back """
 
 
-ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps/"
+# ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps/"
+ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
 
 
 def get_pcap_paths():

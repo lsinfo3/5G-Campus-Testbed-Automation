@@ -35,6 +35,10 @@ run_to_run_params_default = {
     #         "icmp_intervall": 0.01,
     #         "icmp_count": 6000
     #     },
+    "gnb_version": {
+        "type": "srsRAN"
+        #TODO: "version": xyz
+        },
     "traffic_config": {                     # TODO: build_traffic_config function
         "traffic_type" : "scapy",
         "traffic_duration": 60,
@@ -118,21 +122,31 @@ def new_per_run_config_base():
 def create_param_combinations():
     c = []
 
-    run_to_run_params_default["traffic_config"]["scapy_iat"]="0.01"
-    run_to_run_params_default["traffic_config"]["scapy_count"]="6000"
-    for ratio in [1, 2, 4]:
-        for period_length in [5, 10, 20]:
-            r = new_per_run_config_base()
-            r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
-            c.append(r)
+    ratios = [1,2,4]
 
-    run_to_run_params_default["traffic_config"]["scapy_iat"]="0.001"
-    run_to_run_params_default["traffic_config"]["scapy_count"]="60000"
-    for ratio in [1, 2, 4]:
-        for period_length in [5, 10, 20]:
-            r = new_per_run_config_base()
-            r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
-            c.append(r)
+    period_lengths = [5, 10, 20]
+
+    srsranconf = { "type": "srsRAN" }
+    oairanconf = { "type": "OAI" }
+
+    for gnb in [srsranconf, oairanconf]:
+        run_to_run_params_default["traffic_config"]["scapy_iat"]="0.01"
+        run_to_run_params_default["traffic_config"]["scapy_count"]="6000"
+        for ratio in ratios:
+            for period_length in period_lengths:
+                r = new_per_run_config_base()
+                r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+                r["gnb_version"] = gnb
+                c.append(r)
+
+        run_to_run_params_default["traffic_config"]["scapy_iat"]="0.001"
+        run_to_run_params_default["traffic_config"]["scapy_count"]="60000"
+        for ratio in ratios:
+            for period_length in period_lengths:
+                r = new_per_run_config_base()
+                r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+                r["gnb_version"] = gnb
+                c.append(r)
 
     return c
 

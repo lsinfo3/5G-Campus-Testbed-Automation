@@ -3,13 +3,17 @@
 - name: Generate traffic
   hosts: 5g-gnb
   vars:
-    gnb_srs_config_path: "/home/gnb/srsRAN-configs/gnb_rf_b200_tdd_n78_20mhz.yml"
+    gnb_srs_config_path: "/home/gnb/srsRAN-configs/gnb_srs.yml"
     gnb_srs_logfile_path: "/tmp/gnb.log"
     gnb_srs_binary: "/home/gnb/srsRAN_Project/build/apps/gnb/gnb"
+    gnb_oai_config_path: "/home/gnb/OAI-configs/gnb_oai.conf"
+    gnb_oai_logfile_path: "/tmp/gnb.log"
+    gnb_oai_binary: "/home/gnb/openairinterface5g/cmake_targets/ran_build/build/nr-softmodem"
 
   pre_tasks:
     - name: include test configuration
-      include_vars: ../first-tests-0.35h-scapy.yaml
+      # include_vars: ../first-tests-0.35h-scapy.yaml
+      include_vars: ../first-tests-0.35h-scapy-2.0.yaml
 
 
   tasks:

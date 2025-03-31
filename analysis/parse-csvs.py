@@ -12,7 +12,8 @@ import time
 
 
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
-ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps/"
+# ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps/"
+ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
 
 test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
 runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]

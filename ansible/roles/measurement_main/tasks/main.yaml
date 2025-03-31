@@ -2,6 +2,7 @@
 - name: '"{{ item.identifier }}": killall running gnb instances'
   ansible.builtin.shell: |
      killall gnb || true
+     killall nr-softmodem || true
   become: true
 
 
@@ -24,12 +25,28 @@
 - name: '"{{ item.identifier }}": Run role'
   ansible.builtin.include_role:
     name: SRS_config
+  when: item.gnb_version.type== 'srsRAN'
 - name: Launch SRS gNB
   shell: "{{ gnb_srs_binary }} -c {{ gnb_srs_config_path }}"
   become: true
   async: 900
   poll: 0
-  register: gnb_job
+  register: gnb_job_srs
+  when: item.gnb_version.type== 'srsRAN'
+- name: '"{{ item.identifier }}": Run role'
+  ansible.builtin.include_role:
+    name: OAI_config
+  when: item.gnb_version.type== 'OAI'
+- name: Launch OAI gNB
+  shell: "{{ gnb_oai_binary }} -O {{ gnb_oai_config_path }} --sa --continuous-tx > {{ gnb_oai_logfile_path }} 2>&1"
+  become: true
+  async: 900
+  poll: 0
+  register: gnb_job_oai
+  when: item.gnb_version.type== 'OAI'
+- name: Save gnb_job
+  ansible.builtin.set_fact:
+    gnb_job: "{{ gnb_job_oai if gnb_job_oai.ansible_job_id is defined else gnb_job_srs }}"
 
 - name: '"{{ item.identifier }}": Wait for 60 seconds until gNB becomes ready'
   wait_for:
@@ -42,185 +59,229 @@
   register: gnb_job_results
   ignore_errors: true
   become: true
+- name: "{{ item.identifier }}: check if failed"
+  ansible.builtin.set_fact:
+    gnb_job_failed: "{{ gnb_job_results.failed != 0 or gnb_job_results.finished != 0 }}"
+- name: "{{ item.identifier }}: save cause of failure"
+  ansible.builtin.set_fact:
+    gnb_job_failed_cause: "gnb"
+  when: gnb_job_failed
 - block:
    - name: '"{{ item.identifier }}": job status of faulty run'
      debug:
         msg:
           - "{{ gnb_job_results }}"
-   - name: '"{{ item.identifier }}": Copy gnb log of faulty run'
-     ansible.builtin.fetch:
-        src: "{{ gnb_srs_logfile_path }}"
-        dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-        flat: true
-        validate_checksum: false
-     become: false
-   - name: '"{{ item.identifier }}": Exit faulty run'
-     ansible.builtin.meta: end_play
-  when: gnb_job_results.failed != 0 or gnb_job_results.finished != 0
-
-
+   # - name: '"{{ item.identifier }}": Exit faulty run'
+   #   ansible.builtin.meta: end_play
+  when: gnb_job_failed
 
 # INFO: get ip for modem
 - name: '"{{ item.identifier }}": Acquire IP for modem'
   shell: "bash /home/gnb/setip.sh"
+  register: get_ip_shell_script
+  ignore_errors: true
   become: true
-- name: '"{{ item.identifier }}": Wait for 10 seconds after obtaining IP'
-  wait_for:
-    timeout: 10
-# TODO: save gnb stdout/stderr on failure
-# TODO: on failure: save stdout/stderr and gnb.log
-# TODO: continue loop on failure
-# TODO: track failed runs in evaluation?
+  when: not gnb_job_failed
+- name: '"{{ item.identifier }}": Error handling of ip connections shell script'
+  when: not gnb_job_failed and get_ip_shell_script.rc != 0
+  ansible.builtin.set_fact:
+    gnb_job_failed_cause: "getip"
+    gnb_job_failed: true
 
 
 
-- name: '"{{ item.identifier }}": tcpdump on gnb'
-  ansible.builtin.command:
-    cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_gnb }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_gnb.pcap udp port 2152
-  async: "{{ item.traffic_config.traffic_duration * 2 }}"
-  poll: 0
-  become: true
-  register: tcpdump_gnb
 
-- name: '"{{ item.identifier }}": tcpdump on ue'
-  ansible.builtin.command:
-    cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_ue }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_ue.pcap
-  async: "{{ item.traffic_config.traffic_duration * 2 }}"
-  poll: 0
-  become: true
-  register: tcpdump_ue
+# INFO: this block catches all other tasks, appart from the cleanup
+- name: "{{ item.identifier }}: Main routine"
+  when: not gnb_job_failed
+  block:
+  - name: '"{{ item.identifier }}": Wait for 10 seconds after obtaining IP'
+    wait_for:
+      timeout: 10
+  # TODO: save gnb stdout/stderr on failure
+  # TODO: on failure: save stdout/stderr and gnb.log
+  # TODO: track failed runs in evaluation?
+  - name: '"{{ item.identifier }}": tcpdump on gnb'
+    ansible.builtin.command:
+      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_gnb }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_gnb.pcap udp port 2152
+    async: "{{ item.traffic_config.traffic_duration * 2 }}"
+    poll: 0
+    become: true
+    register: tcpdump_gnb
 
-- name: '"{{ item.identifier }}": sleep'
-  ansible.builtin.command:
-     cmd: sleep 2
-  become: false
+  - name: '"{{ item.identifier }}": tcpdump on ue'
+    ansible.builtin.command:
+      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_ue }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_ue.pcap
+    async: "{{ item.traffic_config.traffic_duration * 2 }}"
+    poll: 0
+    become: true
+    register: tcpdump_ue
 
-
-# INFO: ensure route to core is set? wrong routes were set before
-# TODO: hardcoded ip addr :/
-- name: Delete old route
-  ansible.builtin.shell: |
-     ip route del 10.45.0.0/24 dev {{ system.fixed_params.interface_ue }} || true
-  become: true
-- name: Create new route
-  ansible.builtin.shell: |
-     ip route add 10.45.0.0/24 dev {{ system.fixed_params.interface_ue }}
-  become: true
-
-
-- name: '"{{ item.identifier }}": run ping role'
-  ansible.builtin.include_role:
-    name: traffic-generation
-    tasks_from: icmp.yaml
-  vars:
-    icmp_intervall: "{{ item.traffic_config.icmp_intervall }}"
-    icmp_count: "{{ item.traffic_config.icmp_count }}"
-  when: item.traffic_config.traffic_type== 'ping'
-- name: '"{{ item.identifier }}": run udp scapy traffic gen role'
-  ansible.builtin.include_role:
-    name: traffic-generation
-    tasks_from: scapy.yaml
-  vars:
-    tg_proto: "{{ item.traffic_config.scapy_proto }}"
-    tg_dist: "{{ item.traffic_config.scapy_dist }}"
-    tg_iat: "{{ item.traffic_config.scapy_iat }}"
-    tg_size: "{{ item.traffic_config.scapy_size }}"
-    tg_count: "{{ item.traffic_config.scapy_count }}"
-    tg_ip: "{{ item.traffic_config.scapy_ip }}"
-    tg_port: "{{ item.traffic_config.scapy_port }}"
-    tg_burst: "{{ item.traffic_config.scapy_burst }}"
-  when: item.traffic_config.traffic_type == 'scapy'
-
-- name: '"{{ item.identifier }}": wait for gnb tcpdump'
-  ansible.builtin.async_status:
-     jid: "{{ tcpdump_gnb.ansible_job_id }}"
-  register: tcpdump_gnb_result
-  until: tcpdump_gnb_result.finished
-  failed_when: tcpdump_gnb_result.rc != 0 and tcpdump_gnb_result.rc != 124
-  retries: 10
-  delay: 5
-  become: true
-
-- name: '"{{ item.identifier }}": wait for ue tcpdump'
-  ansible.builtin.async_status:
-     jid: "{{ tcpdump_ue.ansible_job_id }}"
-  register: tcpdump_ue_result
-  until: tcpdump_ue_result.finished
-  failed_when: tcpdump_gnb_result.rc != 0 and tcpdump_gnb_result.rc != 124
-  retries: 10
-  delay: 5
-  become: true
+  - name: '"{{ item.identifier }}": sleep'
+    ansible.builtin.command:
+       cmd: sleep 2
+    become: false
 
 
+  # INFO: ensure route to core is set? wrong routes were set before
+  # TODO: hardcoded ip addr :/
+  - name: Delete old route
+    ansible.builtin.shell: |
+       ip route del 10.45.0.0/24 dev {{ system.fixed_params.interface_ue }} || true
+    become: true
+  - name: Create new route
+    ansible.builtin.shell: |
+       ip route add 10.45.0.0/24 dev {{ system.fixed_params.interface_ue }}
+    become: true
 
-# Copy pcaps and params to localhost
-- name: "{{ item.identifier }}: Copy config to local: make dir"
-  ansible.builtin.file:
-     path: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-     state: directory
-  delegate_to: localhost
 
-# TODO: include start and end timestamp in yaml!!
-- name: "{{ item.identifier }}: Copy config to local: copy"
-  ansible.builtin.copy:
-     content: "{{ system.fixed_params | ansible.builtin.combine( item ) }}"
-     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/{{ item.identifier }}.yaml"
-  delegate_to: localhost
+  - name: '"{{ item.identifier }}": run ping role'
+    ansible.builtin.include_role:
+      name: traffic-generation
+      tasks_from: icmp.yaml
+    vars:
+      icmp_intervall: "{{ item.traffic_config.icmp_intervall }}"
+      icmp_count: "{{ item.traffic_config.icmp_count }}"
+    when: item.traffic_config.traffic_type== 'ping'
+  - name: '"{{ item.identifier }}": run udp scapy traffic gen role'
+    ansible.builtin.include_role:
+      name: traffic-generation
+      tasks_from: scapy.yaml
+    vars:
+      tg_proto: "{{ item.traffic_config.scapy_proto }}"
+      tg_dist: "{{ item.traffic_config.scapy_dist }}"
+      tg_iat: "{{ item.traffic_config.scapy_iat }}"
+      tg_size: "{{ item.traffic_config.scapy_size }}"
+      tg_count: "{{ item.traffic_config.scapy_count }}"
+      tg_ip: "{{ item.traffic_config.scapy_ip }}"
+      tg_port: "{{ item.traffic_config.scapy_port }}"
+      tg_burst: "{{ item.traffic_config.scapy_burst }}"
+    when: item.traffic_config.traffic_type == 'scapy'
 
-- name: '"{{ item.identifier }}": Copy gnb config'
-  ansible.builtin.fetch:
-     src: "{{ gnb_srs_config_path }}"
-     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-     flat: true
-  become: false
+  - name: '"{{ item.identifier }}": wait for gnb tcpdump'
+    ansible.builtin.async_status:
+       jid: "{{ tcpdump_gnb.ansible_job_id }}"
+    register: tcpdump_gnb_result
+    until: tcpdump_gnb_result.finished
+    failed_when: tcpdump_gnb_result.rc != 0 and tcpdump_gnb_result.rc != 124
+    retries: 10
+    delay: 5
+    become: true
 
-- name: '"{{ item.identifier }}": Compress log'
-  community.general.archive:
-     path: "{{ gnb_srs_logfile_path }}"
-     unsafe_writes: false
-- name: '"{{ item.identifier }}": Copy gnb log'
-  ansible.builtin.fetch:
-     src: "{{ gnb_srs_logfile_path }}.gz"
-     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-     flat: true
-     validate_checksum: false
-  become: false
+  - name: '"{{ item.identifier }}": wait for ue tcpdump'
+    ansible.builtin.async_status:
+       jid: "{{ tcpdump_ue.ansible_job_id }}"
+    register: tcpdump_ue_result
+    until: tcpdump_ue_result.finished
+    failed_when: tcpdump_gnb_result.rc != 0 and tcpdump_gnb_result.rc != 124
+    retries: 10
+    delay: 5
+    become: true
 
-- name: '"{{ item.identifier }}": Compress pcaps (1/2)'
-  community.general.archive:
-     path: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap
-     unsafe_writes: false
-     remove: true
-     owner: "{{ ansible_user_id }}"
-  become: true
-- name: '"{{ item.identifier }}": Compress pcaps (2/2)'
-  community.general.archive:
-     path: /home/{{ ansible_user_id }}/tcpdump_ue.pcap
-     unsafe_writes: false
-     remove: true
-     owner: "{{ ansible_user_id }}"
-  become: true
 
-- name: '"{{ item.identifier }}": Copy pcaps (1/2)'
-  ansible.builtin.fetch:
-     src: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap.gz
-     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-     flat: true
-  become: false
-- name: '"{{ item.identifier }}": Copy pcaps (2/2)'
-  ansible.builtin.fetch:
-     src: /home/{{ ansible_user_id }}/tcpdump_ue.pcap.gz
-     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-     flat: true
-  become: false
-- name: '"{{ item.identifier }}": Cleanup pcaps (1/2)'
-  ansible.builtin.file:
-     path: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap.gz
-     state: absent
-  become: true
-- name: '"{{ item.identifier }}": Cleanup pcaps (2/2)'
-  ansible.builtin.file:
-     path: /home/{{ ansible_user_id }}/tcpdump_ue.pcap.gz
-     state: absent
-  become: true
 
+# INFO: cleanup block
+- name: "{{ item.identifier }}: cleanup tasks"
+  block:
+  # Copy pcaps and params to localhost
+  - name: "{{ item.identifier }}: Copy config to local: make dir"
+    ansible.builtin.file:
+       path: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+       state: directory
+    delegate_to: localhost
+
+  - name: "{{ item.identifier }}: Write FAILED label"
+    ansible.builtin.copy:
+      content: "{{ gnb_job_failed_cause }}"
+      dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/FAILED"
+    delegate_to: localhost
+    when: gnb_job_failed
+
+  # TODO: include start and end timestamp in yaml!!
+  - name: "{{ item.identifier }}: Copy config to local: copy"
+    ansible.builtin.copy:
+       content: "{{ system.fixed_params | ansible.builtin.combine( item ) }}"
+       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/{{ item.identifier }}.yaml"
+    delegate_to: localhost
+
+  - name: '"{{ item.identifier }}": Copy gnb config'
+    ansible.builtin.fetch:
+       src: "{{ gnb_srs_config_path }}"
+       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+       flat: true
+    become: false
+    when: item.gnb_version.type== 'srsRAN'
+  - name: '"{{ item.identifier }}": Copy gnb config'
+    ansible.builtin.fetch:
+       src: "{{ gnb_oai_config_path }}"
+       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+       flat: true
+    become: false
+    when: item.gnb_version.type== 'OAI'
+
+  - block:
+     - name: '"{{ item.identifier }}": Compress log'
+       community.general.archive:
+          path: "{{ gnb_srs_logfile_path }}"
+          unsafe_writes: false
+     - name: '"{{ item.identifier }}": Copy gnb log'
+       ansible.builtin.fetch:
+          src: "{{ gnb_srs_logfile_path }}.gz"
+          dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+          flat: true
+          validate_checksum: false
+       become: false
+    when: item.gnb_version.type== 'srsRAN'
+  - block:
+     - name: '"{{ item.identifier }}": Compress log'
+       community.general.archive:
+          path: "{{ gnb_oai_logfile_path }}"
+          unsafe_writes: false
+     - name: '"{{ item.identifier }}": Copy gnb log'
+       ansible.builtin.fetch:
+          src: "{{ gnb_oai_logfile_path }}.gz"
+          dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+          flat: true
+          validate_checksum: false
+       become: false
+    when: item.gnb_version.type== 'OAI'
+
+  - name: "{{ item.identifier }}: Handle pcaps"
+    when: not gnb_job_failed
+    block:
+    - name: '"{{ item.identifier }}": Compress pcaps'
+      block:
+      - community.general.archive:
+           path: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap
+           unsafe_writes: false
+           remove: true
+           owner: "{{ ansible_user_id }}"
+        become: true
+      - community.general.archive:
+           path: /home/{{ ansible_user_id }}/tcpdump_ue.pcap
+           unsafe_writes: false
+           remove: true
+           owner: "{{ ansible_user_id }}"
+        become: true
+    - name: '"{{ item.identifier }}": Copy pcaps'
+      block:
+      - ansible.builtin.fetch:
+           src: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap.gz
+           dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+           flat: true
+        become: false
+      - ansible.builtin.fetch:
+           src: /home/{{ ansible_user_id }}/tcpdump_ue.pcap.gz
+           dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+           flat: true
+        become: false
+    - name: '"{{ item.identifier }}": Cleanup pcaps'
+      block:
+      - ansible.builtin.file:
+           path: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap.gz
+           state: absent
+        become: true
+      - ansible.builtin.file:
+           path: /home/{{ ansible_user_id }}/tcpdump_ue.pcap.gz
+           state: absent
+        become: true
