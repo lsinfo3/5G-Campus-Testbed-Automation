@@ -6,6 +6,7 @@ import gzip
 import os
 import json
 import binascii
+import numpy as np
 
 # TODO: handle ipv6 in all branches
 # TODO: combine gtp and non gtp parser?
@@ -17,7 +18,11 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
             "echo":0,
             "unreachable":0
             }
+    corrupted = 0
     ipv6_pkts=0
+
+    print_pkts = lambda x : x <10 or x == 6886
+
     # Open the pcap file
     if infile.endswith(".gz"):
         open_file = lambda :gzip.open(infile, 'rb')
@@ -78,7 +83,12 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
                                 ret = handle_inner_ipv4(ip_inner, udpport)
                                 icmps["echo"]+=ret["icmps"]["echo"]
                                 icmps["unreachable"]+=ret["icmps"]["unreachable"]
+                                corrupted += ret["corrupted"]
                                 if ret["skip"]:
+                                    continue
+
+                                if ip_outer.len != len(ip_outer.data)+20:
+                                    corrupted +=1
                                     continue
 
                                 # Write the information to the CSV file
@@ -90,7 +100,7 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
                     print("Error1")
     # logging
     status_dict = { "file":f"{os.path.basename(os.path.dirname(infile)) +"/"+ os.path.basename(infile)}", "time":f"{time.time() - t0:.2f}",
-                   "pkts":f"{pktid}", "icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
+                   "pkts":f"{pktid}", "corrupted":corrupted,"icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
     return json.dumps(status_dict)
 
 
@@ -102,6 +112,7 @@ def parse_pcap_ip(infile, outfile, offset = 0, udpport = 6363):
             "echo":0,
             "unreachable":0
             }
+    corrupted = 0
     ipv6_pkts=0
 
     # Open the pcap file
@@ -146,6 +157,7 @@ def parse_pcap_ip(infile, outfile, offset = 0, udpport = 6363):
                 ret = handle_inner_ipv4(ip_pkt, udpport)
                 icmps["echo"]+=ret["icmps"]["echo"]
                 icmps["unreachable"]+=ret["icmps"]["unreachable"]
+                corrupted += ret["corrupted"]
                 if ret["skip"]:
                     continue
 
@@ -153,11 +165,16 @@ def parse_pcap_ip(infile, outfile, offset = 0, udpport = 6363):
 
     # logging
     status_dict = { "file":f"{os.path.basename(os.path.dirname(infile)) +"/"+ os.path.basename(infile)}", "time":f"{time.time() - t0:.2f}",
-                   "pkts":f"{pktid}", "icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
+                   "pkts":f"{pktid}", "corrupted":corrupted,"icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
     return json.dumps(status_dict)
 
 def handle_inner_ipv4(ip_pkt, udpport):
-    ret = {"ip_src":None, "ip_dst":None, "skip": False, "seqnum":0, "icmps":{"echo":0,"unreachable":0}}
+    ret = {"ip_src":None, "ip_dst":None, "skip": False, "seqnum":0, "corrupted":0,"icmps":{"echo":0,"unreachable":0}}
+    if ip_pkt.len != len(ip_pkt.data)+20:
+        ret["skip"] = True
+        ret["corrupted"] = 1
+        return ret
+
     if isinstance(ip_pkt.data, dpkt.udp.UDP) or isinstance(ip_pkt.data, dpkt.icmp.ICMP):
         ret["ip_src"] = socket.inet_ntoa(ip_pkt.src)
         ret["ip_dst"] = socket.inet_ntoa(ip_pkt.dst)
@@ -168,7 +185,13 @@ def handle_inner_ipv4(ip_pkt, udpport):
             ret["skip"] = True
             return ret
         if isinstance(ip_pkt.data, dpkt.udp.UDP):
-            ret["seqnum"] = ip_pkt.data.data.decode().replace("X", "").replace("a", "")
+            seqnum_dec = ip_pkt.data.data.decode()
+            # e.g. aaa3419
+            if not seqnum_dec.startswith("aaa") or not seqnum_dec[3:].isdecimal():
+                ret["skip"] = True
+                ret["corrupted"] = 1
+                return ret
+            ret["seqnum"] = seqnum_dec.replace("X", "").replace("a", "")
         elif isinstance(ip_pkt.data, dpkt.icmp.ICMP):
             icmp = ip_pkt.data
             if hasattr(icmp, 'echo'):

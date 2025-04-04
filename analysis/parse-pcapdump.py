@@ -7,7 +7,7 @@ import multiprocessing as mp
 
 
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps/"
-ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
+ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
 
 
 def get_pcap_paths():

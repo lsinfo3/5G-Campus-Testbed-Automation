@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import yaml
 import time
+import copy
 
 
 """ Read CSVs in ansible pcap dump. Extract and aggregate data. Write back one parquet file """
@@ -13,7 +14,8 @@ import time
 
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps/"
-ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
+# ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
+ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
 
 test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
 runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
@@ -21,34 +23,19 @@ pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and
 
 
 
-
-
-
-def handle_ping_run(run_directory: str):
-    # TODO: one more layer of redirection: don't aggregate in this function, instead return the prepared df (so it can be used on a per file bases!)
-    # TODO: better(?): write combined df to file
+def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     gnb_rec = [f.path for f in os.scandir(run_directory) if f.path.endswith("gnb.csv") or f.path.endswith("gnb.csv.gz")]
     if len(gnb_rec) != 1:
-        raise ValueError(f"Expected exactly 1 file like 'xyz_gnb.csv[.gz]' but found {len(gnb_rec)}")
+        raise ValueError(f"Expected exactly 1 file like 'xyz_gnb.csv[.gz]' but found {len(gnb_rec)}; {run_directory}")
     gnb_rec = gnb_rec[0]
 
     ue_rec = [f.path for f in os.scandir(run_directory) if f.path.endswith("ue.csv") or f.path.endswith("ue.csv.gz")]
     if len(ue_rec) != 1:
-        raise ValueError(f"Expected exactly 1 file like 'xyz_ue.csv[.gz]' but found {len(ue_rec)}")
+        raise ValueError(f"Expected exactly 1 file like 'xyz_ue.csv[.gz]' but found {len(ue_rec)}; {run_directory}")
     ue_rec = ue_rec[0]
 
-
-
-    with open(f"{run_directory}/{os.path.basename(run_directory)}.yaml", "r") as f:
-        config = yaml.unsafe_load(f)
-        dc = pd.json_normalize(config, sep="__") # flatten config
-        config = dc.to_dict(orient='records')[0]
-        # if (run_directory.endswith("0")):
-        #     for k in config.keys():
-        #         print(f"{k}:{config[k]}")
-    df_config = pd.DataFrame.from_records([config])
-
     df_ue = pd.read_csv(ue_rec)
+    df_ue = df_ue.astype({"SeqNum":'int'})
     df_ue["location"] = "ue"
     df_ue["type"] = df_ue.apply(lambda x: "request" if x["SourceIPInner"] != "10.45.0.1" else "response" , axis=1)
     df_ue.sort_values(by=["SeqNum", "type"], ignore_index=True, inplace=True)
@@ -60,6 +47,30 @@ def handle_ping_run(run_directory: str):
     df_ue.loc[indexer,"IAT"] = df_ue.loc[indexer,"Timestamp"] - df_ue.loc[indexer,"Timestamp"].shift(1)
 
     df_gnb = pd.read_csv(gnb_rec)
+    try:
+        df_gnb = df_gnb.astype({"SeqNum":'int'})
+    except Exception as e:
+        print(run_directory)
+        print(df_gnb.dtypes)
+        df_gnb["SeqNum"] = pd.to_numeric(df_gnb["SeqNum"],errors='coerce')
+        df_gnb.to_csv(f"{run_directory}/err_gnb_.csv", index=False)
+        df_gnb = df_gnb.dropna()
+        df_gnb = df_gnb.astype({"SeqNum":'int'})
+        seqnum1 = df_gnb.query("SourceIPInner == '10.45.0.1'")["SeqNum"]
+        mini = int(seqnum1.min())
+        maxi = int(seqnum1.max())
+        print((mini,maxi))
+        miss1 = [int(i) for i in range(mini,maxi+1) if int(i) not in seqnum1]
+        print(f"len1: {len(miss1)}")
+        seqnum2 = df_gnb.query("SourceIPInner != '10.45.0.1'")["SeqNum"]
+        mini = int(seqnum2.min())
+        maxi = int(seqnum2.max())
+        print((mini,maxi))
+        miss2 = [int(i) for i in range(mini,maxi+1) if int(i) not in seqnum2]
+        print(f"len2: {len(miss2)}")
+        seqnum1.to_csv(f"{run_directory}/err_gnb_seqnum1_.csv", index=False)
+        seqnum2.to_csv(f"{run_directory}/err_gnb_seqnum2_.csv", index=False)
+        raise e
     df_gnb["location"] = "gnb"
     df_gnb["type"] = df_gnb.apply(lambda x: "request" if x["SourceIPInner"] != "10.45.0.1" else "response" , axis=1)
     df_gnb.sort_values(by=["SeqNum", "type"], ignore_index=True, inplace=True)
@@ -123,28 +134,9 @@ def handle_ping_run(run_directory: str):
     df.to_csv(f"{run_directory}/combined.csv.gz", index=False,compression="gzip")
 
 
-
-
-    # print(df)
-    # print(df_ue.head())
-    # print(df_gnb.head())
-    # print(df.dtypes)
-
-
-    metrics_default = {
-        "delay":np.nan,
-        "throughput":np.nan,
-        "iat":np.nan,
-    }
-    relevant_stats = ["min", "max", "mean", "std", "5%", "25%", "50%", "75%", "95%"]
-    metrics = {"direction":'XXX'}
-    for k,v in metrics_default.items():
-        for s in relevant_stats:
-            metrics[f"{k}__{s}"] = v
-
+    percentiles = [0.05, 0.25, 0.5, 0.75, 0.95]
+    assert(all([f"{int(p*100)}%" in relevant_stats for p in percentiles]))
     ret = df.groupby("type").describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
-
-
 
     for s in relevant_stats:
         metrics[f"delay__{s}"] = ret["delay"][s].loc["request"]
@@ -162,6 +154,48 @@ def handle_ping_run(run_directory: str):
     # print(metrics)
     # print("")
     return ret1
+
+
+
+def handle_ping_run(run_directory: str):
+    # TODO: 2025-03-31: this function should be more high level. Then it would be easier and more clear how a failed run is handled
+
+    # TODO: one more layer of redirection: don't aggregate in this function, instead return the prepared df (so it can be used on a per file bases!)
+    # TODO: better(?): write combined df to file
+
+    metrics_default = {
+        "delay":np.nan,
+        "throughput":np.nan,
+        "iat":np.nan,
+    }
+    relevant_stats = ["min", "max", "mean", "std", "5%", "25%", "50%", "75%", "95%"]
+    metrics = {"direction":'XXX',"failed":False}
+    for k,v in metrics_default.items():
+        for s in relevant_stats:
+            metrics[f"{k}__{s}"] = v
+
+    with open(f"{run_directory}/{os.path.basename(run_directory)}.yaml", "r") as f:
+        config = yaml.unsafe_load(f)
+        dc = pd.json_normalize(config, sep="__") # flatten config
+        config = dc.to_dict(orient='records')[0]
+
+    faulty_run = os.path.isfile(f"{run_directory}/FAILED")
+    fault_reason = ""
+
+    if not faulty_run:
+        return calc_pkt_metrics(run_directory=run_directory, metrics=metrics, relevant_stats=relevant_stats, config=config)
+    else:
+        with open(f"{run_directory}/FAILED", "r") as ff:
+            fault_reason = ff.read().strip().strip("\n")
+        # TODO: how do i know if there is up-&downstream?
+        metrics["direction"]="Ul"
+        metrics["failed"]=True
+        ret1 = {**metrics, **config}
+        ret2 = copy.deepcopy(ret1)
+        ret2["direction"]="Dl"
+        return [ret1,ret2]
+
+
 
 
 
