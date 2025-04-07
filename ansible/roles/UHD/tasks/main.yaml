@@ -1,6 +1,16 @@
 ---
+# version: tag/branch name of the target version
+# Install path is known
 
-- name: Install dependencies
+
+- ansible.builtin.set_fact:
+    install_path: "/home/gnb/gnb_versions/{{ version }}/UHD--{{ version }}"
+- ansible.builtin.file:
+    path: "{{ install_path }}"
+    state: directory
+
+
+- name: '("{{version}}"): Install dependencies'
   ansible.builtin.apt:
     install_recommends: false
     pkg:
@@ -31,54 +41,55 @@
     state: present
   become: true
 
-- name: Clone USRP Hardware Driver
+- name: '("{{version}}"): Clone USRP Hardware Driver'
   ansible.builtin.git:
     repo: "https://github.com/EttusResearch/uhd.git"
     clone: true
-    dest: "./uhd/{{ hostvars[inventory_hostname].uhd_version }}"
-    version: "{{ hostvars[inventory_hostname].uhd_version }}"
+    dest: "{{ install_path }}"
+    version: "{{ version }}"
   become: false
 
-- name: Create Symlink
+- name: '("{{version}}"): Compile UHD - prepare build'
   ansible.builtin.file:
-    src: "~/uhd/{{ hostvars[inventory_hostname].uhd_version }}"
-    dest: "~/uhd/current-version"
-    state: link
-  become: false
-
-- name: Compile UHD - prepare build
-  ansible.builtin.file:
-    dest: uhd/current-version/host/build
+    dest: "{{ install_path }}/host/build"
     state: directory
   become: false
 
-- name: Compile UHD - cmake
-  ansible.builtin.command:
-    chdir: uhd/current-version/host/build
+- name: '("{{version}}"): Compile UHD - cmake'
+  ansible.builtin.shell:
+    chdir: "{{ install_path }}/host/build"
+    cmd: cmake ../
+  become: false
+  ignore_errors: true
+# WARN: not an error: cmake fails for the first time for UHD-3.15.LTS in ansible (for some bizzare reason)
+#  second time works
+- name: '("{{version}}"): Compile UHD - cmake'
+  ansible.builtin.shell:
+    chdir: "{{ install_path }}/host/build"
     cmd: cmake ../
   become: false
 
-- name: Compile UHD - make
+- name: '("{{version}}"): Compile UHD - make'
   ansible.builtin.make:
-    chdir: uhd/current-version/host/build
+    chdir: "{{ install_path }}/host/build"
     jobs: "{{ ansible_facts['processor_vcpus'] }}"
   become: false
 
-- name: Compile UHD - make test
+- name: '("{{version}}"): Compile UHD - make test'
   ansible.builtin.make:
-    chdir: uhd/current-version/host/build
+    chdir: "{{ install_path }}/host/build"
     target: test
     jobs: "{{ ansible_facts['processor_vcpus'] }}"
   become: false
 
-# - name: Compile UHD - make install
-#   ansible.builtin.make:
-#     chdir: uhd/current-version/host/build
-#     target: install
-#   become: true
+- name: '("{{version}}"): Compile UHD - make install'
+  ansible.builtin.make:
+    chdir: "{{ install_path }}/host/build"
+    target: install
+  become: true
 
-# - name: Compile UHD - setup library path
-#   ansible.builtin.command:
-#     cmd: ldconfig
-#   become: true
-
+- name: '("{{version}}"): Compile UHD - setup library path'
+  ansible.builtin.command:
+    chdir: "{{ install_path }}/host/build"
+    cmd: ldconfig
+  become: true

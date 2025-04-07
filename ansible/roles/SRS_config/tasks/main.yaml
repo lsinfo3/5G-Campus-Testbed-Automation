@@ -4,6 +4,7 @@
   ansible.builtin.slurp:
     path: "{{ gnb_srs_config_path }}"
   register: gnb_srs_config_content
+  local_action: true
 
 - name: "Edit srsRAN config: parse variable to dict"
   ansible.builtin.set_fact:

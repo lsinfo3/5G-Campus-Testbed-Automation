@@ -1,6 +1,11 @@
 ---
+# requires params:
+# version: tag/branch name of the target version
+# install_path: target path for srsRAN installation
+# commit: actual full commit hash
+# uhd: uhd version
 
-- name: Install dependencies
+- name: '("{{version}}"): Install dependencies'
   ansible.builtin.apt:
     install_recommends: false
     pkg:
@@ -17,46 +22,49 @@
     state: present
   become: true
 
-- name: Clone SRS RAN
+- ansible.builtin.file:
+    path: "{{ install_path }}"
+    state: directory
+- ansible.builtin.include_role:
+    name: UHD
+  vars:
+    version: "{{ uhd }}"
+
+- name: '("{{version}}"): Clone srsRAN release'
   ansible.builtin.git:
-    repo: "https://github.com/srsRAN/srsRAN_Project.git"
+    repo: "https://github.com/srsran/srsRAN_Project"
     clone: true
-    dest: "~/srsRAN/"
+    dest: "{{ install_path }}"
+    version: "{{ commit }}"
   become: false
 
-- name: Compile SRS RAN - prepare build
+- ansible.builtin.set_fact:
+    git_root: "{{ install_path }}/"
+
+- name: '("{{version}}"): Compile SRS RAN - prepare build'
   ansible.builtin.file:
-    dest: ~/srsRAN/build
+    dest: "{{ git_root }}/build"
     state: directory
   become: false
 
-- name: Compile SRS RAN - cmake
-  ansible.builtin.command:
-    chdir: ~/srsRAN/build
+- name: '("{{version}}"): Compile SRS RAN - cmake'
+  ansible.builtin.shell:
+    chdir: "{{ git_root }}/build"
     cmd: cmake ../
   become: false
 
-- name: Compile SRS RAN - make
+- name: '("{{version}}"): Compile SRS RAN - make'
   ansible.builtin.make:
-    chdir: ~/srsRAN/build
-    jobs: "{{ ansible_facts['processor_vcpus'] }}"
+    chdir: "{{ git_root }}/build"
+    # TODO: jobs: "{{ ansible_facts['processor_vcpus'] }}"
+    jobs: 16
   become: false
 
-- name: Compile SRS RAN - make test
+- name: '("{{version}}"): Compile SRS RAN - make test'
   ansible.builtin.make:
-    chdir: ~/srsRAN/build
+    chdir: "{{ git_root }}/build"
     target: test
-    jobs: "{{ ansible_facts['processor_vcpus'] }}"
+    # TODO: jobs: "{{ ansible_facts['processor_vcpus'] }}"
+    jobs: 16
   become: false
-
-  # - name: Compile SRS RAN - make install
-  #   ansible.builtin.make:
-  #     chdir: ~/srsRAN/build
-  #     target: install
-  #   become: true
-
-  # - name: Compile SRS RAN - setup library path
-  #   ansible.builtin.command:
-  #     cmd: ldconfig
-  #   become: true
 

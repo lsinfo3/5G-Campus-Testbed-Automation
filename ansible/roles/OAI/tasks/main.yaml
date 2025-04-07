@@ -1,0 +1,55 @@
+---
+# requires params:
+# version: tag/branch name of the target version
+# install_path: target path for srsRAN installation
+# commit: actual full commit hash
+# uhd: uhd version
+
+# - name: Install dependencies
+#   ansible.builtin.apt:
+#     install_recommends: false
+#     pkg:
+#        - cmake
+#        - make
+#        - gcc
+#        - g++
+#        - pkg-config
+#        - libfftw3-dev
+#        - libmbedtls-dev
+#        - libsctp-dev
+#        - libyaml-cpp-dev
+#        - libgtest-dev
+#     state: present
+#   become: true
+#
+
+
+- ansible.builtin.file:
+    path: "{{ install_path }}"
+    state: directory
+- ansible.builtin.include_role:
+    name: UHD
+  vars:
+    version: "{{ uhd }}"
+
+- name: '("{{version}}"): Clone OAI release'
+  ansible.builtin.git:
+    repo: "https://gitlab.eurecom.fr/oai/openairinterface5g.git"
+    clone: true
+    dest: "{{ install_path }}"
+    version: "{{ commit }}"
+  become: false
+
+- ansible.builtin.set_fact:
+    archive_root: "{{ install_path }}/"
+
+- name: '("{{version}}"): Compile OAI RAN - install dependencies'
+  ansible.builtin.command:
+    chdir: "{{ archive_root }}/cmake_targets/"
+    cmd: "./build_oai -I"
+  become: true
+- name: '("{{version}}"): Compile OAI RAN - build'
+  ansible.builtin.command:
+    chdir: "{{ archive_root }}/cmake_targets/"
+    cmd: "./build_oai --ninja --gNB -C -w USRP" # WARNING: OAI docs states to not use the `-w USRP` flag if you want to manage UHD yourself. This statement is FALSE!
+  become: true

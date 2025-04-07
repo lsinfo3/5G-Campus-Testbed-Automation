@@ -1,0 +1,47 @@
+---
+
+- name: Install gnb
+  hosts: 5g-gnb
+  pre_tasks:
+    - name: load versions config
+      ansible.builtin.include_vars:
+        file: ../config/gnb-versions.yaml
+
+  tasks:
+    - name: print debug UHD versions
+      ansible.builtin.debug:
+        msg: "UHD:: {{ item }}"
+      loop: "{{ uhd_versions }}"
+
+    - name: print debug OAI versions
+      ansible.builtin.debug:
+        msg: "OAI:: uhd:{{ item.UHD }} oai:{{ item.OAI }}"
+      loop: "{{ oai_versions }}"
+
+    # - name: register path
+    # - ansible.builtin.set_fact:
+    #   xyz_path: "/home/gnb/gnb_versions/{{ item.UHD }}/{{ item.OAI }}"
+
+    - ansible.builtin.include_role:
+        name: UHD
+      vars:
+        version: "{{ item }}"
+      loop: "{{ uhd_versions }}"
+
+    - ansible.builtin.include_role:
+        name: OAI
+      vars:
+        install_path: "/home/gnb/gnb_versions/{{ item.UHD }}/OAI--{{ item.OAI }}--{{ item.commit }}"
+        version: "{{ item.OAI }}"
+        commit: "{{ item.commit }}"
+        uhd: "{{ item.UHD }}"
+      loop: "{{ oai_versions }}"
+
+    - ansible.builtin.include_role:
+       name: SRS
+      vars:
+        install_path: "/home/gnb/gnb_versions/{{ item.UHD }}/SRS--{{ item.SRS }}--{{ item.commit }}"
+        version: "{{ item.OAI }}"
+        commit: "{{ item.commit }}"
+        uhd: "{{ item.UHD }}"
+      loop: "{{ srs_versions }}"
