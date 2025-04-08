@@ -6,6 +6,14 @@ import hashlib
 yaml.Dumper.ignore_aliases = lambda *args : True # Don't reference identical types
 
 
+# OAI--v2.1.0--9fab2124417cfe67fe09b1eab5e377e26c5cf3a5
+# OAI--v2.2.0--68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+# SRS--release_24_04--c33cacba7d940e734ac7bad08935cbc35578fad9
+# SRS--release_24_10--9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+
+
+
+
 GLOBAL_COUNTER = 0
 
 system = {
@@ -16,7 +24,7 @@ system = {
 # TODO:  Should different types of traffic generation result in the same identifier=hash?
 fixed_params = {
     "distance_horizontal_in_m": 0.5,
-    "distance_vertical_in_m": 0.35,
+    "distance_vertical_in_m": 0.34,
     "gnb_antenna_inclanation_in_degree": 90,
     "gnb_antenna_rotation_in_degree": 0,
     "ue_antenna_inclanation_in_degree": 90,
@@ -36,7 +44,10 @@ run_to_run_params_default = {
     #         "icmp_count": 6000
     #     },
     "gnb_version": {
-        "type": "srsRAN"
+        "type": "srsRAN",
+        "uhd_version": "UHD-4.0",
+        "version": "",
+        "commit":""
         #TODO: "version": xyz
         },
     "traffic_config": {                     # TODO: build_traffic_config function
@@ -123,21 +134,33 @@ def create_param_combinations():
     c = []
 
     ratios = [1,2,4]
+    ratios = [1,2]
 
     period_lengths = [5, 10, 20]
+    period_lengths = [5, 10]
 
-    srsranconf = { "type": "srsRAN" }
-    oairanconf = { "type": "OAI" }
+    srsranconfs = [
+            {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
+            {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_10", "commit":"9d5dd742a70e82c0813c34f57982f9507f1b6d5d"},
+            {"type":"srsRAN","uhd_version": "UHD-4.0", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
+            {"type":"srsRAN","uhd_version": "UHD-4.0", "version": "release_24_10", "commit":"9d5dd742a70e82c0813c34f57982f9507f1b6d5d"},
+            ]
+    oairanconfs = [
+            {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
+            {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
+            {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
+            {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
+            ]
 
-    for gnb in [srsranconf, oairanconf]:
-        run_to_run_params_default["traffic_config"]["scapy_iat"]="0.01"
-        run_to_run_params_default["traffic_config"]["scapy_count"]="6000"
-        for ratio in ratios:
-            for period_length in period_lengths:
-                r = new_per_run_config_base()
-                r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
-                r["gnb_version"] = gnb
-                c.append(r)
+    for gnb in srsranconfs + oairanconfs:
+        # run_to_run_params_default["traffic_config"]["scapy_iat"]="0.01"
+        # run_to_run_params_default["traffic_config"]["scapy_count"]="6000"
+        # for ratio in ratios:
+        #     for period_length in period_lengths:
+        #         r = new_per_run_config_base()
+        #         r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+        #         r["gnb_version"] = gnb
+        #         c.append(r)
 
         run_to_run_params_default["traffic_config"]["scapy_iat"]="0.001"
         run_to_run_params_default["traffic_config"]["scapy_count"]="60000"

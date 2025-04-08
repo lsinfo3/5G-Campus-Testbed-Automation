@@ -56,15 +56,13 @@
 - name: '("{{version}}"): Compile SRS RAN - make'
   ansible.builtin.make:
     chdir: "{{ git_root }}/build"
-    # TODO: jobs: "{{ ansible_facts['processor_vcpus'] }}"
-    jobs: 16
+    jobs: "{{ ansible_facts['processor_vcpus'] }}"
   become: false
 
 - name: '("{{version}}"): Compile SRS RAN - make test'
   ansible.builtin.make:
     chdir: "{{ git_root }}/build"
     target: test
-    # TODO: jobs: "{{ ansible_facts['processor_vcpus'] }}"
-    jobs: 16
+    jobs: "{{ ansible_facts['processor_vcpus'] }}"
   become: false
 

@@ -1,14 +1,35 @@
 ---
 
-- name: "Edit srsRAN config: read config to variable"
-  ansible.builtin.slurp:
-    path: "{{ gnb_srs_config_path }}"
-  register: gnb_srs_config_content
-  local_action: true
+# requires following variables:
+# srs_version
+# tdd_dl_ul_tx_period
+# tdd_dl_slots
+# tdd_dl_symbols
+# tdd_ul_slots
+# tdd_ul_symbols
 
-- name: "Edit srsRAN config: parse variable to dict"
-  ansible.builtin.set_fact:
-    gnb_srs_config: "{{ gnb_srs_config_content['content'] | b64decode | from_yaml }}"
+
+- name: "Edit srsRAN config: read config to variable"
+  when: srs_version == "release_24_10"
+  block:
+     - ansible.builtin.slurp:
+         path: ../config/gnb_srs.yml
+       register: gnb_srs_config_content__24_10
+       delegate_to: localhost
+     - name: "Edit srsRAN config: parse variable to dict"
+       ansible.builtin.set_fact:
+         gnb_srs_config: "{{ gnb_srs_config_content__24_10['content'] | b64decode | from_yaml }}"
+- name: "Edit srsRAN config: read config to variable"
+  when: srs_version != "release_24_10"
+  block:
+     - ansible.builtin.slurp:
+         path: ../config/gnb_srs_legacy.yml
+       register: gnb_srs_config_content__legacy
+       delegate_to: localhost
+     - name: "Edit srsRAN config: parse variable to dict"
+       ansible.builtin.set_fact:
+         gnb_srs_config: "{{ gnb_srs_config_content__legacy['content'] | b64decode | from_yaml }}"
+
 
 - name: "PRINT SRS CONFIG"
   ansible.builtin.debug:

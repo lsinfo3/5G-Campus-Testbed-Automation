@@ -25,7 +25,7 @@ srs_versions:
    - UHD: "UHD-4.0"
      SRS: "release_24_10"
      commit: "9d5dd742a70e82c0813c34f57982f9507f1b6d5d"
-   # BORKED
+   # BORKED -> not borked just different config required
    # - UHD: "UHD-4.0"
    #   SRS: "release_24_04"
    #   commit: "1483bda3091420cf7270eacdf31de932865c6294"
@@ -36,7 +36,7 @@ srs_versions:
    - UHD: "UHD-3.15.LTS"
      SRS: "release_24_10"
      commit: "9d5dd742a70e82c0813c34f57982f9507f1b6d5d"
-   # BORKED
+   # BORKED -> not borked just different config required
    # - UHD: "UHD-3.15.LTS"
    #   SRS: "release_24_04"
    #   commit: "1483bda3091420cf7270eacdf31de932865c6294"

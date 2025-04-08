@@ -18,10 +18,6 @@
         msg: "OAI:: uhd:{{ item.UHD }} oai:{{ item.OAI }}"
       loop: "{{ oai_versions }}"
 
-    # - name: register path
-    # - ansible.builtin.set_fact:
-    #   xyz_path: "/home/gnb/gnb_versions/{{ item.UHD }}/{{ item.OAI }}"
-
     - ansible.builtin.include_role:
         name: UHD
       vars:

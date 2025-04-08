@@ -1,3 +1,7 @@
+
+
+
+
 # INFO: kill running OAI/SRS instances
 - name: '"{{ item.identifier }}": killall running gnb instances'
   ansible.builtin.shell: |
@@ -21,10 +25,21 @@
        - 2-4.2
   become: true
 
+- name: '"{{ item.identifier }}": Switch UHD version'
+  ansible.builtin.include_role:
+    name: UHD
+  vars:
+    version: "{{ item.gnb_version.uhd_version }}"
 # INFO: edit config and start gnb application and wait!
 - name: '"{{ item.identifier }}": Run role'
   ansible.builtin.include_role:
     name: SRS_config
+  vars:
+    srs_version: "{{ item.gnb_version.version }}"
+  when: item.gnb_version.type== 'srsRAN'
+- name: register gnb_srs_binary path
+  ansible.builtin.set_fact:
+    gnb_srs_binary: "/home/gnb/gnb_versions/{{ item.gnb_version.uhd_version }}/SRS--{{ item.gnb_version.version }}--{{ item.gnb_version.commit }}/build/apps/gnb/gnb"
   when: item.gnb_version.type== 'srsRAN'
 - name: Launch SRS gNB
   shell: "{{ gnb_srs_binary }} -c {{ gnb_srs_config_path }}"
@@ -36,6 +51,10 @@
 - name: '"{{ item.identifier }}": Run role'
   ansible.builtin.include_role:
     name: OAI_config
+  when: item.gnb_version.type== 'OAI'
+- name: register gnb_oai_binary path
+  ansible.builtin.set_fact:
+    gnb_oai_binary: "/home/gnb/gnb_versions/{{ item.gnb_version.uhd_version }}/OAI--{{ item.gnb_version.version }}--{{ item.gnb_version.commit }}/cmake_targets/ran_build/build/nr-softmodem"
   when: item.gnb_version.type== 'OAI'
 - name: Launch OAI gNB
   shell: "{{ gnb_oai_binary }} -O {{ gnb_oai_config_path }} --sa --continuous-tx > {{ gnb_oai_logfile_path }} 2>&1"
