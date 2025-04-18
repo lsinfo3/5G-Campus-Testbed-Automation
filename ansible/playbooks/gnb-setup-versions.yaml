@@ -37,7 +37,7 @@
        name: SRS
       vars:
         install_path: "/home/gnb/gnb_versions/{{ item.UHD }}/SRS--{{ item.SRS }}--{{ item.commit }}"
-        version: "{{ item.OAI }}"
+        version: "{{ item.SRS }}"
         commit: "{{ item.commit }}"
         uhd: "{{ item.UHD }}"
       loop: "{{ srs_versions }}"

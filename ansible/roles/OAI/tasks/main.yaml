@@ -43,12 +43,12 @@
 - ansible.builtin.set_fact:
     archive_root: "{{ install_path }}/"
 
-- name: '("{{version}}"): Compile OAI RAN - install dependencies'
+- name: '("{{ version }}"): Compile OAI RAN - install dependencies'
   ansible.builtin.command:
     chdir: "{{ archive_root }}/cmake_targets/"
     cmd: "./build_oai -I"
   become: true
-- name: '("{{version}}"): Compile OAI RAN - build'
+- name: '("{{ version }}"): Compile OAI RAN - build (takes multiple minutes)'
   ansible.builtin.command:
     chdir: "{{ archive_root }}/cmake_targets/"
     cmd: "./build_oai --ninja --gNB -C -w USRP" # WARNING: OAI docs states to not use the `-w USRP` flag if you want to manage UHD yourself. This statement is FALSE!

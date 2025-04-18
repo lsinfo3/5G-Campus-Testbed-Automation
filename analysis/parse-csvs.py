@@ -196,6 +196,12 @@ def handle_ping_run(run_directory: str):
         return [ret1,ret2]
 
 
+def aggregate_final_df(df: pd.DataFrame):
+    # df["gnb_version__combined"] = df["gnb_version__version"] + df["gnb_version__commit"]
+    # df["gnb_version__combined"] = df.apply(lambda x: x["gnb_version__version"] + str(x["gnb_version__commit"])[:7])
+    df["gnb_version__combined"] = df["gnb_version__version"] + "__" + df["gnb_version__commit"].str.slice(0,7)
+    return df
+
 
 
 
@@ -217,7 +223,13 @@ for r in returns:
 
 
 final_df = pd.DataFrame.from_records(records)
+# aggregate final df
+final_df = aggregate_final_df(final_df)
+
+
 print(final_df)
+
+
 
 final_df.to_parquet(f"{ansible_dump}/all_runs.parquet")
 final_df.to_csv(f"{ansible_dump}/all_runs.csv.gz", compression="gzip")

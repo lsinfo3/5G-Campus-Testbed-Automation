@@ -1,7 +1,7 @@
 # Branch names!
 uhd_versions:
    - "UHD-4.0"
-   # - "UHD-3.9.LTS" borked?
+   # - "UHD-3.9.LTS" # BORKED?
    - "UHD-3.15.LTS"
 
 # UHD version branch name, gitlab commit hash and related tag release name
@@ -25,22 +25,22 @@ srs_versions:
    - UHD: "UHD-4.0"
      SRS: "release_24_10"
      commit: "9d5dd742a70e82c0813c34f57982f9507f1b6d5d"
-   # BORKED -> not borked just different config required
-   # - UHD: "UHD-4.0"
-   #   SRS: "release_24_04"
-   #   commit: "1483bda3091420cf7270eacdf31de932865c6294"
    - UHD: "UHD-4.0"
      SRS: "release_24_04"
      commit: "c33cacba7d940e734ac7bad08935cbc35578fad9"
+     # Older
+   - UHD: "UHD-4.0"
+     SRS: "release_24_04"
+     commit: "1483bda3091420cf7270eacdf31de932865c6294"
 
    - UHD: "UHD-3.15.LTS"
      SRS: "release_24_10"
      commit: "9d5dd742a70e82c0813c34f57982f9507f1b6d5d"
-   # BORKED -> not borked just different config required
-   # - UHD: "UHD-3.15.LTS"
-   #   SRS: "release_24_04"
-   #   commit: "1483bda3091420cf7270eacdf31de932865c6294"
    - UHD: "UHD-3.15.LTS"
      SRS: "release_24_04"
      commit: "c33cacba7d940e734ac7bad08935cbc35578fad9"
+     # Older
+   - UHD: "UHD-3.15.LTS"
+     SRS: "release_24_04"
+     commit: "1483bda3091420cf7270eacdf31de932865c6294"
 

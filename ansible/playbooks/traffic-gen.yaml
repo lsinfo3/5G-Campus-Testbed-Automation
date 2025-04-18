@@ -3,12 +3,15 @@
 - name: Generate traffic
   hosts: 5g-gnb
   vars:
+    collected_logs: "/tmp/5ggnb-logs"
     gnb_srs_config_path: "/home/gnb/srsRAN-configs/gnb_srs.yml"
     gnb_srs_logfile_path: "/tmp/gnb.log"
     gnb_srs_binary: "/home/gnb/srsRAN_Project/build/apps/gnb/gnb"
     gnb_oai_config_path: "/home/gnb/OAI-configs/gnb_oai.conf"
     gnb_oai_logfile_path: "/tmp/gnb.log"
     gnb_oai_binary: "/home/gnb/openairinterface5g/cmake_targets/ran_build/build/nr-softmodem"
+    snr_msm_script: "/home/gnb/read-snr.sh"
+    snr_msm_script_output: "/tmp/snr.csv"
 
   pre_tasks:
     - name: include test configuration

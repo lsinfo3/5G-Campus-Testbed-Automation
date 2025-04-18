@@ -1,6 +1,9 @@
 ---
 
-# TODO: fresh copy of config template?
+- name: Get default config
+  ansible.builtin.copy:
+    src: ../config/gnb_oai.conf
+    dest: "{{ gnb_oai_config_path }}"
 
 - name: "Edit OAI RAN config:"
   block:

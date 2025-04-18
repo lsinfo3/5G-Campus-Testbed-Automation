@@ -5,7 +5,7 @@
 # commit: actual full commit hash
 # uhd: uhd version
 
-- name: '("{{version}}"): Install dependencies'
+- name: '("{{ version }}"): Install dependencies'
   ansible.builtin.apt:
     install_recommends: false
     pkg:
@@ -30,7 +30,7 @@
   vars:
     version: "{{ uhd }}"
 
-- name: '("{{version}}"): Clone srsRAN release'
+- name: '("{{ version }}"): Clone srsRAN release'
   ansible.builtin.git:
     repo: "https://github.com/srsran/srsRAN_Project"
     clone: true
@@ -41,25 +41,25 @@
 - ansible.builtin.set_fact:
     git_root: "{{ install_path }}/"
 
-- name: '("{{version}}"): Compile SRS RAN - prepare build'
+- name: '("{{ version }}"): Compile SRS RAN - prepare build'
   ansible.builtin.file:
     dest: "{{ git_root }}/build"
     state: directory
   become: false
 
-- name: '("{{version}}"): Compile SRS RAN - cmake'
+- name: '("{{ version }}"): Compile SRS RAN - cmake'
   ansible.builtin.shell:
     chdir: "{{ git_root }}/build"
     cmd: cmake ../
   become: false
 
-- name: '("{{version}}"): Compile SRS RAN - make'
+- name: '("{{ version }}"): Compile SRS RAN - make (takes multiple minutes)'
   ansible.builtin.make:
     chdir: "{{ git_root }}/build"
     jobs: "{{ ansible_facts['processor_vcpus'] }}"
   become: false
 
-- name: '("{{version}}"): Compile SRS RAN - make test'
+- name: '("{{ version }}"): Compile SRS RAN - make test'
   ansible.builtin.make:
     chdir: "{{ git_root }}/build"
     target: test

@@ -59,7 +59,7 @@
   ansible.builtin.shell:
     chdir: "{{ install_path }}/host/build"
     cmd: cmake ../
-  become: false
+  become: true
   ignore_errors: true
 # WARN: not an error: cmake fails for the first time for UHD-3.15.LTS in ansible (for some bizzare reason)
 #  second time works
@@ -67,20 +67,20 @@
   ansible.builtin.shell:
     chdir: "{{ install_path }}/host/build"
     cmd: cmake ../
-  become: false
+  become: true
 
-- name: '("{{version}}"): Compile UHD - make'
+- name: '("{{version}}"): Compile UHD - make (takes multiple minutes)'
   ansible.builtin.make:
     chdir: "{{ install_path }}/host/build"
     jobs: "{{ ansible_facts['processor_vcpus'] }}"
-  become: false
+  become: true
 
 - name: '("{{version}}"): Compile UHD - make test'
   ansible.builtin.make:
     chdir: "{{ install_path }}/host/build"
     target: test
     jobs: "{{ ansible_facts['processor_vcpus'] }}"
-  become: false
+  become: true
 
 - name: '("{{version}}"): Compile UHD - make install'
   ansible.builtin.make:

@@ -2,34 +2,57 @@
 
 
 
+
 # INFO: kill running OAI/SRS instances
 - name: '"{{ item.identifier }}": killall running gnb instances'
   ansible.builtin.shell: |
      killall gnb || true
      killall nr-softmodem || true
+     killall read-snr.sh || true
   become: true
 
+- name: '"{{ item.identifier }}": create log dir'
+  ansible.builtin.file:
+    path: "{{ collected_logs }}"
+    state: directory
 
-# INFO: powercycle USB hub and wait!
-- name: '"{{ item.identifier }}": powercycle modem'
-  ansible.builtin.command:
-    argv:
-       - uhubctl
-       - --action
-       - cycle
-       - --delay
-       - 2
-       - --location
-       - 2-4
-       - --location
-       - 2-4.2
-  become: true
 
+  # TODO: is this required?
 - name: '"{{ item.identifier }}": Switch UHD version'
   ansible.builtin.include_role:
     name: UHD
   vars:
     version: "{{ item.gnb_version.uhd_version }}"
+
+
+# INFO: powercycle USB hub and wait!
+- name: '"{{ item.identifier }}": powercycle modem'
+  ansible.builtin.shell:
+     cmd: "/home/gnb/usb_resetter --device 2109:0817 --reset-device > {{ collected_logs }}/usb 2>&1"
+  become: true
+- wait_for:
+    timeout: 5
+- name: '"{{ item.identifier }}": powercycle modem'
+  ansible.builtin.shell:
+     cmd: "/home/gnb/usb_resetter --device 2109:0817 --reset-device > {{ collected_logs }}/usb 2>&1"
+  become: true
+#- name: '"{{ item.identifier }}": powercycle modem'
+#  ansible.builtin.command:
+#    argv:
+#       - uhubctl
+#       - --action
+#       - cycle
+#       - --delay
+#       - 5
+#       - --location
+#       - 2-3
+#       - --location
+#       - 3-3
+#  become: true
+
+- wait_for:
+    timeout: 15
+
 # INFO: edit config and start gnb application and wait!
 - name: '"{{ item.identifier }}": Run role'
   ansible.builtin.include_role:
@@ -96,7 +119,7 @@
 
 # INFO: get ip for modem
 - name: '"{{ item.identifier }}": Acquire IP for modem'
-  shell: "bash /home/gnb/setip.sh"
+  shell: "bash /home/gnb/setip.sh > {{ collected_logs }}/setip 2>&1"
   register: get_ip_shell_script
   ignore_errors: true
   become: true
@@ -107,6 +130,22 @@
     gnb_job_failed_cause: "getip"
     gnb_job_failed: true
 
+
+
+# INFO: log SNR,SiNR,PSRP, etc
+- name: copy qmi SNR monitor
+  ansible.builtin.copy:
+    src: "../config/read-snr.sh"
+    dest: "{{ snr_msm_script }}"
+    mode: 755
+  become: true
+
+- name: Launch qmi SNR monitor
+  shell: "{{ snr_msm_script }}"
+  become: true
+  async: 90
+  poll: 0
+  register: snr_job
 
 
 
@@ -216,12 +255,43 @@
     delegate_to: localhost
     when: gnb_job_failed
 
+  - name: '"{{ item.identifier }}": Copy SNR measurements'
+    ansible.builtin.fetch:
+       src: "{{ snr_msm_script_output }}"
+       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+       flat: true
+       validate_checksum: false
+    become: false
+
   # TODO: include start and end timestamp in yaml!!
   - name: "{{ item.identifier }}: Copy config to local: copy"
     ansible.builtin.copy:
        content: "{{ system.fixed_params | ansible.builtin.combine( item ) }}"
        dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/{{ item.identifier }}.yaml"
     delegate_to: localhost
+
+  - name: "{{ item.identifier }}: Copy shell output to local: compress"
+    community.general.archive:
+       path: "{{ collected_logs }}"
+       dest: "{{ collected_logs }}.tar.gz"
+       format: gz
+       force_archive: true
+       unsafe_writes: false
+  - name: "{{ item.identifier }}: Copy shell output to local: copy"
+    ansible.builtin.fetch:
+       src: "{{ collected_logs }}.tar.gz"
+       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/shell_output.tar.gz"
+       flat: true
+       validate_checksum: false
+    become: true
+    # delegate_to: localhost
+
+  # TODO: fails for some reason, using shell for now
+  - name: "{{ item.identifier }}: Copy shell output to local: remove old"
+    ansible.builtin.file:
+       path: "{{ collected_logs }}"
+       state: absent
+    become: true
 
   - name: '"{{ item.identifier }}": Copy gnb config'
     ansible.builtin.fetch:
@@ -250,6 +320,16 @@
           flat: true
           validate_checksum: false
        become: false
+     - name: '"{{ item.identifier }}": Remove remote gnb log'
+       ansible.builtin.file:
+          path: "{{ gnb_srs_logfile_path }}"
+          state: absent
+       become: true
+     - name: '"{{ item.identifier }}": Remove remote gnb log archive'
+       ansible.builtin.file:
+          path: "{{ gnb_srs_logfile_path }}.gz"
+          state: absent
+       become: true
     when: item.gnb_version.type== 'srsRAN'
   - block:
      - name: '"{{ item.identifier }}": Compress log'
@@ -263,6 +343,16 @@
           flat: true
           validate_checksum: false
        become: false
+     - name: '"{{ item.identifier }}": Remove remote gnb log'
+       ansible.builtin.file:
+          path: "{{ gnb_oai_logfile_path }}"
+          state: absent
+       become: true
+     - name: '"{{ item.identifier }}": Remove remote gnb log archive'
+       ansible.builtin.file:
+          path: "{{ gnb_oai_logfile_path }}.gz"
+          state: absent
+       become: true
     when: item.gnb_version.type== 'OAI'
 
   - name: "{{ item.identifier }}: Handle pcaps"
