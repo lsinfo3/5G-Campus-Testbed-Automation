@@ -36,7 +36,7 @@ fixed_params = {
 
 run_to_run_params_default = {
     "identifier" : 0,
-    "run": 1,
+    "run": 0,
     #     "traffic_config": {                     # TODO: build_traffic_config function
     #         "traffic_type" : "ping",
     #         "traffic_duration": 60,
@@ -122,9 +122,9 @@ def build_tdd_config(period=10, ratio=2, dl_symbols = 8, ul_symbols = 4, min_fle
 
 def new_per_run_config_base():
     r = copy.deepcopy(run_to_run_params_default)
-    global GLOBAL_COUNTER
-    r["identifier"] = f"{dict_to_small_hash(fixed_params)}__{GLOBAL_COUNTER}"
-    GLOBAL_COUNTER+=1
+    # global GLOBAL_COUNTER
+    # r["identifier"] = f"{dict_to_small_hash(fixed_params)}__{GLOBAL_COUNTER}"
+    # GLOBAL_COUNTER+=1
     return r
 
 
@@ -138,6 +138,8 @@ def create_param_combinations():
 
     period_lengths = [5, 10, 20]
     period_lengths = [5, 10]
+
+    runs = [ i for i in range(5) ]
 
     srsranconfs = [
             {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
@@ -166,10 +168,15 @@ def create_param_combinations():
         run_to_run_params_default["traffic_config"]["scapy_count"]="60000"
         for ratio in ratios:
             for period_length in period_lengths:
-                r = new_per_run_config_base()
-                r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
-                r["gnb_version"] = gnb
-                c.append(r)
+                for run in runs:
+                    r = new_per_run_config_base()
+                    r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+                    r["gnb_version"] = gnb
+                    r["run"] = 0
+                    r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
+                    # r["identifier"] = r["identifier"] + f"__{run:03d}"
+                    r["run"] = run
+                    c.append(r)
 
     return c
 
