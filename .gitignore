@@ -1,5 +1,7 @@
 __pycache__
 data/
+dumps*/
+dumps/
 *.parquet
 *.pcap
 *.pcap.gz

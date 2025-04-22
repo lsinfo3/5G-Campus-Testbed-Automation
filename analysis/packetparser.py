@@ -73,7 +73,7 @@ def parse_pcap_gtp(infile, outfile, udpport = 6363):
                                 try:
                                     ip_inner = dpkt.ip.IP(ip_outer.data.data[16:])
                                 except Exception as e:
-                                    print(f"Can't parse ip frame: {e}")
+                                    print(f"Can't parse ip frame {pktid}! File:{infile} : {e}")
                                     continue
 
                                 # Convert IP addresses from binary to string format
