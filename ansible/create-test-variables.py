@@ -51,11 +51,13 @@ run_to_run_params_default = {
         #TODO: "version": xyz
         },
     "traffic_config": {                     # TODO: build_traffic_config function
-        "traffic_type" : "scapy",
+        "traffic_type" : "scapyudpping",    # 'scapyudpping', 'iperfthroughput' or 'ping'
+        "direction": "Ul",                   # only relevant for 'iperfthroughput'
         "traffic_duration": 60,
         "proto": "udp",
         "dist": "det",
         "iat": "0.01",
+        "rate": "100M",                     # only relevant for throughput measurements
         "size": "small",
         "count": "6000",
         "target_ip": "10.45.0.1",
@@ -135,22 +137,24 @@ def create_param_combinations():
 
     ratios = [1,2,4]
     ratios = [1,2]
+    ratios = [2]
 
     period_lengths = [5, 10, 20]
     period_lengths = [5, 10]
+    period_lengths = [5]
 
-    runs = [ i for i in range(5) ]
+    runs = [ i for i in range(2) ]
 
     srsranconfs = [
-            {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
+            # {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
             {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_10", "commit":"9d5dd742a70e82c0813c34f57982f9507f1b6d5d"},
-            {"type":"srsRAN","uhd_version": "UHD-4.0", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
+            # {"type":"srsRAN","uhd_version": "UHD-4.0", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
             {"type":"srsRAN","uhd_version": "UHD-4.0", "version": "release_24_10", "commit":"9d5dd742a70e82c0813c34f57982f9507f1b6d5d"},
             ]
     oairanconfs = [
-            {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
+            # {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
             {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
-            {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
+            # {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
             {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
             ]
 
@@ -164,8 +168,29 @@ def create_param_combinations():
         #         r["gnb_version"] = gnb
         #         c.append(r)
 
-        run_to_run_params_default["traffic_config"]["scapy_iat"]="0.001"
-        run_to_run_params_default["traffic_config"]["scapy_count"]="60000"
+
+        # iperf
+        run_to_run_params_default["traffic_config"]["traffic_type"] = "iperfthroughput"
+        run_to_run_params_default["traffic_config"]["target_port"] = "4455"
+        run_to_run_params_default["traffic_config"]["iat"]="0.001"
+        run_to_run_params_default["traffic_config"]["count"]="60000"
+        for ratio in ratios:
+            for period_length in period_lengths:
+                for run in runs:
+                    r = new_per_run_config_base()
+                    r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+                    r["gnb_version"] = gnb
+                    r["run"] = 0
+                    r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
+                    # r["identifier"] = r["identifier"] + f"__{run:03d}"
+                    r["run"] = run
+                    c.append(r)
+
+        # scapy
+        run_to_run_params_default["traffic_config"]["traffic_type"] = "scapyudpping"
+        run_to_run_params_default["traffic_config"]["target_port"] = "3344"
+        run_to_run_params_default["traffic_config"]["iat"]="0.001"
+        run_to_run_params_default["traffic_config"]["count"]="60000"
         for ratio in ratios:
             for period_length in period_lengths:
                 for run in runs:
