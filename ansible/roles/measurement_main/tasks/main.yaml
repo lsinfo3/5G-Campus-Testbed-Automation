@@ -26,32 +26,18 @@
 
 
 # INFO: powercycle USB hub and wait!
+- name: '"{{ item.identifier }}": power off modem'
+  ansible.builtin.shell:
+    cmd: "uhubctl --action off --location 2-3 --location 3-3 2>&1"
+  become: true
+- wait_for:
+    timeout: 2
 - name: '"{{ item.identifier }}": powercycle modem'
   ansible.builtin.shell:
      cmd: "/home/gnb/usb_resetter --device 2109:0817 --reset-device > {{ collected_logs }}/usb 2>&1"
   become: true
 - wait_for:
-    timeout: 5
-- name: '"{{ item.identifier }}": powercycle modem'
-  ansible.builtin.shell:
-     cmd: "/home/gnb/usb_resetter --device 2109:0817 --reset-device > {{ collected_logs }}/usb 2>&1"
-  become: true
-#- name: '"{{ item.identifier }}": powercycle modem'
-#  ansible.builtin.command:
-#    argv:
-#       - uhubctl
-#       - --action
-#       - cycle
-#       - --delay
-#       - 5
-#       - --location
-#       - 2-3
-#       - --location
-#       - 3-3
-#  become: true
-
-- wait_for:
-    timeout: 15
+    timeout: 20 # TODO: wait for modem recognition from modemmanager
 
 # INFO: edit config and start gnb application and wait!
 - name: '"{{ item.identifier }}": Run role'
@@ -80,7 +66,7 @@
     gnb_oai_binary: "/home/gnb/gnb_versions/{{ item.gnb_version.uhd_version }}/OAI--{{ item.gnb_version.version }}--{{ item.gnb_version.commit }}/cmake_targets/ran_build/build/nr-softmodem"
   when: item.gnb_version.type== 'OAI'
 - name: Launch OAI gNB
-  shell: "{{ gnb_oai_binary }} -O {{ gnb_oai_config_path }} --sa --continuous-tx > {{ gnb_oai_logfile_path }} 2>&1"
+  shell: "{{ gnb_oai_binary }} -O {{ gnb_oai_config_path }} --sa --continuous-tx 2>&1 | ts '%.s' > {{ gnb_oai_logfile_path }} 2>&1" # pipe stdout+stderr to ts to get timestamps in the log
   become: true
   async: 900
   poll: 0
@@ -204,7 +190,7 @@
   - name: '"{{ item.identifier }}": run udp scapy traffic gen role'
     ansible.builtin.include_role:
       name: traffic-generation
-      tasks_from: scapy.yaml
+      tasks_from: scapy-udp-ping.yaml
     vars:
       tg_proto: "{{ item.traffic_config.proto }}"
       tg_dist: "{{ item.traffic_config.dist }}"
@@ -214,7 +200,18 @@
       tg_ip: "{{ item.traffic_config.target_ip }}"
       tg_port: "{{ item.traffic_config.target_port }}"
       tg_burst: "{{ item.traffic_config.burst }}"
-    when: item.traffic_config.traffic_type == 'scapy'
+    when: item.traffic_config.traffic_type == 'scapyudpping'
+  - name: '"{{ item.identifier }}": run udp iperf traffic gen role'
+    ansible.builtin.include_role:
+      name: traffic-generation
+      tasks_from: iperf-udp-throughput.yaml
+    vars:
+      tg_port: "{{ item.traffic_config.target_port }}"
+      tg_size: "{{ item.traffic_config.size }}"
+      tg_ip: "{{ item.traffic_config.target_ip }}"
+      tg_duration: "{{ item.traffic_config.traffic_duration }}"
+      tg_rate: "{{ item.traffic_config.rate }}"
+    when: item.traffic_config.traffic_type == 'iperfthroughput'
 
   - name: '"{{ item.identifier }}": wait for gnb tcpdump'
     ansible.builtin.async_status:

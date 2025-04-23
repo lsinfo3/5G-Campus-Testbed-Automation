@@ -1,4 +1,3 @@
-
 ---
 
 # INFO: this task runs the python traffic generation
@@ -11,18 +10,23 @@
     mode: '755'
   become: false
 
+# TODO: redirect stdout/stderr to file and move to host
+# TODO: when tg_proto == 'udp' ... else ...
+# TODO: when direction == 'Ul' ... else ...
 - name: Python traffic gen
   ansible.builtin.command:
      argv:
-        - "/home/{{ ansible_user_id }}/5g-scapy-client.py"
-        - "{{ tg_proto }}"
-        - "{{ tg_dist }}"
-        - "{{ tg_iat }}"
-        - "{{ tg_size }}"
-        - "{{ tg_count }}"
-        - "{{ tg_ip }}"
+        - "iperf3"
+        - "--udp"
+        - "--port"
         - "{{ tg_port }}"
-        - "{{ tg_burst }}"
+        - "--client"
+        - "{{ tg_ip }}"
+        - "--time"
+        - "{{ tg_duration }}"
+        - "--bitrate"
+        - "{{ tg_rate }}"
+        # - "{{ tg_size }}"
   become: true
 
 #     tg_proto: "{{ item.traffic_config.scapy_proto }}"

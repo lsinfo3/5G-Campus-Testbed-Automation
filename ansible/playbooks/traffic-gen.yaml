@@ -11,13 +11,14 @@
     gnb_oai_logfile_path: "/tmp/gnb.log"
     gnb_oai_binary: "/home/gnb/openairinterface5g/cmake_targets/ran_build/build/nr-softmodem"
     snr_msm_script: "/home/gnb/read-snr.sh"
-    snr_msm_script_output: "/tmp/snr.csv"
+    snr_msm_script_output: "/tmp/modem-snr.csv"
 
   pre_tasks:
     - name: include test configuration
       # include_vars: ../first-tests-0.35h-scapy.yaml
       # include_vars: ../first-tests-0.35h-scapy-2.0.yaml
-      include_vars: ../compare-gnb-versions.yaml
+      # include_vars: ../compare-gnb-versions.yaml
+      include_vars: ../compare-gnb-versions-throughput.yaml
 
 
   tasks:
