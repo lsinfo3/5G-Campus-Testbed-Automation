@@ -1,14 +1,8 @@
 ---
 
 # INFO: this task runs the python traffic generation
-# WARNING: this requires a traffic sink to be set up on the target(=core)
+# WARNING: this requires a iperf3 server to be set up on the target(=core)
 
-- name: copy script
-  ansible.builtin.copy:
-    src: ../../../scripts/5g-scapy-client.py
-    dest: /home/{{ ansible_user_id }}/5g-scapy-client.py
-    mode: '755'
-  become: false
 
 # TODO: redirect stdout/stderr to file and move to host
 # TODO: when tg_proto == 'udp' ... else ...
@@ -28,12 +22,3 @@
         - "{{ tg_rate }}"
         # - "{{ tg_size }}"
   become: true
-
-#     tg_proto: "{{ item.traffic_config.scapy_proto }}"
-#     tg_dist: "{{ item.traffic_config.scapy_dist }}"
-#     tg_iat: "{{ item.traffic_config.scapy_iat }}"
-#     tg_size: "{{ item.traffic_config.scapy_size }}"
-#     tg_amount: "{{ item.traffic_config.scapy_amount }}"
-#     tg_ip: "{{ item.traffic_config.scapy_ip }}"
-#     tg_port: "{{ item.traffic_config.scapy_port }}"
-#     tg_burst: "{{ item.traffic_config.scapy_burst }}"

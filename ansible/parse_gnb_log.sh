@@ -7,6 +7,12 @@ LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__
 GNBTYPE="srsRAN"
 
 
+LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__cd2bd61d__001/gnb.log.gz"
+GNBTYPE="OAI"
+
+
+
+
 parse_srsran() {
     # INFO: this is for loglevel: 'info'
     echo -ne "TS,CQI,SNR,RSRP,MCS\n"
@@ -24,13 +30,26 @@ parse_srsran() {
 }
 
 parse_oai() {
-    # TODO: <
-    true
+    echo -ne "TS,CQI,SNR,RSRP,MCS\n"
+    gzip -dc "$LOGPATH" | grep " RSRP \| MCS \| SNR " | grep -e '^[0-9]' | while read -r line; do
+        ts="$(echo -n "$line" | awk '{print $1}')"
+        cqi=""
+        snr="$(echo -n "$line" | grep " SNR " | awk '{print $23}')"
+        rsrp="$(echo -n "$line" | grep " RSRP " | awk '{print $16}')"
+        mcs="$(echo -n "$line" | grep " MCS " | grep -v " SNR " | awk '{print $14}')"
+
+        # 1745504694.380505 UE RNTI e7eb CU-UE-ID 1 in-sync PH 52 dB PCMAX 21 dBm, average RSRP -70 (31 meas)
+        # 1745504694.380582 UE e7eb: dlsch_rounds 22637/3/1/0, dlsch_errors 0, pucch0_DTX 3, BLER 0.00000 MCS (1) 9
+        # 1745504694.380614 UE e7eb: ulsch_rounds 77550/23000/219/0, ulsch_errors 0, ulsch_DTX 209, BLER 0.06702 MCS (1) 8 (Qm 4 deltaMCS 0 dB) NPRB 5  SNR 14.0 dB
+        echo -ne "$ts,$cqi,$snr,$rsrp,$mcs\n"
+    done
 }
 
 
 
 if [[ $GNBTYPE == "srsRAN" ]]; then
     parse_srsran
+elif [[ $GNBTYPE == "OAI" ]]; then
+    parse_oai
 fi
 

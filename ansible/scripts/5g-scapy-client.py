@@ -63,7 +63,7 @@ def apply_burst_size(pkt_sched, burst_size):
 
 def send_packets(socket, iat_dist, arrival_rate, payload_size, packet_amount, packet_type, burst_size):
     if payload_size == "small":
-        payload = "aaa"
+        payload = "aaaa"
         index = 1
     else:
         payload = "X" * 1400
@@ -78,8 +78,9 @@ def send_packets(socket, iat_dist, arrival_rate, payload_size, packet_amount, pa
         pktschedule = t0 + 3 + apply_burst_size((np.array(range(0, packet_amount + 1)) * arrival_rate), burst_size)
 
     # tlast = t0
+    assert(packet_amount <= 0xffffffff)
     for i in range(0, packet_amount):
-        payload_n = payload + str(index)
+        payload_n = payload.encode() + index.to_bytes(4, "big")
         if packet_type != "icmp":
             pkt_n = Raw(payload_n)
         else:
