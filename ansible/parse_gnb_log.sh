@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+BASEPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps"
 
 
 LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__0/gnb.log.gz"
@@ -47,9 +48,25 @@ parse_oai() {
 
 
 
-if [[ $GNBTYPE == "srsRAN" ]]; then
-    parse_srsran
-elif [[ $GNBTYPE == "OAI" ]]; then
-    parse_oai
-fi
+walk_dir() {
+    for run_group in "$BASEPATH"/*/; do
+        for run in "$run_group"/*/; do
+            run_name="$(basename "$run")"
+            gnb_type="$(jq '.gnb_version.type' < "$run/$run_name.yaml")"
+            echo "$run"
+
+            if [[ $gnb_type == "srsRAN" ]]; then
+                parse_srsran > "$run"/gnb_snr.csv
+            elif [[ $GNBTYPE == "OAI" ]]; then
+                parse_oai > "$run"/gnb_snr.csv
+            fi
+        done
+    done
+}
+
+
+
+time walk_dir
+
+
 
