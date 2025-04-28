@@ -71,6 +71,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         seqnum1.to_csv(f"{run_directory}/err_gnb_seqnum1_.csv", index=False)
         seqnum2.to_csv(f"{run_directory}/err_gnb_seqnum2_.csv", index=False)
         raise e
+
     df_gnb["location"] = "gnb"
     df_gnb["type"] = df_gnb.apply(lambda x: "request" if x["SourceIPInner"] != "10.45.0.1" else "response" , axis=1)
     df_gnb.sort_values(by=["SeqNum", "type"], ignore_index=True, inplace=True)
@@ -80,18 +81,6 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     df_gnb.loc[indexer,"IAT"] = df_gnb.loc[indexer,"Timestamp"] - df_gnb.loc[indexer,"Timestamp"].shift(1)
     indexer = lambda d:d["type"] == "response"
     df_gnb.loc[indexer,"IAT"] = df_gnb.loc[indexer,"Timestamp"] - df_gnb.loc[indexer,"Timestamp"].shift(1)
-
-    ## wird nicht mehr gebraucht wenn wir die set.symmetric_difference bestimmen
-    ## min_max_seq = min([int(df_ue["SeqNum"].max()), int(df_gnb["SeqNum"].max())])
-    ## df_gnb= df_gnb[df_gnb["SeqNum"] < min_max_seq]
-    ## print(f"Max: {min_max_seq}")
-    ##
-    ## len_before = len(df_ue)
-    ## df_ue= df_ue[df_ue["SeqNum"] < min_max_seq]
-    ## len_after = len(df_ue)
-    ## print(f"New length: {len_after}, dropping {len_before-len_after} entries")
-    ## print(df_ue)
-    ## print(df_gnb)
 
 
     # find missing seqnums,
@@ -112,10 +101,6 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
 
     print(f"dropped {missing_pkts} pkts")
     print(f"len ue: {len(df_ue)}, len gnb: {len(df_gnb)}")
-    # print(f"ue-req: {set(df_ue.query("type == 'request'")["SeqNum"]).symmetric_difference(set(range(df_ue.query("type == 'request'")["SeqNum"].min(),df_ue.query("type == 'request'")['SeqNum'].max()+1)))}")
-    # print(f"ue-res: {set(df_ue.query("type == 'response'")["SeqNum"]).symmetric_difference(set(range(df_ue.query("type == 'response'")["SeqNum"].min(),df_ue.query("type == 'response'")['SeqNum'].max()+1)))}")
-    # print(f"gnb-req: {set(df_gnb.query("type == 'request'")["SeqNum"]).symmetric_difference(set(range(df_gnb.query("type == 'request'")["SeqNum"].min(),df_gnb.query("type == 'request'")['SeqNum'].max()+1)))}")
-    # print(f"gnb-res: {set(df_gnb.query("type == 'response'")["SeqNum"]).symmetric_difference(set(range(df_gnb.query("type == 'response'")["SeqNum"].min(),df_gnb.query("type == 'response'")['SeqNum'].max()+1)))}")
     df_gnb.sort_values(by=["type", "SeqNum"], ignore_index=True, inplace=True)
     df_ue.sort_values(by=["type", "SeqNum"], ignore_index=True, inplace=True)
     assert(len(df_ue) == len(df_gnb))
@@ -127,8 +112,8 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
 
 
     df_ue.dropna(subset=["delay"], inplace=True)
-    # df = pd.concat([df_ue, df_gnb])
-    df = pd.concat([df_ue])
+    df = pd.concat([df_ue, df_gnb]) # TODO: why was this commented out
+    # df = pd.concat([df_ue])
 
 
     df.to_csv(f"{run_directory}/combined.csv.gz", index=False,compression="gzip")
@@ -138,22 +123,31 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     assert(all([f"{int(p*100)}%" in relevant_stats for p in percentiles]))
     ret = df.groupby("type").describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
 
-    for s in relevant_stats:
-        metrics[f"delay__{s}"] = ret["delay"][s].loc["request"]
-    metrics["direction"] = "Ul"
-    ret1 = {**metrics, **config}
-    # TODO: Do we have upstream und downstream simultaneously?
-    if len(df.loc[df["type"] == "response"]) > 0:
+    if config["traffic_config__direction"] == "UlDl":
+        # Both Ul and Dl in the same pcaps
+        assert(len(df.loc[df["type"] == "response"]) > 0)
+        for s in relevant_stats:
+            metrics[f"delay__{s}"] = ret["delay"][s].loc["request"]
+        metrics["direction"] = "Ul"
+        ret1 = {**metrics, **config}
         for s in relevant_stats:
             metrics[f"delay__{s}"] = ret["delay"][s].loc["response"]
         metrics["direction"] = "Dl"
         ret2 = {**metrics, **config}
-        # print(metrics)
-        # print("")
-        return [ret1, ret2]
-    # print(metrics)
-    # print("")
-    return ret1
+        return [ret1,ret2]
+    else:
+        for s in relevant_stats:
+            metrics[f"delay__{s}"] = ret["delay"][s].loc["request"]
+        # TODO: steamlined throughput calculation
+        ts_min = df_gnb.query("type == 'request'")["Timestamp"].min()
+        ts_max = df_gnb.query("type == 'request'")["Timestamp"].max()
+        pkt_size = df_gnb.query("type == 'request'")["PacketSize"].mean()
+        amount = len(df_gnb.loc[df_gnb["type"] == "request"])
+        print(f"Mi:{ts_min},Ma:{ts_max},S:{pkt_size},A:{amount}")
+        metrics["throughput__mean"] = amount * pkt_size * 8 /(ts_max - ts_min)
+        metrics["direction"] = config["traffic_config__direction"]
+        ret1 = {**metrics, **config}
+        return ret1
 
 
 
@@ -204,6 +198,25 @@ def aggregate_final_df(df: pd.DataFrame):
 
 
 
+def handle_run(run_directory: str):
+    dirname = os.path.basename(run_directory)
+    run_config_path = f"{run_directory}/{dirname}.yaml"
+    print(run_config_path)
+
+    with open(run_config_path, "r") as rf:
+        run_config = yaml.safe_load(rf)
+
+    traffic_type = run_config["traffic_config"]["traffic_type"]
+
+    if traffic_type == "scapyudpping":
+        return handle_ping_run(run_directory)
+    elif traffic_type == "iperfthroughput":
+        # return handle_throughput_run(run_directory)
+        return handle_ping_run(run_directory)
+    else:
+        raise RuntimeError(f"Unknown traffic type: {traffic_type}")
+
+
 
 
 
@@ -212,7 +225,8 @@ start = time.time()
 # runs = runs[:1]
 print(runs)
 with mp.Pool(8) as p:
-    returns = p.map(handle_ping_run, runs)
+    # returns = p.map(handle_ping_run, runs)
+    returns = p.map(handle_run, runs)
 
 records = []
 for r in returns:

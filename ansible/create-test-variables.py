@@ -174,6 +174,7 @@ def create_param_combinations():
         run_to_run_params_default["traffic_config"]["target_port"] = "4455"
         run_to_run_params_default["traffic_config"]["iat"]="0.001"
         run_to_run_params_default["traffic_config"]["count"]="60000"
+        run_to_run_params_default["traffic_config"]["direction"]="Ul"
         for ratio in ratios:
             for period_length in period_lengths:
                 for run in runs:
@@ -191,6 +192,7 @@ def create_param_combinations():
         run_to_run_params_default["traffic_config"]["target_port"] = "3344"
         run_to_run_params_default["traffic_config"]["iat"]="0.001"
         run_to_run_params_default["traffic_config"]["count"]="60000"
+        run_to_run_params_default["traffic_config"]["direction"]="UlDl"
         for ratio in ratios:
             for period_length in period_lengths:
                 for run in runs:

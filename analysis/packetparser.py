@@ -68,6 +68,7 @@ def parse_pcap_gtp(infile, outfile, validator: validator=empty_validator):
             }
     corrupted = 0
     invalid = 0
+    valid = 0
     ipv6_pkts=0
 
     print_pkts = lambda x : x <10 or x == 6886
@@ -154,7 +155,8 @@ def parse_pcap_gtp(infile, outfile, validator: validator=empty_validator):
                                     continue
 
                                 # Write the information to the CSV file
-                                csv_file.write(f"\n{timestamp},{src_ip_outer},{dst_ip_outer},{ret["ip_src"]},{ret["ip_dst"]},{ip_outer.len+14},{ret["seqnum"]}")
+                                csv_file.write(f"\n{timestamp},{src_ip_outer},{dst_ip_outer},{ret["ip_src"]},{ret["ip_dst"]},{ip_inner.len},{ret["seqnum"]}")
+                                valid += 1
                     else:
                         print("Error2")
                         continue
@@ -162,7 +164,7 @@ def parse_pcap_gtp(infile, outfile, validator: validator=empty_validator):
                     print("Error1")
     # logging
     status_dict = { "file":f"{os.path.basename(os.path.dirname(infile)) +"/"+ os.path.basename(infile)}", "time":f"{time.time() - t0:.2f}",
-                   "pkts":f"{pktid}", "corrupted":corrupted,"invalid":invalid,"icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
+                   "total_pkts":pktid, "valid_pkts":valid, "corrupted":corrupted, "invalid":invalid,"icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
     return json.dumps(status_dict)
 
 
@@ -176,6 +178,7 @@ def parse_pcap_ip(infile, outfile, offset = 0, validator: validator = empty_vali
             }
     corrupted = 0
     invalid = 0
+    valid = 0
     ipv6_pkts=0
 
     # Open the pcap file
@@ -226,10 +229,11 @@ def parse_pcap_ip(infile, outfile, offset = 0, validator: validator = empty_vali
                     continue
 
                 csv_file.write(f"\n{timestamp},NA,NA,{ret["ip_src"]},{ret["ip_dst"]},{ip_pkt.len},{ret["seqnum"]}")
+                valid += 1
 
     # logging
     status_dict = { "file":f"{os.path.basename(os.path.dirname(infile)) +"/"+ os.path.basename(infile)}", "time":f"{time.time() - t0:.2f}",
-                   "pkts":f"{pktid}", "corrupted":corrupted,"invalid":invalid,"icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
+                   "total_pkts":pktid,"valid_pkts":valid, "corrupted":corrupted,"invalid":invalid,"icmps":icmps, "ip_v6":f"{ipv6_pkts}" }
     return json.dumps(status_dict)
 
 

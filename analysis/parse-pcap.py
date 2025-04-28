@@ -64,8 +64,10 @@ def pp_wrapper(infile:str):
 
 start = time.time()
 with mp.Pool(8) as p:
-    for log in p.imap_unordered(pp_wrapper,get_pcap_paths()):
-        print(log)
+    with open(f"{ansible_dump}/parse_pcap.log", "w") as f:
+        for log in p.imap_unordered(pp_wrapper,get_pcap_paths()):
+            f.write(log+"\n")
+            print(log)
 
 print(f"Took {time.time()-start}s")
 
