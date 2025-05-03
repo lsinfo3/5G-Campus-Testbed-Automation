@@ -6,6 +6,7 @@ import numpy as np
 import yaml
 import time
 import copy
+import argparse
 
 
 """ Read CSVs in ansible pcap dump. Extract and aggregate data. Write back one parquet file """
@@ -16,10 +17,6 @@ ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
-
-test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
-runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
-pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
 
 
 
@@ -220,47 +217,57 @@ def handle_run(run_directory: str):
 
 
 
-start = time.time()
+
+
+
+def main():
+    start = time.time()
+
+    test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
+    runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
+    pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
 
 # runs = runs[:1]
-print(runs)
-with mp.Pool(8) as p:
-    # returns = p.map(handle_ping_run, runs)
-    returns = p.map(handle_run, runs)
+    print(runs)
+    with mp.Pool(8) as p:
+        # returns = p.map(handle_ping_run, runs)
+        returns = p.map(handle_run, runs)
 
-records = []
-for r in returns:
-    if isinstance(r,list):
-        records.extend(r)
-    else:
-        records.append(r)
+    records = []
+    for r in returns:
+        if isinstance(r,list):
+            records.extend(r)
+        else:
+            records.append(r)
 
 
-final_df = pd.DataFrame.from_records(records)
+    final_df = pd.DataFrame.from_records(records)
 # aggregate final df
-final_df = aggregate_final_df(final_df)
+    final_df = aggregate_final_df(final_df)
 
 
-print(final_df)
-
-
-
-final_df.to_parquet(f"{ansible_dump}/all_runs.parquet")
-final_df.to_csv(f"{ansible_dump}/all_runs.csv.gz", compression="gzip")
-print(f"Took {time.time()-start}s")
+    print(final_df)
 
 
 
+    final_df.to_parquet(f"{ansible_dump}/all_runs.parquet")
+    final_df.to_csv(f"{ansible_dump}/all_runs.csv.gz", compression="gzip")
+    print(f"Took {time.time()-start}s")
 
 
-## def mp_wrapper(infile:str):
-##     outfile = infile
-##     if outfile.endswith(".gz"):
-##         outfile = outfile[:-3]
-##     outfile = outfile[:-5] # strip .pcap
-##     if infile.endswith("gnb.pcap") or infile.endswith("gnb.pcap.gz"):
-##         pp.parse_pcap_gtp(infile=infile, outfile=outfile+".csv", udpport=2152)
-##     elif infile.endswith("ue.pcap") or infile.endswith("ue.pcap.gz"):
-##         pp.parse_pcap_ip(infile=infile, outfile=outfile+".csv", udpport=2152)
-##     else:
-##         raise ValueError(f"Wrong pcap format: {infile}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="Evaluate packet recordings in csvs",
+        description="Scan given dir and"
+            )
+    parser.add_argument("filename")
+    args = parser.parse_args()
+    ansible_dump = args.filename
+    main()
+
+
+
+
+

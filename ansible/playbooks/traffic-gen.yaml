@@ -18,7 +18,10 @@
       # include_vars: ../first-tests-0.35h-scapy.yaml
       # include_vars: ../first-tests-0.35h-scapy-2.0.yaml
       # include_vars: ../compare-gnb-versions.yaml
-      include_vars: ../compare-gnb-versions-throughput.yaml
+      # include_vars: ../compare-gnb-versions-throughput.yaml
+      # include_vars: ../compare-gnb-versions-throughput-jammer.yaml
+      # include_vars: ../test.yaml
+      include_vars: ../antenna-gain.yaml
 
 
   tasks:

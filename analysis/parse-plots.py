@@ -159,13 +159,33 @@ def plots_per_run_mp(pcaps):
 
 
 
+def plots_antenna_gain():
+    ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
+    plot_dir = ansible_dump
+    df = pd.read_parquet(f"{ansible_dump}/all_runs.parquet")
+    df = df.query("run == 0")
+    df["gain_type"] = df["rx_gain"].apply(lambda x: "Rx" if x >= 0 else "Tx")
+    df["gain_value"] = df.apply(lambda x: x["rx_gain"] if x["rx_gain"] >= 0 else x["tx_gain"], axis=1)
+    print(df)
+
+    plots.simple_line_plot(df=df, filename=f"{plot_dir}/simple-line",
+            # facets={"facet":p9.facet_grid('gnb_version__uhd_version', cols='gnb_version__combined', scales="fixed")},
+            facets={"facet":p9.facet_grid('gnb_version__type', scales="fixed")},
+            labels={"y":"throughput [Bps?]", "x":"gain [dB]", "color":"gain_type"},
+            aesthetics=p9.aes(y="throughput__mean", x="gain_value", color="factor(gain_type)"),
+            errorbars=False
+            )
+
+
+
 # TODO: take cli flag: either parse the generall eval or work on a per packet level
 
 
 if __name__ == "__main__":
 
-    plot_per_setup()
-    plots_per_run_mp(get_pcap_paths())
+    plots_antenna_gain()
+    # plot_per_setup()
+    # plots_per_run_mp(get_pcap_paths())
 
 
 

@@ -3,6 +3,7 @@ import os
 import time
 import multiprocessing as mp
 import yaml
+import argparse
 
 """ Read ansible pcap dump. Parse pcaps and extract relevant data. Write csvs back """
 
@@ -11,8 +12,8 @@ import yaml
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
 
 
-def get_pcap_paths():
-    test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
+def get_pcap_paths(root: str):
+    test_configurations = [e.path for e in os.scandir(root) if e.is_dir()]
     runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
     pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
     return pcaps
@@ -62,14 +63,29 @@ def pp_wrapper(infile:str):
 # print(runs)
 # print(pcaps)
 
-start = time.time()
-with mp.Pool(8) as p:
-    with open(f"{ansible_dump}/parse_pcap.log", "w") as f:
-        for log in p.imap_unordered(pp_wrapper,get_pcap_paths()):
-            f.write(log+"\n")
-            print(log)
+def main():
+    start = time.time()
+    with mp.Pool(8) as p:
+        with open(f"{ansible_dump}/parse_pcap.log", "w") as f:
+            for log in p.imap_unordered(pp_wrapper,get_pcap_paths(ansible_dump)):
+                f.write(log+"\n")
+                print(log)
 
-print(f"Took {time.time()-start}s")
+    print(f"Took {time.time()-start}s")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="parse pcap recordings to csv",
+        description="Scan given dir and"
+            )
+    parser.add_argument("filename")
+    args = parser.parse_args()
+    ansible_dump = args.filename
+    main()
+
+
+
 
 
 

@@ -31,7 +31,8 @@ fixed_params = {
     "ue_antenna_rotation_in_degree": 0,
     "modem": "SIM8200EA-M2 5G HAT",         # TODO: Verify!
     "interface_ue": "wwan0",
-    "interface_gnb": "eno1"
+    "interface_gnb": "eno1",
+    "jammer": True,                         # TODO: more options?
     }
 
 run_to_run_params_default = {
@@ -64,6 +65,8 @@ run_to_run_params_default = {
         "target_port": "3344",
         "burst": "1",
     },
+    "rx_gain": None,
+    "tx_gain": None,
     "tdd_config": {
         "tdd_dl_ul_ratio": 2,
         "tdd_flex_slots": 1,
@@ -204,8 +207,89 @@ def create_param_combinations():
                     # r["identifier"] = r["identifier"] + f"__{run:03d}"
                     r["run"] = run
                     c.append(r)
-
     return c
+
+def create_antenna_gain_combinations():
+    c = []
+    ratios = [1]
+    period_lengths = [5]
+
+    runs = [ i for i in range(3) ]
+
+    OAI_RX_MIN = 20
+    OAI_TX_MIN = 40
+    SRS_RX_MIN = 0
+    SRS_TX_MIN = 30
+
+    OAI_RX_MAX_RANGE = [0, 70]
+    OAI_TX_MAX_RANGE = [0, 89]
+    OAI_RX_RANGE = [i for i in range(OAI_RX_MIN, 70, 4)]
+    OAI_TX_RANGE = [i for i in range(OAI_TX_MIN, 89, 4)]
+
+    SRS_RX_MAX_RANGE = [0, 76]
+    SRS_TX_MAX_RANGE = [0, 89]
+    SRS_RX_RANGE = [i for i in range(SRS_RX_MIN, 70, 4)]
+    SRS_TX_RANGE = [i for i in range(SRS_TX_MIN, 89, 4)]
+
+
+    srsranconfs = [
+            # {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
+            # {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_10", "commit":"9d5dd742a70e82c0813c34f57982f9507f1b6d5d"},
+            # {"type":"srsRAN","uhd_version": "UHD-4.0", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
+            {"type":"srsRAN","uhd_version": "UHD-4.0", "version": "release_24_10", "commit":"9d5dd742a70e82c0813c34f57982f9507f1b6d5d"},
+            ]
+    oairanconfs = [
+            # {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
+            # {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
+            # {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
+            {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
+            ]
+
+    for gnb in srsranconfs + oairanconfs:
+        for rxtx in ["rx", "tx"]:
+            # iperf
+            run_to_run_params_default["traffic_config"]["traffic_type"] = "iperfthroughput"
+            run_to_run_params_default["traffic_config"]["target_port"] = "4455"
+            run_to_run_params_default["traffic_config"]["iat"]="0.001"
+            run_to_run_params_default["traffic_config"]["count"]="60000"
+            run_to_run_params_default["traffic_config"]["direction"]="Ul"
+            for ratio in ratios:
+                for period_length in period_lengths:
+                    if rxtx == "rx":
+                        if gnb["type"] == "srsRAN":
+                            gain_range = SRS_RX_RANGE
+                        elif gnb["type"] == "OAI":
+                            gain_range = OAI_RX_RANGE
+                        else:
+                            raise RuntimeError()
+                    elif rxtx == "tx":
+                        if gnb["type"] == "srsRAN":
+                            gain_range = SRS_TX_RANGE
+                        elif gnb["type"] == "OAI":
+                            gain_range = OAI_TX_RANGE
+                        else:
+                            raise RuntimeError()
+                    else:
+                        raise RuntimeError()
+                    for gain in gain_range:
+                        for run in runs:
+                            r = new_per_run_config_base()
+                            r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+                            if rxtx == "rx":
+                                r["rx_gain"] = gain
+                                format_id = f"rx-{gain:02d}"
+                            elif rxtx == "tx":
+                                r["tx_gain"] = gain
+                                format_id = f"tx-{gain:02d}"
+                            else:
+                                RuntimeError()
+                            r["gnb_version"] = gnb
+                            r["run"] = 0
+                            r["identifier"] = dict_to_small_hash(fixed_params) + "__" + gnb["type"] + "__" + format_id + f"__{run:03d}"
+                            r["run"] = run
+                            c.append(r)
+    return c
+
 
 
 
@@ -216,13 +300,21 @@ if __name__ == "__main__":
         prog="create test configuration",
         description="Create .yaml file which contains all variables need for ansible"
             )
+    parser.add_argument("--findgain", dest="findgain", action="store_true")
+    parser.set_defaults(findgain=False)
     parser.add_argument("filename")
     args = parser.parse_args()
+
     system["identifier"] = dict_to_small_hash(fixed_params)
     system["fixed_params"] = fixed_params
-    d = {"system":system, "run_to_run_variation":create_param_combinations()}
-    run_config_str = yaml.dump(d, sort_keys=False, indent=4)
-    print(run_config_str)
+    if args.findgain:
+        d = {"system":system, "run_to_run_variation":create_antenna_gain_combinations()}
+        run_config_str = yaml.dump(d, sort_keys=False, indent=4)
+        print(run_config_str)
+    else:
+        d = {"system":system, "run_to_run_variation":create_param_combinations()}
+        run_config_str = yaml.dump(d, sort_keys=False, indent=4)
+        print(run_config_str)
 
     with open(args.filename, "w") as f:
         f.write(run_config_str)

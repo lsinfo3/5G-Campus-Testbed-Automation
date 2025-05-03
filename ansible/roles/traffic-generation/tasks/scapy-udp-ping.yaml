@@ -11,6 +11,7 @@
     mode: '755'
   become: false
 
+# TODO: timeout(max duration)!
 # TODO: redirect stdout/stderr to file and move to host
 - name: Python traffic gen
   ansible.builtin.command:

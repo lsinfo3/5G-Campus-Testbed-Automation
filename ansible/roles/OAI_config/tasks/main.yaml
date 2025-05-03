@@ -39,3 +39,15 @@
     path: "{{ gnb_oai_config_path }}"
     search_string: '      dl_UL_TransmissionPeriodicity'
     line: "      dl_UL_TransmissionPeriodicity                                 = 7;"
+
+
+- when: item.rx_gain != None
+  ansible.builtin.lineinfile:
+    path: "{{ gnb_oai_config_path }}"
+    search_string: '  att_rx         = '
+    line: "  att_rx         = {{ 70.0 - item.rx_gain |int }};" # TODO: is this calculation correct? only for B210 if at all!
+- when: item.tx_gain != None
+  ansible.builtin.lineinfile:
+    path: "{{ gnb_oai_config_path }}"
+    search_string: '  att_tx         = '
+    line: "  att_tx         = {{ 89.75 - item.tx_gain |int }};" # TODO: is this calculation correct? only for B210 if at all!
