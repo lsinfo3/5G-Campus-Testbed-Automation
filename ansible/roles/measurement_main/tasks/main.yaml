@@ -129,7 +129,7 @@
 - name: Launch qmi SNR monitor
   shell: "{{ snr_msm_script }}"
   become: true
-  async: 90
+  async: 120
   poll: 0
   register: snr_job
 
@@ -163,7 +163,7 @@
 
   - name: '"{{ item.identifier }}": sleep'
     ansible.builtin.command:
-       cmd: sleep 2
+       cmd: sleep 10
     become: false
 
 

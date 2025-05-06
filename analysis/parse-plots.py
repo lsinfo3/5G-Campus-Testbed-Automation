@@ -15,6 +15,7 @@ ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-04-11/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
+ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
 
 plot_dir = ansible_dump
 
@@ -138,6 +139,7 @@ def plot_per_setup():
             )
 
 def plot_per_run(p: str):
+    print(p)
     df = pd.read_csv(p)
     plots.simple_line_plot(df=df.query("SeqNum > 1000 and SeqNum < 1100"), filename=f"{os.path.dirname(p)}/delay-timeline",
             labels={"y":"delay [s]", "x":"sequence number [#]", "color":"type"},
@@ -150,6 +152,33 @@ def plot_per_run(p: str):
             errorbars=False
             )
 
+    dft = df.query("SeqNum > 6000 and SeqNum < 6100")
+    dft["channel"] = "IAT"
+    ts_min = dft["Timestamp"].min()
+    ts_max = dft["Timestamp"].max()
+
+    df_modem = pd.read_csv(os.path.dirname(p) + "/modem-snr.csv")
+    df_modem = pd.melt(df_modem, id_vars=["TIMESTAMP"]).dropna().reset_index(drop=True)
+    df_modem["channel"] = "MODEM"
+    df_modem_t = df_modem.query(f"TIMESTAMP >= {ts_min} and TIMESTAMP <= {ts_max}")
+
+    df_gnb = pd.read_csv(os.path.dirname(p) + "/gnb_snr.csv")
+    df_gnb = pd.melt(df_gnb, id_vars=["TIMESTAMP"]).dropna().reset_index(drop=True)
+    df_gnb["channel"] = "GNB"
+    df_gnb_t = df_gnb.query(f"TIMESTAMP >= {ts_min} and TIMESTAMP <= {ts_max}")
+
+    plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel",
+            facets={"facet":p9.facet_grid('channel', scales="free")},
+            labels={"y":"IAT [s] / dB", "x":"sequence number [#]", "color":"type/metric"},
+            aesthetics=p9.aes(y="IAT", x="Timestamp", color="factor(type)"),
+            errorbars=False,
+            add_to_plot=[
+                p9.geom_line(p9.aes(y="value",x="TIMESTAMP"),data=df_modem_t, size=plots.LINE_SIZE),
+                p9.geom_line(p9.aes(y="value",x="TIMESTAMP"),data=df_gnb_t, size=plots.LINE_SIZE),
+                ]
+            )
+    print(f"Completed: {p}\n\n")
+
 
 
 def plots_per_run_mp(pcaps):
@@ -160,6 +189,10 @@ def plots_per_run_mp(pcaps):
 
 
 def plots_antenna_gain():
+    plots_antenna_gain_single_runs()
+    plots_antenna_gain_aggregated_runs()
+
+def plots_antenna_gain_single_runs():
     ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
     plot_dir = ansible_dump
     df = pd.read_parquet(f"{ansible_dump}/all_runs.parquet")
@@ -171,11 +204,39 @@ def plots_antenna_gain():
     plots.simple_line_plot(df=df, filename=f"{plot_dir}/simple-line",
             # facets={"facet":p9.facet_grid('gnb_version__uhd_version', cols='gnb_version__combined', scales="fixed")},
             facets={"facet":p9.facet_grid('gnb_version__type', scales="fixed")},
-            labels={"y":"throughput [Bps?]", "x":"gain [dB]", "color":"gain_type"},
+            labels={"y":"throughput [bps]", "x":"gain [dB]", "color":"gain_type"},
             aesthetics=p9.aes(y="throughput__mean", x="gain_value", color="factor(gain_type)"),
             errorbars=False
             )
 
+def plots_antenna_gain_aggregated_runs():
+    ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
+    plot_dir = ansible_dump
+    df = pd.read_parquet(f"{ansible_dump}/all_runs_groupby_agg.parquet")
+    df["gain_type"] = df["rx_gain"].apply(lambda x: "Rx" if x >= 0 else "Tx")
+    df["gain_value"] = df.apply(lambda x: x["rx_gain"] if x["rx_gain"] >= 0 else x["tx_gain"], axis=1)
+
+    plots.simple_line_plot(df=df, filename=f"{plot_dir}/rxtx-gain-throughput-agg",
+            # facets={"facet":p9.facet_grid('gnb_version__uhd_version', cols='gnb_version__combined', scales="fixed")},
+            facets={"facet":p9.facet_grid('gnb_version__type', scales="fixed")},
+            labels={"y":"throughput [bps]", "x":"gain [dB]", "color":"gain_type"},
+            aesthetics=p9.aes(y="throughput__mean__agg__mean",ymin="throughput__mean__agg__ci_95_l", ymax="throughput__mean__agg__ci_95_u", x="gain_value", color="factor(gain_type)"),
+            errorbars=True
+            )
+    plots.simple_line_plot(df=df, filename=f"{plot_dir}/rxtx-gain-throughput-agg-ci-width",
+            # facets={"facet":p9.facet_grid('gnb_version__uhd_version', cols='gnb_version__combined', scales="fixed")},
+            facets={"facet":p9.facet_grid('gnb_version__type', scales="free")},
+            labels={"y":"width of 95% CI [bps]", "x":"gain [dB]", "color":"gain_type"},
+            aesthetics=p9.aes(y="throughput__mean__agg__ci_95", x="gain_value", color="factor(gain_type)"),
+            errorbars=False
+            )
+    plots.simple_line_plot(df=df, filename=f"{plot_dir}/rxtx-gain-delay-agg",
+            # facets={"facet":p9.facet_grid('gnb_version__uhd_version', cols='gnb_version__combined', scales="fixed")},
+            facets={"facet":p9.facet_grid('gnb_version__type', scales="fixed")},
+            labels={"y":"delay [s]", "x":"gain [dB]", "color":"gain_type"},
+            aesthetics=p9.aes(y="delay__mean__agg__mean",ymin="delay__mean__agg__ci_95_l", ymax="delay__mean__agg__ci_95_u", x="gain_value", color="factor(gain_type)"),
+            errorbars=True
+            )
 
 
 # TODO: take cli flag: either parse the generall eval or work on a per packet level
@@ -183,9 +244,10 @@ def plots_antenna_gain():
 
 if __name__ == "__main__":
 
-    plots_antenna_gain()
+    # plots_antenna_gain()
+
     # plot_per_setup()
-    # plots_per_run_mp(get_pcap_paths())
+    plots_per_run_mp(get_pcap_paths())
 
 
 
