@@ -31,14 +31,15 @@ log:
     all_level: info
     filename: /tmp/gnb.log
 pcap:
-    mac_enable: false
-    mac_filename: /tmp/gnb_mac.pcap
-    ngap_enable: false
-    ngap_filename: /tmp/gnb_ngap.pcap
+    mac_enable: true
+    mac_filename: /tmp/5ggnb-logs/gnb_mac.pcap
+    ngap_enable: true
+    ngap_filename: /tmp/5ggnb-logs/gnb_ngap.pcap
+
 ru_sdr:
     device_args: type=b200,num_recv_frames=64,num_send_frames=64
     device_driver: uhd
     otw_format: sc12
-    rx_gain: 40
+    rx_gain: 38
     srate: 23.04
-    tx_gain: 80
+    tx_gain: 76

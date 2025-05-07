@@ -18,6 +18,11 @@ ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
 
+def calc_channel_metrics(run_directory, relevant_stats):
+    assert(os.path.isfile(f"{run_directory}/modem-snr.csv"))
+    assert(os.path.isfile(f"{run_directory}/gnb_snr.csv"))
+
+
 
 
 def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
@@ -152,7 +157,6 @@ def handle_ping_run(run_directory: str):
     # TODO: 2025-03-31: this function should be more high level. Then it would be easier and more clear how a failed run is handled
 
     # TODO: one more layer of redirection: don't aggregate in this function, instead return the prepared df (so it can be used on a per file bases!)
-    # TODO: better(?): write combined df to file
 
     metrics_default = {
         "delay":np.nan,
@@ -160,7 +164,8 @@ def handle_ping_run(run_directory: str):
         "iat":np.nan,
     }
     relevant_stats = ["min", "max", "mean", "std", "5%", "25%", "50%", "75%", "95%"]
-    metrics = {"direction":'XXX',"failed":False}
+    # TODO: missing_pkts
+    metrics = {"direction":'XXX',"failed_run":False, "missing_pkts":np.nan}
     for k,v in metrics_default.items():
         for s in relevant_stats:
             metrics[f"{k}__{s}"] = v
@@ -180,7 +185,7 @@ def handle_ping_run(run_directory: str):
             fault_reason = ff.read().strip().strip("\n")
         # TODO: how do i know if there is up-&downstream?
         metrics["direction"]="Ul"
-        metrics["failed"]=True
+        metrics["failed_run"]=True
         ret1 = {**metrics, **config}
         ret2 = copy.deepcopy(ret1)
         ret2["direction"]="Dl"
@@ -208,12 +213,11 @@ def handle_run(run_directory: str):
     if traffic_type == "scapyudpping":
         return handle_ping_run(run_directory)
     elif traffic_type == "iperfthroughput":
+        # WARN: when changing this step: double check FAILED runs are marked correctly
         # return handle_throughput_run(run_directory)
         return handle_ping_run(run_directory)
     else:
         raise RuntimeError(f"Unknown traffic type: {traffic_type}")
-
-
 
 
 

@@ -4,21 +4,29 @@
 # WARNING: this requires a iperf3 server to be set up on the target(=core)
 
 
-# TODO: redirect stdout/stderr to file and move to host
-# TODO: when tg_proto == 'udp' ... else ...
-# TODO: when direction == 'Ul' ... else ...
-- name: Python traffic gen
-  ansible.builtin.command:
-     argv:
-        - "iperf3"
-        - "--udp"
-        - "--port"
-        - "{{ tg_port }}"
-        - "--client"
-        - "{{ tg_ip }}"
-        - "--time"
-        - "{{ tg_duration }}"
-        - "--bitrate"
-        - "{{ tg_rate }}"
-        # - "{{ tg_size }}"
+# {{ collected_logs }}/usb 2>&1"
+
+- ansible.builtin.set_fact:
+    iperf_shell_output: "{{ collected_logs | default('/tmp') }}/iperf"
+
+- ansible.builtin.set_fact:
+    iperf_udp: "--udp"
+  when: tg_proto == 'udp'
+- ansible.builtin.set_fact:
+    iperf_udp: ""
+  when: tg_proto != 'udp'
+
+- ansible.builtin.set_fact:
+    iperf_direction: "--reverse"
+  when: tg_direction == 'Ul'
+- ansible.builtin.set_fact:
+    iperf_direction: ""
+  when: tg_direction != 'Ul'
+
+- name: Iperf3 traffic gen
+  ansible.builtin.shell:
+     cmd: "iperf3 {{ iperf_udp }} {{ iperf_direction }} --port {{ tg_port }} --client {{ tg_ip }} --time {{ tg_duration }} --bitrate {{ tg_rate }} > {{ iperf_shell_output }} 2>&1"
   become: true
+  # ignore_errors: true
+  register: iperf_ret
+

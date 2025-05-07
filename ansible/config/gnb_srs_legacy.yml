@@ -32,6 +32,6 @@ ru_sdr:
     device_args: type=b200,num_recv_frames=64,num_send_frames=64
     device_driver: uhd
     otw_format: sc12
-    rx_gain: 40
+    rx_gain: 38
     srate: 23.04
-    tx_gain: 80
+    tx_gain: 76

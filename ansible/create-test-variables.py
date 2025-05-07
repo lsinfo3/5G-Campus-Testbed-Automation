@@ -32,18 +32,14 @@ fixed_params = {
     "modem": "SIM8200EA-M2 5G HAT",         # TODO: Verify!
     "interface_ue": "wwan0",
     "interface_gnb": "eno1",
-    "jammer": True,                         # TODO: more options?
+    "jammer": False,                         # TODO: more options?
+    "sdr": "B210",
+    "performance_tuning": False             # set governor, drm kms polling, pinning?, etc
     }
 
 run_to_run_params_default = {
     "identifier" : 0,
     "run": 0,
-    #     "traffic_config": {                     # TODO: build_traffic_config function
-    #         "traffic_type" : "ping",
-    #         "traffic_duration": 60,
-    #         "icmp_intervall": 0.01,
-    #         "icmp_count": 6000
-    #     },
     "gnb_version": {
         "type": "srsRAN",
         "uhd_version": "UHD-4.0",
@@ -65,8 +61,8 @@ run_to_run_params_default = {
         "target_port": "3344",
         "burst": "1",
     },
-    "rx_gain": None,
-    "tx_gain": None,
+    "rx_gain": None,                        # Good values depend on the environment,
+    "tx_gain": None,                        # determin beforehand and set in gnb config defaults
     "tdd_config": {
         "tdd_dl_ul_ratio": 2,
         "tdd_flex_slots": 1,
@@ -140,11 +136,11 @@ def create_param_combinations():
 
     ratios = [1,2,4]
     ratios = [1,2]
-    ratios = [2]
+    # ratios = [2]
 
     period_lengths = [5, 10, 20]
-    period_lengths = [5, 10]
-    period_lengths = [5]
+    period_lengths = [5, 20]
+    # period_lengths = [5]
 
     runs = [ i for i in range(2) ]
 
@@ -161,7 +157,8 @@ def create_param_combinations():
             {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
             ]
 
-    for gnb in srsranconfs + oairanconfs:
+    # for gnb in srsranconfs + oairanconfs:
+    for gnb in [srsranconfs[1]]:
         # run_to_run_params_default["traffic_config"]["scapy_iat"]="0.01"
         # run_to_run_params_default["traffic_config"]["scapy_count"]="6000"
         # for ratio in ratios:
@@ -189,13 +186,7 @@ def create_param_combinations():
                     # r["identifier"] = r["identifier"] + f"__{run:03d}"
                     r["run"] = run
                     c.append(r)
-
-        # scapy
-        run_to_run_params_default["traffic_config"]["traffic_type"] = "scapyudpping"
-        run_to_run_params_default["traffic_config"]["target_port"] = "3344"
-        run_to_run_params_default["traffic_config"]["iat"]="0.001"
-        run_to_run_params_default["traffic_config"]["count"]="60000"
-        run_to_run_params_default["traffic_config"]["direction"]="UlDl"
+        run_to_run_params_default["traffic_config"]["direction"]="Dl"
         for ratio in ratios:
             for period_length in period_lengths:
                 for run in runs:
@@ -207,6 +198,24 @@ def create_param_combinations():
                     # r["identifier"] = r["identifier"] + f"__{run:03d}"
                     r["run"] = run
                     c.append(r)
+
+        # # scapy
+        # run_to_run_params_default["traffic_config"]["traffic_type"] = "scapyudpping"
+        # run_to_run_params_default["traffic_config"]["target_port"] = "3344"
+        # run_to_run_params_default["traffic_config"]["iat"]="0.001"
+        # run_to_run_params_default["traffic_config"]["count"]="60000"
+        # run_to_run_params_default["traffic_config"]["direction"]="UlDl"
+        # for ratio in ratios:
+        #     for period_length in period_lengths:
+        #         for run in runs:
+        #             r = new_per_run_config_base()
+        #             r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+        #             r["gnb_version"] = gnb
+        #             r["run"] = 0
+        #             r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
+        #             # r["identifier"] = r["identifier"] + f"__{run:03d}"
+        #             r["run"] = run
+        #             c.append(r)
     return c
 
 def create_antenna_gain_combinations():

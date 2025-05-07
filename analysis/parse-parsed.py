@@ -4,7 +4,6 @@ import numpy as np
 
 
 agg_percentiles = [
-    # 'failed',
     'delay__mean',
     'delay__std',
     'throughput__mean',
@@ -14,14 +13,12 @@ agg_percentiles = [
 ]
 
 agg_min = [
-    # 'failed',
     'delay__min',
     'throughput__mean',
     'throughput__min',
     'iat__min',
 ]
 agg_max = [
-    # 'failed',
     'delay__max',
     'throughput__mean',
     'throughput__max',
@@ -30,7 +27,7 @@ agg_max = [
 
 
 agg_mean = [
-    'failed',
+    'failed_run',
     'delay__min',
     'delay__max',
     'delay__mean',
@@ -60,7 +57,7 @@ agg_mean = [
 ]
 
 all_msm_columns = [
-'failed',
+'failed_run',
 'delay__min',
 'delay__max',
 'delay__mean',
@@ -92,7 +89,7 @@ all_msm_columns = [
 
 all_columns = [
 'direction',
-'failed',
+'failed_run',
 'delay__min',
 'delay__max',
 'delay__mean',
@@ -228,12 +225,7 @@ def main():
         print(f"{c}: {df[c].nunique()}")
     print("---")
 
-    print("count:")
-    dfg = df.groupby(columns_to_group_by, dropna=False).count()
-    dfg.to_csv("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/all_runs_groupby_counts.csv")
-    dfg.to_parquet("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/all_runs_groupby_counts.parquet")
-    print(dfg)
-
+    # Not needed, coverd by agg failed_runs_series = df.groupby(columns_to_group_by, dropna=False).agg({"failed_run":[("failed_runs",lambda x : sum(x==True))]}).reset_index(drop=True)["failed_run"]["failed_runs"]
     dfg = df.groupby(columns_to_group_by, dropna=False).agg(build_agg_dictionary())
     dfg.columns = list(map(lambda x: '__agg__'.join(filter(None,x)), dfg.columns.values))
     dfg.reset_index(inplace=True)

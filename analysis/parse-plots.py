@@ -1,6 +1,7 @@
 import plotninesettings
 import plots
 import pandas as pd
+import numpy as np
 import plotnine as p9
 import argparse
 import os
@@ -15,7 +16,10 @@ ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-04-11/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
-ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
+
+# ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
+ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/plottests"
+
 
 plot_dir = ansible_dump
 
@@ -141,48 +145,89 @@ def plot_per_setup():
 def plot_per_run(p: str):
     print(p)
     df = pd.read_csv(p)
-    plots.simple_line_plot(df=df.query("SeqNum > 1000 and SeqNum < 1100"), filename=f"{os.path.dirname(p)}/delay-timeline",
-            labels={"y":"delay [s]", "x":"sequence number [#]", "color":"type"},
-            aesthetics=p9.aes(y="delay", x="SeqNum", color="type"),
-            errorbars=False
-            )
-    plots.simple_line_plot(df=df.query("SeqNum > 1000 and SeqNum < 1100"), filename=f"{os.path.dirname(p)}/iat-timeline",
-            labels={"y":"IAT [s]", "x":"sequence number [#]", "color":"type"},
-            aesthetics=p9.aes(y="IAT", x="SeqNum", color="type"),
-            errorbars=False
-            )
+    query_range = int(df["SeqNum"].max() * 0.7)
+    query_range1 = int(df["SeqNum"].max() * 0.6)
+    query_range2 = int(df["SeqNum"].max() * 0.5)
 
-    dft = df.query("SeqNum > 6000 and SeqNum < 6100")
-    dft["channel"] = "IAT"
-    ts_min = dft["Timestamp"].min()
-    ts_max = dft["Timestamp"].max()
+    for l in [100, 1000]:
+        if query_range -l < 50:
+            continue
+        plots.simple_line_plot(df=df.query(f"SeqNum > {query_range -l } and SeqNum < {query_range}"), filename=f"{os.path.dirname(p)}/timeline-delay-{l}",
+                labels={"y":"delay [s]", "x":"sequence number [#]", "color":"type"},
+                aesthetics=p9.aes(y="delay", x="SeqNum", color="type"),
+                errorbars=False
+                )
+        plots.simple_line_plot(df=df.query(f"SeqNum > {query_range -l } and SeqNum < {query_range}"), filename=f"{os.path.dirname(p)}/timeline-delay-{l}",
+                labels={"y":"IAT [s]", "x":"sequence number [#]", "color":"type"},
+                aesthetics=p9.aes(y="IAT", x="SeqNum", color="type"),
+                errorbars=False
+                )
 
-    df_modem = pd.read_csv(os.path.dirname(p) + "/modem-snr.csv")
-    df_modem = pd.melt(df_modem, id_vars=["TIMESTAMP"]).dropna().reset_index(drop=True)
-    df_modem["channel"] = "MODEM"
-    df_modem_t = df_modem.query(f"TIMESTAMP >= {ts_min} and TIMESTAMP <= {ts_max}")
+    """ time x seq.num plots """
+    for s in [query_range2, query_range1, query_range]:
+        for l in [100, 1000, 10000]:
+            if s -l < 50:
+                continue
+            plots.simple_line_plot(df=df.query(f"SeqNum > {s -l } and SeqNum < {s}"), filename=f"{os.path.dirname(p)}/timeline-sending-{l}-s{s}",
+                    lines= False,
+                    labels={"y":"seq. number [#]", "x":"timestamp [s]", "color":"location"},
+                    aesthetics=p9.aes(y="SeqNum", x="Timestamp", color="location"),
+                    errorbars=False
+                    )
 
-    df_gnb = pd.read_csv(os.path.dirname(p) + "/gnb_snr.csv")
-    df_gnb = pd.melt(df_gnb, id_vars=["TIMESTAMP"]).dropna().reset_index(drop=True)
-    df_gnb["channel"] = "GNB"
-    df_gnb_t = df_gnb.query(f"TIMESTAMP >= {ts_min} and TIMESTAMP <= {ts_max}")
+    """ delay vs IAT -> retransmission? """
+    for s in [query_range2, query_range1, query_range]:
+        for l in [100, 1000, 10000]:
+            if s -l < 50:
+                continue
+            plots.simple_line_plot(df=df.query(f"SeqNum > {s -l } and SeqNum < {s}"), filename=f"{os.path.dirname(p)}/timeline-delay_x_iat-{l}-s{s}",
+                    lines= False,
+                    labels={"y":"seq. number [#]", "x":"timestamp [s]", "color":"location"},
+                    aesthetics=p9.aes(y="SeqNum", x="Timestamp", color="location"),
+                    errorbars=False
+                    )
 
-    plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel",
-            facets={"facet":p9.facet_grid('channel', scales="free")},
-            labels={"y":"IAT [s] / dB", "x":"sequence number [#]", "color":"type/metric"},
-            aesthetics=p9.aes(y="IAT", x="Timestamp", color="factor(type)"),
-            errorbars=False,
-            add_to_plot=[
-                p9.geom_line(p9.aes(y="value",x="TIMESTAMP"),data=df_modem_t, size=plots.LINE_SIZE),
-                p9.geom_line(p9.aes(y="value",x="TIMESTAMP"),data=df_gnb_t, size=plots.LINE_SIZE),
-                ]
-            )
+
+
+
+    """ timeline plots, showing delay in combination with channel values """
+    query_range = int(df["SeqNum"].max() * 0.7)
+    for l in [100, 1000, 10000, 20000]:
+        if query_range -l < 50:
+            continue
+        dft = df.query(f"SeqNum > {query_range - l} and SeqNum < {query_range}")
+        dft["channel"] = "Delay"
+        ts_min = dft["Timestamp"].min()
+        ts_max = dft["Timestamp"].max()
+
+        df_modem = pd.read_csv(os.path.dirname(p) + "/modem-snr.csv")
+        df_modem = pd.melt(df_modem, id_vars=["TIMESTAMP"], var_name="type").dropna().reset_index(drop=True)
+        df_modem["channel"] = "MODEM"
+        df_modem_t = df_modem.query(f"TIMESTAMP >= {ts_min} and TIMESTAMP <= {ts_max}")
+        df_modem_t["value"] = pd.to_numeric(df_modem_t["value"], errors="coerce")
+
+        df_gnb = pd.read_csv(os.path.dirname(p) + "/gnb_snr.csv")
+        df_gnb = pd.melt(df_gnb, id_vars=["TIMESTAMP"], var_name="type").dropna().reset_index(drop=True)
+        df_gnb["channel"] = "GNB"
+        df_gnb_t = df_gnb.query(f"TIMESTAMP >= {ts_min} and TIMESTAMP <= {ts_max}")
+        df_gnb_t["value"] = pd.to_numeric(df_gnb_t["value"], errors="coerce")
+
+        plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel-{l}",
+                facets={"facet":p9.facet_grid('channel', scales="free")},
+                labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
+                aesthetics=p9.aes(y="delay", x="Timestamp"),
+                errorbars=False,
+                add_to_plot=[
+                    p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="type"),data=df_modem_t, size=plots.LINE_SIZE),
+                    p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="type"),data=df_gnb_t, size=plots.LINE_SIZE),
+                    ]
+                )
     print(f"Completed: {p}\n\n")
 
 
 
 def plots_per_run_mp(pcaps):
-    with mp.Pool(8) as p:
+    with mp.Pool(1) as p:
         returns = p.map(plot_per_run, get_pcap_paths())
 
 
@@ -248,6 +293,9 @@ if __name__ == "__main__":
 
     # plot_per_setup()
     plots_per_run_mp(get_pcap_paths())
+
+    # plot_per_run("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/srsRAN_651c9a37/srsRAN_651c9a37__rx-40__002/combined.csv.gz")
+    #plot_per_run("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/srsRAN_651c9a37/srsRAN_651c9a37__tx-62__000/combined.csv.gz")
 
 
 

@@ -21,7 +21,8 @@
       # include_vars: ../compare-gnb-versions-throughput.yaml
       # include_vars: ../compare-gnb-versions-throughput-jammer.yaml
       # include_vars: ../test.yaml
-      include_vars: ../antenna-gain.yaml
+      # include_vars: ../antenna-gain.yaml
+      include_vars: ../throughput-uldl.yaml
 
 
   tasks:
