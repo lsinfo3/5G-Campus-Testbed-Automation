@@ -197,13 +197,13 @@ def plot_per_run(p: str):
         if query_range -l < 50:
             continue
         plots.simple_line_plot(df=df.query(f"SeqNum > {query_range -l } and SeqNum < {query_range}"), filename=f"{os.path.dirname(p)}/timeline-delay-{l}",
-                labels={"y":"delay [s]", "x":"sequence number [#]", "color":"type"},
-                aesthetics=p9.aes(y="delay", x="SeqNum", color="type"),
+                labels={"y":"delay [s]", "x":"sequence number [#]", "color":"trafficflow"},
+                aesthetics=p9.aes(y="delay", x="SeqNum", color="trafficflow"),
                 errorbars=False
                 )
         plots.simple_line_plot(df=df.query(f"SeqNum > {query_range -l } and SeqNum < {query_range}"), filename=f"{os.path.dirname(p)}/timeline-delay-{l}",
-                labels={"y":"IAT [s]", "x":"sequence number [#]", "color":"type"},
-                aesthetics=p9.aes(y="IAT", x="SeqNum", color="type"),
+                labels={"y":"IAT [s]", "x":"sequence number [#]", "color":"trafficflow"},
+                aesthetics=p9.aes(y="IAT", x="SeqNum", color="trafficflow"),
                 errorbars=False
                 )
 
@@ -245,13 +245,13 @@ def plot_per_run(p: str):
         ts_max = dft["Timestamp"].max()
 
         df_modem = pd.read_csv(os.path.dirname(p) + "/modem-snr.csv")
-        df_modem = pd.melt(df_modem, id_vars=["TIMESTAMP"], var_name="type").dropna().reset_index(drop=True)
+        df_modem = pd.melt(df_modem, id_vars=["TIMESTAMP"], var_name="metrictype").dropna().reset_index(drop=True)
         df_modem["channel"] = "MODEM"
         df_modem_t = df_modem.query(f"TIMESTAMP >= {ts_min} and TIMESTAMP <= {ts_max}")
         df_modem_t["value"] = pd.to_numeric(df_modem_t["value"], errors="coerce")
 
         df_gnb = pd.read_csv(os.path.dirname(p) + "/gnb_snr.csv")
-        df_gnb = pd.melt(df_gnb, id_vars=["TIMESTAMP"], var_name="type").dropna().reset_index(drop=True)
+        df_gnb = pd.melt(df_gnb, id_vars=["TIMESTAMP"], var_name="metrictype").dropna().reset_index(drop=True)
         df_gnb["channel"] = "GNB"
         df_gnb_t = df_gnb.query(f"TIMESTAMP >= {ts_min} and TIMESTAMP <= {ts_max}")
         df_gnb_t["value"] = pd.to_numeric(df_gnb_t["value"], errors="coerce")
@@ -262,8 +262,8 @@ def plot_per_run(p: str):
                 aesthetics=p9.aes(y="delay", x="Timestamp"),
                 errorbars=False,
                 add_to_plot=[
-                    p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="type"),data=df_modem_t, size=plots.LINE_SIZE),
-                    p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="type"),data=df_gnb_t, size=plots.LINE_SIZE),
+                    p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
+                    p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
                     ]
                 )
     print(f"Completed: {p}\n\n")

@@ -42,14 +42,15 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     df_ue = pd.read_csv(ue_rec)
     df_ue = df_ue.astype({"SeqNum":'int'})
     df_ue["location"] = "ue"
-    df_ue["type"] = df_ue.apply(lambda x: "request" if x["SourceIPInner"] != "10.45.0.1" else "response" , axis=1)
-    df_ue.sort_values(by=["SeqNum", "type"], ignore_index=True, inplace=True)
+    df_ue["trafficflow"] = df_ue.apply(lambda x: "egress" if x["SourceIPInner"] != "10.45.0.1" else "ingress" , axis=1)
+    df_ue.sort_values(by=["SeqNum", "trafficflow"], ignore_index=True, inplace=True)
     df_ue["delay"] = np.nan
     df_ue["IAT"] = np.nan
-    indexer = lambda d:d["type"] == "request"
-    df_ue.loc[indexer,"IAT"] = df_ue.loc[indexer,"Timestamp"] - df_ue.loc[indexer,"Timestamp"].shift(1)
-    indexer = lambda d:d["type"] == "response"
-    df_ue.loc[indexer,"IAT"] = df_ue.loc[indexer,"Timestamp"] - df_ue.loc[indexer,"Timestamp"].shift(1)
+    df_ue["IDT"] = np.nan
+    indexer_egress = lambda d:d["trafficflow"] == "egress"
+    indexer_ingress = lambda d:d["trafficflow"] == "ingress"
+    df_ue.loc[indexer_egress,"IDT"] = df_ue.loc[indexer_egress,"Timestamp"] - df_ue.loc[indexer_egress,"Timestamp"].shift(1)
+    df_ue.loc[indexer_ingress,"IAT"] = df_ue.loc[indexer_ingress,"Timestamp"] - df_ue.loc[indexer_ingress,"Timestamp"].shift(1)
 
     df_gnb = pd.read_csv(gnb_rec)
     try:
@@ -78,47 +79,66 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         raise e
 
     df_gnb["location"] = "gnb"
-    df_gnb["type"] = df_gnb.apply(lambda x: "request" if x["SourceIPInner"] != "10.45.0.1" else "response" , axis=1)
-    df_gnb.sort_values(by=["SeqNum", "type"], ignore_index=True, inplace=True)
+    df_gnb["trafficflow"] = df_gnb.apply(lambda x: "ingress" if x["SourceIPInner"] != "10.45.0.1" else "egress" , axis=1)
+    df_gnb.sort_values(by=["SeqNum", "trafficflow"], ignore_index=True, inplace=True)
     df_gnb["delay"] = np.nan
     df_gnb["IAT"] = np.nan
-    indexer = lambda d:d["type"] == "request"
-    df_gnb.loc[indexer,"IAT"] = df_gnb.loc[indexer,"Timestamp"] - df_gnb.loc[indexer,"Timestamp"].shift(1)
-    indexer = lambda d:d["type"] == "response"
-    df_gnb.loc[indexer,"IAT"] = df_gnb.loc[indexer,"Timestamp"] - df_gnb.loc[indexer,"Timestamp"].shift(1)
+    df_gnb["IDT"] = np.nan
+    df_gnb.loc[indexer_egress,"IDT"] = df_gnb.loc[indexer_egress,"Timestamp"] - df_gnb.loc[indexer_egress,"Timestamp"].shift(1)
+    df_gnb.loc[indexer_ingress,"IAT"] = df_gnb.loc[indexer_ingress,"Timestamp"] - df_gnb.loc[indexer_ingress,"Timestamp"].shift(1)
 
 
     # find missing seqnums,
     missing_pkts = 0
-    for direction in set(df_ue["type"].unique()) | set(df_ue["type"].unique()):
-        seqnums_ue = df_ue.query(f"type == '{direction}'")["SeqNum"]
-        seqnums_gnb = df_gnb.query(f"type == '{direction}'")["SeqNum"]
+    # Only keep packets which are sent by the ue AND received by gnb, or the other way around
+    for direction in ["ingress","egress"]:
+        direction_complement = lambda x: "ingress" if x == "egress" else "egress"
+        seqnums_ue = df_ue.query(f"trafficflow == '{direction}'")["SeqNum"]
+        seqnums_gnb = df_gnb.query(f"trafficflow == '{direction_complement(direction)}'")["SeqNum"]
         missing_seqnums = set(seqnums_ue).symmetric_difference(seqnums_gnb)
-        for df in [df_ue,df_gnb]:
-            indexes_to_drop = df.loc[(df["SeqNum"].isin(missing_seqnums)) & (df["type"] == direction)].index
-            missing_pkts += len(indexes_to_drop)
-            df.drop(indexes_to_drop, inplace=True)
-        print(f"{run_directory}({direction}) missing: {missing_seqnums}")
+        # drop rows for the correct direction
+        indexes_to_drop = df_ue.loc[(df_ue["SeqNum"].isin(missing_seqnums)) & (df_ue["trafficflow"] == direction)].index
+        missing_pkts += len(indexes_to_drop)
+        df_ue.drop(indexes_to_drop, inplace=True)
+        indexes_to_drop = df_gnb.loc[(df_gnb["SeqNum"].isin(missing_seqnums)) & (df_gnb["trafficflow"] == direction_complement(direction))].index
+        missing_pkts += len(indexes_to_drop)
+        df_gnb.drop(indexes_to_drop, inplace=True)
+
+        if len(missing_seqnums)> 0:
+            print(f"{run_directory}(ue:{direction}) missing: {{min:{min(missing_seqnums)},max:{max(missing_seqnums)},len:{len(missing_seqnums)}}}")
+        else:
+            continue
+        df_ue.to_csv(f"{os.path.basename(run_directory)}__df_ue_.csv")
+        df_gnb.to_csv(f"{os.path.basename(run_directory)}__df_gnb_.csv")
         # Verify both dataframes have the same sequence numbers
-        ue_seqs = df_ue.query(f"type == '{direction}'")["SeqNum"]
-        gnb_seqs = df_gnb.query(f"type == '{direction}'")["SeqNum"]
+        ue_seqs = df_ue.query(f"trafficflow == '{direction}'")["SeqNum"]
+        gnb_seqs = df_gnb.query(f"trafficflow == '{direction_complement(direction)}'")["SeqNum"]
+        # print(ue_seqs.min())
+        # print(ue_seqs.max())
+        # print(gnb_seqs.min())
+        # print(gnb_seqs.max())
         assert(set(ue_seqs).symmetric_difference(set(range(ue_seqs.min(),ue_seqs.max()+1))) == set(gnb_seqs).symmetric_difference(set(range(gnb_seqs.min(),gnb_seqs.max()+1))))
 
     print(f"dropped {missing_pkts} pkts")
     print(f"len ue: {len(df_ue)}, len gnb: {len(df_gnb)}")
-    df_gnb.sort_values(by=["type", "SeqNum"], ignore_index=True, inplace=True)
-    df_ue.sort_values(by=["type", "SeqNum"], ignore_index=True, inplace=True)
+    df_gnb.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
+    df_ue.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
     assert(len(df_ue) == len(df_gnb))
     assert(df_ue["SeqNum"].equals(df_gnb["SeqNum"]))
 
-    df_ue.loc[(df_ue["type"] == 'request'),"delay"] = df_gnb.loc[(df_gnb["type"] == 'request'),"Timestamp"] - df_ue.loc[(df_ue["type"] == 'request'),"Timestamp"]
-    df_ue.loc[(df_ue["type"] == 'response'),"delay"] = df_ue.loc[(df_ue["type"] == 'response'),"Timestamp"] - df_gnb.loc[(df_gnb["type"] == 'response'),"Timestamp"]
+
+    # df_ue.loc[(df_ue["trafficflow"] == 'egress'),"delay"] = df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"Timestamp"] - df_ue.loc[(df_ue["trafficflow"] == 'egress'),"Timestamp"]
+    df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"delay"] = df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"Timestamp"] - df_ue.loc[(df_ue["trafficflow"] == 'egress'),"Timestamp"]
+    df_ue.loc[(df_ue["trafficflow"] == 'ingress'),"delay"] = df_ue.loc[(df_ue["trafficflow"] == 'ingress'),"Timestamp"] - df_gnb.loc[(df_gnb["trafficflow"] == 'egress'),"Timestamp"]
 
 
 
     df_ue.dropna(subset=["delay"], inplace=True)
-    df = pd.concat([df_ue, df_gnb]) # TODO: why was this commented out
+    df = pd.concat([df_ue, df_gnb]) # INFO: required to accurate determin missing pkts
     # df = pd.concat([df_ue])
+    df["SeqNum"] = df["SeqNum"].astype(np.int64)
+    with open(f"/tmp/pandas-{os.path.basename(run_directory)}.txt", "w") as f:
+        print(df.dtypes, file=f)
 
 
     df.to_csv(f"{run_directory}/combined.csv.gz", index=False,compression="gzip")
@@ -126,37 +146,53 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
 
     percentiles = [0.05, 0.25, 0.5, 0.75, 0.95]
     assert(all([f"{int(p*100)}%" in relevant_stats for p in percentiles]))
-    ret = df.groupby("type").describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
+    # INFO: determine packet metrics (delay/missing/throughput) at the ingress
+    ret = df.groupby("location").describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
 
     if config["traffic_config__direction"] == "UlDl":
         # Both Ul and Dl in the same pcaps
-        assert(len(df.loc[df["type"] == "response"]) > 0)
+        assert(len(df.loc[df["trafficflow"] == "ingress"]) > 0)
         for s in relevant_stats:
-            metrics[f"delay__{s}"] = ret["delay"][s].loc["request"]
+            metrics[f"delay__{s}"] = ret["delay"][s].loc["gnb"]
         metrics["direction"] = "Ul"
+        df_query = df.query(f"trafficflow == 'ingress' and location == 'gnb'")
+        metrics["missing_pkts"] = len( set(range(df_query["SeqNum"].min(numeric_only=True), df_query["SeqNum"].max(numeric_only=True)+1)) .difference(set(df_query["SeqNum"])) )
         ret1 = {**metrics, **config}
         for s in relevant_stats:
-            metrics[f"delay__{s}"] = ret["delay"][s].loc["response"]
+            metrics[f"delay__{s}"] = ret["delay"][s].loc["ue"]
         metrics["direction"] = "Dl"
+        df_query = df.query(f"trafficflow == 'ingress' and location == 'ue'")
+        metrics["missing_pkts"] = len( set(range(df_query["SeqNum"].min(numeric_only=True), df_query["SeqNum"].max(numeric_only=True)+1)) .difference(set(df_query["SeqNum"])) )
         ret2 = {**metrics, **config}
         return [ret1,ret2]
     else:
         # TODO: this is a really bad heuristic?!
         if config["traffic_config__direction"] == "Ul":
-            dir_label = "request"
+            dir_label = "ingress"
+            location_label = "gnb"
+            df_query = df.query(f"trafficflow == 'ingress' and location == 'gnb'")
         else:
-            dir_label = "response"
+            dir_label = "ingress"
+            location_label = "ue"
+            df_query = df.query(f"trafficflow == 'ingress' and location == 'ue'")
+        print(ret["delay"]["mean"])
         for s in relevant_stats:
             try:
-                metrics[f"delay__{s}"] = ret["delay"][s].loc[dir_label]
+                metrics[f"delay__{s}"] = ret["delay"][s].loc[location_label]
             except Exception as e:
                 raise ValueError(f"Can't get metrics for {run_directory} {s}") from e
         # TODO: steamlined throughput calculation
-        ts_min = df_gnb.query(f"type == '{dir_label}'")["Timestamp"].min()
-        ts_max = df_gnb.query(f"type == '{dir_label}'")["Timestamp"].max()
-        pkt_size = df_gnb.query(f"type == '{dir_label}'")["PacketSize"].mean()
-        amount = len(df_gnb.loc[df_gnb["type"] == dir_label])
+        ts_min = df.query(f"trafficflow   == 'ingress' and location == '{location_label}'")["Timestamp"].min()
+        ts_max = df.query(f"trafficflow   == 'ingress' and location == '{location_label}'")["Timestamp"].max()
+        pkt_size = df.query(f"trafficflow == 'ingress' and location == '{location_label}'")["PacketSize"].mean()
+        amount = len(df.query(f"trafficflow == 'ingress' and location == '{location_label}'"))
         print(f"Mi:{ts_min},Ma:{ts_max},S:{pkt_size},A:{amount}")
+        print(f"SeqNum min max")
+        print(df_query["SeqNum"].min(numeric_only=True))
+        print(df_query["SeqNum"].max(numeric_only=True))
+        if df_query["SeqNum"].min(numeric_only=True) < 1 and df_query["SeqNum"].min(numeric_only=True) > 1:
+            print("Nan")
+        metrics["missing_pkts"] = len( set(range(int(df_query["SeqNum"].min(numeric_only=True)), int(df_query["SeqNum"].max(numeric_only=True))+1)) .difference(set(df_query["SeqNum"])) )
         metrics["throughput__mean"] = amount * pkt_size * 8 /(ts_max - ts_min)
         metrics["direction"] = config["traffic_config__direction"]
         ret1 = {**metrics, **config}
@@ -200,7 +236,12 @@ def handle_ping_run(run_directory: str):
         ret1 = {**metrics, **config}
         ret2 = copy.deepcopy(ret1)
         ret2["direction"]="Dl"
-        return [ret1,ret2]
+        if config["traffic_config__direction"] == "UlDl":
+            return [ret1,ret2]
+        elif config["traffic_config__direction"] == "Ul":
+            return [ret1]
+        else:
+            return [ret2]
 
 
 def refactor_final_df(df: pd.DataFrame):
@@ -248,10 +289,12 @@ def main():
     #     sys.exit(1)
 
 # runs = runs[:1]
+
     print(runs)
     with mp.Pool(8) as p:
         # returns = p.map(handle_ping_run, runs)
         returns = p.map(handle_run, runs)
+    # returns = [handle_run(r) for r in runs]
 
     records = []
     for r in returns:
