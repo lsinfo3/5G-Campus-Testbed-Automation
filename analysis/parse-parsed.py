@@ -1,6 +1,8 @@
 import pandas as pd
 import scipy.stats
 import numpy as np
+import argparse
+import os
 
 
 agg_percentiles = [
@@ -214,8 +216,11 @@ def build_agg_dictionary() -> dict:
 
     return d
 
-def main():
-    df = pd.read_parquet("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/all_runs.parquet")
+def main(dir):
+    # df = pd.read_parquet("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/all_runs.parquet")
+    assert(os.path.isdir(dir))
+    assert(os.path.isfile(f"{dir}/all_runs.parquet"))
+    df = pd.read_parquet(f"{dir}/all_runs.parquet")
 
     columns_to_group_by = list( set(all_columns).difference(set(all_msm_columns)).difference(set(["run", "identifier"])) )
     print("---")
@@ -236,13 +241,20 @@ def main():
     dfg['delay__mean__agg__ci_95_l'] = dfg['delay__mean__agg__mean'] - np.abs(dfg["delay__mean__agg__ci_95"])
     dfg['delay__mean__agg__ci_95_u'] = dfg['delay__mean__agg__mean'] + np.abs(dfg["delay__mean__agg__ci_95"])
 
-    dfg.to_csv("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/all_runs_groupby_agg.csv")
-    dfg.to_parquet("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/all_runs_groupby_agg.parquet")
+    dfg.to_csv(f"{dir}/all_runs_groupby_agg.csv")
+    dfg.to_parquet(f"{dir}/all_runs_groupby_agg.parquet")
     print(dfg)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        prog="Evaluate packet recordings in csvs",
+        description="Scan given dir and"
+            )
+    parser.add_argument("filename")
+    args = parser.parse_args()
+    ansible_dump = args.filename
+    main(ansible_dump)
 
 
 

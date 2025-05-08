@@ -158,7 +158,7 @@ def create_param_combinations():
             ]
 
     # for gnb in srsranconfs + oairanconfs:
-    for gnb in [srsranconfs[1]]:
+    for gnb in [srsranconfs[1], oairanconfs[1]]:
         # run_to_run_params_default["traffic_config"]["scapy_iat"]="0.01"
         # run_to_run_params_default["traffic_config"]["scapy_count"]="6000"
         # for ratio in ratios:

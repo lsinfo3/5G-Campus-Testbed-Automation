@@ -26,6 +26,8 @@ def calc_channel_metrics(run_directory, relevant_stats):
 
 
 def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
+    print(run_directory)
+
     gnb_rec = [f.path for f in os.scandir(run_directory) if f.path.endswith("gnb.csv") or f.path.endswith("gnb.csv.gz")]
     if len(gnb_rec) != 1:
         raise ValueError(f"Expected exactly 1 file like 'xyz_gnb.csv[.gz]' but found {len(gnb_rec)}; {run_directory}")
@@ -35,6 +37,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     if len(ue_rec) != 1:
         raise ValueError(f"Expected exactly 1 file like 'xyz_ue.csv[.gz]' but found {len(ue_rec)}; {run_directory}")
     ue_rec = ue_rec[0]
+
 
     df_ue = pd.read_csv(ue_rec)
     df_ue = df_ue.astype({"SeqNum":'int'})
@@ -138,13 +141,21 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         ret2 = {**metrics, **config}
         return [ret1,ret2]
     else:
+        # TODO: this is a really bad heuristic?!
+        if config["traffic_config__direction"] == "Ul":
+            dir_label = "request"
+        else:
+            dir_label = "response"
         for s in relevant_stats:
-            metrics[f"delay__{s}"] = ret["delay"][s].loc["request"]
+            try:
+                metrics[f"delay__{s}"] = ret["delay"][s].loc[dir_label]
+            except Exception as e:
+                raise ValueError(f"Can't get metrics for {run_directory} {s}") from e
         # TODO: steamlined throughput calculation
-        ts_min = df_gnb.query("type == 'request'")["Timestamp"].min()
-        ts_max = df_gnb.query("type == 'request'")["Timestamp"].max()
-        pkt_size = df_gnb.query("type == 'request'")["PacketSize"].mean()
-        amount = len(df_gnb.loc[df_gnb["type"] == "request"])
+        ts_min = df_gnb.query(f"type == '{dir_label}'")["Timestamp"].min()
+        ts_max = df_gnb.query(f"type == '{dir_label}'")["Timestamp"].max()
+        pkt_size = df_gnb.query(f"type == '{dir_label}'")["PacketSize"].mean()
+        amount = len(df_gnb.loc[df_gnb["type"] == dir_label])
         print(f"Mi:{ts_min},Ma:{ts_max},S:{pkt_size},A:{amount}")
         metrics["throughput__mean"] = amount * pkt_size * 8 /(ts_max - ts_min)
         metrics["direction"] = config["traffic_config__direction"]
@@ -230,6 +241,11 @@ def main():
     test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
     runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
     pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
+
+    # handle_run("../ansible/dumps/f353745a/f353745a__c9d26484__001")
+    # handle_run("../ansible/dumps/f353745a/f353745a__06e1f169__000")
+    # if True:
+    #     sys.exit(1)
 
 # runs = runs[:1]
     print(runs)

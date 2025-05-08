@@ -18,10 +18,10 @@
 
 - ansible.builtin.set_fact:
     iperf_direction: "--reverse"
-  when: tg_direction == 'Ul'
+  when: tg_direction != 'Ul'
 - ansible.builtin.set_fact:
     iperf_direction: ""
-  when: tg_direction != 'Ul'
+  when: tg_direction == 'Ul'
 
 - name: Iperf3 traffic gen
   ansible.builtin.shell:
