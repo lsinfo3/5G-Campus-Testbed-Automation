@@ -261,7 +261,7 @@ def create_antenna_gain_combinations():
             run_to_run_params_default["traffic_config"]["target_port"] = "4455"
             run_to_run_params_default["traffic_config"]["iat"]="0.001"
             run_to_run_params_default["traffic_config"]["count"]="60000"
-            run_to_run_params_default["traffic_config"]["direction"]="Ul"
+            run_to_run_params_default["traffic_config"]["direction"]="Dl"
             for ratio in ratios:
                 for period_length in period_lengths:
                     if rxtx == "rx":
@@ -291,7 +291,7 @@ def create_antenna_gain_combinations():
                                 r["tx_gain"] = gain
                                 format_id = f"tx-{gain:02d}"
                             else:
-                                RuntimeError()
+                                raise RuntimeError()
                             r["gnb_version"] = gnb
                             r["run"] = 0
                             r["identifier"] = dict_to_small_hash(fixed_params) + "__" + gnb["type"] + "__" + format_id + f"__{run:03d}"

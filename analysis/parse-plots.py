@@ -278,11 +278,12 @@ def plots_per_run_mp(pcaps):
 
 
 def plots_antenna_gain():
-    plots_antenna_gain_single_runs()
-    plots_antenna_gain_aggregated_runs()
-
-def plots_antenna_gain_single_runs():
     ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
+    ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna_gain_dl/"
+    plots_antenna_gain_single_runs(ansible_dump)
+    plots_antenna_gain_aggregated_runs(ansible_dump)
+
+def plots_antenna_gain_single_runs(ansible_dump):
     plot_dir = ansible_dump
     df = pd.read_parquet(f"{ansible_dump}/all_runs.parquet")
     df = df.query("run == 0")
@@ -298,8 +299,7 @@ def plots_antenna_gain_single_runs():
             errorbars=False
             )
 
-def plots_antenna_gain_aggregated_runs():
-    ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
+def plots_antenna_gain_aggregated_runs(ansible_dump):
     plot_dir = ansible_dump
     df = pd.read_parquet(f"{ansible_dump}/all_runs_groupby_agg.parquet")
     df["gain_type"] = df["rx_gain"].apply(lambda x: "Rx" if x >= 0 else "Tx")
@@ -333,9 +333,9 @@ def plots_antenna_gain_aggregated_runs():
 
 if __name__ == "__main__":
 
-    # plots_antenna_gain()
+    plots_antenna_gain()
 
-    plot_per_setup()
+    # plot_per_setup()
     # plots_per_run_mp(get_pcap_paths())
 
     # plot_per_run("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/srsRAN_651c9a37/srsRAN_651c9a37__rx-40__002/combined.csv.gz")

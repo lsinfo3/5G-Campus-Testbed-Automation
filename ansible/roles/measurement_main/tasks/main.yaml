@@ -214,15 +214,15 @@
       tg_duration: "{{ item.traffic_config.traffic_duration }}"
       tg_rate: "{{ item.traffic_config.rate }}"
     when: item.traffic_config.traffic_type == 'iperfthroughput'
-  - name: '"{{ item.identifier }}": check for iperf errors'
-    ansible.builtin.debug:
-      msg: "{{iperf_ret}}"
-    when: item.traffic_config.traffic_type == 'iperfthroughput'
   # - name: '"{{ item.identifier }}": check for iperf errors'
-  #   ansible.builtin.set_fact:
-  #     gnb_job_failed_cause: "broken pipe"
-  #     gnb_job_failed: true
-  #   when: item.traffic_config.traffic_type == 'iperfthroughput' and iperf_ret.rc != 0
+  #   ansible.builtin.debug:
+  #     msg: "{{iperf_ret}}"
+  #   when: item.traffic_config.traffic_type == 'iperfthroughput'
+  - name: '"{{ item.identifier }}": check for iperf errors'
+    ansible.builtin.set_fact:
+      gnb_job_failed_cause: "broken pipe"
+      gnb_job_failed: true
+    when: item.traffic_config.traffic_type == 'iperfthroughput' and iperf_ret.rc != 0
 
   - name: '"{{ item.identifier }}": wait for gnb tcpdump'
     ansible.builtin.async_status:

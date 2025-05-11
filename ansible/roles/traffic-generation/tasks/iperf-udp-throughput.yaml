@@ -27,6 +27,6 @@
   ansible.builtin.shell:
      cmd: "iperf3 {{ iperf_udp }} {{ iperf_direction }} --port {{ tg_port }} --client {{ tg_ip }} --time {{ tg_duration }} --bitrate {{ tg_rate }} > {{ iperf_shell_output }} 2>&1"
   become: true
-  # ignore_errors: true
+  ignore_errors: true
   register: iperf_ret
 
