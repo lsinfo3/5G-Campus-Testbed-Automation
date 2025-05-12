@@ -16,7 +16,7 @@ ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-04-11/"
 
-ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
+ansible_dump = "/home/lks/Documents/datastore/5g-masterarbeit/dumps/"
 
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/plottests"
@@ -278,10 +278,13 @@ def plots_per_run_mp(pcaps):
 
 
 def plots_antenna_gain():
-    ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
-    ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna_gain_dl/"
-    plots_antenna_gain_single_runs(ansible_dump)
-    plots_antenna_gain_aggregated_runs(ansible_dump)
+    antenna_msm_dumps = [
+        "/home/lks/Documents/datastore/5g-masterarbeit/antenna-gain_ul/",
+        "/home/lks/Documents/datastore/5g-masterarbeit/antenna_gain_dl/"
+            ]
+    for ansible_dump in antenna_msm_dumps:
+        plots_antenna_gain_single_runs(ansible_dump)
+        plots_antenna_gain_aggregated_runs(ansible_dump)
 
 def plots_antenna_gain_single_runs(ansible_dump):
     plot_dir = ansible_dump

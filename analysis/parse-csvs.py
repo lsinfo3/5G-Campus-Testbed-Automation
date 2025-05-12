@@ -108,15 +108,12 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
             print(f"{run_directory}(ue:{direction}) missing: {{min:{min(missing_seqnums)},max:{max(missing_seqnums)},len:{len(missing_seqnums)}}}")
         else:
             continue
-        df_ue.to_csv(f"{os.path.basename(run_directory)}__df_ue_.csv")
-        df_gnb.to_csv(f"{os.path.basename(run_directory)}__df_gnb_.csv")
+        # df_ue.to_csv(f"{os.path.basename(run_directory)}__df_ue_.csv")
+        # df_gnb.to_csv(f"{os.path.basename(run_directory)}__df_gnb_.csv")
+
         # Verify both dataframes have the same sequence numbers
         ue_seqs = df_ue.query(f"trafficflow == '{direction}'")["SeqNum"]
         gnb_seqs = df_gnb.query(f"trafficflow == '{direction_complement(direction)}'")["SeqNum"]
-        # print(ue_seqs.min())
-        # print(ue_seqs.max())
-        # print(gnb_seqs.min())
-        # print(gnb_seqs.max())
         assert(set(ue_seqs).symmetric_difference(set(range(ue_seqs.min(),ue_seqs.max()+1))) == set(gnb_seqs).symmetric_difference(set(range(gnb_seqs.min(),gnb_seqs.max()+1))))
 
     print(f"dropped {missing_pkts} pkts")

@@ -17,7 +17,7 @@ yaml.Dumper.ignore_aliases = lambda *args : True # Don't reference identical typ
 GLOBAL_COUNTER = 0
 
 system = {
-    "pcap_dump": "../dumps/",
+    "pcap_dump": "/home/lks/Documents/datastore/5g-masterarbeit/dumps/",
     "identifier":0
     }
 
