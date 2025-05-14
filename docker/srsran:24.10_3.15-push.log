@@ -1,0 +1,63 @@
+The push refers to repository [docker.io/lkschu/srsran]
+e7c2c5dbcdf5: Preparing
+14d5bc28adea: Preparing
+5fde34082472: Preparing
+5f3c1d348286: Preparing
+5b188ee9a76b: Preparing
+9a65e565e760: Preparing
+73688302699f: Preparing
+47c970c72e36: Preparing
+ef74ecdffd24: Preparing
+d39cbbcde7c0: Preparing
+6af62c67ed2a: Preparing
+0657036ec365: Preparing
+ebf0e755a8d5: Preparing
+c4fb99e5230c: Preparing
+a6a0dad8ba37: Preparing
+8d454e0ffaf0: Preparing
+c1ab7a7d69d5: Preparing
+107d6aff73b5: Preparing
+dc38b150bc3d: Preparing
+0e7fba7ffa5a: Preparing
+3435f0a3afd1: Preparing
+346f14bf17b9: Preparing
+73688302699f: Waiting
+9a65e565e760: Waiting
+47c970c72e36: Waiting
+ef74ecdffd24: Waiting
+8d454e0ffaf0: Waiting
+0e7fba7ffa5a: Waiting
+c1ab7a7d69d5: Waiting
+107d6aff73b5: Waiting
+dc38b150bc3d: Waiting
+3435f0a3afd1: Waiting
+d39cbbcde7c0: Waiting
+ebf0e755a8d5: Waiting
+6af62c67ed2a: Waiting
+c4fb99e5230c: Waiting
+a6a0dad8ba37: Waiting
+0657036ec365: Waiting
+346f14bf17b9: Waiting
+5f3c1d348286: Pushed
+5fde34082472: Pushed
+5b188ee9a76b: Pushed
+73688302699f: Pushed
+e7c2c5dbcdf5: Pushed
+47c970c72e36: Pushed
+d39cbbcde7c0: Mounted from lkschu/oai
+6af62c67ed2a: Mounted from lkschu/oai
+9a65e565e760: Pushed
+0657036ec365: Mounted from lkschu/oai
+ebf0e755a8d5: Mounted from lkschu/oai
+ef74ecdffd24: Pushed
+c4fb99e5230c: Mounted from lkschu/oai
+8d454e0ffaf0: Mounted from lkschu/oai
+a6a0dad8ba37: Mounted from lkschu/oai
+c1ab7a7d69d5: Mounted from lkschu/oai
+107d6aff73b5: Mounted from lkschu/oai
+dc38b150bc3d: Mounted from lkschu/oai
+346f14bf17b9: Layer already exists
+0e7fba7ffa5a: Mounted from lkschu/oai
+3435f0a3afd1: Mounted from lkschu/oai
+14d5bc28adea: Pushed
+24.10_3.15: digest: sha256:a92d1e25bd2586b05147d25646695290b5451bd5b739c91fefaad4d25f2fe68e size: 4959

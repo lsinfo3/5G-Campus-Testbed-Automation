@@ -1,0 +1,36 @@
+The push refers to repository [docker.io/lkschu/uhd]
+d39cbbcde7c0: Preparing
+6af62c67ed2a: Preparing
+0657036ec365: Preparing
+ebf0e755a8d5: Preparing
+c4fb99e5230c: Preparing
+a6a0dad8ba37: Preparing
+8d454e0ffaf0: Preparing
+c1ab7a7d69d5: Preparing
+107d6aff73b5: Preparing
+dc38b150bc3d: Preparing
+0e7fba7ffa5a: Preparing
+3435f0a3afd1: Preparing
+346f14bf17b9: Preparing
+a6a0dad8ba37: Waiting
+8d454e0ffaf0: Waiting
+0e7fba7ffa5a: Waiting
+c1ab7a7d69d5: Waiting
+3435f0a3afd1: Waiting
+dc38b150bc3d: Waiting
+107d6aff73b5: Waiting
+346f14bf17b9: Waiting
+c4fb99e5230c: Pushed
+ebf0e755a8d5: Pushed
+a6a0dad8ba37: Pushed
+8d454e0ffaf0: Pushed
+6af62c67ed2a: Pushed
+107d6aff73b5: Pushed
+0657036ec365: Pushed
+3435f0a3afd1: Pushed
+346f14bf17b9: Layer already exists
+c1ab7a7d69d5: Pushed
+d39cbbcde7c0: Pushed
+0e7fba7ffa5a: Pushed
+dc38b150bc3d: Pushed
+3.15: digest: sha256:833183f023605c3a852be1e206e3a3959e391476b4b3899d2db6ae8c377c74e6 size: 3061

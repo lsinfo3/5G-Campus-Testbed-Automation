@@ -1,0 +1,54 @@
+The push refers to repository [docker.io/lkschu/oai]
+253f909e3eef: Preparing
+317877def03e: Preparing
+8aaacc412636: Preparing
+f8c5eb42a537: Preparing
+e7a4aa2f536d: Preparing
+6e073f33b2be: Preparing
+d39cbbcde7c0: Preparing
+6af62c67ed2a: Preparing
+0657036ec365: Preparing
+ebf0e755a8d5: Preparing
+c4fb99e5230c: Preparing
+a6a0dad8ba37: Preparing
+8d454e0ffaf0: Preparing
+c1ab7a7d69d5: Preparing
+107d6aff73b5: Preparing
+dc38b150bc3d: Preparing
+0e7fba7ffa5a: Preparing
+3435f0a3afd1: Preparing
+346f14bf17b9: Preparing
+6e073f33b2be: Waiting
+c4fb99e5230c: Waiting
+a6a0dad8ba37: Waiting
+d39cbbcde7c0: Waiting
+8d454e0ffaf0: Waiting
+c1ab7a7d69d5: Waiting
+6af62c67ed2a: Waiting
+107d6aff73b5: Waiting
+0657036ec365: Waiting
+ebf0e755a8d5: Waiting
+dc38b150bc3d: Waiting
+0e7fba7ffa5a: Waiting
+3435f0a3afd1: Waiting
+346f14bf17b9: Waiting
+317877def03e: Pushed
+f8c5eb42a537: Pushed
+d39cbbcde7c0: Mounted from lkschu/uhd
+6af62c67ed2a: Mounted from lkschu/uhd
+0657036ec365: Mounted from lkschu/uhd
+ebf0e755a8d5: Mounted from lkschu/uhd
+6e073f33b2be: Pushed
+c4fb99e5230c: Mounted from lkschu/uhd
+a6a0dad8ba37: Mounted from lkschu/uhd
+8aaacc412636: Pushed
+8d454e0ffaf0: Mounted from lkschu/uhd
+c1ab7a7d69d5: Mounted from lkschu/uhd
+107d6aff73b5: Mounted from lkschu/uhd
+dc38b150bc3d: Mounted from lkschu/uhd
+0e7fba7ffa5a: Mounted from lkschu/uhd
+346f14bf17b9: Layer already exists
+3435f0a3afd1: Mounted from lkschu/uhd
+e7a4aa2f536d: Pushed
+253f909e3eef: Pushed
+2.2.0_3.15: digest: sha256:430ede2eb3b136a321e8ef74def81c50de27a13ca14f94d85c5bf829365f0682 size: 4329

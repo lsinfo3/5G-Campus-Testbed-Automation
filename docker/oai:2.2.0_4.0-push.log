@@ -1,0 +1,51 @@
+The push refers to repository [docker.io/lkschu/oai]
+e0b1232f9dc7: Preparing
+c98379fda5ac: Preparing
+8e46674a6a1c: Preparing
+8ddda87fa0cb: Preparing
+d65c767f7124: Preparing
+d1bbf0ed133c: Preparing
+fe83532d601e: Preparing
+5c77171448ea: Preparing
+73a82e019aa7: Preparing
+2ca189721fec: Preparing
+1c4323bc2c10: Preparing
+0f66057c0ac5: Preparing
+39babf8e7471: Preparing
+07e969afd120: Preparing
+689a56030c96: Preparing
+90c58fe780a5: Preparing
+d790657ad8c9: Preparing
+346f14bf17b9: Preparing
+689a56030c96: Waiting
+1c4323bc2c10: Waiting
+90c58fe780a5: Waiting
+0f66057c0ac5: Waiting
+d790657ad8c9: Waiting
+39babf8e7471: Waiting
+346f14bf17b9: Waiting
+07e969afd120: Waiting
+fe83532d601e: Waiting
+5c77171448ea: Waiting
+d1bbf0ed133c: Waiting
+73a82e019aa7: Waiting
+2ca189721fec: Waiting
+c98379fda5ac: Pushed
+8ddda87fa0cb: Pushed
+fe83532d601e: Mounted from lkschu/srsran
+5c77171448ea: Mounted from lkschu/srsran
+73a82e019aa7: Mounted from lkschu/srsran
+2ca189721fec: Mounted from lkschu/srsran
+d1bbf0ed133c: Pushed
+1c4323bc2c10: Mounted from lkschu/srsran
+0f66057c0ac5: Mounted from lkschu/srsran
+8e46674a6a1c: Pushed
+39babf8e7471: Mounted from lkschu/srsran
+07e969afd120: Mounted from lkschu/srsran
+689a56030c96: Mounted from lkschu/srsran
+346f14bf17b9: Layer already exists
+90c58fe780a5: Mounted from lkschu/srsran
+d790657ad8c9: Mounted from lkschu/srsran
+d65c767f7124: Pushed
+e0b1232f9dc7: Pushed
+2.2.0_4.0: digest: sha256:7b508085a1a68166164518b0367ec8b7938cdf3bd938c4cdfa66cc76d938b795 size: 4119
