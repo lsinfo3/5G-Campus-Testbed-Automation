@@ -26,3 +26,4 @@ RUN          rm -rf /var/lib/apt/lists/*
 RUN          ./build_oai --ninja --gNB -C -w USRP
 WORKDIR      /
 
+ENTRYPOINT ["/usr/local/src/OAI/cmake_targets/ran_build/build/nr-softmodem", "-O", "/oai_config.conf", "--sa", "--continous-tx"]

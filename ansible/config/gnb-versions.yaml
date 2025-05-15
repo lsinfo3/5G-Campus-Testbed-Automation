@@ -44,3 +44,9 @@ srs_versions:
      SRS: "release_24_04"
      commit: "1483bda3091420cf7270eacdf31de932865c6294"
 
+
+docker_tags:
+  release_24_10:
+    UHD-4.0: lkschu/srsran:24.10_4.0
+  v2.2.0:
+    UHD-4.0: lkschu/oai:2.2.0_4.0

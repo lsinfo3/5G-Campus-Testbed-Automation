@@ -17,7 +17,7 @@ yaml.Dumper.ignore_aliases = lambda *args : True # Don't reference identical typ
 GLOBAL_COUNTER = 0
 
 system = {
-    "pcap_dump": "/home/lks/Documents/datastore/5g-masterarbeit/dumps/",
+    "pcap_dump": "/home/lks/Documents/datastore/5g-masterarbeit/dockerization/",
     "identifier":0
     }
 
@@ -40,6 +40,7 @@ fixed_params = {
 run_to_run_params_default = {
     "identifier" : 0,
     "run": 0,
+    "dockerization" : False,
     "gnb_version": {
         "type": "srsRAN",
         "uhd_version": "UHD-4.0",
@@ -140,25 +141,24 @@ def create_param_combinations():
 
     period_lengths = [5, 10, 20]
     period_lengths = [5, 20]
-    # period_lengths = [5]
+    # period_lengths = [20]
 
-    runs = [ i for i in range(2) ]
+    runs = [ i for i in range(3) ]
 
     srsranconfs = [
             # {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
-            {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_10", "commit":"9d5dd742a70e82c0813c34f57982f9507f1b6d5d"},
+            # {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_10", "commit":"9d5dd742a70e82c0813c34f57982f9507f1b6d5d"},
             # {"type":"srsRAN","uhd_version": "UHD-4.0", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
             {"type":"srsRAN","uhd_version": "UHD-4.0", "version": "release_24_10", "commit":"9d5dd742a70e82c0813c34f57982f9507f1b6d5d"},
             ]
     oairanconfs = [
             # {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
-            {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
+            # {"type":"OAI","uhd_version": "UHD-3.15.LTS", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
             # {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.1.0", "commit":"9fab2124417cfe67fe09b1eab5e377e26c5cf3a5"},
             {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
             ]
 
-    # for gnb in srsranconfs + oairanconfs:
-    for gnb in [srsranconfs[1], oairanconfs[1]]:
+    for gnb in srsranconfs + oairanconfs:
         # run_to_run_params_default["traffic_config"]["scapy_iat"]="0.01"
         # run_to_run_params_default["traffic_config"]["scapy_count"]="6000"
         # for ratio in ratios:
@@ -174,30 +174,21 @@ def create_param_combinations():
         run_to_run_params_default["traffic_config"]["target_port"] = "4455"
         run_to_run_params_default["traffic_config"]["iat"]="0.001"
         run_to_run_params_default["traffic_config"]["count"]="60000"
-        run_to_run_params_default["traffic_config"]["direction"]="Ul"
-        for ratio in ratios:
-            for period_length in period_lengths:
-                for run in runs:
-                    r = new_per_run_config_base()
-                    r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
-                    r["gnb_version"] = gnb
-                    r["run"] = 0
-                    r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
-                    # r["identifier"] = r["identifier"] + f"__{run:03d}"
-                    r["run"] = run
-                    c.append(r)
-        run_to_run_params_default["traffic_config"]["direction"]="Dl"
-        for ratio in ratios:
-            for period_length in period_lengths:
-                for run in runs:
-                    r = new_per_run_config_base()
-                    r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
-                    r["gnb_version"] = gnb
-                    r["run"] = 0
-                    r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
-                    # r["identifier"] = r["identifier"] + f"__{run:03d}"
-                    r["run"] = run
-                    c.append(r)
+        for dockerization in [True, False]:
+            for direction in ["Dl", "Ul"]:
+                run_to_run_params_default["traffic_config"]["direction"]=direction
+                for ratio in ratios:
+                    for period_length in period_lengths:
+                        for run in runs:
+                            r = new_per_run_config_base()
+                            r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+                            r["gnb_version"] = gnb
+                            r["dockerization"] = dockerization
+                            r["run"] = 0 # hash shouldn't change between runs
+                            r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
+                            # r["identifier"] = r["identifier"] + f"__{run:03d}"
+                            r["run"] = run
+                            c.append(r)
 
         # # scapy
         # run_to_run_params_default["traffic_config"]["traffic_type"] = "scapyudpping"

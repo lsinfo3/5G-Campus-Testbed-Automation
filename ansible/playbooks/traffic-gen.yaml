@@ -14,6 +14,8 @@
     snr_msm_script_output: "/tmp/modem-snr.csv"
 
   pre_tasks:
+    - name: include docker tags map
+      include_vars: ../config/gnb-versions.yaml
     - name: include test configuration
       # include_vars: ../first-tests-0.35h-scapy.yaml
       # include_vars: ../first-tests-0.35h-scapy-2.0.yaml
@@ -21,8 +23,9 @@
       # include_vars: ../compare-gnb-versions-throughput.yaml
       # include_vars: ../compare-gnb-versions-throughput-jammer.yaml
       # include_vars: ../test.yaml
-      include_vars: ../antenna-gain-Dl.yaml
+      # include_vars: ../antenna-gain-Dl.yaml
       # include_vars: ../throughput-uldl.yaml
+      include_vars: ../dockerization.yaml
 
 
   tasks:
@@ -30,6 +33,8 @@
        ansible.builtin.include_role:
           name: measurement_main
        loop: "{{ run_to_run_variation }}"
+       vars:
+         docker_tags_map: "{{docker_tags}}"
 
 
      ## # TODO: kill running OAI/SRS instances

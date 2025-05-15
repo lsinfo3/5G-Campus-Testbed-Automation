@@ -42,3 +42,4 @@ RUN          make -j $MAKEWIDTH
 RUN          make install
 WORKDIR      /
 
+ENTRYPOINT ["gnb", "-c", "/srsran_config.yaml"]

@@ -73,6 +73,7 @@ RUN          git clone https://github.com/EttusResearch/uhd.git /usr/local/src/u
 RUN          cd /usr/local/src/uhd/ && git checkout $UHD_TAG
 RUN          mkdir -p /usr/local/src/uhd/host/build
 WORKDIR      /usr/local/src/uhd/host/build
+# cmake fails for uhd 3.15 for the first try. The second try works ¯\_(ツ)_/¯
 RUN          cmake .. -DENABLE_PYTHON3=ON -DUHD_RELEASE_MODE=release -DCMAKE_INSTALL_PREFIX=/usr || true
 RUN          cmake .. -DENABLE_PYTHON3=ON -DUHD_RELEASE_MODE=release -DCMAKE_INSTALL_PREFIX=/usr
 RUN          make -j $MAKEWIDTH

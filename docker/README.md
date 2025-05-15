@@ -27,9 +27,15 @@ Start container:
 sudo docker run --rm -ti --privileged \
   --device /dev/bus/usb/:/dev/bus/usb/ \
   --network=host \
-  --volume /home/gnb/:/mnt \
-  lkschu/srsran:24.10_4.0 bash
+  --volume <path/to/local/config>:/srsran_config.yaml \
+  lkschu/srsran:24.10_4.0
+
 ```
+
+
+
+These are no longer needed as entrypoints are set
+
 Inside srsran container:
 ```bash
 UHD_IMAGES_DIR=/usr/share/uhd/images/ gnb -c /mnt/gnb_srs.yml
