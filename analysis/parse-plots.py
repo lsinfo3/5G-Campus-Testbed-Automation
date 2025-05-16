@@ -17,6 +17,7 @@ ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-04-11/"
 
 ansible_dump = "/home/lks/Documents/datastore/5g-masterarbeit/dumps/"
+ansible_dump = "/home/lks/Documents/datastore/5g-masterarbeit/dockerization/"
 
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/plottests"
@@ -55,10 +56,22 @@ def plot_per_setup_single_runs():
 
     df_plot = df
     df_plot["group"]=df_plot["tdd_config__tdd_dl_ul_tx_period"].astype(str) + df_plot["direction"].astype(str)
+    df_plot["direction_width"] = df_plot["direction"].apply(lambda x: 0.2 if x == "Ul" else 0.4)
+    df_plot["direction_line"] = df_plot["direction"].apply(lambda x: "dashed" if x == "Ul" else "solid")
     plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/throughput_compare-tdd",
                           facets={"facet":p9.facet_grid(cols='gnb_version__type', scales="fixed")},
                            labels={"y":"throughput [Mbps]", "x":"tdd dl/ul ratio", "color":"tdd period", "linetype":"direction", "shape":"direction"},
                           aesthetics=p9.aes(y="throughput__mean / 1000000", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", shape="direction", linetype="direction", group="group"),
+                          )
+    df_plot = df_plot.query("failed_run == False")
+    df_plot.drop(columns=[c for c in df_plot.columns if c not in ["gnb_version__type", "throughput__mean", "tdd_config__tdd_dl_ul_ratio", "tdd_config__tdd_dl_ul_tx_period", "direction", "direction_line", "direction_width", "dockerization"]], inplace=True)
+    df_plot.to_csv("/tmp/ttt.csv")
+    df_plot = pd.read_csv("/tmp/ttt.csv")
+    plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/throughput_compare-tdd-b",
+                          facets={"facet":p9.facet_grid("gnb_version__type",cols='direction')},
+                           # labels={"y":"throughput [bps]", "x":"tdd dl/ul ratio", "color":"tdd period","fill":"tdd period", "linetype":"dockerization", "shape":"direction"},
+                            lines=False,points=False,bars=True,errorbars=False,
+                          aesthetics=p9.aes(y="throughput__mean", x="factor(tdd_config__tdd_dl_ul_ratio)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="dockerization"),
                           )
 
 
@@ -109,55 +122,71 @@ def plot_per_setup_single_runs():
 
     df_plot = df.query("distance_vertical_in_m == 0.34 and traffic_config__iat == '0.01' and gnb_version__type == 'srsRAN'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-srsRAN-0.35h-0.01s",
-                          labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
-                          aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
-                          )
+    if len(df_plot) > 0:
+        plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-srsRAN-0.35h-0.01s",
+                              labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                              facets={"facet":p9.facet_grid(cols='dockerization', scales="fixed")},
+                              aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                              )
     df_plot = df.query("distance_vertical_in_m == 0.34 and traffic_config__iat == '0.001' and gnb_version__type == 'srsRAN'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-srsRAN-0.35h-0.001s",
-                          labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
-                          aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
-                          )
+    if len(df_plot) > 0:
+        plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-srsRAN-0.35h-0.001s",
+                              labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                              facets={"facet":p9.facet_grid(cols='dockerization', scales="fixed")},
+                              aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                              )
     df_plot = df.query("distance_vertical_in_m == 0.34 and traffic_config__iat == '0.01' and gnb_version__type == 'srsRAN'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-srsRAN-0.35h-0.01s",
-            labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
-            aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
-            )
+    if len(df_plot) > 0:
+        plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-srsRAN-0.35h-0.01s",
+                labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                              facets={"facet":p9.facet_grid(cols='dockerization', scales="fixed")},
+                aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                )
     df_plot = df.query("distance_vertical_in_m == 0.34 and traffic_config__iat == '0.001' and gnb_version__type == 'srsRAN'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-srsRAN-0.35h-0.001s",
-            labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
-            aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
-            )
+    if len(df_plot) > 0:
+        plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-srsRAN-0.35h-0.001s",
+                labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                              facets={"facet":p9.facet_grid(cols='dockerization', scales="fixed")},
+                aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                )
 
     #
 
-    df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__iat == '0.01' and gnb_version__type == 'OAI'")
+    df_plot = df.query("distance_vertical_in_m == 0.34 and traffic_config__iat == '0.01' and gnb_version__type == 'OAI'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-OAI-0.35h-0.01s",
-                          labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
-                          aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
-                          )
-    df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__iat == '0.001' and gnb_version__type == 'OAI'")
+    if len(df_plot) > 0:
+        plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-OAI-0.35h-0.01s",
+                              labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                              facets={"facet":p9.facet_grid(cols='dockerization', scales="fixed")},
+                              aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                              )
+    df_plot = df.query("distance_vertical_in_m == 0.34 and traffic_config__iat == '0.001' and gnb_version__type == 'OAI'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-OAI-0.35h-0.001s",
-                          labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
-                          aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
-                          )
-    df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__iat == '0.01' and gnb_version__type == 'OAI'")
+    if len(df_plot) > 0:
+        plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-OAI-0.35h-0.001s",
+                              labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                              facets={"facet":p9.facet_grid(cols='dockerization', scales="fixed")},
+                              aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                              )
+    df_plot = df.query("distance_vertical_in_m == 0.34 and traffic_config__iat == '0.01' and gnb_version__type == 'OAI'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-OAI-0.35h-0.01s",
-            labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
-            aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
-            )
-    df_plot = df.query("distance_vertical_in_m == 0.35 and traffic_config__iat == '0.001' and gnb_version__type == 'OAI'")
+    if len(df_plot) > 0:
+        plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-OAI-0.35h-0.01s",
+                labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                              facets={"facet":p9.facet_grid(cols='dockerization', scales="fixed")},
+                aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                )
+    df_plot = df.query("distance_vertical_in_m == 0.34 and traffic_config__iat == '0.001' and gnb_version__type == 'OAI'")
     print(df_plot)
-    plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-OAI-0.35h-0.001s",
-            labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
-            aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
-            )
+    if len(df_plot) > 0:
+        plots.box_plot_manual(df=df_plot, filename=f"{plot_dir}/boxplots-OAI-0.35h-0.001s",
+                labels={"y":"delay [s]", "x":"tdd dl ul ratio", "color":"tdd period", "fill":"tdd period"},
+                              facets={"facet":p9.facet_grid(cols='dockerization', scales="fixed")},
+                aesthetics=p9.aes(y="delay__mean", ymax="delay__95%", ymin="delay__5%",middle="delay__50%", lower="delay__25%", upper="delay__75%", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction"),
+                )
 
 
 def plot_per_setup_aggregated_runs():
@@ -165,17 +194,36 @@ def plot_per_setup_aggregated_runs():
 
     df_plot = df
     df_plot["group"]=df_plot["tdd_config__tdd_dl_ul_tx_period"].astype(str) + df_plot["direction"].astype(str)
+    df_plot["dockerization_label"] = df_plot["dockerization"].apply(lambda x : "docker" if x else "bare")
+    df_plot["throughput__mean__agg__ci_95_l"] = df_plot["throughput__mean__agg__ci_95_l"].apply(lambda x: 0 if x<0 else x)
+    df_plot["delay__mean__agg__ci_95_l"] = df_plot["delay__mean__agg__ci_95_l"].apply(lambda x: 0 if x<0 else x)
+    df_plot["tdd_config__tdd_dl_ul_ratio"] = df_plot["tdd_config__tdd_dl_ul_ratio"].astype(pd.api.types.CategoricalDtype(categories=[1,2,4], ordered=True))
+    # df_plot["tdd_config__tdd_dl_ul_tx_period"] = df_plot["tdd_config__tdd_dl_ul_tx_period"].astype(pd.api.types.CategoricalDtype(categories=[5,10,20], ordered=True))
+    # df_plot["tdd_config__tdd_dl_ul_tx_period"] = df_plot["tdd_config__tdd_dl_ul_tx_period"].apply(lambda x : f"{x:02d}")
+    # df_plot["tdd_config__tdd_dl_ul_tx_period"] = df_plot["tdd_config__tdd_dl_ul_tx_period"].astype(pd.api.types.CategoricalDtype(categories=["05","10","20"], ordered=True))
     plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_throughput_compare-tdd",
-                          facets={"facet":p9.facet_grid(cols='gnb_version__type', scales="fixed")},
+                          facets={"facet":p9.facet_grid("gnb_version__type",cols="dockerization_label", scales="fixed")},
                           labels={"y":"throughput [Mbps]", "x":"tdd dl/ul ratio", "color":"tdd period", "linetype":"direction", "shape":"direction"},
                           errorbars=True,
                           aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", shape="direction", linetype="direction", group="group"),
                           )
     plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_delay_compare-tdd",
-                          facets={"facet":p9.facet_grid(cols='gnb_version__type', scales="fixed")},
+                          facets={"facet":p9.facet_grid("gnb_version__type",cols="dockerization_label", scales="fixed")},
                           labels={"y":"delay [s]", "x":"tdd dl/ul ratio", "color":"tdd period", "linetype":"direction", "shape":"direction"},
                           errorbars=True,
                           aesthetics=p9.aes(y="delay__mean__agg__mean", ymin="delay__mean__agg__ci_95_l",ymax="delay__mean__agg__ci_95_u", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", shape="direction", linetype="direction", group="group"),
+                          )
+    plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_throughput_compare-tdd-b",
+                          facets={"facet":p9.facet_grid("gnb_version__type",cols=["direction", "dockerization_label"], scales="fixed")},
+                          labels={"y":"throughput [Mbps]", "x":"tdd dl/ul ratio", "fill":"tdd period", "linetype":"dockerization_label", "shape":"direction"},
+                          errorbars=True,bars=True,lines=False,points=False,
+                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="factor(tdd_config__tdd_dl_ul_ratio)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", shape="direction", linetype="dockerization_label", group="group"),
+                          )
+    plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_delay_compare-tdd-b",
+                          facets={"facet":p9.facet_grid("gnb_version__type",cols=["direction", "dockerization_label"], scales="fixed")},
+                          labels={"y":"delay [s]", "x":"tdd dl/ul ratio", "fill":"tdd period", "linetype":"dockerization_label", "shape":"direction"},
+                          errorbars=True,bars=True,lines=False,points=False,
+                          aesthetics=p9.aes(y="delay__mean__agg__mean", ymin="delay__mean__agg__ci_95_l",ymax="delay__mean__agg__ci_95_u", x="factor(tdd_config__tdd_dl_ul_ratio)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", shape="direction", linetype="dockerization_label", group="group"),
                           )
 
 
@@ -336,13 +384,15 @@ def plots_antenna_gain_aggregated_runs(ansible_dump):
 
 if __name__ == "__main__":
 
-    plots_antenna_gain()
+    # plots_antenna_gain()
 
-    # plot_per_setup()
+    plot_per_setup()
     # plots_per_run_mp(get_pcap_paths())
 
     # plot_per_run("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/srsRAN_651c9a37/srsRAN_651c9a37__rx-40__002/combined.csv.gz")
     #plot_per_run("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/srsRAN_651c9a37/srsRAN_651c9a37__tx-62__000/combined.csv.gz")
+
+
 
 
 

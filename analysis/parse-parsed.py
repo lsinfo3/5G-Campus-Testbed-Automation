@@ -16,12 +16,14 @@ agg_percentiles = [
 
 agg_min = [
     'delay__min',
+    'missing_pkts',
     'throughput__mean',
     'throughput__min',
     'iat__min',
 ]
 agg_max = [
     'delay__max',
+    'missing_pkts',
     'throughput__mean',
     'throughput__max',
     'iat__max',
@@ -30,6 +32,7 @@ agg_max = [
 
 agg_mean = [
     'failed_run',
+    'missing_pkts',
     'delay__min',
     'delay__max',
     'delay__mean',
@@ -60,6 +63,7 @@ agg_mean = [
 
 all_msm_columns = [
 'failed_run',
+'missing_pkts',
 'delay__min',
 'delay__max',
 'delay__mean',
@@ -92,6 +96,7 @@ all_msm_columns = [
 all_columns = [
 'direction',
 'failed_run',
+'missing_pkts',
 'delay__min',
 'delay__max',
 'delay__mean',
@@ -129,6 +134,9 @@ all_columns = [
 'interface_ue',
 'interface_gnb',
 'jammer',
+'dockerization',
+'performance_tuning',
+'sdr',
 'identifier',
 'run',
 'rx_gain',
@@ -221,6 +229,7 @@ def main(dir):
     assert(os.path.isdir(dir))
     assert(os.path.isfile(f"{dir}/all_runs.parquet"))
     df = pd.read_parquet(f"{dir}/all_runs.parquet")
+    assert(set(df.columns) == set(all_columns))
 
     columns_to_group_by = list( set(all_columns).difference(set(all_msm_columns)).difference(set(["run", "identifier"])) )
     print("---")
