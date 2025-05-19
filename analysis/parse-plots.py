@@ -17,7 +17,9 @@ ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-04-11/"
 
 ansible_dump = "/home/lks/Documents/datastore/5g-masterarbeit/dumps/"
+ansible_dump = "/home/lks/Akten/datastore/5g-masterarbeit/dumps_small_throughput"
 ansible_dump = "/home/lks/Documents/datastore/5g-masterarbeit/dockerization/"
+# ansible_dump = "/home/lks/Akten/datastore/5g-masterarbeit/dumps_2025-04-11"
 
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/plottests"
@@ -69,9 +71,10 @@ def plot_per_setup_single_runs():
     df_plot = pd.read_csv("/tmp/ttt.csv")
     plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/throughput_compare-tdd-b",
                           facets={"facet":p9.facet_grid("gnb_version__type",cols='direction')},
-                           # labels={"y":"throughput [bps]", "x":"tdd dl/ul ratio", "color":"tdd period","fill":"tdd period", "linetype":"dockerization", "shape":"direction"},
+                           labels={"y":"throughput [bps]", "x":"tdd dl/ul ratio", "color":"tdd period","fill":"tdd period", "linetype":"dockerization", "shape":"direction"},
                             lines=False,points=False,bars=True,errorbars=False,
                           aesthetics=p9.aes(y="throughput__mean", x="factor(tdd_config__tdd_dl_ul_ratio)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="dockerization"),
+                           add_to_plot=[p9.scale_linetype_manual(["solid", "dotted"]), p9.guides(linetype = p9.guide_legend(title="dockerization", override_aes = {"size": 1.4, "fill":"#fff"}))]
                           )
 
 
@@ -215,15 +218,17 @@ def plot_per_setup_aggregated_runs():
                           )
     plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_throughput_compare-tdd-b",
                           facets={"facet":p9.facet_grid("gnb_version__type",cols=["direction", "dockerization_label"], scales="fixed")},
-                          labels={"y":"throughput [Mbps]", "x":"tdd dl/ul ratio", "fill":"tdd period", "linetype":"dockerization_label", "shape":"direction"},
+                          labels={"y":"throughput [Mbps]", "x":"tdd dl/ul ratio", "fill":"tdd period", "linetype":"dockerization", "shape":"direction"},
                           errorbars=True,bars=True,lines=False,points=False,
                           aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="factor(tdd_config__tdd_dl_ul_ratio)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", shape="direction", linetype="dockerization_label", group="group"),
+                          add_to_plot=[p9.scale_linetype_discrete(guide=None)]
                           )
     plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_delay_compare-tdd-b",
-                          facets={"facet":p9.facet_grid("gnb_version__type",cols=["direction", "dockerization_label"], scales="fixed")},
-                          labels={"y":"delay [s]", "x":"tdd dl/ul ratio", "fill":"tdd period", "linetype":"dockerization_label", "shape":"direction"},
+                          facets={"facet":p9.facet_grid("gnb_version__type",cols=["direction", "dockerization_label"], scales="free_y")},
+                          labels={"y":"delay [s]", "x":"tdd dl/ul ratio", "fill":"tdd period", "linetype":"dockerization", "shape":"direction"},
                           errorbars=True,bars=True,lines=False,points=False,
                           aesthetics=p9.aes(y="delay__mean__agg__mean", ymin="delay__mean__agg__ci_95_l",ymax="delay__mean__agg__ci_95_u", x="factor(tdd_config__tdd_dl_ul_ratio)", fill="factor(tdd_config__tdd_dl_ul_tx_period)", shape="direction", linetype="dockerization_label", group="group"),
+                          add_to_plot=[p9.scale_linetype_discrete(guide=None)]
                           )
 
 

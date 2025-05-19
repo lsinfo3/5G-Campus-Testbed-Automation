@@ -120,18 +120,42 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     print(f"len ue: {len(df_ue)}, len gnb: {len(df_gnb)}")
     df_gnb.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
     df_ue.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
+    # df_gnb.sort_values(by=["SeqNum", "trafficflow" ], ignore_index=True, inplace=True)
+    # df_ue.sort_values(by=["SeqNum", "trafficflow"], ignore_index=True, inplace=True)
     assert(len(df_ue) == len(df_gnb))
-    assert(df_ue["SeqNum"].equals(df_gnb["SeqNum"]))
+
+    # FIXME: this assert does not work for ping-type traffic!
+    # try:
+    #     df_gnb_custom_sort = df_gnb.sort_values(by=["trafficflow"], ignore_index=True, ascending=True)
+    #     df_gnb_custom_sort.to_csv("/tmp/df_gnb_custom_sort")
+    #     df_ue_custom_sort = df_ue.sort_values(by=["trafficflow"], ignore_index=True, ascending=False)
+    #     df_ue_custom_sort.to_csv("/tmp/df_ue_custom_sort")
+    #     # assert(df_ue["SeqNum"].equals(df_gnb["SeqNum"]))
+    #     assert(df_ue_custom_sort["SeqNum"].equals(df_gnb_custom_sort["SeqNum"]))
+    # except AssertionError as ar:
+    #     df_ue["SeqNum"].to_csv("/tmp/ar_ue.csv")
+    #     df_gnb["SeqNum"].to_csv("/tmp/ar_gnb.csv")
+    #     raise RuntimeError(f"Error parsing {run_directory}!") from ar
 
 
-    # df_ue.loc[(df_ue["trafficflow"] == 'egress'),"delay"] = df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"Timestamp"] - df_ue.loc[(df_ue["trafficflow"] == 'egress'),"Timestamp"]
-    df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"delay"] = df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"Timestamp"] - df_ue.loc[(df_ue["trafficflow"] == 'egress'),"Timestamp"]
-    df_ue.loc[(df_ue["trafficflow"] == 'ingress'),"delay"] = df_ue.loc[(df_ue["trafficflow"] == 'ingress'),"Timestamp"] - df_gnb.loc[(df_gnb["trafficflow"] == 'egress'),"Timestamp"]
+
+    #df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"delay"] = df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"Timestamp"].reset_index() - df_ue.loc[(df_ue["trafficflow"] == 'egress'),"Timestamp"].reset_index()
+    #df_ue.loc[(df_ue["trafficflow"] == 'ingress'),"delay"] = df_ue.loc[(df_ue["trafficflow"] == 'ingress'),"Timestamp"].reset_index() - df_gnb.loc[(df_gnb["trafficflow"] == 'egress'),"Timestamp"].reset_index()
+
+    # Try to split the dataframes (along 'trafficflow') and use SeqNum as index
+    df_gnb_ingress = df_gnb[df_gnb['trafficflow'] == 'ingress']
+    df_gnb_egress = df_gnb[df_gnb['trafficflow'] == 'egress']
+    df_ue_ingress = df_ue[df_ue['trafficflow'] == 'ingress']
+    df_ue_egress = df_ue[df_ue['trafficflow'] == 'egress']
+    for d in [df_gnb_ingress,df_gnb_egress,df_ue_ingress,df_ue_egress]:
+        d.set_index("SeqNum", inplace=True, verify_integrity=True)
+
+    df_gnb_ingress["delay"] = df_gnb_ingress["Timestamp"] - df_ue_egress["Timestamp"]
+    df_ue_ingress["delay"] = df_ue_ingress["Timestamp"] - df_gnb_egress["Timestamp"]
 
 
-
-    df_ue.dropna(subset=["delay"], inplace=True)
-    df = pd.concat([df_ue, df_gnb]) # INFO: required to accurate determin missing pkts
+    #df_ue.dropna(subset=["delay"], inplace=True)
+    df = pd.concat([df_ue_ingress.reset_index(), df_gnb_ingress.reset_index()]) # INFO: required to accurate determin missing pkts
     # df = pd.concat([df_ue])
     df["SeqNum"] = df["SeqNum"].astype(np.int64)
     with open(f"/tmp/pandas-{os.path.basename(run_directory)}.txt", "w") as f:
@@ -288,10 +312,10 @@ def main():
 # runs = runs[:1]
 
     print(runs)
-    with mp.Pool(8) as p:
-        # returns = p.map(handle_ping_run, runs)
-        returns = p.map(handle_run, runs)
-    # returns = [handle_run(r) for r in runs]
+    # with mp.Pool(8) as p:
+    #     # returns = p.map(handle_ping_run, runs)
+    #     returns = p.map(handle_run, runs)
+    returns = [handle_run(r) for r in runs]
 
     records = []
     for r in returns:
@@ -318,13 +342,15 @@ def main():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        prog="Evaluate packet recordings in csvs",
-        description="Scan given dir and"
-            )
-    parser.add_argument("filename")
-    args = parser.parse_args()
-    ansible_dump = args.filename
+    #parser = argparse.ArgumentParser(
+    #    prog="Evaluate packet recordings in csvs",
+    #    description="Scan given dir and"
+    #        )
+    #parser.add_argument("filename")
+    #args = parser.parse_args()
+    #ansible_dump = args.filename
+    ansible_dump = "/home/lks/Akten/datastore/5g-masterarbeit/gnb-versions-delay"
+    #ansible_dump = "/home/lks/Akten/datastore/5g-masterarbeit/dockerization"
     main()
 
 
