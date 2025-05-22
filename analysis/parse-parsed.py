@@ -224,6 +224,19 @@ def build_agg_dictionary() -> dict:
 
     return d
 
+
+def show_columns_with_differences(df : pd.DataFrame):
+    columns_to_group_by = list( set(all_columns).difference(set(all_msm_columns)).difference(set(["identifier"])) )
+    for c in columns_to_group_by:
+        if not c in df.columns:
+            continue
+        param_values = list(df[c].unique())
+        if len(param_values) <= 1:
+            continue
+        print(f"{c}:{param_values}")
+
+
+
 def main(dir):
     # df = pd.read_parquet("/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/all_runs.parquet")
     assert(os.path.isdir(dir))
@@ -239,6 +252,7 @@ def main(dir):
         print(f"{c}: {df[c].nunique()}")
     print("---")
 
+
     # Not needed, coverd by agg failed_runs_series = df.groupby(columns_to_group_by, dropna=False).agg({"failed_run":[("failed_runs",lambda x : sum(x==True))]}).reset_index(drop=True)["failed_run"]["failed_runs"]
     dfg = df.groupby(columns_to_group_by, dropna=False).agg(build_agg_dictionary())
     dfg.columns = list(map(lambda x: '__agg__'.join(filter(None,x)), dfg.columns.values))
@@ -253,6 +267,13 @@ def main(dir):
     dfg.to_csv(f"{dir}/all_runs_groupby_agg.csv")
     dfg.to_parquet(f"{dir}/all_runs_groupby_agg.parquet")
     print(dfg)
+
+    print("Different values:")
+    show_columns_with_differences(df)
+
+    print("\n\nDifferent values aggregated:")
+    show_columns_with_differences(dfg)
+
 
 
 if __name__ == "__main__":

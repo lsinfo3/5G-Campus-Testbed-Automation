@@ -342,14 +342,14 @@ def main():
 
 
 if __name__ == "__main__":
-    #parser = argparse.ArgumentParser(
-    #    prog="Evaluate packet recordings in csvs",
-    #    description="Scan given dir and"
-    #        )
-    #parser.add_argument("filename")
-    #args = parser.parse_args()
-    #ansible_dump = args.filename
-    ansible_dump = "/home/lks/Akten/datastore/5g-masterarbeit/gnb-versions-delay"
+    parser = argparse.ArgumentParser(
+        prog="Evaluate packet recordings in csvs",
+        description="Scan given dir and"
+            )
+    parser.add_argument("filename")
+    args = parser.parse_args()
+    ansible_dump = args.filename
+    # ansible_dump = "/home/lks/Akten/datastore/5g-masterarbeit/gnb-versions-delay"
     #ansible_dump = "/home/lks/Akten/datastore/5g-masterarbeit/dockerization"
     main()
 

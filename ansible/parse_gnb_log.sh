@@ -5,16 +5,13 @@ BASEPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps"
 BASEPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
 BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/dockerization"
 BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/gnb-versions-delay"
+BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot"
 
 
-
-
-LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__0/gnb.log.gz"
-GNBTYPE="srsRAN"
-
-
-LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__cd2bd61d__001/gnb.log.gz"
-GNBTYPE="OAI"
+# LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__0/gnb.log.gz"
+# GNBTYPE="srsRAN"
+# LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__cd2bd61d__001/gnb.log.gz"
+# GNBTYPE="OAI"
 
 
 # Very unlikely used single-byte character

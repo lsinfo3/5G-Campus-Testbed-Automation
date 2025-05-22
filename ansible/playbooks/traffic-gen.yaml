@@ -26,7 +26,8 @@
       # include_vars: ../antenna-gain-Dl.yaml
       # include_vars: ../throughput-uldl.yaml
       # include_vars: ../dockerization.yaml
-      include_vars: ../gnb-compare-delay.yaml
+      # include_vars: ../gnb-compare-delay.yaml
+      include_vars: ../throughput-overshoot.yaml
 
 
   tasks:
