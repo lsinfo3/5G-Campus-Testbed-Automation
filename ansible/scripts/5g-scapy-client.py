@@ -63,10 +63,12 @@ def apply_burst_size(pkt_sched, burst_size):
 
 def send_packets(socket, iat_dist, arrival_rate, payload_size, packet_amount, packet_type, burst_size):
     if payload_size == "small":
-        payload = "aaaa"
+        base_payload = "aaaa"
+        extra_payload = ""
         index = 1
     else:
-        payload = "a" * 1450
+        base_payload = "aaaa"
+        extra_payload = "b" * 1446
         index = 1
     t0 = time.perf_counter()
     if iat_dist == "det":
@@ -80,18 +82,13 @@ def send_packets(socket, iat_dist, arrival_rate, payload_size, packet_amount, pa
     # tlast = t0
     assert(packet_amount <= 0xffffffff)
     for i in range(0, packet_amount):
-        payload_n = payload.encode() + index.to_bytes(4, "big")
+        payload_n = base_payload.encode() + index.to_bytes(4, "big") + extra_payload.encode()
         if packet_type != "icmp":
             pkt_n = Raw(payload_n)
         else:
             pkt_n = ICMP(id=1234, seq=0) / payload_n
         high_precision_sleep(pktschedule[i] - time.perf_counter())
-        # tpre = time.perf_counter()
         socket.send(pkt_n)
-        # tpost = time.perf_counter()
-        # print("took %.2f mus to send()" % ((tpost - tpre) / 1e-6))
-        # print("sent pkt %d at %.2f us since t0, iat %.2f us" % (index, (tpost - t0) / 1e-6, (tpost - tlast) / 1e-6))
-        # tlast = tpost
         index += 1
 
 
