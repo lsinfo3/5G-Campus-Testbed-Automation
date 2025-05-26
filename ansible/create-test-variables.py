@@ -17,7 +17,7 @@ yaml.Dumper.ignore_aliases = lambda *args : True # Don't reference identical typ
 GLOBAL_COUNTER = 0
 
 system = {
-    "pcap_dump": "/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot/",
+    "pcap_dump": "/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot-scapy/",
     "identifier":0
     }
 
@@ -49,7 +49,7 @@ run_to_run_params_default = {
         #TODO: "version": xyz
         },
     "traffic_config": {                     # TODO: build_traffic_config function
-        "traffic_type" : "scapyudpping",    # 'scapyudpping', 'iperfthroughput' or 'ping'
+        "traffic_type" : "scapyudpping",    # 'scapyudpping', 'iperfthroughput' or 'ping', 'scapyudpthroughput'
         "direction": "Ul",                   # only relevant for 'iperfthroughput'
         "traffic_duration": 60,
         "proto": "udp",
@@ -130,6 +130,12 @@ def new_per_run_config_base():
     return r
 
 
+""" assert rate is in Mbps, size in B """
+def iat_from_rate(rate, size) -> int:
+    iat_s = size / (1000 * 1000 * rate / 8)
+    return iat_s
+
+
 
 """ Returns list of all per run configurations """
 def create_param_combinations():
@@ -171,7 +177,7 @@ def create_param_combinations():
 
         # TODO: wiederholen mit docker, anderem generator
         # iperf
-        if True:
+        if False:
             run_to_run_params_default["traffic_config"]["traffic_type"] = "iperfthroughput"
             run_to_run_params_default["traffic_config"]["target_port"] = "4455"
             run_to_run_params_default["traffic_config"]["iat"]="0.001"
@@ -185,6 +191,37 @@ def create_param_combinations():
                     for rate in rates:
                         run_to_run_params_default["traffic_config"]["direction"]=direction
                         run_to_run_params_default["traffic_config"]["rate"]=rate
+                        for ratio in ratios:
+                            for period_length in period_lengths:
+                                for run in runs:
+                                    r = new_per_run_config_base()
+                                    r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+                                    r["gnb_version"] = gnb
+                                    r["dockerization"] = dockerization
+                                    r["run"] = 0 # hash shouldn't change between runs
+                                    r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
+                                    # r["identifier"] = r["identifier"] + f"__{run:03d}"
+                                    r["run"] = run
+                                    c.append(r)
+
+        # scapy-throughput
+        if True:
+            run_to_run_params_default["traffic_config"]["traffic_type"] = "scapyudpthroughput"
+            run_to_run_params_default["traffic_config"]["target_port"] = "3344"
+            run_to_run_params_default["traffic_config"]["iat"]="0.001"
+            run_to_run_params_default["traffic_config"]["count"]="60000"
+            for dockerization in [False]:
+                for direction in ["Ul"]:
+                    if direction == "Dl":
+                        rates = ["30M","40M","50M","60M","70M","100M", "200M"]
+                    else:
+                        rates = ["10M","20M","30M","50M","100M", "200M"]
+                    for rate in rates:
+                        run_to_run_params_default["traffic_config"]["iat"]=f"{iat_from_rate(rate=int(rate[:-1]), size=1496)}"
+                        run_to_run_params_default["traffic_config"]["direction"]=direction
+                        run_to_run_params_default["traffic_config"]["rate"]=rate
+                        run_to_run_params_default["traffic_config"]["size"]="big"
+                        run_to_run_params_default["traffic_config"]["count"]=f"{ int( (65 * (1000*1000*int(rate[:-1])/8) / 1496) +0.5) }"
                         for ratio in ratios:
                             for period_length in period_lengths:
                                 for run in runs:

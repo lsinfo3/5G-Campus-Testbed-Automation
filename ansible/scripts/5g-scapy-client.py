@@ -12,7 +12,7 @@ def main() -> int:
     argparser.add_argument("iat_dist", default="det", help="IAT distribution det or exp")
     argparser.add_argument("arrival_rate", default=-1,
                            help="Arrival Rate for det = wanted IAT, for exp = lambda = 1/arrival_rate")
-    argparser.add_argument("payload_size", default="small", help="Small (just counter) | Big (1400 + counter)")
+    argparser.add_argument("payload_size", default="small", help="Small (just counter) | Big (1450 + counter)")
     argparser.add_argument("packet_amount", default="small", help="Number of packets to transmit")
     argparser.add_argument("dst_ip", default="172.30.2.2", help="Destination IP address")
     argparser.add_argument("dst_port", default=6363, help="Destination port")
@@ -66,7 +66,7 @@ def send_packets(socket, iat_dist, arrival_rate, payload_size, packet_amount, pa
         payload = "aaaa"
         index = 1
     else:
-        payload = "X" * 1400
+        payload = "a" * 1450
         index = 1
     t0 = time.perf_counter()
     if iat_dist == "det":

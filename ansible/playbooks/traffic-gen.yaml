@@ -27,127 +27,17 @@
       # include_vars: ../throughput-uldl.yaml
       # include_vars: ../dockerization.yaml
       # include_vars: ../gnb-compare-delay.yaml
-      include_vars: ../throughput-overshoot.yaml
+      # include_vars: ../throughput-overshoot.yaml
+      # include_vars: ../throughput-overshoot-scapy.yaml
+      include_vars: ../throughput-overshoot-scapy_small_test.yaml
 
 
   tasks:
      - name: iterate over test definition
        ansible.builtin.include_role:
-          name: measurement_main
+          # name: measurement_main
+          name: loop-control
        loop: "{{ run_to_run_variation }}"
        vars:
          docker_tags_map: "{{docker_tags}}"
-
-
-     ## # TODO: kill running OAI/SRS instances
-     ##     - name: killall running gnb instances
-     ##       ansible.builtin.shell: |
-     ##          killall gnb || true
-     ##       become: true
-     ##
-     ##
-     ## # TODO: powercycle USB hub and wait!
-     ##     - name: powercycle modem
-     ##       ansible.builtin.command:
-     ##         argv:
-     ##            - uhubctl
-     ##            - --action
-     ##            - cycle
-     ##            - --delay
-     ##            - 2
-     ##            - --location
-     ##            - 2-4
-     ##            - --location
-     ##            - 2-4.2
-     ##       become: true
-     ##
-     ## # TODO: start gnb application and wait!
-     ##     - name: Launch SRS gNB
-     ##       shell: "{{ srs_gnb_binary }} -c {{ gnb_srs_config_path }}"
-     ##       become: true
-     ##       async: 900
-     ##       poll: 0
-     ##     - name: Wait for 20 seconds until gNB becomes ready
-     ##       wait_for:
-     ##         timeout: 20
-     ## # TODO: check if gnb is running (-> missconfiguration)
-     ##
-     ##
-     ##
-     ## # TODO: get ip for modem
-     ##
-     ##     - name: Acquire IP for modem
-     ##       shell: "/home/gnb/setip.sh"
-     ##
-     ##     - name: Wait for 10 seconds after obtaining IP
-     ##       wait_for:
-     ##         timeout: 10
-     ##
-     ##
-     ##
-     ##     - name: tcpdump on gnb
-     ##       ansible.builtin.command:
-     ##         cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_gnb }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_gnb.pcap udp port 2152
-     ##       async: "{{ item.traffic_config.traffic_duration * 2 }}"
-     ##       poll: 0
-     ##       become: true
-     ##       register: tcpdump_gnb
-     ##
-     ##     - name: tcpdump on ue
-     ##       ansible.builtin.command:
-     ##         cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_ue }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_ue.pcap
-     ##       async: "{{ item.traffic_config.traffic_duration * 2 }}"
-     ##       poll: 0
-     ##       become: true
-     ##       register: tcpdump_ue
-     ##
-     ##     - name: sleep
-     ##       ansible.builtin.command:
-     ##          cmd: sleep 2
-     ##       become: false
-     ##
-     ##     - name: run ping role
-     ##       ansible.builtin.include_role:
-     ##         name: measurements
-     ##         tasks_from: icmp.yaml
-     ##       vars:
-     ##         icmp_intervall: "{{ item.traffic_config.icmp_intervall }}"
-     ##         icmp_count: "{{ item.traffic_config.icmp_count }}"
-     ##
-     ##     - name: wait for gnb tcpdump
-     ##       ansible.builtin.async_status:
-     ##          jid: "{{ tcpdump_gnb.ansible_job_id }}"
-     ##       register: tcpdump_gnb_result
-     ##       until: tcpdump_gnb_result.finished
-     ##       failed_when: tcpdump_gnb_result.rc != 0 and tcpdump_gnb_result.rc != 124
-     ##       retries: 10
-     ##       delay: 5
-     ##       become: true
-     ##
-     ##     - name: wait for ue tcpdump
-     ##       ansible.builtin.async_status:
-     ##          jid: "{{ tcpdump_ue.ansible_job_id }}"
-     ##       register: tcpdump_ue_result
-     ##       until: tcpdump_ue_result.finished
-     ##       failed_when: tcpdump_gnb_result.rc != 0 and tcpdump_gnb_result.rc != 124
-     ##       retries: 10
-     ##       delay: 5
-     ##       become: true
-     ##
-     ##     - name: Copy pcaps (1/2)
-     ##       ansible.builtin.fetch:
-     ##          src: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap
-     ##          dest: ../dumps/
-     ##          flat: true
-     ##       become: false
-     ##
-     ##     - name: Copy pcaps (2/2)
-     ##       ansible.builtin.fetch:
-     ##          src: /home/{{ ansible_user_id }}/tcpdump_ue.pcap
-     ##          dest: ../dumps/
-     ##          flat: true
-     ##       become: false
-
-
-
 

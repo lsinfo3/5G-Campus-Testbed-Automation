@@ -1,0 +1,18 @@
+---
+
+- name: test loop
+  hosts: localhost
+
+  tasks:
+     - name: iterate loop
+       ansible.builtin.include_role:
+          name: loop-control
+       loop:
+         - { "identifier": 'item1', "val":'0bfc62f00a4f6139' }
+         - { "identifier": 'item2', "val":'4c2f427ca2f63009' }
+         - { "identifier": 'item3', "val":'64aad60e18d1ed1c' }
+         - { "identifier": 'item4', "val":'b627e74d49c25ce6' }
+         - { "identifier": 'item5', "val":'e97d6b3a9c38d586' }
+         - { "identifier": 'item6', "val":'e18fb5da84f060ed' }
+       # vars:
+       #   skip_until_id: "item4"

@@ -221,7 +221,7 @@
       icmp_intervall: "{{ item.traffic_config.iat }}"
       icmp_count: "{{ item.traffic_config.count }}"
     when: item.traffic_config.traffic_type== 'ping'
-  - name: '"{{ item.identifier }}": run udp scapy traffic gen role'
+  - name: '"{{ item.identifier }}": run udp scapy ping traffic gen role'
     ansible.builtin.include_role:
       name: traffic-generation
       tasks_from: scapy-udp-ping.yaml
@@ -235,6 +235,21 @@
       tg_port: "{{ item.traffic_config.target_port }}"
       tg_burst: "{{ item.traffic_config.burst }}"
     when: item.traffic_config.traffic_type == 'scapyudpping'
+  - name: '"{{ item.identifier }}": run udp scapy throughput traffic gen role'
+    ansible.builtin.include_role:
+      name: traffic-generation
+      tasks_from: scapy-udp-throughput.yaml
+    vars:
+      tg_proto: "{{ item.traffic_config.proto }}"
+      tg_dist: "{{ item.traffic_config.dist }}"
+      tg_iat: "{{ item.traffic_config.iat }}"
+      tg_size: "{{ item.traffic_config.size }}"
+      tg_count: "{{ item.traffic_config.count }}"
+      tg_ip: "{{ item.traffic_config.target_ip }}"
+      tg_port: "{{ item.traffic_config.target_port }}"
+      tg_burst: "{{ item.traffic_config.burst }}"
+      tg_duration: "{{ item.traffic_config.traffic_duration }}"
+    when: item.traffic_config.traffic_type == 'scapyudpthroughput'
   - name: '"{{ item.identifier }}": run udp iperf traffic gen role'
     ansible.builtin.include_role:
       name: traffic-generation
