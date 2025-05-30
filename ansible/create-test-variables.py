@@ -217,11 +217,36 @@ def create_param_combinations():
                     else:
                         rates = ["10M","20M","30M","50M","100M", "200M"]
                     for rate in rates:
-                        run_to_run_params_default["traffic_config"]["iat"]=f"{iat_from_rate(rate=int(rate[:-1]), size=1496)}"
+                        run_to_run_params_default["traffic_config"]["iat"]=f"{iat_from_rate(rate=int(rate[:-1]), size=1350)}"
                         run_to_run_params_default["traffic_config"]["direction"]=direction
                         run_to_run_params_default["traffic_config"]["rate"]=rate
                         run_to_run_params_default["traffic_config"]["size"]="big"
-                        run_to_run_params_default["traffic_config"]["count"]=f"{ int( (65 * (1000*1000*int(rate[:-1])/8) / 1496) +0.5) }"
+                        run_to_run_params_default["traffic_config"]["count"]=f"{ int( (65 * (1000*1000*int(rate[:-1])/8) / 1350) +0.5) }"
+                        for ratio in ratios:
+                            for period_length in period_lengths:
+                                for run in runs:
+                                    r = new_per_run_config_base()
+                                    r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+                                    r["gnb_version"] = gnb
+                                    r["dockerization"] = dockerization
+                                    r["run"] = 0 # hash shouldn't change between runs
+                                    r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
+                                    # r["identifier"] = r["identifier"] + f"__{run:03d}"
+                                    r["run"] = run
+                                    c.append(r)
+    for gnb in srsranconfs + oairanconfs:
+        for dockerization in [False]:
+                for direction in ["Dl"]:
+                    if direction == "Dl":
+                        rates = ["30M","40M","50M","60M","70M","100M", "200M"]
+                    else:
+                        rates = ["10M","20M","30M","50M","100M", "200M"]
+                    for rate in rates:
+                        run_to_run_params_default["traffic_config"]["iat"]=f"{iat_from_rate(rate=int(rate[:-1]), size=1350)}"
+                        run_to_run_params_default["traffic_config"]["direction"]=direction
+                        run_to_run_params_default["traffic_config"]["rate"]=rate
+                        run_to_run_params_default["traffic_config"]["size"]="big"
+                        run_to_run_params_default["traffic_config"]["count"]=f"{ int( (65 * (1000*1000*int(rate[:-1])/8) / 1350) +0.5) }"
                         for ratio in ratios:
                             for period_length in period_lengths:
                                 for run in runs:

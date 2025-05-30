@@ -1,4 +1,5 @@
 import argparse
+import traceback
 import dpkt
 import socket
 import time
@@ -15,6 +16,7 @@ import traceback
 # TODO: combine gtp and non gtp parser?
 
 
+DEBUG=False
 
 
 # TODO: define expectation of inner packet: udp/tcp? ports?
@@ -49,6 +51,8 @@ class validator:
             return True
 
         except AssertionError as ae:
+            # print(ae.with_traceback())
+            traceback.print_exception(ae)
             return False
 
 empty_validator = validator()
@@ -130,11 +134,10 @@ def parse_pcap_gtp(infile, outfile, validator: validator=empty_validator):
                                 src_ip_outer = socket.inet_ntoa(ip_outer.src)
                                 dst_ip_outer = socket.inet_ntoa(ip_outer.dst)
 
-                                # if True:
-                                if False:
+                                if DEBUG:
                                     print(f"UDP:{isinstance(ip_outer.data, dpkt.udp.UDP)}; TCP:{isinstance(ip_outer.data, dpkt.tcp.TCP)}")
                                     print(f"UDP:{isinstance(ip_inner.data, dpkt.udp.UDP)}; TCP:{isinstance(ip_inner.data, dpkt.tcp.TCP)}")
-                                    print(f"so:{src_ip_outer}, do:{src_ip_outer}")
+                                    print(f"so:{src_ip_outer}, do:{dst_ip_outer}")
                                     print(f"si:{socket.inet_ntoa(ip_inner.src)}, di:{socket.inet_ntoa(ip_inner.dst)}")
                                     print(f"sp:{ip_inner.data.sport}, dp:{ip_inner.data.dport}")
                                     print(len(ip_inner.data.data))
@@ -142,7 +145,7 @@ def parse_pcap_gtp(infile, outfile, validator: validator=empty_validator):
                                     print(type(ip_inner))
                                     print(type(ip_inner).__name__)
                                     print("")
-                                ret = handle_inner_ipv4(ip_inner, validator)
+                                ret = handle_inner_ipv4(ip_inner, validator, pktid, infile)
                                 icmps["echo"]+=ret["icmps"]["echo"]
                                 icmps["unreachable"]+=ret["icmps"]["unreachable"]
                                 corrupted += ret["corrupted"]
@@ -220,7 +223,7 @@ def parse_pcap_ip(infile, outfile, offset = 0, validator: validator = empty_vali
                         break
 
                 # Handle ip packet; udpports, buffer -> ip_src/dst, seqnum, icmps
-                ret = handle_inner_ipv4(ip_pkt, validator)
+                ret = handle_inner_ipv4(ip_pkt, validator, pktid, infile)
                 icmps["echo"]+=ret["icmps"]["echo"]
                 icmps["unreachable"]+=ret["icmps"]["unreachable"]
                 corrupted += ret["corrupted"]
@@ -238,9 +241,11 @@ def parse_pcap_ip(infile, outfile, offset = 0, validator: validator = empty_vali
 
 
 # TODO: icmps are no longer checked for (everything is just invalid)
-def handle_inner_ipv4(ip_pkt, traffic_type: validator):
+def handle_inner_ipv4(ip_pkt, traffic_type: validator, pktid = None, infile = None):
     ret = {"ip_src":None, "ip_dst":None, "skip": False, "seqnum":0, "corrupted":0,"invalid":0,"icmps":{"echo":0,"unreachable":0}}
-    if ip_pkt.len != len(ip_pkt.data)+20:
+    if ip_pkt.len != len(ip_pkt.data)+20 and ip_pkt.len != len(ip_pkt.data)+46:
+        if DEBUG:
+            print(f"len check failed: {ip_pkt.len} != {len(ip_pkt.data)}+20")
         ret["skip"] = True
         ret["corrupted"] = 1
         return ret
@@ -257,7 +262,9 @@ def handle_inner_ipv4(ip_pkt, traffic_type: validator):
         #     return ret
 
         if not traffic_type.validate(ip_pkt):
-            print("Failed validation")
+            if DEBUG:
+                print("traffic_type validate failed")
+            print(f"Failed validation for pkt# {pktid} in file {infile}")
             ret["skip"] = True
             ret["invalid"] = 1
             return ret

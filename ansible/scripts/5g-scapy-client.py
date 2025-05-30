@@ -3,7 +3,9 @@ import socket
 from scapy.all import *
 import numpy as np
 from scapy.layers.inet import *
+import time
 
+start_time=0
 
 def main() -> int:
     import argparse
@@ -18,38 +20,45 @@ def main() -> int:
     argparser.add_argument("dst_port", default=6363, help="Destination port")
     argparser.add_argument("burst_size", default=1,
                            help="Number of packets per burst, each burst spaced with sum(bust_size IATs)")
+    argparser.add_argument("duration", default=0,
+                           help="Time after which the process ends. 0 for infinite.")
     args = argparser.parse_args()
 
+    if int(args.duration) != 0:
+        global start_time
+        start_time= time.time()
+
+    print("Starting packet generator")
     if args.protocol == "tcp":
         generate_tcp(args.dst_ip, int(args.dst_port), args.iat_dist, float(args.arrival_rate), args.payload_size,
-                     int(args.packet_amount), int(args.burst_size))
+                     int(args.packet_amount), int(args.burst_size), int(args.duration))
     elif args.protocol == "udp":
         generate_udp(args.dst_ip, int(args.dst_port), args.iat_dist, float(args.arrival_rate), args.payload_size,
-                     int(args.packet_amount), int(args.burst_size))
+                     int(args.packet_amount), int(args.burst_size), int(args.duration))
     elif args.protocol == "icmp":
         generate_icmp(args.dst_ip, args.iat_dist, float(args.arrival_rate), args.payload_size, int(args.packet_amount),
-                      int(args.burst_size))
+                      int(args.burst_size), int(args.duration))
 
 
-def generate_tcp(dst_ip, dst_port, iat_dist, arrival_rate, payload_size, packet_amount, burst_size):
+def generate_tcp(dst_ip, dst_port, iat_dist, arrival_rate, payload_size, packet_amount, burst_size, duration):
     sck = socket.socket(socket.AF_INET, socket.TCP_NODELAY)
     sck.connect((dst_ip, dst_port))
     ssck = StreamSocket(sck)
-    send_packets(ssck, iat_dist, arrival_rate, payload_size, packet_amount, "tcp", burst_size)
+    send_packets(ssck, iat_dist, arrival_rate, payload_size, packet_amount, "tcp", burst_size, duration)
 
 
-def generate_udp(dst_ip, dst_port, iat_dist, arrival_rate, payload_size, packet_amount, burst_size):
+def generate_udp(dst_ip, dst_port, iat_dist, arrival_rate, payload_size, packet_amount, burst_size, duration):
     sck = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sck.connect((dst_ip, dst_port))
     ssck = StreamSocket(sck)
-    send_packets(ssck, iat_dist, arrival_rate, payload_size, packet_amount, "udp", burst_size)
+    send_packets(ssck, iat_dist, arrival_rate, payload_size, packet_amount, "udp", burst_size, duration)
 
 
-def generate_icmp(dst_ip, iat_dist, arrival_rate, payload_size, packet_amount, burst_size):
+def generate_icmp(dst_ip, iat_dist, arrival_rate, payload_size, packet_amount, burst_size, duration):
     sck = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
     sck.connect((dst_ip, 1234))
     ssck = StreamSocket(sck)
-    send_packets(ssck, iat_dist, arrival_rate, payload_size, packet_amount, "icmp", burst_size)
+    send_packets(ssck, iat_dist, arrival_rate, payload_size, packet_amount, "icmp", burst_size, duration)
 
 
 def apply_burst_size(pkt_sched, burst_size):
@@ -61,7 +70,7 @@ def apply_burst_size(pkt_sched, burst_size):
     return sched_out
 
 
-def send_packets(socket, iat_dist, arrival_rate, payload_size, packet_amount, packet_type, burst_size):
+def send_packets(socket, iat_dist, arrival_rate, payload_size, packet_amount, packet_type, burst_size, duration):
     if payload_size == "small":
         base_payload = "aaaa"
         extra_payload = ""
@@ -90,6 +99,9 @@ def send_packets(socket, iat_dist, arrival_rate, payload_size, packet_amount, pa
         high_precision_sleep(pktschedule[i] - time.perf_counter())
         socket.send(pkt_n)
         index += 1
+        if time.time() > start_time + duration:
+            break
+
 
 
 def high_precision_sleep(duration):

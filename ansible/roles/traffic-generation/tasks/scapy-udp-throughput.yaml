@@ -1,23 +1,92 @@
-
 ---
 
 # INFO: this task runs the python traffic generation
 # WARNING: this requires a traffic sink to be set up on the target(=core), traffic sink should NOT answer (-a false)
 
-- name: copy script
-  ansible.builtin.copy:
-    src: ../../../scripts/5g-scapy-client.py
-    dest: /home/{{ ansible_user_id }}/5g-scapy-client.py
-    mode: '755'
-  become: false
+- name: Run scapy Ul traffig gen
+  when: tg_direction == "Ul"
+  block:
+  - name: copy scapy server
+    delegate_to: core
+    ansible.builtin.copy:
+      src: ../../../scripts/udp-server.py
+    # TODO: homedir should be read from ansible_user_id of core
+      dest: /home/core/udp-server.py
+      mode: '755'
+    become: false
+  - name: copy script
+    ansible.builtin.copy:
+      src: ../../../scripts/5g-scapy-client.py
+      dest: /home/{{ ansible_user_id }}/5g-scapy-client.py
+      mode: '755'
+    become: false
 
-- name: Python traffic gen
-  ansible.builtin.shell:
-    # cmd: "bash -c 'timeout {{ tg_duration }}s /home/{{ ansible_user_id }}/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ tg_ip }} {{ tg_port }} {{ tg_burst }}  > {{ collected_logs }}/traffic_scapy 2>&1 || ( [[ $? -eq 124 ]] && true ) '"
-    cmd: "timeout {{ tg_duration }}s /home/{{ ansible_user_id }}/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ tg_ip }} {{ tg_port }} {{ tg_burst }}  > {{ collected_logs }}/traffic_scapy 2>&1"
-  become: true
-  register: scapy_udp_throughput_result
-  failed_when: scapy_udp_throughput_result.rc != 0 and scapy_udp_throughput_result.rc != 124  # 124 is return code after timeout
+  - name: Python traffic gen
+    ansible.builtin.shell:
+      cmd: "/home/{{ ansible_user_id }}/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ tg_ip }} {{ tg_port }} {{ tg_burst }} {{ tg_duration }} > {{ collected_logs }}/traffic_scapy 2>&1"
+    become: true
+    # register: scapy_udp_throughput_result
+    # failed_when: scapy_udp_throughput_result.rc != 0 and scapy_udp_throughput_result.rc != 124  # 124 is return code after timeout
+
+
+
+- name: Run scapy Dl traffig gen
+  when: tg_direction == "Dl"
+    # TODO: homedir should be read from ansible_user_id of core
+  block:
+  - name: update facts to get updated ip addr
+    ansible.builtin.setup:
+      filter:
+        - 'ansible_wwan0'
+  # TODO: this task can be deleted
+  - name: "IMPORTANT DEBUG currentipv4 {{ ansible_wwan0.ipv4.address }}"
+    ansible.builtin.debug:
+      msg: "currentipv4 {{ ansible_wwan0.ipv4.address }}"
+  - name: copy scapy server
+    ansible.builtin.copy:
+      src: ../../../scripts/udp-server.py
+      dest: /home/{{ ansible_user_id }}/udp-server.py
+      mode: '755'
+    become: false
+  - name: copy script
+    delegate_to: core
+    ansible.builtin.copy:
+      src: ../../../scripts/5g-scapy-client.py
+      dest: /home/core/5g-scapy-client.py
+      mode: '755'
+    become: false
+
+  - name: 'create core log dir'
+    delegate_to: core
+    ansible.builtin.file:
+      path: "{{ collected_logs }}"
+      state: directory
+  # - name: Debug print
+  #   ansible.builtin.debug:
+  #     msg: "/home/core/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ ansible_wwan0.ipv4.address }} {{ tg_port }} {{ tg_burst }} {{ tg_duration }}  > {{ collected_logs }}/traffic_scapy_core 2>&1"
+  - name: Python traffic gen
+    delegate_to: core
+    ansible.builtin.shell:
+      cmd: "/home/core/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ ansible_wwan0.ipv4.address }} {{ tg_port }} {{ tg_burst }} {{ tg_duration }}  > {{ collected_logs }}/traffic_scapy_core 2>&1"
+    become: true
+  # - name: Debug print
+  #   ansible.builtin.debug:
+  #     msg: "Traffic task completed!!"
+
+  # TODO: this does not work for some godforsaken reason, "the remote file does not exist, not transferring, ignored"
+  # - name: copy to local
+  #   ansible.builtin.fetch:
+  #     src: "/tmp/{{ collected_logs }}/traffic_scapy_core"
+  #     dest: /tmp/traffic_scapy_core
+  #     flat: true
+  #   delegate_to: core
+  # - name: copy to target
+  #   ansible.builtin.copy:
+  #     src: /tmp/traffic_scapy_core
+  #     dest: "{{ collected_logs }}/traffic_scapy_core"
+  #   become: true
+
+
 
 #     tg_proto: "{{ item.traffic_config.scapy_proto }}"
 #     tg_dist: "{{ item.traffic_config.scapy_dist }}"

@@ -8,18 +8,14 @@ import argparse
 
 
 
-def bind_socket(ip, port, answer):
+def bind_socket(ip, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((ip, port))
-    i = 0
 
     while True:
        data, address = sock.recvfrom(60784)
-       # i+=1
-       # if i % 1000 == 0:
-       #     print(address)
-       if answer:
-           sock.sendto(data, address)
+       print(address)
+       sock.sendto(data, address)
 
 
 
@@ -27,8 +23,7 @@ if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("-i", "--ip", help="IP address to bind to.", required=True)
     argparser.add_argument("-p", "--port", help="Port to bind to.", required=True)
-    argparser.add_argument("-a", "--answer", help="Answer each received packet", required=True)
     args = argparser.parse_args()
-    bind_socket(ip=args.ip, port=int(args.port), answer=(args.answer.casefold()=="true"))
+    bind_socket(ip=args.ip, port=int(args.port))
 
 

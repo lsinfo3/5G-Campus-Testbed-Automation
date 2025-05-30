@@ -289,6 +289,10 @@ def handle_run(run_directory: str):
         # WARN: when changing this step: double check FAILED runs are marked correctly
         # return handle_throughput_run(run_directory)
         return handle_ping_run(run_directory)
+    elif traffic_type == "scapyudpthroughput":
+        # WARN: when changing this step: double check FAILED runs are marked correctly
+        # return handle_throughput_run(run_directory)
+        return handle_ping_run(run_directory)
     else:
         raise RuntimeError(f"Unknown traffic type: {traffic_type}")
 

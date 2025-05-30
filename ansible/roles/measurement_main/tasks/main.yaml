@@ -234,6 +234,7 @@
       tg_ip: "{{ item.traffic_config.target_ip }}"
       tg_port: "{{ item.traffic_config.target_port }}"
       tg_burst: "{{ item.traffic_config.burst }}"
+      tg_direction: "{{ item.traffic_config.direction }}"
     when: item.traffic_config.traffic_type == 'scapyudpping'
   - name: '"{{ item.identifier }}": run udp scapy throughput traffic gen role'
     ansible.builtin.include_role:
@@ -249,6 +250,7 @@
       tg_port: "{{ item.traffic_config.target_port }}"
       tg_burst: "{{ item.traffic_config.burst }}"
       tg_duration: "{{ item.traffic_config.traffic_duration }}"
+      tg_direction: "{{ item.traffic_config.direction }}"
     when: item.traffic_config.traffic_type == 'scapyudpthroughput'
   - name: '"{{ item.identifier }}": run udp iperf traffic gen role'
     ansible.builtin.include_role:

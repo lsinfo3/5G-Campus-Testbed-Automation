@@ -22,6 +22,9 @@ def get_pcap_paths(root: str):
 
 iperf_udp_throughput = pp.validator(proto="udp", pl_min_len=1200, seq_num_first_byte=8, seq_num_last_byte=12, match_port=4455)
 scapy_ping = pp.validator(proto="udp", pl_min_len=8, pl_max_len=8, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
+# scapy_throughput = pp.validator(proto="udp", pl_min_len=1454, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
+# scapy_throughput = pp.validator(proto="udp", pl_min_len=1428, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
+scapy_throughput = pp.validator(proto="udp", pl_min_len=1300, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
 
 
 def pp_wrapper(infile:str):
@@ -35,6 +38,10 @@ def pp_wrapper(infile:str):
     if run_config["traffic_config"]["traffic_type"] == "scapyudpping":
         v = scapy_ping
         v.match_port = run_config["traffic_config"]["target_port"]
+    elif run_config["traffic_config"]["traffic_type"] == "scapyudpthroughput":
+        v = scapy_throughput
+        v.match_port = run_config["traffic_config"]["target_port"]
+        v.proto = run_config["traffic_config"]["proto"]
     elif run_config["traffic_config"]["traffic_type"] == "iperfthroughput":
         v = iperf_udp_throughput
         v.match_port = run_config["traffic_config"]["target_port"]
@@ -65,6 +72,10 @@ def pp_wrapper(infile:str):
 
 def main():
     start = time.time()
+
+    # p = get_pcap_paths(ansible_dump)[0]
+    # print(pp_wrapper(p))
+
     with mp.Pool(8) as p:
         with open(f"{ansible_dump}/parse_pcap.log", "w") as f:
             for log in p.imap_unordered(pp_wrapper,get_pcap_paths(ansible_dump)):
