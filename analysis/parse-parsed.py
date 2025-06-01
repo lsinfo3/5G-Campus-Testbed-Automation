@@ -10,6 +10,7 @@ agg_percentiles = [
     'delay__std',
     'throughput__mean',
     'throughput__std',
+    'throughputin__mean',
     'iat__mean',
     'iat__std',
 ]
@@ -51,6 +52,7 @@ agg_mean = [
     'throughput__50%',
     'throughput__75%',
     'throughput__95%',
+    'throughputin__mean',
     'iat__max',
     'iat__mean',
     'iat__std',
@@ -82,6 +84,7 @@ all_msm_columns = [
 'throughput__50%',
 'throughput__75%',
 'throughput__95%',
+'throughputin__mean',
 'iat__min',
 'iat__max',
 'iat__mean',
@@ -115,6 +118,7 @@ all_columns = [
 'throughput__50%',
 'throughput__75%',
 'throughput__95%',
+'throughputin__mean',
 'iat__min',
 'iat__max',
 'iat__mean',
@@ -242,7 +246,13 @@ def main(dir):
     assert(os.path.isdir(dir))
     assert(os.path.isfile(f"{dir}/all_runs.parquet"))
     df = pd.read_parquet(f"{dir}/all_runs.parquet")
-    assert(set(df.columns) == set(all_columns))
+    try :
+        assert(set(df.columns) == set(all_columns))
+    except AssertionError as ae:
+        print(set(df.columns).symmetric_difference(set(all_columns)))
+        raise ae
+
+
 
     columns_to_group_by = list( set(all_columns).difference(set(all_msm_columns)).difference(set(["run", "identifier"])) )
     print("---")
@@ -260,6 +270,9 @@ def main(dir):
 
     dfg['throughput__mean__agg__ci_95_l'] = dfg['throughput__mean__agg__mean'] - np.abs(dfg["throughput__mean__agg__ci_95"])
     dfg['throughput__mean__agg__ci_95_u'] = dfg['throughput__mean__agg__mean'] + np.abs(dfg["throughput__mean__agg__ci_95"])
+
+    dfg['throughputin__mean__agg__ci_95_l'] = dfg['throughputin__mean__agg__mean'] - np.abs(dfg["throughputin__mean__agg__ci_95"])
+    dfg['throughputin__mean__agg__ci_95_u'] = dfg['throughputin__mean__agg__mean'] + np.abs(dfg["throughputin__mean__agg__ci_95"])
 
     dfg['delay__mean__agg__ci_95_l'] = dfg['delay__mean__agg__mean'] - np.abs(dfg["delay__mean__agg__ci_95"])
     dfg['delay__mean__agg__ci_95_u'] = dfg['delay__mean__agg__mean'] + np.abs(dfg["delay__mean__agg__ci_95"])

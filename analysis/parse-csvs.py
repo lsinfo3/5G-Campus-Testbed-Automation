@@ -120,27 +120,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     print(f"len ue: {len(df_ue)}, len gnb: {len(df_gnb)}")
     df_gnb.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
     df_ue.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
-    # df_gnb.sort_values(by=["SeqNum", "trafficflow" ], ignore_index=True, inplace=True)
-    # df_ue.sort_values(by=["SeqNum", "trafficflow"], ignore_index=True, inplace=True)
     assert(len(df_ue) == len(df_gnb))
-
-    # FIXME: this assert does not work for ping-type traffic!
-    # try:
-    #     df_gnb_custom_sort = df_gnb.sort_values(by=["trafficflow"], ignore_index=True, ascending=True)
-    #     df_gnb_custom_sort.to_csv("/tmp/df_gnb_custom_sort")
-    #     df_ue_custom_sort = df_ue.sort_values(by=["trafficflow"], ignore_index=True, ascending=False)
-    #     df_ue_custom_sort.to_csv("/tmp/df_ue_custom_sort")
-    #     # assert(df_ue["SeqNum"].equals(df_gnb["SeqNum"]))
-    #     assert(df_ue_custom_sort["SeqNum"].equals(df_gnb_custom_sort["SeqNum"]))
-    # except AssertionError as ar:
-    #     df_ue["SeqNum"].to_csv("/tmp/ar_ue.csv")
-    #     df_gnb["SeqNum"].to_csv("/tmp/ar_gnb.csv")
-    #     raise RuntimeError(f"Error parsing {run_directory}!") from ar
-
-
-
-    #df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"delay"] = df_gnb.loc[(df_gnb["trafficflow"] == 'ingress'),"Timestamp"].reset_index() - df_ue.loc[(df_ue["trafficflow"] == 'egress'),"Timestamp"].reset_index()
-    #df_ue.loc[(df_ue["trafficflow"] == 'ingress'),"delay"] = df_ue.loc[(df_ue["trafficflow"] == 'ingress'),"Timestamp"].reset_index() - df_gnb.loc[(df_gnb["trafficflow"] == 'egress'),"Timestamp"].reset_index()
 
     # Try to split the dataframes (along 'trafficflow') and use SeqNum as index
     df_gnb_ingress = df_gnb[df_gnb['trafficflow'] == 'ingress']
@@ -148,6 +128,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     df_ue_ingress = df_ue[df_ue['trafficflow'] == 'ingress']
     df_ue_egress = df_ue[df_ue['trafficflow'] == 'egress']
     for d in [df_gnb_ingress,df_gnb_egress,df_ue_ingress,df_ue_egress]:
+        d["SeqNum"] = d["SeqNum"].astype(np.int64)
         d.set_index("SeqNum", inplace=True, verify_integrity=True)
 
     df_gnb_ingress["delay"] = df_gnb_ingress["Timestamp"] - df_ue_egress["Timestamp"]
@@ -157,7 +138,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     #df_ue.dropna(subset=["delay"], inplace=True)
     df = pd.concat([df_ue_ingress.reset_index(), df_gnb_ingress.reset_index()]) # INFO: required to accurate determin missing pkts
     # df = pd.concat([df_ue])
-    df["SeqNum"] = df["SeqNum"].astype(np.int64)
+    # df["SeqNum"] = df["SeqNum"].astype(np.int64)
     with open(f"/tmp/pandas-{os.path.basename(run_directory)}.txt", "w") as f:
         print(df.dtypes, file=f)
 
@@ -191,11 +172,17 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         if config["traffic_config__direction"] == "Ul":
             dir_label = "ingress"
             location_label = "gnb"
-            df_query = df.query(f"trafficflow == 'ingress' and location == 'gnb'")
+            # df_ingress = df.query(f"trafficflow == 'ingress' and location == 'gnb'")
+            df_ingress = df_gnb_ingress
+            # df_egress = df.query(f"trafficflow == 'egress' and location == 'ue'")
+            df_egress = df_ue_egress
         else:
             dir_label = "ingress"
             location_label = "ue"
-            df_query = df.query(f"trafficflow == 'ingress' and location == 'ue'")
+            # df_ingress = df.query(f"trafficflow == 'ingress' and location == 'ue'")
+            df_ingress = df_ue_ingress
+            # df_egress = df.query(f"trafficflow == 'egress' and location == 'gnb'")
+            df_egress = df_gnb_egress
         print(ret["delay"]["mean"])
         for s in relevant_stats:
             try:
@@ -203,18 +190,19 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
             except Exception as e:
                 raise ValueError(f"Can't get metrics for {run_directory} {s}") from e
         # TODO: steamlined throughput calculation
-        ts_min = df.query(f"trafficflow   == 'ingress' and location == '{location_label}'")["Timestamp"].min()
-        ts_max = df.query(f"trafficflow   == 'ingress' and location == '{location_label}'")["Timestamp"].max()
-        pkt_size = df.query(f"trafficflow == 'ingress' and location == '{location_label}'")["PacketSize"].mean()
-        amount = len(df.query(f"trafficflow == 'ingress' and location == '{location_label}'"))
+        ts_min = df_ingress["Timestamp"].min()
+        ts_max = df_ingress["Timestamp"].max()
+        pkt_size = df_ingress["PacketSize"].mean()
+        amount = len(df_ingress)
         print(f"Mi:{ts_min},Ma:{ts_max},S:{pkt_size},A:{amount}")
-        print(f"SeqNum min max")
-        print(df_query["SeqNum"].min(numeric_only=True))
-        print(df_query["SeqNum"].max(numeric_only=True))
-        if df_query["SeqNum"].min(numeric_only=True) < 1 and df_query["SeqNum"].min(numeric_only=True) > 1:
-            print("Nan")
-        metrics["missing_pkts"] = len( set(range(int(df_query["SeqNum"].min(numeric_only=True)), int(df_query["SeqNum"].max(numeric_only=True))+1)) .difference(set(df_query["SeqNum"])) )
+        metrics["missing_pkts"] = len( set(range(int(df_ingress.index.min()), int(df_ingress.index.max())+1)) .difference(set(df_ingress.index)) )
         metrics["throughput__mean"] = amount * pkt_size * 8 /(ts_max - ts_min)
+        ts_min = df_egress["Timestamp"].min()
+        ts_max = df_egress["Timestamp"].max()
+        pkt_size = df_egress["PacketSize"].mean()
+        amount = len(df_egress)
+        metrics["throughputin__mean"] = amount * pkt_size * 8 /(ts_max - ts_min)
+        print(f"metrics['throughputin__mean'] {metrics["throughputin__mean"]}")
         metrics["direction"] = config["traffic_config__direction"]
         ret1 = {**metrics, **config}
         return ret1
@@ -316,10 +304,10 @@ def main():
 # runs = runs[:1]
 
     print(runs)
-    # with mp.Pool(8) as p:
-    #     # returns = p.map(handle_ping_run, runs)
-    #     returns = p.map(handle_run, runs)
-    returns = [handle_run(r) for r in runs]
+    with mp.Pool(8) as p:
+        # returns = p.map(handle_ping_run, runs)
+        returns = p.map(handle_run, runs)
+    # returns = [handle_run(r) for r in runs]
 
     records = []
     for r in returns:

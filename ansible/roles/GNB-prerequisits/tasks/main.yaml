@@ -6,6 +6,9 @@
       - uhubctl               # Used to powercycle the modem
       - tcpdump
       - python3-scapy
+      - lm-sensors
     state: present
   become: true
 
+  # TODO: sudo apt install linux-tools-$(uname -r)
+  # TODO: usb resetter

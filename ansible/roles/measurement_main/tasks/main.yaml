@@ -46,6 +46,19 @@
 - wait_for:
     timeout: 20
 
+
+- name: '"{{ item.identifier }}": Enable performance tuning options if wanted'
+  when: system.fixed_params.performance_tuning
+  block:
+    - name: Copy script
+      ansible.builtin.copy:
+        src: "../scripts/srsran_performance"
+        dest: "srsran_performance"
+        mode: 755
+    - name: Run script
+      ansible.builtin.shell: "bash /home/{{ ansible_user_id }}/srsran_performance > {{ collected_logs }}/setip 2>&1"
+      become: true
+
 # INFO: edit config and start gnb application and wait!
 # TODO: this block is to big, break it up, move it to role or do whatever but dont keep it
 - name: '"{{ item.identifier }}": Run role'

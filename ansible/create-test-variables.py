@@ -17,7 +17,7 @@ yaml.Dumper.ignore_aliases = lambda *args : True # Don't reference identical typ
 GLOBAL_COUNTER = 0
 
 system = {
-    "pcap_dump": "/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot-scapy/",
+    "pcap_dump": "/home/lks/Documents/datastore/5g-masterarbeit/performance-tuning/",
     "identifier":0
     }
 
@@ -34,7 +34,7 @@ fixed_params = {
     "interface_gnb": "eno1",
     "jammer": False,                         # TODO: more options?
     "sdr": "B210",
-    "performance_tuning": False             # set governor, drm kms polling, pinning?, etc
+    "performance_tuning": True             # set governor, drm kms polling, pinning?, etc
     }
 
 run_to_run_params_default = {
@@ -149,7 +149,8 @@ def create_param_combinations():
     period_lengths = [5, 20]
     # period_lengths = [20]
 
-    runs = [ i for i in range(3) ]
+    runs = [ i for i in range(5) ]
+    # runs = [ i for i in range(3,4) ]
 
     srsranconfs = [
             # {"type":"srsRAN","uhd_version": "UHD-3.15.LTS", "version": "release_24_04", "commit":"c33cacba7d940e734ac7bad08935cbc35578fad9"},
@@ -164,7 +165,7 @@ def create_param_combinations():
             {"type":"OAI","uhd_version": "UHD-4.0", "version": "v2.2.0", "commit":"68191088ab4cdcd47d6c0764ac5cf2483f4b3d29"},
             ]
 
-    for gnb in srsranconfs + oairanconfs:
+    # for gnb in srsranconfs + oairanconfs:
         # run_to_run_params_default["traffic_config"]["scapy_iat"]="0.01"
         # run_to_run_params_default["traffic_config"]["scapy_count"]="6000"
         # for ratio in ratios:
@@ -175,9 +176,9 @@ def create_param_combinations():
         #         c.append(r)
 
 
-        # TODO: wiederholen mit docker, anderem generator
         # iperf
-        if False:
+    if True:
+        for gnb in srsranconfs + oairanconfs:
             run_to_run_params_default["traffic_config"]["traffic_type"] = "iperfthroughput"
             run_to_run_params_default["traffic_config"]["target_port"] = "4455"
             run_to_run_params_default["traffic_config"]["iat"]="0.001"
@@ -185,9 +186,10 @@ def create_param_combinations():
             for dockerization in [False]:
                 for direction in ["Dl", "Ul"]:
                     if direction == "Dl":
-                        rates = ["30M","40M","50M","60M","70M","100M", "200M"]
+                        # rates = ["30M","40M","50M","60M","70M","100M", "200M"]
+                        rates = ["100M"]
                     else:
-                        rates = ["10M","20M","30M","50M","100M", "200M"]
+                        rates = ["50M"]
                     for rate in rates:
                         run_to_run_params_default["traffic_config"]["direction"]=direction
                         run_to_run_params_default["traffic_config"]["rate"]=rate
@@ -204,12 +206,13 @@ def create_param_combinations():
                                     r["run"] = run
                                     c.append(r)
 
-        # scapy-throughput
-        if True:
-            run_to_run_params_default["traffic_config"]["traffic_type"] = "scapyudpthroughput"
-            run_to_run_params_default["traffic_config"]["target_port"] = "3344"
-            run_to_run_params_default["traffic_config"]["iat"]="0.001"
-            run_to_run_params_default["traffic_config"]["count"]="60000"
+    # scapy-throughput
+    if False:
+        run_to_run_params_default["traffic_config"]["traffic_type"] = "scapyudpthroughput"
+        run_to_run_params_default["traffic_config"]["target_port"] = "3344"
+        run_to_run_params_default["traffic_config"]["iat"]="0.001"
+        run_to_run_params_default["traffic_config"]["count"]="60000"
+        for gnb in srsranconfs + oairanconfs:
             for dockerization in [False]:
                 for direction in ["Ul"]:
                     if direction == "Dl":
@@ -234,8 +237,8 @@ def create_param_combinations():
                                     # r["identifier"] = r["identifier"] + f"__{run:03d}"
                                     r["run"] = run
                                     c.append(r)
-    for gnb in srsranconfs + oairanconfs:
-        for dockerization in [False]:
+        for gnb in srsranconfs + oairanconfs:
+            for dockerization in [False]:
                 for direction in ["Dl"]:
                     if direction == "Dl":
                         rates = ["30M","40M","50M","60M","70M","100M", "200M"]
@@ -261,8 +264,9 @@ def create_param_combinations():
                                     c.append(r)
 
 
-        # # scapy
-        if False:
+    # # scapy
+    if False:
+        for gnb in srsranconfs + oairanconfs:
             run_to_run_params_default["traffic_config"]["traffic_type"] = "scapyudpping"
             run_to_run_params_default["traffic_config"]["target_port"] = "3344"
             run_to_run_params_default["traffic_config"]["iat"]="0.001"

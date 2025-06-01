@@ -30,8 +30,9 @@ plot_dir = ansible_dump
 
 def get_pcap_paths(ansible_dump_path = ansible_dump):
     test_configurations = [e.path for e in os.scandir(ansible_dump_path) if e.is_dir()]
-    test_configurations = sorted(test_configurations)
     runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
+    runs = sorted(runs)
+    print(runs)
     pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
 
     pcaps = [os.path.dirname(p) for p in pcaps]
@@ -42,7 +43,9 @@ def get_pcap_paths(ansible_dump_path = ansible_dump):
 
 
 def _scenario_throughput_overshoot():
-    for ansible_dump in ["/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot", "/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot-scapy"]:
+    scenarios = ["/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot", "/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot-scapy"]
+    scenarios.reverse()
+    for ansible_dump in scenarios:
         plot_dir = ansible_dump
         df = pd.read_parquet(f"{ansible_dump}/all_runs_groupby_agg.parquet")
         print(df)
@@ -57,11 +60,45 @@ def _scenario_throughput_overshoot():
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="bandwidth_sent", color="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction", group="group"),
                               )
+        plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_throughputin_compare-bandwidth",
+                              facets={"facet":p9.facet_grid("gnb_version__type",cols="tdd_ratio_label", scales="fixed")},
+                              labels={"y":"generated throughput [Mbps]", "x":"generated data rate [Mbps]", "color":"tdd period", "linetype":"direction", "shape":"direction"},
+                              errorbars=True,
+                              aesthetics=p9.aes(y="throughputin__mean__agg__mean / 1000000", ymin="throughputin__mean__agg__ci_95_l / 1000000",ymax="throughputin__mean__agg__ci_95_u / 1000000", x="bandwidth_sent", color="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction", group="group"),
+                              )
         plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_delay_compare-bandwidth",
                               facets={"facet":p9.facet_grid("gnb_version__type",cols="tdd_ratio_label", scales="fixed")},
                               labels={"y":"delay [s]", "x":"generated data rate [Mbps]", "color":"tdd period", "linetype":"direction", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="delay__mean__agg__mean", ymin="delay__mean__agg__ci_95_l",ymax="delay__mean__agg__ci_95_u", x="bandwidth_sent", color="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction", group="group"),
+                              )
+        for p in get_pcap_paths(ansible_dump)[:4]:
+            plot_per_run(p)
+
+
+def _scenario_performance_tuning():
+    scenarios = ["/home/lks/Documents/datastore/5g-masterarbeit/performance-tuning"]
+    scenarios.reverse()
+    for ansible_dump in scenarios:
+        plot_dir = ansible_dump
+        df = pd.read_parquet(f"{ansible_dump}/all_runs_groupby_agg.parquet")
+        print(df)
+
+        df_plot = df
+        df_plot["group"]=df_plot["tdd_config__tdd_dl_ul_tx_period"].astype(str) + df_plot["direction"].astype(str)
+        df_plot["bandwidth_sent"]=df_plot["traffic_config__rate"].apply(lambda x: int(x[:-1]))
+        df_plot["tdd_ratio_label"]=df_plot["tdd_config__tdd_dl_ul_ratio"].apply(lambda x: f"TDD Dl/Ul {x}")
+        plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_performance_tuning-bandwidth",
+                              facets={"facet":p9.facet_grid("gnb_version__type",cols="performance_tuning", scales="fixed")},
+                              labels={"y":"throughput [Mbps]", "x":"tdd dl/ul ratio", "color":"tdd period", "linetype":"direction", "shape":"direction"},
+                              errorbars=True,
+                              aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction", group="group"),
+                              )
+        plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_delay-bandwidth",
+                              facets={"facet":p9.facet_grid("gnb_version__type",cols="performance_tuning", scales="fixed")},
+                              labels={"y":"delay [s]", "x":"tdd dl/ul ratio", "color":"tdd period", "linetype":"direction", "shape":"direction"},
+                              errorbars=True,
+                              aesthetics=p9.aes(y="delay__mean__agg__mean", ymin="delay__mean__agg__ci_95_l",ymax="delay__mean__agg__ci_95_u", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction", group="group"),
                               )
         # for p in get_pcap_paths(ansible_dump)[:4]:
         #     plot_per_run(p)
@@ -582,7 +619,8 @@ if __name__ == "__main__":
     # plots_antenna_gain()
 
     # _scenario_gnb_versions_delay()
-    _scenario_throughput_overshoot()
+    # _scenario_throughput_overshoot()
+    _scenario_performance_tuning()
 
 
     # plot_per_setup()

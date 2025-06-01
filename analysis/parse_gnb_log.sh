@@ -6,7 +6,8 @@ BASEPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
 BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/dockerization"
 BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/gnb-versions-delay"
 BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot"
-BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot-scapy"
+# BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot-scapy"
+BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/performance-tuning"
 
 
 # LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__0/gnb.log.gz"
@@ -16,13 +17,14 @@ BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot-sca
 
 
 # Very unlikely used single-byte character
-DELIM=""
+export DELIM=""
 
 
 parse_srsran() {
     # INFO: this is for loglevel: 'info'
+    gnb_log_path="$1"
     echo -ne "TIMESTAMP,CQI,SNR,RSRP,MCS_DL,MCS_UL\n"
-    gzip -dc "$LOGPATH" | grep "pusch" | grep -e '^[0-9]' | while read -r line; do
+    gzip -dc "$gnb_log_path" | grep "pusch" | grep -e '^[0-9]' | while read -r line; do
         ts="$(echo -n "$line" | awk '{print $1}')"
         ts="$(TZ=UTC date --date="$ts" "+%s.%N")"
         cqi="$(echo -n "$line" | sed "s/cqi=/$DELIM/" | cut -d "$DELIM" -f 2 | awk '{print $1}' | sed 's/n\/a//')"
@@ -37,8 +39,9 @@ parse_srsran() {
 }
 
 parse_oai() {
+    gnb_log_path="$1"
     echo -ne "TIMESTAMP,CQI,SNR,RSRP,MCS_DL,MCS_UL\n"
-    gzip -dc "$LOGPATH" | grep " RSRP \| MCS \| SNR " | grep -e '^[0-9]' | while read -r line; do
+    gzip -dc "$gnb_log_path" | grep " RSRP \| MCS \| SNR " | grep -e '^[0-9]' | while read -r line; do
         ts="$(echo -n "$line" | awk '{print $1}')"
         cqi=""
         snr="$(echo -n "$line" | grep " SNR " | awk '{print $23}')"
@@ -55,27 +58,53 @@ parse_oai() {
 
 
 
+detect_gnb_type() {
+    run="$1"
+    run_name="$(basename "$run")"
+    gnb_type="$(jq -r '.gnb_version.type' < "$run/$run_name.yaml")"
+    echo "$run  --- $gnb_type "
+    gnb_log="$run/gnb.log.gz"
+
+    if [[ $gnb_type == "srsRAN" ]]; then
+        parse_srsran "$gnb_log" > "$run"/gnb_snr.csv
+    elif [[ $gnb_type == "OAI" ]]; then
+        parse_oai "$gnb_log" > "$run"/gnb_snr.csv
+    fi
+}
+
+
 walk_dir() {
     for run_group in "$BASEPATH"/*/; do
         for run in "$run_group"/*/; do
-            run_name="$(basename "$run")"
-            gnb_type="$(jq -r '.gnb_version.type' < "$run/$run_name.yaml")"
-            echo "$run  --- $gnb_type "
-            LOGPATH="$run/gnb.log.gz"
-
-            if [[ $gnb_type == "srsRAN" ]]; then
-                continue
-                parse_srsran > "$run"/gnb_snr.csv
-            elif [[ $gnb_type == "OAI" ]]; then
-                parse_oai > "$run"/gnb_snr.csv
-            fi
+            detect_gnb_type "$run"
         done
     done
 }
 
+walkdir_parallel() {
+    lines=()
+    # I=0
+    for run_group in "$BASEPATH"/*/; do
+        for run in "$run_group"/*/; do
+            lines+=("$run")
+            # I=$((I+1))
+            # if [[ I -gt 10 ]]; then
+            #     break
+            # fi
+        done
+    done
+    for l in "${lines[@]}"; do
+        echo "$l"
+    done | SHELL="bash" parallel detect_gnb_type
+}
 
 
-time walk_dir
+export -f detect_gnb_type
+export -f parse_srsran
+export -f parse_oai
+
+# time walk_dir
+time walkdir_parallel
 
 
 

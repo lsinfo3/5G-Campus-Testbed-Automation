@@ -28,7 +28,10 @@
       # include_vars: ../dockerization.yaml
       # include_vars: ../gnb-compare-delay.yaml
       # include_vars: ../throughput-overshoot.yaml
-      include_vars: ../throughput-overshoot-scapy.yaml
+      # include_vars: ../throughput-overshoot-scapy.yaml
+      # include_vars: ../throughput-overshoot-scapy_addruns_3.yaml
+      # include_vars: ../perf-tuning.yaml
+      include_vars: ../perf-tuning-on.yaml
 
 
   tasks:
