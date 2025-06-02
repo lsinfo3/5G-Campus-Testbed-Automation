@@ -157,14 +157,18 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         for s in relevant_stats:
             metrics[f"delay__{s}"] = ret["delay"][s].loc["gnb"]
         metrics["direction"] = "Ul"
-        df_query = df.query(f"trafficflow == 'ingress' and location == 'gnb'")
-        metrics["missing_pkts"] = len( set(range(df_query["SeqNum"].min(numeric_only=True), df_query["SeqNum"].max(numeric_only=True)+1)) .difference(set(df_query["SeqNum"])) )
+        # df_query = df.query(f"trafficflow == 'ingress' and location == 'gnb'")
+        df_query = df_gnb_ingress
+        metrics["missing_pkts"] = len( set(range(df_query.index.min(), df_query.index.max()+1)) .difference(set(df_query.index)) )
+        metrics["sent_pkts"] = len(df_query)
         ret1 = {**metrics, **config}
         for s in relevant_stats:
             metrics[f"delay__{s}"] = ret["delay"][s].loc["ue"]
         metrics["direction"] = "Dl"
-        df_query = df.query(f"trafficflow == 'ingress' and location == 'ue'")
-        metrics["missing_pkts"] = len( set(range(df_query["SeqNum"].min(numeric_only=True), df_query["SeqNum"].max(numeric_only=True)+1)) .difference(set(df_query["SeqNum"])) )
+        # df_query = df.query(f"trafficflow == 'ingress' and location == 'ue'")
+        df_query = df_ue_ingress
+        metrics["missing_pkts"] = len( set(range(df_query.index.min(), df_query.index.max()+1)) .difference(set(df_query.index)) )
+        metrics["sent_pkts"] = len(df_query)
         ret2 = {**metrics, **config}
         return [ret1,ret2]
     else:
@@ -197,6 +201,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         print(f"Mi:{ts_min},Ma:{ts_max},S:{pkt_size},A:{amount}")
         metrics["missing_pkts"] = len( set(range(int(df_ingress.index.min()), int(df_ingress.index.max())+1)) .difference(set(df_ingress.index)) )
         metrics["throughput__mean"] = amount * pkt_size * 8 /(ts_max - ts_min)
+        metrics["sent_pkts"] = len(df_ingress)
         ts_min = df_egress["Timestamp"].min()
         ts_max = df_egress["Timestamp"].max()
         pkt_size = df_egress["PacketSize"].mean()
@@ -221,7 +226,7 @@ def handle_ping_run(run_directory: str):
     }
     relevant_stats = ["min", "max", "mean", "std", "5%", "25%", "50%", "75%", "95%"]
     # TODO: missing_pkts
-    metrics = {"direction":'XXX',"failed_run":False, "missing_pkts":np.nan}
+    metrics = {"direction":'XXX',"failed_run":False, "missing_pkts":np.nan, "sent_pkts":np.nan}
     for k,v in metrics_default.items():
         for s in relevant_stats:
             metrics[f"{k}__{s}"] = v

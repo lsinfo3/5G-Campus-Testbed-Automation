@@ -13,11 +13,13 @@ agg_percentiles = [
     'throughputin__mean',
     'iat__mean',
     'iat__std',
+    'sent_pkts',
 ]
 
 agg_min = [
     'delay__min',
     'missing_pkts',
+    'sent_pkts',
     'throughput__mean',
     'throughput__min',
     'iat__min',
@@ -25,6 +27,7 @@ agg_min = [
 agg_max = [
     'delay__max',
     'missing_pkts',
+    'sent_pkts',
     'throughput__mean',
     'throughput__max',
     'iat__max',
@@ -34,6 +37,7 @@ agg_max = [
 agg_mean = [
     'failed_run',
     'missing_pkts',
+    'sent_pkts',
     'delay__min',
     'delay__max',
     'delay__mean',
@@ -66,6 +70,7 @@ agg_mean = [
 all_msm_columns = [
 'failed_run',
 'missing_pkts',
+'sent_pkts',
 'delay__min',
 'delay__max',
 'delay__mean',
@@ -100,6 +105,7 @@ all_columns = [
 'direction',
 'failed_run',
 'missing_pkts',
+'sent_pkts',
 'delay__min',
 'delay__max',
 'delay__mean',
@@ -276,6 +282,9 @@ def main(dir):
 
     dfg['delay__mean__agg__ci_95_l'] = dfg['delay__mean__agg__mean'] - np.abs(dfg["delay__mean__agg__ci_95"])
     dfg['delay__mean__agg__ci_95_u'] = dfg['delay__mean__agg__mean'] + np.abs(dfg["delay__mean__agg__ci_95"])
+
+    dfg['sent_pkts__agg__ci_95_l'] = dfg['sent_pkts__agg__mean'] - np.abs(dfg["sent_pkts__agg__ci_95"])
+    dfg['sent_pkts__agg__ci_95_u'] = dfg['sent_pkts__agg__mean'] + np.abs(dfg["sent_pkts__agg__ci_95"])
 
     dfg.to_csv(f"{dir}/all_runs_groupby_agg.csv")
     dfg.to_parquet(f"{dir}/all_runs_groupby_agg.parquet")

@@ -72,17 +72,21 @@ set_network_buffers() {
   #   echo "Did not tweak network buffer sizes"
   #   return
   # fi
-  sudo sysctl -w net.core.wmem_max=33554432
-  sudo sysctl -w net.core.rmem_max=33554432
-  sudo sysctl -w net.core.wmem_default=33554432
-  sudo sysctl -w net.core.rmem_default=33554432
+  # sudo sysctl -w net.core.wmem_max=33554432
+  # sudo sysctl -w net.core.rmem_max=33554432
+  # sudo sysctl -w net.core.wmem_default=33554432
+  # sudo sysctl -w net.core.rmem_default=33554432
+  sudo sysctl -n -e -q -w net.core.rmem_default=134217728
+  sudo sysctl -n -e -q -w net.core.rmem_max=134217728
+  sudo sysctl -n -e -q -w net.core.wmem_default=134217728
+  sudo sysctl -n -e -q -w net.core.wmem_max=134217728
   echo "Tweaked network buffer sizes"
 }
 
 #
 set_cpu_cstates() {
   sudo cpupower idle-set -D0
-  echo "Tweaked network buffer sizes"
+  echo "Disabled C states"
 }
 
 #Check for sudo rights

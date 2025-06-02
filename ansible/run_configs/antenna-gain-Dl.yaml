@@ -1,0 +1,5327 @@
+system:
+    pcap_dump: ../dumps/
+    identifier: f353745a
+    fixed_params:
+        distance_horizontal_in_m: 0.5
+        distance_vertical_in_m: 0.34
+        gnb_antenna_inclanation_in_degree: 90
+        gnb_antenna_rotation_in_degree: 0
+        ue_antenna_inclanation_in_degree: 90
+        ue_antenna_rotation_in_degree: 0
+        modem: SIM8200EA-M2 5G HAT
+        interface_ue: wwan0
+        interface_gnb: eno1
+        jammer: false
+        sdr: B210
+        performance_tuning: false
+run_to_run_variation:
+# -   identifier: f353745a__srsRAN__rx-00__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 0
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-00__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 0
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-00__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 0
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-04__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 4
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-04__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 4
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-04__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 4
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-08__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 8
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-08__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 8
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-08__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 8
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-12__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 12
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-12__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 12
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-12__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 12
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-16__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 16
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-16__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 16
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-16__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 16
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-20__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 20
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-20__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 20
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-20__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 20
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-24__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 24
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-24__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 24
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-24__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 24
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-28__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 28
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-28__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 28
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-28__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 28
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-32__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 32
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-32__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 32
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-32__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 32
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-36__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 36
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-36__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 36
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-36__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 36
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-40__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 40
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-40__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 40
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-40__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 40
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-44__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 44
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-44__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 44
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-44__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 44
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-48__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 48
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-48__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 48
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-48__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 48
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-52__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 52
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-52__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 52
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-52__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 52
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-56__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 56
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-56__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 56
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-56__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 56
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-60__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 60
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-60__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 60
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-60__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 60
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-64__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 64
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-64__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 64
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-64__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 64
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-68__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 68
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-68__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 68
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__rx-68__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 68
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-30__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 30
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-30__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 30
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-30__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 30
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-34__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 34
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-34__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 34
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-34__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 34
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-38__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 38
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-38__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 38
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-38__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 38
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-42__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 42
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-42__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 42
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-42__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 42
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-46__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 46
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-46__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 46
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-46__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 46
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-50__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 50
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-50__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 50
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-50__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 50
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-54__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 54
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-54__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 54
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-54__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 54
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-58__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 58
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-58__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 58
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-58__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 58
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-62__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 62
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-62__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 62
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-62__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 62
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-66__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 66
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-66__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 66
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-66__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 66
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-70__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 70
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-70__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 70
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-70__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 70
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-74__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 74
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-74__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 74
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-74__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 74
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-78__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 78
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-78__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 78
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-78__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 78
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-82__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 82
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-82__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 82
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-82__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 82
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-86__000
+#     run: 0
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 86
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-86__001
+#     run: 1
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 86
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__srsRAN__tx-86__002
+#     run: 2
+#     gnb_version:
+#         type: srsRAN
+#         uhd_version: UHD-4.0
+#         version: release_24_10
+#         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: null
+#     tx_gain: 86
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-20__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 20
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-20__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 20
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-20__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 20
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-24__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 24
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-24__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 24
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-24__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 24
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-28__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 28
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-28__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 28
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-28__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 28
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-32__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 32
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-32__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 32
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-32__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 32
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-36__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 36
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-36__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 36
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-36__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 36
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-40__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 40
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-40__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 40
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-40__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 40
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-44__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 44
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-44__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 44
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-44__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 44
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-48__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 48
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-48__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 48
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-48__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 48
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-52__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 52
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-52__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 52
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-52__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 52
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-56__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 56
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-56__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 56
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-56__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 56
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-60__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 60
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-60__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 60
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-60__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 60
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-64__000
+#     run: 0
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 64
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-64__001
+#     run: 1
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 64
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+# -   identifier: f353745a__OAI__rx-64__002
+#     run: 2
+#     gnb_version:
+#         type: OAI
+#         uhd_version: UHD-4.0
+#         version: v2.2.0
+#         commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+#     traffic_config:
+#         traffic_type: iperfthroughput
+#         direction: Dl
+#         traffic_duration: 60
+#         proto: udp
+#         dist: det
+#         iat: '0.001'
+#         rate: 100M
+#         size: small
+#         count: '60000'
+#         target_ip: 10.45.0.1
+#         target_port: '4455'
+#         burst: '1'
+#     rx_gain: 64
+#     tx_gain: null
+#     tdd_config:
+#         tdd_dl_ul_ratio: 1
+#         tdd_flex_slots: 1
+#         tdd_dl_ul_tx_period: 5
+#         tdd_dl_slots: 2
+#         tdd_dl_symbols: 8
+#         tdd_ul_slots: 2
+#         tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__rx-68__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: 68
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__rx-68__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: 68
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__rx-68__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: 68
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-40__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 40
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-40__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 40
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-40__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 40
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-44__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 44
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-44__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 44
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-44__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 44
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-48__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 48
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-48__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 48
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-48__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 48
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-52__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 52
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-52__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 52
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-52__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 52
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-56__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 56
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-56__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 56
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-56__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 56
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-60__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 60
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-60__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 60
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-60__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 60
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-64__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 64
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-64__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 64
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-64__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 64
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-68__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 68
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-68__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 68
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-68__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 68
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-72__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 72
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-72__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 72
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-72__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 72
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-76__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 76
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-76__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 76
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-76__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 76
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-80__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 80
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-80__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 80
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-80__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 80
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-84__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 84
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-84__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 84
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-84__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 84
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-88__000
+    run: 0
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 88
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-88__001
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 88
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: f353745a__OAI__tx-88__002
+    run: 2
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: iperfthroughput
+        direction: Dl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '4455'
+        burst: '1'
+    rx_gain: null
+    tx_gain: 88
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4

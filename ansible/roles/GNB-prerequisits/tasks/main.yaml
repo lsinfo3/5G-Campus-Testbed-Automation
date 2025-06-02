@@ -10,5 +10,13 @@
     state: present
   become: true
 
+- name: Remove unattended upgrades
+  ansible.builtin.apt:
+    install_recommends: false
+    pkg:
+      - unattended-upgrades
+    state: absent
+  become: true
+
   # TODO: sudo apt install linux-tools-$(uname -r)
   # TODO: usb resetter

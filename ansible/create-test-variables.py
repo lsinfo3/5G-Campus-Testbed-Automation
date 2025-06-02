@@ -34,7 +34,7 @@ fixed_params = {
     "interface_gnb": "eno1",
     "jammer": False,                         # TODO: more options?
     "sdr": "B210",
-    "performance_tuning": True             # set governor, drm kms polling, pinning?, etc
+    "performance_tuning": False             # set governor, drm kms polling, pinning?, etc
     }
 
 run_to_run_params_default = {
@@ -149,7 +149,8 @@ def create_param_combinations():
     period_lengths = [5, 20]
     # period_lengths = [20]
 
-    runs = [ i for i in range(5) ]
+    # runs = [ i for i in range(10,15) ]
+    runs = [ i for i in range(0,10) ]
     # runs = [ i for i in range(3,4) ]
 
     srsranconfs = [
@@ -177,7 +178,7 @@ def create_param_combinations():
 
 
         # iperf
-    if True:
+    if False:
         for gnb in srsranconfs + oairanconfs:
             run_to_run_params_default["traffic_config"]["traffic_type"] = "iperfthroughput"
             run_to_run_params_default["traffic_config"]["target_port"] = "4455"
@@ -265,7 +266,7 @@ def create_param_combinations():
 
 
     # # scapy
-    if False:
+    if True:
         for gnb in srsranconfs + oairanconfs:
             run_to_run_params_default["traffic_config"]["traffic_type"] = "scapyudpping"
             run_to_run_params_default["traffic_config"]["target_port"] = "3344"
