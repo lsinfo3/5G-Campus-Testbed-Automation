@@ -143,9 +143,12 @@ all_columns = [
 'modem',
 'interface_ue',
 'interface_gnb',
-'jammer',
-'dockerization',
-'performance_tuning',
+'jammer',                               # DEFAULT: false
+'dockerization',                        # DEFAULT: false
+'performance_tuning',                   # DEFAULT: false
+'distance_floor',                       # DEFAULT: 0.2
+'distance_nearest_wall',                # DEFAULT: 0.2
+'location',                             # DEFAULT: A202?
 'sdr',
 'identifier',
 'run',

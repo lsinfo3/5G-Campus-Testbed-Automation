@@ -8,11 +8,15 @@
 # 31. if not present, start from beginning, else -> 40.
 # 40. start ansible playbook with `skip_until_id=<last_id>` -> 11.
 
+
 # TODO: iperf server
 # TODO: scapy server x2
 
 
-ansible_log="/home/lks/Documents/datastore/5g-masterarbeit/performance-tuning/ansible_task.log"
+
+# ansible_log="/home/lks/Documents/datastore/5g-masterarbeit/tdd-pattern-algo/ansible_task.log"
+# ansible_log="/mnt/ext1/5g-masterarbeit-daten/tdd-pattern-algo/ansible_task.log"
+ansible_log="/mnt/ext1/5g-masterarbeit-daten/main_measurement/ansible_task.log"
 # Ansible_Playbook_Extra_Vars="skip_until_id=4343fe5c__94c63a77__001"
 # Ansible_Playbook_Extra_Vars="skip_until_id=4343fe5c__9ba06c22__000"
 Ansible_Playbook_Extra_Vars=""

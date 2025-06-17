@@ -31,7 +31,16 @@
       # include_vars: ../throughput-overshoot-scapy.yaml
       # include_vars: ../throughput-overshoot-scapy_addruns_3.yaml
       # include_vars: ../perf-tuning.yaml
-      include_vars: ../perf-tuning-on.yaml
+      # include_vars: ../perf-tuning-on.yaml
+      # include_vars: ../perf-tuning_ping-on.yaml
+      # include_vars: ../perf-tuning_ping-off.yaml
+      # include_vars: ../antenna-gain-b205.yaml
+      # include_vars: ../antenna-gain-b205-run2.yaml
+      # include_vars: ../antenna-gain-b205-only_Ul-runs0-2.yaml
+      # include_vars: ../tdd-pattern-algo-old.yaml
+      # include_vars: ../tdd-pattern-algo-new.yaml
+      # include_vars: ../main_measurement.yaml
+      include_vars: ../main_measurement_repeat_ping_pkt_big.yaml
 
 
   tasks:

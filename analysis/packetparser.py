@@ -10,7 +10,6 @@ import binascii
 import numpy as np
 
 import dataclasses
-import traceback
 
 # TODO: handle ipv6 in all branches
 # TODO: combine gtp and non gtp parser?
@@ -52,7 +51,8 @@ class validator:
 
         except AssertionError as ae:
             # print(ae.with_traceback())
-            traceback.print_exception(ae)
+            if DEBUG:
+                traceback.print_exception(ae)
             return False
 
 empty_validator = validator()
@@ -263,8 +263,7 @@ def handle_inner_ipv4(ip_pkt, traffic_type: validator, pktid = None, infile = No
 
         if not traffic_type.validate(ip_pkt):
             if DEBUG:
-                print("traffic_type validate failed")
-            print(f"Failed validation for pkt# {pktid} in file {infile}")
+                print(f"Failed validation for pkt# {pktid} in file {infile}")
             ret["skip"] = True
             ret["invalid"] = 1
             return ret

@@ -7,7 +7,10 @@ BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/dockerization"
 BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/gnb-versions-delay"
 BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot"
 # BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot-scapy"
-BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/performance-tuning"
+# BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/performance-tuning"
+# BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/antenna-gain-b205/"
+# BASEPATH="/mnt/ext1/5g-masterarbeit-daten/tdd-pattern-algo/"
+BASEPATH="/mnt/ext1/5g-masterarbeit-daten/main_measurement/"
 
 
 # LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__0/gnb.log.gz"

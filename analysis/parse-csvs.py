@@ -26,7 +26,7 @@ def calc_channel_metrics(run_directory, relevant_stats):
 
 
 def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
-    print(run_directory)
+    log_report = f"{run_directory}\n"
 
     gnb_rec = [f.path for f in os.scandir(run_directory) if f.path.endswith("gnb.csv") or f.path.endswith("gnb.csv.gz")]
     if len(gnb_rec) != 1:
@@ -56,8 +56,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     try:
         df_gnb = df_gnb.astype({"SeqNum":'int'})
     except Exception as e:
-        print(run_directory)
-        print(df_gnb.dtypes)
+        log_report += f"{df_gnb.dtypes}\n"
         df_gnb["SeqNum"] = pd.to_numeric(df_gnb["SeqNum"],errors='coerce')
         df_gnb.to_csv(f"{run_directory}/err_gnb_.csv", index=False)
         df_gnb = df_gnb.dropna()
@@ -65,17 +64,18 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         seqnum1 = df_gnb.query("SourceIPInner == '10.45.0.1'")["SeqNum"]
         mini = int(seqnum1.min())
         maxi = int(seqnum1.max())
-        print((mini,maxi))
+        log_report += f"1:{mini},{maxi}\n"
         miss1 = [int(i) for i in range(mini,maxi+1) if int(i) not in seqnum1]
-        print(f"len1: {len(miss1)}")
+        log_report += f"len1: {len(miss1)}\n"
         seqnum2 = df_gnb.query("SourceIPInner != '10.45.0.1'")["SeqNum"]
         mini = int(seqnum2.min())
         maxi = int(seqnum2.max())
-        print((mini,maxi))
+        log_report += f"2:{mini},{maxi}\n"
         miss2 = [int(i) for i in range(mini,maxi+1) if int(i) not in seqnum2]
-        print(f"len2: {len(miss2)}")
+        log_report += f"len2: {len(miss2)}\n"
         seqnum1.to_csv(f"{run_directory}/err_gnb_seqnum1_.csv", index=False)
         seqnum2.to_csv(f"{run_directory}/err_gnb_seqnum2_.csv", index=False)
+        print(log_report)
         raise e
 
     df_gnb["location"] = "gnb"
@@ -86,11 +86,18 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     df_gnb["IDT"] = np.nan
     df_gnb.loc[indexer_egress,"IDT"] = df_gnb.loc[indexer_egress,"Timestamp"] - df_gnb.loc[indexer_egress,"Timestamp"].shift(1)
     df_gnb.loc[indexer_ingress,"IAT"] = df_gnb.loc[indexer_ingress,"Timestamp"] - df_gnb.loc[indexer_ingress,"Timestamp"].shift(1)
+    if (len(df_ue)==0 and len(df_gnb)>0)  or (len(df_ue)>0 and len(df_gnb)==0):
+        # INFO: this run is faulty; return without truthy value to mark failed
+        log_report += f"Faulty run bcause of df len: {len(df_ue)} != {len(df_gnb)}\n"
+        print(log_report)
+        return False
 
 
     # find missing seqnums,
     missing_pkts = 0
     # Only keep packets which are sent by the ue AND received by gnb, or the other way around
+    df_gnb = df_gnb.drop_duplicates(subset=['trafficflow', 'SeqNum'])
+    df_ue = df_ue.drop_duplicates(subset=['trafficflow', 'SeqNum'])
     for direction in ["ingress","egress"]:
         direction_complement = lambda x: "ingress" if x == "egress" else "egress"
         seqnums_ue = df_ue.query(f"trafficflow == '{direction}'")["SeqNum"]
@@ -105,7 +112,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         df_gnb.drop(indexes_to_drop, inplace=True)
 
         if len(missing_seqnums)> 0:
-            print(f"{run_directory}(ue:{direction}) missing: {{min:{min(missing_seqnums)},max:{max(missing_seqnums)},len:{len(missing_seqnums)}}}")
+            log_report += f"{run_directory}(ue:{direction}) missing: {{min:{min(missing_seqnums)},max:{max(missing_seqnums)},len:{len(missing_seqnums)}}}\n"
         else:
             continue
         # df_ue.to_csv(f"{os.path.basename(run_directory)}__df_ue_.csv")
@@ -114,25 +121,42 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         # Verify both dataframes have the same sequence numbers
         ue_seqs = df_ue.query(f"trafficflow == '{direction}'")["SeqNum"]
         gnb_seqs = df_gnb.query(f"trafficflow == '{direction_complement(direction)}'")["SeqNum"]
-        assert(set(ue_seqs).symmetric_difference(set(range(ue_seqs.min(),ue_seqs.max()+1))) == set(gnb_seqs).symmetric_difference(set(range(gnb_seqs.min(),gnb_seqs.max()+1))))
+
+        # print(f"ue: {df_ue}")
+        # print(f"gnb: {df_gnb}")
+
+        try:
+            assert(set(ue_seqs).symmetric_difference(set(range(ue_seqs.min(),ue_seqs.max()+1))) == set(gnb_seqs).symmetric_difference(set(range(gnb_seqs.min(),gnb_seqs.max()+1))))
+        except Exception as e:
+            log_report += f"ASSERTIONERROR: run_directory: {run_directory}\n"
+            log_report += f"ASSERTIONERROR: ue_seqs: {ue_seqs}\n"
+            log_report += f"ASSERTIONERROR: gnb_seqs: {gnb_seqs}\n"
+            print(log_report)
+            raise e
 
     print(f"dropped {missing_pkts} pkts")
     print(f"len ue: {len(df_ue)}, len gnb: {len(df_gnb)}")
     df_gnb.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
     df_ue.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
-    assert(len(df_ue) == len(df_gnb))
+    try:
+        assert(len(df_ue) == len(df_gnb))
+    except AssertionError as ae:
+        log_report += f"ERROR: {run_directory}, df_ue:{len(df_ue)} == df_gnb:{len(df_gnb)}\n"
+        print(log_report)
+        raise ae
 
     # Try to split the dataframes (along 'trafficflow') and use SeqNum as index
     df_gnb_ingress = df_gnb[df_gnb['trafficflow'] == 'ingress']
     df_gnb_egress = df_gnb[df_gnb['trafficflow'] == 'egress']
     df_ue_ingress = df_ue[df_ue['trafficflow'] == 'ingress']
     df_ue_egress = df_ue[df_ue['trafficflow'] == 'egress']
+    # Use SeqNum as index from now on
     for d in [df_gnb_ingress,df_gnb_egress,df_ue_ingress,df_ue_egress]:
-        d["SeqNum"] = d["SeqNum"].astype(np.int64)
+        d.loc[:,"SeqNum"] = d["SeqNum"].astype(np.int64)
         d.set_index("SeqNum", inplace=True, verify_integrity=True)
 
-    df_gnb_ingress["delay"] = df_gnb_ingress["Timestamp"] - df_ue_egress["Timestamp"]
-    df_ue_ingress["delay"] = df_ue_ingress["Timestamp"] - df_gnb_egress["Timestamp"]
+    df_gnb_ingress.loc[:,"delay"] = df_gnb_ingress["Timestamp"] - df_ue_egress["Timestamp"]
+    df_ue_ingress.loc[:,"delay"] = df_ue_ingress["Timestamp"] - df_gnb_egress["Timestamp"]
 
 
     #df_ue.dropna(subset=["delay"], inplace=True)
@@ -153,7 +177,14 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
 
     if config["traffic_config__direction"] == "UlDl":
         # Both Ul and Dl in the same pcaps
-        assert(len(df.loc[df["trafficflow"] == "ingress"]) > 0)
+        if len(df.loc[df["trafficflow"] == "ingress"]) <= 0:
+            log_report += "No ingress?, how?\n"
+            print(log_report)
+            return False
+        # if len(df.loc[df["trafficflow"] == "egress"]) <= 0:
+        #     print("No egress?, how?")
+        #     print("No egress?, how?")
+        #     return False
         for s in relevant_stats:
             metrics[f"delay__{s}"] = ret["delay"][s].loc["gnb"]
         metrics["direction"] = "Ul"
@@ -170,6 +201,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         metrics["missing_pkts"] = len( set(range(df_query.index.min(), df_query.index.max()+1)) .difference(set(df_query.index)) )
         metrics["sent_pkts"] = len(df_query)
         ret2 = {**metrics, **config}
+        print(log_report)
         return [ret1,ret2]
     else:
         # TODO: this is a really bad heuristic?!
@@ -187,18 +219,21 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
             df_ingress = df_ue_ingress
             # df_egress = df.query(f"trafficflow == 'egress' and location == 'gnb'")
             df_egress = df_gnb_egress
-        print(ret["delay"]["mean"])
+        log_report += f"Delay mean: {ret["delay"]["mean"]}\n"
         for s in relevant_stats:
             try:
                 metrics[f"delay__{s}"] = ret["delay"][s].loc[location_label]
             except Exception as e:
+                log_report += f"Exception\n"
+                print(log_report)
                 raise ValueError(f"Can't get metrics for {run_directory} {s}") from e
         # TODO: steamlined throughput calculation
         ts_min = df_ingress["Timestamp"].min()
         ts_max = df_ingress["Timestamp"].max()
         pkt_size = df_ingress["PacketSize"].mean()
         amount = len(df_ingress)
-        print(f"Mi:{ts_min},Ma:{ts_max},S:{pkt_size},A:{amount}")
+        log_report += f"Mi:{ts_min},Ma:{ts_max},S:{pkt_size},A:{amount}\n"
+
         metrics["missing_pkts"] = len( set(range(int(df_ingress.index.min()), int(df_ingress.index.max())+1)) .difference(set(df_ingress.index)) )
         metrics["throughput__mean"] = amount * pkt_size * 8 /(ts_max - ts_min)
         metrics["sent_pkts"] = len(df_ingress)
@@ -207,9 +242,11 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         pkt_size = df_egress["PacketSize"].mean()
         amount = len(df_egress)
         metrics["throughputin__mean"] = amount * pkt_size * 8 /(ts_max - ts_min)
-        print(f"metrics['throughputin__mean'] {metrics["throughputin__mean"]}")
+        log_report += f"metrics['throughputin__mean'] {metrics["throughputin__mean"]}\n"
+
         metrics["direction"] = config["traffic_config__direction"]
         ret1 = {**metrics, **config}
+        print(log_report)
         return ret1
 
 
@@ -226,7 +263,7 @@ def handle_ping_run(run_directory: str):
     }
     relevant_stats = ["min", "max", "mean", "std", "5%", "25%", "50%", "75%", "95%"]
     # TODO: missing_pkts
-    metrics = {"direction":'XXX',"failed_run":False, "missing_pkts":np.nan, "sent_pkts":np.nan}
+    metrics = {"direction":'XXX',"failed_run":False, "missing_pkts":np.nan, "sent_pkts":np.nan, "throughputin__mean": np.nan}
     for k,v in metrics_default.items():
         for s in relevant_stats:
             metrics[f"{k}__{s}"] = v
@@ -240,22 +277,26 @@ def handle_ping_run(run_directory: str):
     fault_reason = ""
 
     if not faulty_run:
-        return calc_pkt_metrics(run_directory=run_directory, metrics=metrics, relevant_stats=relevant_stats, config=config)
+        returnvalue = calc_pkt_metrics(run_directory=run_directory, metrics=metrics, relevant_stats=relevant_stats, config=config)
+        if returnvalue:
+            return returnvalue
+
+    # INFO: faulty:
+    #
+    # with open(f"{run_directory}/FAILED", "r") as ff:
+    #     fault_reason = ff.read().strip().strip("\n")
+    # TODO: how do i know if there is up-&downstream?
+    metrics["direction"]="Ul"
+    metrics["failed_run"]=True
+    ret1 = {**metrics, **config}
+    ret2 = copy.deepcopy(ret1)
+    ret2["direction"]="Dl"
+    if config["traffic_config__direction"] == "UlDl":
+        return [ret1,ret2]
+    elif config["traffic_config__direction"] == "Ul":
+        return [ret1]
     else:
-        with open(f"{run_directory}/FAILED", "r") as ff:
-            fault_reason = ff.read().strip().strip("\n")
-        # TODO: how do i know if there is up-&downstream?
-        metrics["direction"]="Ul"
-        metrics["failed_run"]=True
-        ret1 = {**metrics, **config}
-        ret2 = copy.deepcopy(ret1)
-        ret2["direction"]="Dl"
-        if config["traffic_config__direction"] == "UlDl":
-            return [ret1,ret2]
-        elif config["traffic_config__direction"] == "Ul":
-            return [ret1]
-        else:
-            return [ret2]
+        return [ret2]
 
 
 def refactor_final_df(df: pd.DataFrame):
@@ -313,6 +354,9 @@ def main():
         # returns = p.map(handle_ping_run, runs)
         returns = p.map(handle_run, runs)
     # returns = [handle_run(r) for r in runs]
+    # returns = [handle_run("/home/lks/Documents/datastore/5g-masterarbeit/performance-tuning/54e0b2b3/54e0b2b3__d5bd4e7b__001")]
+    # returns = [handle_run("/mnt/ext1/5g-masterarbeit-daten/main_measurement/9ff091db/9ff091db__0a2cefea__000")]
+
 
     records = []
     for r in returns:
