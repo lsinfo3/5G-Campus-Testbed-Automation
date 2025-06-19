@@ -21,7 +21,8 @@ def get_pcap_paths(root: str):
 
 
 iperf_udp_throughput = pp.validator(proto="udp", pl_min_len=1200, seq_num_first_byte=8, seq_num_last_byte=12, match_port=4455)
-scapy_ping = pp.validator(proto="udp", pl_min_len=8, pl_max_len=8, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
+scapy_ping_small = pp.validator(proto="udp", pl_min_len=8, pl_max_len=8, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
+scapy_ping_big = pp.validator(proto="udp", pl_min_len=1300, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
 # scapy_throughput = pp.validator(proto="udp", pl_min_len=1454, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
 # scapy_throughput = pp.validator(proto="udp", pl_min_len=1428, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
 scapy_throughput = pp.validator(proto="udp", pl_min_len=1300, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
@@ -36,7 +37,12 @@ def pp_wrapper(infile:str):
         run_config = yaml.safe_load(rf)
 
     if run_config["traffic_config"]["traffic_type"] == "scapyudpping":
-        v = scapy_ping
+        if run_config["traffic_config"]["size"] == "big":
+            v = scapy_ping_big
+        elif run_config["traffic_config"]["size"] == "small":
+            v = scapy_ping_small
+        else:
+            raise ValueError("Unknown traffic packet size")
         v.match_port = run_config["traffic_config"]["target_port"]
     elif run_config["traffic_config"]["traffic_type"] == "scapyudpthroughput":
         v = scapy_throughput

@@ -191,7 +191,7 @@ def create_main_measurement_param_combinations():
     # period_lengths = [20]
 
     # runs = [ i for i in range(10,15) ]
-    runs = [ i for i in range(0,5) ]
+    runs = [ i for i in range(5,10) ]
     # runs = [ i for i in range(3,4) ]
 
     srsranconfs = [
@@ -219,7 +219,7 @@ def create_main_measurement_param_combinations():
 
 
         # iperf
-    if False:
+    if True:
         for gnb in srsranconfs + oairanconfs:
             run_to_run_params_default["traffic_config"]["traffic_type"] = "iperfthroughput"
             run_to_run_params_default["traffic_config"]["target_port"] = "4455"
@@ -317,8 +317,7 @@ def create_main_measurement_param_combinations():
             for iat,count in [("0.001","60000"),("0.01", "6000")]:
                 run_to_run_params_default["traffic_config"]["iat"]=iat
                 run_to_run_params_default["traffic_config"]["count"]=count
-                # for size in ["small", "big"]:
-                for size in ["big"]:
+                for size in ["small", "big"]:
                     run_to_run_params_default["traffic_config"]["size"]=size
                     for dockerization in [False]:
                         for ratio in ratios:

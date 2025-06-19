@@ -1,4 +1,5 @@
 import plotninesettings
+import itertools
 import math
 import scipy
 import plots
@@ -102,12 +103,12 @@ def _scenario_main_measurements():
                     if c != main_effect_parameter and c not in always_group_by_params and not pd.api.types.is_numeric_dtype(df_queried[c]):
                         columns_to_drop_because_nonnumeric.append(c)
 
-                df_agg = df_queried.drop(columns_to_drop_because_nonnumeric, axis="columns")
+                df_agg = df_queried.drop(columns_to_drop_because_nonnumeric, axis="columns").copy(deep=True)
                 df_agg = df_agg.groupby(always_group_by_params + [main_effect_parameter]).agg(["mean", mean_confidence_interval(0.95)]).reset_index()
                 df_agg.columns = ['___'.join(filter(None,col)) for col in df_agg.columns.values]
                 # print(df_agg["failed_run"])
                 # print(df_agg[main_effect_parameter,"failed_run mean","failed_run ci95"])
-                print(df_agg.columns)
+                print(list(df_agg.columns))
                 print(df_agg[["failed_run___mean","failed_run___ci_95"]+always_group_by_params+[main_effect_parameter]])
                 print("\n\n")
 
@@ -129,6 +130,63 @@ def _scenario_main_measurements():
                                        errorbars=True,
                                        aesthetics=p9.aes(y="throughput__mean___mean / 1000000", ymin="(throughput__mean___mean - throughput__mean___ci_95)/ 1000000", ymax="(throughput__mean___mean + throughput__mean___ci_95)/ 1000000", x=main_effect_parameter)
                                        )
+
+            ### Main effects with 1 less degrees of freedom
+            for main_effects_param_1, main_effects_param_2 in itertools.permutations(main_effects_params_list, 2):
+                columns_to_drop_because_nonnumeric = []
+                for c in df_queried.columns:
+                    if c not in [main_effects_param_1, main_effects_param_2] and c not in always_group_by_params and not pd.api.types.is_numeric_dtype(df_queried[c]):
+                        columns_to_drop_because_nonnumeric.append(c)
+
+                df_agg = df_queried.drop(columns_to_drop_because_nonnumeric, axis="columns").copy(deep=True)
+                df_agg = df_agg.groupby(always_group_by_params + [main_effects_param_1, main_effects_param_2]).agg(["mean", mean_confidence_interval(0.95)]).reset_index()
+                df_agg.columns = ['___'.join(filter(None,col)) if len(col)==2 else col for col in df_agg.columns.values]
+                # print(df_agg["failed_run"])
+                # print(df_agg[main_effect_parameter,"failed_run mean","failed_run ci95"])
+                print(f"len multiindex: {df_agg.index.get_level_values(0)}")
+                print(list(df_agg.columns))
+                print("Print excerpt: ")
+                print(df_agg[["failed_run___mean","failed_run___ci_95"]+always_group_by_params+[main_effects_param_1, main_effects_param_2]])
+                print("\n\n")
+
+                print("New df:")
+                print(df_agg)
+                try:
+                    plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effects_param_1}x{main_effects_param_2}__failed",
+                                           facets={"facet":p9.facet_grid("gnb_label", cols=main_effects_param_2,scales="fixed")},
+                                           labels={"y":"failed [%]"},
+                                           errorbars=True,
+                                           aesthetics=p9.aes(y="failed_run___mean * 100", ymin="(failed_run___mean - failed_run___ci_95) * 100", ymax="(failed_run___mean + failed_run___ci_95) * 100", x=main_effects_param_1)
+                                           )
+                except Exception as e:
+                    print(df_agg)
+                    print(f"p1: {main_effects_param_1}, p2: {main_effects_param_2}")
+                    df_agg.to_csv("~/tmp.csv.gz")
+                    raise e
+                try:
+                    plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effects_param_1}x{main_effects_param_2}__delay",
+                                           facets={"facet":p9.facet_grid("gnb_label", cols=main_effects_param_2,scales="fixed")},
+                                           labels={"y":"delay [s]"},
+                                           errorbars=True,
+                                           aesthetics=p9.aes(y="delay__mean___mean", ymin="delay__mean___mean - delay__mean___ci_95", ymax="delay__mean___mean + delay__mean___ci_95", x=main_effects_param_1)
+                                           )
+                except Exception as e:
+                    print(df_agg)
+                    print(f"p1: {main_effects_param_1}, p2: {main_effects_param_2}")
+                    df_agg.to_csv("~/tmp.csv.gz")
+                    raise e
+                try:
+                    plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effects_param_1}x{main_effects_param_2}__throughput",
+                                           facets={"facet":p9.facet_grid("gnb_label", cols=main_effects_param_2,scales="fixed")},
+                                           labels={"y":"throughput [Mbps]"},
+                                           errorbars=True,
+                                           aesthetics=p9.aes(y="throughput__mean___mean / 1000000", ymin="(throughput__mean___mean - throughput__mean___ci_95)/ 1000000", ymax="(throughput__mean___mean + throughput__mean___ci_95)/ 1000000", x=main_effects_param_1)
+                                           )
+                except Exception as e:
+                    print(df_agg)
+                    print(f"p1: {main_effects_param_1}, p2: {main_effects_param_2}")
+                    df_agg.to_csv("~/tmp.csv.gz")
+                    raise e
 
 
 def _scenario_tdd_algo():
