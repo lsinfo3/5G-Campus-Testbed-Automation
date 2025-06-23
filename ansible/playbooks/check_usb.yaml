@@ -1,0 +1,17 @@
+
+
+
+- name: Generate traffic
+  hosts: 5g-gnb
+  tasks:
+    - name: Get information about USB devices
+      community.general.usb_facts:
+
+    - name: Print ALL USB facts
+      ansible.builtin.debug:
+        msg: "{{ ansible_facts.usb_devices }}"
+
+    - name: Print information about USB devices
+      ansible.builtin.debug:
+        msg: "On bus {{ item.bus }} device {{ item.device }} with id {{ item.id }} is {{ item.name }}"
+      loop: "{{ ansible_facts.usb_devices }}"

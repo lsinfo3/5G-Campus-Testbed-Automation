@@ -104,7 +104,7 @@ def _scenario_main_measurements():
                         columns_to_drop_because_nonnumeric.append(c)
 
                 df_agg = df_queried.drop(columns_to_drop_because_nonnumeric, axis="columns").copy(deep=True)
-                df_agg = df_agg.groupby(always_group_by_params + [main_effect_parameter]).agg(["mean", mean_confidence_interval(0.95)]).reset_index()
+                df_agg = df_agg.groupby(always_group_by_params + [main_effect_parameter]).agg(["mean", "count", mean_confidence_interval(0.95)]).reset_index()
                 df_agg.columns = ['___'.join(filter(None,col)) for col in df_agg.columns.values]
                 # print(df_agg["failed_run"])
                 # print(df_agg[main_effect_parameter,"failed_run mean","failed_run ci95"])
@@ -112,11 +112,23 @@ def _scenario_main_measurements():
                 print(df_agg[["failed_run___mean","failed_run___ci_95"]+always_group_by_params+[main_effect_parameter]])
                 print("\n\n")
 
+                plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effect_parameter}__total_count",
+                                       facets={"facet":p9.facet_grid("gnb_label",scales="fixed")},
+                                       labels={"y":"total runs [#]"},
+                                       errorbars=False,
+                                       aesthetics=p9.aes(y="failed_run___count", x=main_effect_parameter)
+                                       )
                 plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effect_parameter}__failed",
                                        facets={"facet":p9.facet_grid("gnb_label",scales="fixed")},
                                        labels={"y":"failed [%]"},
                                        errorbars=True,
                                        aesthetics=p9.aes(y="failed_run___mean * 100", ymin="(failed_run___mean - failed_run___ci_95) * 100", ymax="(failed_run___mean + failed_run___ci_95) * 100", x=main_effect_parameter)
+                                       )
+                plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effect_parameter}__total_success",
+                                       facets={"facet":p9.facet_grid("gnb_label",scales="fixed")},
+                                       labels={"y":"successful runs [#]"},
+                                       errorbars=False,
+                                       aesthetics=p9.aes(y="delay__mean___count", x=main_effect_parameter)
                                        )
                 plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effect_parameter}__delay",
                                        facets={"facet":p9.facet_grid("gnb_label",scales="fixed")},
@@ -139,7 +151,7 @@ def _scenario_main_measurements():
                         columns_to_drop_because_nonnumeric.append(c)
 
                 df_agg = df_queried.drop(columns_to_drop_because_nonnumeric, axis="columns").copy(deep=True)
-                df_agg = df_agg.groupby(always_group_by_params + [main_effects_param_1, main_effects_param_2]).agg(["mean", mean_confidence_interval(0.95)]).reset_index()
+                df_agg = df_agg.groupby(always_group_by_params + [main_effects_param_1, main_effects_param_2]).agg(["mean", "count", mean_confidence_interval(0.95)]).reset_index()
                 df_agg.columns = ['___'.join(filter(None,col)) if len(col)==2 else col for col in df_agg.columns.values]
                 # print(df_agg["failed_run"])
                 # print(df_agg[main_effect_parameter,"failed_run mean","failed_run ci95"])
@@ -152,6 +164,12 @@ def _scenario_main_measurements():
                 print("New df:")
                 print(df_agg)
                 try:
+                    plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effects_param_1}x{main_effects_param_2}__total_count",
+                                           facets={"facet":p9.facet_grid("gnb_label", cols=main_effects_param_2,scales="fixed")},
+                                           labels={"y":"total runs [#]"},
+                                           errorbars=False,
+                                           aesthetics=p9.aes(y="failed_run___count", x=main_effects_param_1)
+                                           )
                     plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effects_param_1}x{main_effects_param_2}__failed",
                                            facets={"facet":p9.facet_grid("gnb_label", cols=main_effects_param_2,scales="fixed")},
                                            labels={"y":"failed [%]"},
@@ -164,6 +182,12 @@ def _scenario_main_measurements():
                     df_agg.to_csv("~/tmp.csv.gz")
                     raise e
                 try:
+                    plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effects_param_1}x{main_effects_param_2}__total_success",
+                                           facets={"facet":p9.facet_grid("gnb_label", cols=main_effects_param_2,scales="fixed")},
+                                           labels={"y":"successful runs [#]"},
+                                           errorbars=False,
+                                           aesthetics=p9.aes(y="delay__mean___count", x=main_effects_param_1)
+                                           )
                     plots.simple_line_plot(df=df_agg, filename=f"{plot_dir}/agg_main__{query["label"]}__{main_effects_param_1}x{main_effects_param_2}__delay",
                                            facets={"facet":p9.facet_grid("gnb_label", cols=main_effects_param_2,scales="fixed")},
                                            labels={"y":"delay [s]"},

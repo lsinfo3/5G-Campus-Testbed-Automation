@@ -47,7 +47,7 @@ parse_oai() {
     gzip -dc "$gnb_log_path" | grep " RSRP \| MCS \| SNR " | grep -e '^[0-9]' | while read -r line; do
         ts="$(echo -n "$line" | awk '{print $1}')"
         cqi=""
-        snr="$(echo -n "$line" | grep " SNR " | awk '{print $23}')"
+        snr="$(echo -n "$line" | grep " SNR " | awk '{print $21}')"
         rsrp="$(echo -n "$line" | grep " RSRP " | awk '{print $16}')"
         mcs_dl="$(echo -n "$line" | grep " MCS " | grep -v "dlsch_rounds" | awk '{print $14}')"
         mcs_ul="$(echo -n "$line" | grep " MCS " | grep -v "ulsch_rounds" | awk '{print $14}')"
