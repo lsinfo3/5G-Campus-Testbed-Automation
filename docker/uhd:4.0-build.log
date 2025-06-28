@@ -6,55 +6,55 @@ Sending build context to Docker daemon  4.608kB
 Step 1/21 : FROM        ubuntu:22.04
  ---> c42dedf797ba
 Step 2/21 : MAINTAINER  Lukas K. Schumann
- ---> Running in a2be4abb9a49
- ---> Removed intermediate container a2be4abb9a49
- ---> 3a5a13bda7b9
+ ---> Running in e284ad76a88c
+ ---> Removed intermediate container e284ad76a88c
+ ---> 24a468553f5e
 Step 3/21 : ENV         security_updates_as_of=2024-05-13
- ---> Running in f36a52b46773
- ---> Removed intermediate container f36a52b46773
- ---> 5008e4fe3343
+ ---> Running in 3153b55b0eb0
+ ---> Removed intermediate container 3153b55b0eb0
+ ---> 7041fbd21d3f
 Step 4/21 : ENV         UHD_IMAGES_DIR=/usr/share/uhd/images/
- ---> Running in d0f01c9dfb7e
- ---> Removed intermediate container d0f01c9dfb7e
- ---> 595bc81bf442
+ ---> Running in 12b51a0fd07c
+ ---> Removed intermediate container 12b51a0fd07c
+ ---> 61b6e18278ed
 Step 5/21 : ARG         DEBIAN_FRONTEND=noninteractive
- ---> Running in 448c7180f616
- ---> Removed intermediate container 448c7180f616
- ---> dbe2d429abd0
+ ---> Running in 9a45211151c6
+ ---> Removed intermediate container 9a45211151c6
+ ---> 995fbb030924
 Step 6/21 : ARG         UHD_TAG=UHD-4.0
- ---> Running in 5c37f411a978
- ---> Removed intermediate container 5c37f411a978
- ---> 51754c6c48a7
+ ---> Running in b410093fe5c2
+ ---> Removed intermediate container b410093fe5c2
+ ---> 2edf700ba812
 Step 7/21 : ARG         MAKEWIDTH=8
- ---> Running in 6fd7499074ff
- ---> Removed intermediate container 6fd7499074ff
- ---> 4ddaffd71803
+ ---> Running in 4bd7364aec87
+ ---> Removed intermediate container 4bd7364aec87
+ ---> c64e74753fab
 Step 8/21 : RUN         apt-get update
- ---> Running in f250f50787d4
-Get:1 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
-Get:2 http://archive.ubuntu.com/ubuntu jammy InRelease [270 kB]
-Get:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
-Get:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
-Get:5 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [2901 kB]
+ ---> Running in df5f77bdbca5
+Get:1 http://archive.ubuntu.com/ubuntu jammy InRelease [270 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Get:4 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy/main amd64 Packages [1792 kB]
 Get:6 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [266 kB]
-Get:7 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1245 kB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [17.5 MB]
 Get:8 http://archive.ubuntu.com/ubuntu jammy/restricted amd64 Packages [164 kB]
-Get:9 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [47.7 kB]
-Get:10 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [4282 kB]
-Get:11 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [17.5 MB]
-Get:12 http://archive.ubuntu.com/ubuntu jammy/main amd64 Packages [1792 kB]
-Get:13 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [3212 kB]
-Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [4436 kB]
-Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1546 kB]
-Get:16 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [55.7 kB]
-Get:17 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [113 kB]
-Get:18 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [38.4 kB]
-Fetched 38.2 MB in 2s (20.3 MB/s)
+Get:9 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [55.7 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1561 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [4741 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [3351 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [35.2 kB]
+Get:14 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [83.2 kB]
+Get:15 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3040 kB]
+Get:16 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [4587 kB]
+Get:17 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1254 kB]
+Get:18 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [47.7 kB]
+Fetched 39.1 MB in 2s (15.9 MB/s)
 Reading package lists...
- ---> Removed intermediate container f250f50787d4
- ---> 332946132afe
+ ---> Removed intermediate container df5f77bdbca5
+ ---> 8fc141a0034b
 Step 9/21 : RUN         apt-get -y install -q                 build-essential                 ccache                 git                 python3-dev                 python3-pip                 curl
- ---> Running in e66873611074
+ ---> Running in 4a4b9c684503
 Reading package lists...
 Building dependency tree...
 Reading state information...
@@ -65,7 +65,7 @@ The following additional packages will be installed:
   gpg-agent gpg-wks-client gpg-wks-server gpgconf gpgsm javascript-common less
   libalgorithm-diff-perl libalgorithm-diff-xs-perl libalgorithm-merge-perl
   libasan6 libassuan0 libatomic1 libbinutils libbrotli1 libbsd0 libc-dev-bin
-  libc-devtools libc6-dev libcbor0.8 libcc1-0 libcrypt-dev libctf-nobfd0
+  libc-devtools libc6 libc6-dev libcbor0.8 libcc1-0 libcrypt-dev libctf-nobfd0
   libctf0 libcurl3-gnutls libcurl4 libdeflate0 libdpkg-perl libedit2
   liberror-perl libexpat1 libexpat1-dev libfakeroot libfido2-1
   libfile-fcntllock-perl libfontconfig1 libfreetype6 libgcc-11-dev libgd3
@@ -91,14 +91,16 @@ Suggested packages:
   libtool flex bison gdb gcc-doc gcc-11-multilib gettext-base git-daemon-run
   | git-daemon-sysvinit git-doc git-email git-gui gitk gitweb git-cvs
   git-mediawiki git-svn parcimonie xloadimage scdaemon apache2 | lighttpd
-  | httpd glibc-doc bzr libgd-tools gdbm-l10n libsasl2-modules-gssapi-mit
-  | libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap libsasl2-modules-otp
-  libsasl2-modules-sql libstdc++-11-doc make-doc man-browser keychain
-  libpam-ssh monkeysphere ssh-askpass ed diffutils-doc perl-doc
-  libterm-readline-gnu-perl | libterm-readline-perl-perl
-  libtap-harness-archive-perl pinentry-doc python3-doc python3-tk python3-venv
-  python-setuptools-doc python3.10-venv python3.10-doc binfmt-support
-  readline-doc
+  | httpd glibc-doc locales bzr libgd-tools gdbm-l10n
+  libsasl2-modules-gssapi-mit | libsasl2-modules-gssapi-heimdal
+  libsasl2-modules-ldap libsasl2-modules-otp libsasl2-modules-sql
+  libstdc++-11-doc make-doc man-browser keychain libpam-ssh monkeysphere
+  ssh-askpass ed diffutils-doc perl-doc libterm-readline-gnu-perl
+  | libterm-readline-perl-perl libtap-harness-archive-perl pinentry-doc
+  python3-doc python3-tk python3-venv python-setuptools-doc python3.10-venv
+  python3.10-doc binfmt-support readline-doc
+Recommended packages:
+  libnss-nis libnss-nisplus
 The following NEW packages will be installed:
   binutils binutils-common binutils-x86-64-linux-gnu build-essential bzip2
   ca-certificates ccache cpp cpp-11 curl dirmngr dpkg-dev fakeroot
@@ -126,179 +128,186 @@ The following NEW packages will be installed:
   python3-minimal python3-pip python3-pkg-resources python3-setuptools
   python3-wheel python3.10 python3.10-dev python3.10-minimal readline-common
   rpcsvc-proto ucf xauth xz-utils zlib1g-dev
-0 upgraded, 152 newly installed, 0 to remove and 0 not upgraded.
-Need to get 108 MB of archives.
+The following packages will be upgraded:
+  libc6
+1 upgraded, 152 newly installed, 0 to remove and 13 not upgraded.
+Need to get 111 MB of archives.
 After this operation, 387 MB of additional disk space will be used.
-Get:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 liblocale-gettext-perl amd64 1.07-4build3 [17.1 kB]
-Get:2 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10-minimal amd64 3.10.12-1~22.04.9 [815 kB]
-Get:3 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libexpat1 amd64 2.4.7-1ubuntu0.6 [92.1 kB]
-Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3.10-minimal amd64 3.10.12-1~22.04.9 [2263 kB]
-Get:5 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-minimal amd64 3.10.6-1~22.04.1 [24.3 kB]
-Get:6 http://archive.ubuntu.com/ubuntu jammy/main amd64 media-types all 7.0.0 [25.5 kB]
-Get:7 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmpdec3 amd64 2.5.1-2build2 [86.8 kB]
-Get:8 http://archive.ubuntu.com/ubuntu jammy/main amd64 readline-common all 8.1.2-1 [53.5 kB]
-Get:9 http://archive.ubuntu.com/ubuntu jammy/main amd64 libreadline8 amd64 8.1.2-1 [153 kB]
-Get:10 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libsqlite3-0 amd64 3.37.2-2ubuntu0.3 [641 kB]
-Get:11 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10-stdlib amd64 3.10.12-1~22.04.9 [1850 kB]
-Get:12 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3.10 amd64 3.10.12-1~22.04.9 [508 kB]
-Get:13 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3-stdlib amd64 3.10.6-1~22.04.1 [6812 B]
-Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3 amd64 3.10.6-1~22.04.1 [22.8 kB]
-Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 perl-modules-5.34 all 5.34.0-3ubuntu1.4 [2977 kB]
-Get:16 http://archive.ubuntu.com/ubuntu jammy/main amd64 libgdbm6 amd64 1.23-1 [33.9 kB]
-Get:17 http://archive.ubuntu.com/ubuntu jammy/main amd64 libgdbm-compat4 amd64 1.23-1 [6606 B]
-Get:18 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libperl5.34 amd64 5.34.0-3ubuntu1.4 [4820 kB]
-Get:19 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 perl amd64 5.34.0-3ubuntu1.4 [232 kB]
-Get:20 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 openssl amd64 3.0.2-0ubuntu1.19 [1186 kB]
-Get:21 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 ca-certificates all 20240203~22.04.1 [162 kB]
-Get:22 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 less amd64 590-1ubuntu0.22.04.3 [142 kB]
-Get:23 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmd0 amd64 1.0.4-1build1 [23.0 kB]
-Get:24 http://archive.ubuntu.com/ubuntu jammy/main amd64 libbsd0 amd64 0.11.5-1 [44.8 kB]
-Get:25 http://archive.ubuntu.com/ubuntu jammy/main amd64 netbase all 6.3 [12.9 kB]
-Get:26 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-pkg-resources all 59.6.0-1.2ubuntu0.22.04.2 [133 kB]
-Get:27 http://archive.ubuntu.com/ubuntu jammy/main amd64 ucf all 3.0043 [56.1 kB]
-Get:28 http://archive.ubuntu.com/ubuntu jammy/main amd64 libcbor0.8 amd64 0.8.0-2ubuntu1 [24.6 kB]
-Get:29 http://archive.ubuntu.com/ubuntu jammy/main amd64 libedit2 amd64 3.1-20210910-1build1 [96.8 kB]
-Get:30 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfido2-1 amd64 1.10.0-1 [82.8 kB]
-Get:31 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libnghttp2-14 amd64 1.43.0-1ubuntu0.2 [76.9 kB]
-Get:32 http://archive.ubuntu.com/ubuntu jammy/main amd64 libpng16-16 amd64 1.6.37-3build5 [191 kB]
-Get:33 http://archive.ubuntu.com/ubuntu jammy/main amd64 libpsl5 amd64 0.21.0-1.2build2 [58.4 kB]
-Get:34 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxau6 amd64 1:1.0.9-1build5 [7634 B]
-Get:35 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxdmcp6 amd64 1:1.1.3-0ubuntu5 [10.9 kB]
-Get:36 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxcb1 amd64 1.14-3ubuntu3 [49.0 kB]
-Get:37 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libx11-data all 2:1.7.5-1ubuntu0.3 [120 kB]
-Get:38 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libx11-6 amd64 2:1.7.5-1ubuntu0.3 [667 kB]
-Get:39 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxext6 amd64 2:1.3.4-1build1 [31.8 kB]
-Get:40 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxmuu1 amd64 2:1.1.3-3 [10.2 kB]
-Get:41 http://archive.ubuntu.com/ubuntu jammy/main amd64 manpages all 5.10-1ubuntu1 [1375 kB]
-Get:42 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 openssh-client amd64 1:8.9p1-3ubuntu0.13 [903 kB]
-Get:43 http://archive.ubuntu.com/ubuntu jammy/main amd64 publicsuffix all 20211207.1025-1 [129 kB]
-Get:44 http://archive.ubuntu.com/ubuntu jammy/main amd64 xauth amd64 1:1.1-1build2 [27.5 kB]
-Get:45 http://archive.ubuntu.com/ubuntu jammy/main amd64 xz-utils amd64 5.2.5-2ubuntu1 [84.8 kB]
-Get:46 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 binutils-common amd64 2.38-4ubuntu2.8 [223 kB]
-Get:47 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libbinutils amd64 2.38-4ubuntu2.8 [661 kB]
-Get:48 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libctf-nobfd0 amd64 2.38-4ubuntu2.8 [108 kB]
-Get:49 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libctf0 amd64 2.38-4ubuntu2.8 [103 kB]
-Get:50 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 binutils-x86-64-linux-gnu amd64 2.38-4ubuntu2.8 [2324 kB]
-Get:51 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 binutils amd64 2.38-4ubuntu2.8 [3196 B]
-Get:52 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc-dev-bin amd64 2.35-0ubuntu3.9 [20.3 kB]
-Get:53 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 linux-libc-dev amd64 5.15.0-139.149 [1298 kB]
-Get:54 http://archive.ubuntu.com/ubuntu jammy/main amd64 libcrypt-dev amd64 1:4.4.27-1 [112 kB]
-Get:55 http://archive.ubuntu.com/ubuntu jammy/main amd64 rpcsvc-proto amd64 1.4.2-0ubuntu6 [68.5 kB]
-Get:56 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libtirpc-dev amd64 1.3.2-2ubuntu0.1 [192 kB]
-Get:57 http://archive.ubuntu.com/ubuntu jammy/main amd64 libnsl-dev amd64 1.3.0-2build2 [71.3 kB]
-Get:58 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc6-dev amd64 2.35-0ubuntu3.9 [2100 kB]
-Get:59 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gcc-11-base amd64 11.4.0-1ubuntu1~22.04 [20.2 kB]
-Get:60 http://archive.ubuntu.com/ubuntu jammy/main amd64 libisl23 amd64 0.24-2build1 [727 kB]
-Get:61 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmpfr6 amd64 4.1.0-3build3 [1425 kB]
-Get:62 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmpc3 amd64 1.2.1-2build1 [46.9 kB]
-Get:63 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 cpp-11 amd64 11.4.0-1ubuntu1~22.04 [10.0 MB]
-Get:64 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpp amd64 4:11.2.0-1ubuntu1 [27.7 kB]
-Get:65 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcc1-0 amd64 12.3.0-1ubuntu1~22.04 [48.3 kB]
-Get:66 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libgomp1 amd64 12.3.0-1ubuntu1~22.04 [126 kB]
-Get:67 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libitm1 amd64 12.3.0-1ubuntu1~22.04 [30.2 kB]
-Get:68 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libatomic1 amd64 12.3.0-1ubuntu1~22.04 [10.4 kB]
-Get:69 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libasan6 amd64 11.4.0-1ubuntu1~22.04 [2282 kB]
-Get:70 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 liblsan0 amd64 12.3.0-1ubuntu1~22.04 [1069 kB]
-Get:71 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libtsan0 amd64 11.4.0-1ubuntu1~22.04 [2260 kB]
-Get:72 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libubsan1 amd64 12.3.0-1ubuntu1~22.04 [976 kB]
-Get:73 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libquadmath0 amd64 12.3.0-1ubuntu1~22.04 [154 kB]
-Get:74 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libgcc-11-dev amd64 11.4.0-1ubuntu1~22.04 [2517 kB]
-Get:75 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gcc-11 amd64 11.4.0-1ubuntu1~22.04 [20.1 MB]
-Get:76 http://archive.ubuntu.com/ubuntu jammy/main amd64 gcc amd64 4:11.2.0-1ubuntu1 [5112 B]
-Get:77 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libstdc++-11-dev amd64 11.4.0-1ubuntu1~22.04 [2101 kB]
-Get:78 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 g++-11 amd64 11.4.0-1ubuntu1~22.04 [11.4 MB]
-Get:79 http://archive.ubuntu.com/ubuntu jammy/main amd64 g++ amd64 4:11.2.0-1ubuntu1 [1412 B]
-Get:80 http://archive.ubuntu.com/ubuntu jammy/main amd64 make amd64 4.3-4.1build1 [180 kB]
-Get:81 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libdpkg-perl all 1.21.1ubuntu2.3 [237 kB]
-Get:82 http://archive.ubuntu.com/ubuntu jammy/main amd64 bzip2 amd64 1.0.8-5build1 [34.8 kB]
-Get:83 http://archive.ubuntu.com/ubuntu jammy/main amd64 patch amd64 2.7.6-7build2 [109 kB]
-Get:84 http://archive.ubuntu.com/ubuntu jammy/main amd64 lto-disabled-list all 24 [12.5 kB]
-Get:85 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 dpkg-dev all 1.21.1ubuntu2.3 [922 kB]
-Get:86 http://archive.ubuntu.com/ubuntu jammy/main amd64 build-essential amd64 12.9ubuntu3 [4744 B]
-Get:87 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libhiredis0.14 amd64 0.14.1-2 [32.8 kB]
-Get:88 http://archive.ubuntu.com/ubuntu jammy/universe amd64 ccache amd64 4.5.1-1 [495 kB]
-Get:89 http://archive.ubuntu.com/ubuntu jammy/main amd64 libbrotli1 amd64 1.0.9-2build6 [315 kB]
-Get:90 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libsasl2-modules-db amd64 2.1.27+dfsg2-3ubuntu1.2 [20.5 kB]
-Get:91 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libsasl2-2 amd64 2.1.27+dfsg2-3ubuntu1.2 [53.8 kB]
-Get:92 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libldap-2.5-0 amd64 2.5.19+dfsg-0ubuntu0.22.04.1 [184 kB]
-Get:93 http://archive.ubuntu.com/ubuntu jammy/main amd64 librtmp1 amd64 2.4+20151223.gitfa8646d.1-2build4 [58.2 kB]
-Get:94 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libssh-4 amd64 0.9.6-2ubuntu0.22.04.3 [186 kB]
-Get:95 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcurl4 amd64 7.81.0-1ubuntu1.20 [289 kB]
-Get:96 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 curl amd64 7.81.0-1ubuntu1.20 [194 kB]
-Get:97 http://archive.ubuntu.com/ubuntu jammy/main amd64 libassuan0 amd64 2.5.5-1build1 [38.2 kB]
-Get:98 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpgconf amd64 2.2.27-3ubuntu2.3 [94.4 kB]
-Get:99 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libksba8 amd64 1.6.0-2ubuntu0.2 [119 kB]
-Get:100 http://archive.ubuntu.com/ubuntu jammy/main amd64 libnpth0 amd64 1.6-3build2 [8664 B]
-Get:101 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 dirmngr amd64 2.2.27-3ubuntu2.3 [293 kB]
-Get:102 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfakeroot amd64 1.28-1ubuntu1 [31.5 kB]
-Get:103 http://archive.ubuntu.com/ubuntu jammy/main amd64 fakeroot amd64 1.28-1ubuntu1 [60.4 kB]
-Get:104 http://archive.ubuntu.com/ubuntu jammy/main amd64 fonts-dejavu-core all 2.37-2build1 [1041 kB]
-Get:105 http://archive.ubuntu.com/ubuntu jammy/main amd64 fontconfig-config all 2.13.1-4.2ubuntu5 [29.1 kB]
-Get:106 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcurl3-gnutls amd64 7.81.0-1ubuntu1.20 [284 kB]
-Get:107 http://archive.ubuntu.com/ubuntu jammy/main amd64 liberror-perl all 0.17029-1 [26.5 kB]
-Get:108 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 git-man all 1:2.34.1-1ubuntu1.12 [955 kB]
-Get:109 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 git amd64 1:2.34.1-1ubuntu1.12 [3165 kB]
-Get:110 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gnupg-l10n all 2.2.27-3ubuntu2.3 [54.6 kB]
-Get:111 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gnupg-utils amd64 2.2.27-3ubuntu2.3 [309 kB]
-Get:112 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpg amd64 2.2.27-3ubuntu2.3 [519 kB]
-Get:113 http://archive.ubuntu.com/ubuntu jammy/main amd64 pinentry-curses amd64 1.1.1-1build2 [34.4 kB]
-Get:114 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpg-agent amd64 2.2.27-3ubuntu2.3 [209 kB]
-Get:115 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpg-wks-client amd64 2.2.27-3ubuntu2.3 [62.7 kB]
-Get:116 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpg-wks-server amd64 2.2.27-3ubuntu2.3 [57.6 kB]
-Get:117 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpgsm amd64 2.2.27-3ubuntu2.3 [198 kB]
-Get:118 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gnupg all 2.2.27-3ubuntu2.3 [315 kB]
-Get:119 http://archive.ubuntu.com/ubuntu jammy/main amd64 javascript-common all 11+nmu1 [5936 B]
-Get:120 http://archive.ubuntu.com/ubuntu jammy/main amd64 libalgorithm-diff-perl all 1.201-1 [41.8 kB]
-Get:121 http://archive.ubuntu.com/ubuntu jammy/main amd64 libalgorithm-diff-xs-perl amd64 0.04-6build3 [11.9 kB]
-Get:122 http://archive.ubuntu.com/ubuntu jammy/main amd64 libalgorithm-merge-perl all 0.08-3 [12.0 kB]
-Get:123 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libfreetype6 amd64 2.11.1+dfsg-1ubuntu0.3 [388 kB]
-Get:124 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfontconfig1 amd64 2.13.1-4.2ubuntu5 [131 kB]
-Get:125 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjpeg-turbo8 amd64 2.1.2-0ubuntu1 [134 kB]
-Get:126 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjpeg8 amd64 8c-2ubuntu10 [2264 B]
-Get:127 http://archive.ubuntu.com/ubuntu jammy/main amd64 libdeflate0 amd64 1.10-2 [70.9 kB]
-Get:128 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libjbig0 amd64 2.1-3.1ubuntu0.22.04.1 [29.2 kB]
-Get:129 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libwebp7 amd64 1.2.2-2ubuntu0.22.04.2 [206 kB]
-Get:130 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libtiff5 amd64 4.3.0-6ubuntu0.10 [185 kB]
-Get:131 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libxpm4 amd64 1:3.5.12-1ubuntu0.22.04.2 [36.7 kB]
-Get:132 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libgd3 amd64 2.3.0-2ubuntu2.3 [129 kB]
-Get:133 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc-devtools amd64 2.35-0ubuntu3.9 [29.0 kB]
-Get:134 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libexpat1-dev amd64 2.4.7-1ubuntu0.6 [148 kB]
-Get:135 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfile-fcntllock-perl amd64 0.22-3build7 [33.9 kB]
-Get:136 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjs-jquery all 3.6.0+dfsg+~3.5.13-1 [321 kB]
-Get:137 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjs-underscore all 1.13.2~dfsg-2 [118 kB]
-Get:138 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjs-sphinxdoc all 4.3.2-1 [139 kB]
-Get:139 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libldap-common all 2.5.19+dfsg-0ubuntu0.22.04.1 [16.1 kB]
-Get:140 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10 amd64 3.10.12-1~22.04.9 [1949 kB]
-Get:141 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 zlib1g-dev amd64 1:1.2.11.dfsg-2ubuntu9.2 [164 kB]
-Get:142 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10-dev amd64 3.10.12-1~22.04.9 [4763 kB]
-Get:143 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3-dev amd64 3.10.6-1~22.04.1 [7064 B]
-Get:144 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libsasl2-modules amd64 2.1.27+dfsg2-3ubuntu1.2 [68.8 kB]
-Get:145 http://archive.ubuntu.com/ubuntu jammy/main amd64 manpages-dev all 5.10-1ubuntu1 [2309 kB]
-Get:146 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3.10-dev amd64 3.10.12-1~22.04.9 [508 kB]
-Get:147 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-lib2to3 all 3.10.8-1~22.04 [77.6 kB]
-Get:148 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-distutils all 3.10.8-1~22.04 [139 kB]
-Get:149 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-dev amd64 3.10.6-1~22.04.1 [26.0 kB]
-Get:150 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-setuptools all 59.6.0-1.2ubuntu0.22.04.2 [340 kB]
-Get:151 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-wheel all 0.37.1-2ubuntu0.22.04.1 [32.0 kB]
-Get:152 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-pip all 22.0.2+dfsg-1ubuntu0.5 [1306 kB]
+Get:1 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc6 amd64 2.35-0ubuntu3.10 [3235 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 liblocale-gettext-perl amd64 1.07-4build3 [17.1 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10-minimal amd64 3.10.12-1~22.04.10 [815 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libexpat1 amd64 2.4.7-1ubuntu0.6 [92.1 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3.10-minimal amd64 3.10.12-1~22.04.10 [2277 kB]
+Get:6 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-minimal amd64 3.10.6-1~22.04.1 [24.3 kB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy/main amd64 media-types all 7.0.0 [25.5 kB]
+Get:8 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmpdec3 amd64 2.5.1-2build2 [86.8 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy/main amd64 readline-common all 8.1.2-1 [53.5 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy/main amd64 libreadline8 amd64 8.1.2-1 [153 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libsqlite3-0 amd64 3.37.2-2ubuntu0.4 [643 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10-stdlib amd64 3.10.12-1~22.04.10 [1850 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3.10 amd64 3.10.12-1~22.04.10 [508 kB]
+Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3-stdlib amd64 3.10.6-1~22.04.1 [6812 B]
+Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3 amd64 3.10.6-1~22.04.1 [22.8 kB]
+Get:16 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 perl-modules-5.34 all 5.34.0-3ubuntu1.4 [2977 kB]
+Get:17 http://archive.ubuntu.com/ubuntu jammy/main amd64 libgdbm6 amd64 1.23-1 [33.9 kB]
+Get:18 http://archive.ubuntu.com/ubuntu jammy/main amd64 libgdbm-compat4 amd64 1.23-1 [6606 B]
+Get:19 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libperl5.34 amd64 5.34.0-3ubuntu1.4 [4820 kB]
+Get:20 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 perl amd64 5.34.0-3ubuntu1.4 [232 kB]
+Get:21 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 openssl amd64 3.0.2-0ubuntu1.19 [1186 kB]
+Get:22 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 ca-certificates all 20240203~22.04.1 [162 kB]
+Get:23 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 less amd64 590-1ubuntu0.22.04.3 [142 kB]
+Get:24 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmd0 amd64 1.0.4-1build1 [23.0 kB]
+Get:25 http://archive.ubuntu.com/ubuntu jammy/main amd64 libbsd0 amd64 0.11.5-1 [44.8 kB]
+Get:26 http://archive.ubuntu.com/ubuntu jammy/main amd64 netbase all 6.3 [12.9 kB]
+Get:27 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-pkg-resources all 59.6.0-1.2ubuntu0.22.04.3 [133 kB]
+Get:28 http://archive.ubuntu.com/ubuntu jammy/main amd64 ucf all 3.0043 [56.1 kB]
+Get:29 http://archive.ubuntu.com/ubuntu jammy/main amd64 libcbor0.8 amd64 0.8.0-2ubuntu1 [24.6 kB]
+Get:30 http://archive.ubuntu.com/ubuntu jammy/main amd64 libedit2 amd64 3.1-20210910-1build1 [96.8 kB]
+Get:31 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfido2-1 amd64 1.10.0-1 [82.8 kB]
+Get:32 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libnghttp2-14 amd64 1.43.0-1ubuntu0.2 [76.9 kB]
+Get:33 http://archive.ubuntu.com/ubuntu jammy/main amd64 libpng16-16 amd64 1.6.37-3build5 [191 kB]
+Get:34 http://archive.ubuntu.com/ubuntu jammy/main amd64 libpsl5 amd64 0.21.0-1.2build2 [58.4 kB]
+Get:35 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxau6 amd64 1:1.0.9-1build5 [7634 B]
+Get:36 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxdmcp6 amd64 1:1.1.3-0ubuntu5 [10.9 kB]
+Get:37 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxcb1 amd64 1.14-3ubuntu3 [49.0 kB]
+Get:38 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libx11-data all 2:1.7.5-1ubuntu0.3 [120 kB]
+Get:39 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libx11-6 amd64 2:1.7.5-1ubuntu0.3 [667 kB]
+Get:40 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxext6 amd64 2:1.3.4-1build1 [31.8 kB]
+Get:41 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxmuu1 amd64 2:1.1.3-3 [10.2 kB]
+Get:42 http://archive.ubuntu.com/ubuntu jammy/main amd64 manpages all 5.10-1ubuntu1 [1375 kB]
+Get:43 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 openssh-client amd64 1:8.9p1-3ubuntu0.13 [903 kB]
+Get:44 http://archive.ubuntu.com/ubuntu jammy/main amd64 publicsuffix all 20211207.1025-1 [129 kB]
+Get:45 http://archive.ubuntu.com/ubuntu jammy/main amd64 xauth amd64 1:1.1-1build2 [27.5 kB]
+Get:46 http://archive.ubuntu.com/ubuntu jammy/main amd64 xz-utils amd64 5.2.5-2ubuntu1 [84.8 kB]
+Get:47 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 binutils-common amd64 2.38-4ubuntu2.8 [223 kB]
+Get:48 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libbinutils amd64 2.38-4ubuntu2.8 [661 kB]
+Get:49 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libctf-nobfd0 amd64 2.38-4ubuntu2.8 [108 kB]
+Get:50 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libctf0 amd64 2.38-4ubuntu2.8 [103 kB]
+Get:51 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 binutils-x86-64-linux-gnu amd64 2.38-4ubuntu2.8 [2324 kB]
+Get:52 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 binutils amd64 2.38-4ubuntu2.8 [3196 B]
+Get:53 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc-dev-bin amd64 2.35-0ubuntu3.10 [20.3 kB]
+Get:54 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 linux-libc-dev amd64 5.15.0-142.152 [1321 kB]
+Get:55 http://archive.ubuntu.com/ubuntu jammy/main amd64 libcrypt-dev amd64 1:4.4.27-1 [112 kB]
+Get:56 http://archive.ubuntu.com/ubuntu jammy/main amd64 rpcsvc-proto amd64 1.4.2-0ubuntu6 [68.5 kB]
+Get:57 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libtirpc-dev amd64 1.3.2-2ubuntu0.1 [192 kB]
+Get:58 http://archive.ubuntu.com/ubuntu jammy/main amd64 libnsl-dev amd64 1.3.0-2build2 [71.3 kB]
+Get:59 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc6-dev amd64 2.35-0ubuntu3.10 [2100 kB]
+Get:60 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gcc-11-base amd64 11.4.0-1ubuntu1~22.04 [20.2 kB]
+Get:61 http://archive.ubuntu.com/ubuntu jammy/main amd64 libisl23 amd64 0.24-2build1 [727 kB]
+Get:62 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmpfr6 amd64 4.1.0-3build3 [1425 kB]
+Get:63 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmpc3 amd64 1.2.1-2build1 [46.9 kB]
+Get:64 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 cpp-11 amd64 11.4.0-1ubuntu1~22.04 [10.0 MB]
+Get:65 http://archive.ubuntu.com/ubuntu jammy/main amd64 cpp amd64 4:11.2.0-1ubuntu1 [27.7 kB]
+Get:66 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcc1-0 amd64 12.3.0-1ubuntu1~22.04 [48.3 kB]
+Get:67 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libgomp1 amd64 12.3.0-1ubuntu1~22.04 [126 kB]
+Get:68 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libitm1 amd64 12.3.0-1ubuntu1~22.04 [30.2 kB]
+Get:69 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libatomic1 amd64 12.3.0-1ubuntu1~22.04 [10.4 kB]
+Get:70 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libasan6 amd64 11.4.0-1ubuntu1~22.04 [2282 kB]
+Get:71 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 liblsan0 amd64 12.3.0-1ubuntu1~22.04 [1069 kB]
+Get:72 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libtsan0 amd64 11.4.0-1ubuntu1~22.04 [2260 kB]
+Get:73 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libubsan1 amd64 12.3.0-1ubuntu1~22.04 [976 kB]
+Get:74 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libquadmath0 amd64 12.3.0-1ubuntu1~22.04 [154 kB]
+Get:75 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libgcc-11-dev amd64 11.4.0-1ubuntu1~22.04 [2517 kB]
+Get:76 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gcc-11 amd64 11.4.0-1ubuntu1~22.04 [20.1 MB]
+Get:77 http://archive.ubuntu.com/ubuntu jammy/main amd64 gcc amd64 4:11.2.0-1ubuntu1 [5112 B]
+Get:78 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libstdc++-11-dev amd64 11.4.0-1ubuntu1~22.04 [2101 kB]
+Get:79 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 g++-11 amd64 11.4.0-1ubuntu1~22.04 [11.4 MB]
+Get:80 http://archive.ubuntu.com/ubuntu jammy/main amd64 g++ amd64 4:11.2.0-1ubuntu1 [1412 B]
+Get:81 http://archive.ubuntu.com/ubuntu jammy/main amd64 make amd64 4.3-4.1build1 [180 kB]
+Get:82 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libdpkg-perl all 1.21.1ubuntu2.3 [237 kB]
+Get:83 http://archive.ubuntu.com/ubuntu jammy/main amd64 bzip2 amd64 1.0.8-5build1 [34.8 kB]
+Get:84 http://archive.ubuntu.com/ubuntu jammy/main amd64 patch amd64 2.7.6-7build2 [109 kB]
+Get:85 http://archive.ubuntu.com/ubuntu jammy/main amd64 lto-disabled-list all 24 [12.5 kB]
+Get:86 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 dpkg-dev all 1.21.1ubuntu2.3 [922 kB]
+Get:87 http://archive.ubuntu.com/ubuntu jammy/main amd64 build-essential amd64 12.9ubuntu3 [4744 B]
+Get:88 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libhiredis0.14 amd64 0.14.1-2 [32.8 kB]
+Get:89 http://archive.ubuntu.com/ubuntu jammy/universe amd64 ccache amd64 4.5.1-1 [495 kB]
+Get:90 http://archive.ubuntu.com/ubuntu jammy/main amd64 libbrotli1 amd64 1.0.9-2build6 [315 kB]
+Get:91 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libsasl2-modules-db amd64 2.1.27+dfsg2-3ubuntu1.2 [20.5 kB]
+Get:92 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libsasl2-2 amd64 2.1.27+dfsg2-3ubuntu1.2 [53.8 kB]
+Get:93 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libldap-2.5-0 amd64 2.5.19+dfsg-0ubuntu0.22.04.1 [184 kB]
+Get:94 http://archive.ubuntu.com/ubuntu jammy/main amd64 librtmp1 amd64 2.4+20151223.gitfa8646d.1-2build4 [58.2 kB]
+Get:95 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libssh-4 amd64 0.9.6-2ubuntu0.22.04.3 [186 kB]
+Get:96 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcurl4 amd64 7.81.0-1ubuntu1.20 [289 kB]
+Get:97 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 curl amd64 7.81.0-1ubuntu1.20 [194 kB]
+Get:98 http://archive.ubuntu.com/ubuntu jammy/main amd64 libassuan0 amd64 2.5.5-1build1 [38.2 kB]
+Get:99 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpgconf amd64 2.2.27-3ubuntu2.3 [94.4 kB]
+Get:100 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libksba8 amd64 1.6.0-2ubuntu0.2 [119 kB]
+Get:101 http://archive.ubuntu.com/ubuntu jammy/main amd64 libnpth0 amd64 1.6-3build2 [8664 B]
+Get:102 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 dirmngr amd64 2.2.27-3ubuntu2.3 [293 kB]
+Get:103 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfakeroot amd64 1.28-1ubuntu1 [31.5 kB]
+Get:104 http://archive.ubuntu.com/ubuntu jammy/main amd64 fakeroot amd64 1.28-1ubuntu1 [60.4 kB]
+Get:105 http://archive.ubuntu.com/ubuntu jammy/main amd64 fonts-dejavu-core all 2.37-2build1 [1041 kB]
+Get:106 http://archive.ubuntu.com/ubuntu jammy/main amd64 fontconfig-config all 2.13.1-4.2ubuntu5 [29.1 kB]
+Get:107 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcurl3-gnutls amd64 7.81.0-1ubuntu1.20 [284 kB]
+Get:108 http://archive.ubuntu.com/ubuntu jammy/main amd64 liberror-perl all 0.17029-1 [26.5 kB]
+Get:109 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 git-man all 1:2.34.1-1ubuntu1.12 [955 kB]
+Get:110 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 git amd64 1:2.34.1-1ubuntu1.12 [3165 kB]
+Get:111 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gnupg-l10n all 2.2.27-3ubuntu2.3 [54.6 kB]
+Get:112 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gnupg-utils amd64 2.2.27-3ubuntu2.3 [309 kB]
+Get:113 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpg amd64 2.2.27-3ubuntu2.3 [519 kB]
+Get:114 http://archive.ubuntu.com/ubuntu jammy/main amd64 pinentry-curses amd64 1.1.1-1build2 [34.4 kB]
+Get:115 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpg-agent amd64 2.2.27-3ubuntu2.3 [209 kB]
+Get:116 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpg-wks-client amd64 2.2.27-3ubuntu2.3 [62.7 kB]
+Get:117 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpg-wks-server amd64 2.2.27-3ubuntu2.3 [57.6 kB]
+Get:118 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gpgsm amd64 2.2.27-3ubuntu2.3 [198 kB]
+Get:119 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 gnupg all 2.2.27-3ubuntu2.3 [315 kB]
+Get:120 http://archive.ubuntu.com/ubuntu jammy/main amd64 javascript-common all 11+nmu1 [5936 B]
+Get:121 http://archive.ubuntu.com/ubuntu jammy/main amd64 libalgorithm-diff-perl all 1.201-1 [41.8 kB]
+Get:122 http://archive.ubuntu.com/ubuntu jammy/main amd64 libalgorithm-diff-xs-perl amd64 0.04-6build3 [11.9 kB]
+Get:123 http://archive.ubuntu.com/ubuntu jammy/main amd64 libalgorithm-merge-perl all 0.08-3 [12.0 kB]
+Get:124 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libfreetype6 amd64 2.11.1+dfsg-1ubuntu0.3 [388 kB]
+Get:125 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfontconfig1 amd64 2.13.1-4.2ubuntu5 [131 kB]
+Get:126 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjpeg-turbo8 amd64 2.1.2-0ubuntu1 [134 kB]
+Get:127 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjpeg8 amd64 8c-2ubuntu10 [2264 B]
+Get:128 http://archive.ubuntu.com/ubuntu jammy/main amd64 libdeflate0 amd64 1.10-2 [70.9 kB]
+Get:129 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libjbig0 amd64 2.1-3.1ubuntu0.22.04.1 [29.2 kB]
+Get:130 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libwebp7 amd64 1.2.2-2ubuntu0.22.04.2 [206 kB]
+Get:131 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libtiff5 amd64 4.3.0-6ubuntu0.10 [185 kB]
+Get:132 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libxpm4 amd64 1:3.5.12-1ubuntu0.22.04.2 [36.7 kB]
+Get:133 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libgd3 amd64 2.3.0-2ubuntu2.3 [129 kB]
+Get:134 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc-devtools amd64 2.35-0ubuntu3.10 [29.0 kB]
+Get:135 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libexpat1-dev amd64 2.4.7-1ubuntu0.6 [148 kB]
+Get:136 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfile-fcntllock-perl amd64 0.22-3build7 [33.9 kB]
+Get:137 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjs-jquery all 3.6.0+dfsg+~3.5.13-1 [321 kB]
+Get:138 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjs-underscore all 1.13.2~dfsg-2 [118 kB]
+Get:139 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjs-sphinxdoc all 4.3.2-1 [139 kB]
+Get:140 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libldap-common all 2.5.19+dfsg-0ubuntu0.22.04.1 [16.1 kB]
+Get:141 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10 amd64 3.10.12-1~22.04.10 [1950 kB]
+Get:142 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 zlib1g-dev amd64 1:1.2.11.dfsg-2ubuntu9.2 [164 kB]
+Get:143 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10-dev amd64 3.10.12-1~22.04.10 [4763 kB]
+Get:144 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3-dev amd64 3.10.6-1~22.04.1 [7064 B]
+Get:145 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libsasl2-modules amd64 2.1.27+dfsg2-3ubuntu1.2 [68.8 kB]
+Get:146 http://archive.ubuntu.com/ubuntu jammy/main amd64 manpages-dev all 5.10-1ubuntu1 [2309 kB]
+Get:147 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3.10-dev amd64 3.10.12-1~22.04.10 [508 kB]
+Get:148 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-lib2to3 all 3.10.8-1~22.04 [77.6 kB]
+Get:149 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-distutils all 3.10.8-1~22.04 [139 kB]
+Get:150 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-dev amd64 3.10.6-1~22.04.1 [26.0 kB]
+Get:151 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-setuptools all 59.6.0-1.2ubuntu0.22.04.3 [340 kB]
+Get:152 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-wheel all 0.37.1-2ubuntu0.22.04.1 [32.0 kB]
+Get:153 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-pip all 22.0.2+dfsg-1ubuntu0.6 [1306 kB]
 [91mdebconf: delaying package configuration, since apt-utils is not installed
-[0mFetched 108 MB in 4s (24.6 MB/s)
+[0mFetched 111 MB in 6s (18.3 MB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4393 files and directories currently installed.)
+Preparing to unpack .../libc6_2.35-0ubuntu3.10_amd64.deb ...
+Unpacking libc6:amd64 (2.35-0ubuntu3.10) over (2.35-0ubuntu3.9) ...
+Setting up libc6:amd64 (2.35-0ubuntu3.10) ...
 Selecting previously unselected package liblocale-gettext-perl.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4393 files and directories currently installed.)
 Preparing to unpack .../liblocale-gettext-perl_1.07-4build3_amd64.deb ...
 Unpacking liblocale-gettext-perl (1.07-4build3) ...
 Selecting previously unselected package libpython3.10-minimal:amd64.
-Preparing to unpack .../libpython3.10-minimal_3.10.12-1~22.04.9_amd64.deb ...
-Unpacking libpython3.10-minimal:amd64 (3.10.12-1~22.04.9) ...
+Preparing to unpack .../libpython3.10-minimal_3.10.12-1~22.04.10_amd64.deb ...
+Unpacking libpython3.10-minimal:amd64 (3.10.12-1~22.04.10) ...
 Selecting previously unselected package libexpat1:amd64.
 Preparing to unpack .../libexpat1_2.4.7-1ubuntu0.6_amd64.deb ...
 Unpacking libexpat1:amd64 (2.4.7-1ubuntu0.6) ...
 Selecting previously unselected package python3.10-minimal.
-Preparing to unpack .../python3.10-minimal_3.10.12-1~22.04.9_amd64.deb ...
-Unpacking python3.10-minimal (3.10.12-1~22.04.9) ...
-Setting up libpython3.10-minimal:amd64 (3.10.12-1~22.04.9) ...
+Preparing to unpack .../python3.10-minimal_3.10.12-1~22.04.10_amd64.deb ...
+Unpacking python3.10-minimal (3.10.12-1~22.04.10) ...
+Setting up libpython3.10-minimal:amd64 (3.10.12-1~22.04.10) ...
 Setting up libexpat1:amd64 (2.4.7-1ubuntu0.6) ...
-Setting up python3.10-minimal (3.10.12-1~22.04.9) ...
+Setting up python3.10-minimal (3.10.12-1~22.04.10) ...
 Selecting previously unselected package python3-minimal.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4711 files and directories currently installed.)
 Preparing to unpack .../0-python3-minimal_3.10.6-1~22.04.1_amd64.deb ...
@@ -316,14 +325,14 @@ Selecting previously unselected package libreadline8:amd64.
 Preparing to unpack .../4-libreadline8_8.1.2-1_amd64.deb ...
 Unpacking libreadline8:amd64 (8.1.2-1) ...
 Selecting previously unselected package libsqlite3-0:amd64.
-Preparing to unpack .../5-libsqlite3-0_3.37.2-2ubuntu0.3_amd64.deb ...
-Unpacking libsqlite3-0:amd64 (3.37.2-2ubuntu0.3) ...
+Preparing to unpack .../5-libsqlite3-0_3.37.2-2ubuntu0.4_amd64.deb ...
+Unpacking libsqlite3-0:amd64 (3.37.2-2ubuntu0.4) ...
 Selecting previously unselected package libpython3.10-stdlib:amd64.
-Preparing to unpack .../6-libpython3.10-stdlib_3.10.12-1~22.04.9_amd64.deb ...
-Unpacking libpython3.10-stdlib:amd64 (3.10.12-1~22.04.9) ...
+Preparing to unpack .../6-libpython3.10-stdlib_3.10.12-1~22.04.10_amd64.deb ...
+Unpacking libpython3.10-stdlib:amd64 (3.10.12-1~22.04.10) ...
 Selecting previously unselected package python3.10.
-Preparing to unpack .../7-python3.10_3.10.12-1~22.04.9_amd64.deb ...
-Unpacking python3.10 (3.10.12-1~22.04.9) ...
+Preparing to unpack .../7-python3.10_3.10.12-1~22.04.10_amd64.deb ...
+Unpacking python3.10 (3.10.12-1~22.04.10) ...
 Selecting previously unselected package libpython3-stdlib:amd64.
 Preparing to unpack .../8-libpython3-stdlib_3.10.6-1~22.04.1_amd64.deb ...
 Unpacking libpython3-stdlib:amd64 (3.10.6-1~22.04.1) ...
@@ -366,8 +375,8 @@ Selecting previously unselected package netbase.
 Preparing to unpack .../011-netbase_6.3_all.deb ...
 Unpacking netbase (6.3) ...
 Selecting previously unselected package python3-pkg-resources.
-Preparing to unpack .../012-python3-pkg-resources_59.6.0-1.2ubuntu0.22.04.2_all.deb ...
-Unpacking python3-pkg-resources (59.6.0-1.2ubuntu0.22.04.2) ...
+Preparing to unpack .../012-python3-pkg-resources_59.6.0-1.2ubuntu0.22.04.3_all.deb ...
+Unpacking python3-pkg-resources (59.6.0-1.2ubuntu0.22.04.3) ...
 Selecting previously unselected package ucf.
 Preparing to unpack .../013-ucf_3.0043_all.deb ...
 Moving old data out of the way
@@ -445,11 +454,11 @@ Selecting previously unselected package binutils.
 Preparing to unpack .../037-binutils_2.38-4ubuntu2.8_amd64.deb ...
 Unpacking binutils (2.38-4ubuntu2.8) ...
 Selecting previously unselected package libc-dev-bin.
-Preparing to unpack .../038-libc-dev-bin_2.35-0ubuntu3.9_amd64.deb ...
-Unpacking libc-dev-bin (2.35-0ubuntu3.9) ...
+Preparing to unpack .../038-libc-dev-bin_2.35-0ubuntu3.10_amd64.deb ...
+Unpacking libc-dev-bin (2.35-0ubuntu3.10) ...
 Selecting previously unselected package linux-libc-dev:amd64.
-Preparing to unpack .../039-linux-libc-dev_5.15.0-139.149_amd64.deb ...
-Unpacking linux-libc-dev:amd64 (5.15.0-139.149) ...
+Preparing to unpack .../039-linux-libc-dev_5.15.0-142.152_amd64.deb ...
+Unpacking linux-libc-dev:amd64 (5.15.0-142.152) ...
 Selecting previously unselected package libcrypt-dev:amd64.
 Preparing to unpack .../040-libcrypt-dev_1%3a4.4.27-1_amd64.deb ...
 Unpacking libcrypt-dev:amd64 (1:4.4.27-1) ...
@@ -463,8 +472,8 @@ Selecting previously unselected package libnsl-dev:amd64.
 Preparing to unpack .../043-libnsl-dev_1.3.0-2build2_amd64.deb ...
 Unpacking libnsl-dev:amd64 (1.3.0-2build2) ...
 Selecting previously unselected package libc6-dev:amd64.
-Preparing to unpack .../044-libc6-dev_2.35-0ubuntu3.9_amd64.deb ...
-Unpacking libc6-dev:amd64 (2.35-0ubuntu3.9) ...
+Preparing to unpack .../044-libc6-dev_2.35-0ubuntu3.10_amd64.deb ...
+Unpacking libc6-dev:amd64 (2.35-0ubuntu3.10) ...
 Selecting previously unselected package gcc-11-base:amd64.
 Preparing to unpack .../045-gcc-11-base_11.4.0-1ubuntu1~22.04_amd64.deb ...
 Unpacking gcc-11-base:amd64 (11.4.0-1ubuntu1~22.04) ...
@@ -688,8 +697,8 @@ Selecting previously unselected package libgd3:amd64.
 Preparing to unpack .../118-libgd3_2.3.0-2ubuntu2.3_amd64.deb ...
 Unpacking libgd3:amd64 (2.3.0-2ubuntu2.3) ...
 Selecting previously unselected package libc-devtools.
-Preparing to unpack .../119-libc-devtools_2.35-0ubuntu3.9_amd64.deb ...
-Unpacking libc-devtools (2.35-0ubuntu3.9) ...
+Preparing to unpack .../119-libc-devtools_2.35-0ubuntu3.10_amd64.deb ...
+Unpacking libc-devtools (2.35-0ubuntu3.10) ...
 Selecting previously unselected package libexpat1-dev:amd64.
 Preparing to unpack .../120-libexpat1-dev_2.4.7-1ubuntu0.6_amd64.deb ...
 Unpacking libexpat1-dev:amd64 (2.4.7-1ubuntu0.6) ...
@@ -709,14 +718,14 @@ Selecting previously unselected package libldap-common.
 Preparing to unpack .../125-libldap-common_2.5.19+dfsg-0ubuntu0.22.04.1_all.deb ...
 Unpacking libldap-common (2.5.19+dfsg-0ubuntu0.22.04.1) ...
 Selecting previously unselected package libpython3.10:amd64.
-Preparing to unpack .../126-libpython3.10_3.10.12-1~22.04.9_amd64.deb ...
-Unpacking libpython3.10:amd64 (3.10.12-1~22.04.9) ...
+Preparing to unpack .../126-libpython3.10_3.10.12-1~22.04.10_amd64.deb ...
+Unpacking libpython3.10:amd64 (3.10.12-1~22.04.10) ...
 Selecting previously unselected package zlib1g-dev:amd64.
 Preparing to unpack .../127-zlib1g-dev_1%3a1.2.11.dfsg-2ubuntu9.2_amd64.deb ...
 Unpacking zlib1g-dev:amd64 (1:1.2.11.dfsg-2ubuntu9.2) ...
 Selecting previously unselected package libpython3.10-dev:amd64.
-Preparing to unpack .../128-libpython3.10-dev_3.10.12-1~22.04.9_amd64.deb ...
-Unpacking libpython3.10-dev:amd64 (3.10.12-1~22.04.9) ...
+Preparing to unpack .../128-libpython3.10-dev_3.10.12-1~22.04.10_amd64.deb ...
+Unpacking libpython3.10-dev:amd64 (3.10.12-1~22.04.10) ...
 Selecting previously unselected package libpython3-dev:amd64.
 Preparing to unpack .../129-libpython3-dev_3.10.6-1~22.04.1_amd64.deb ...
 Unpacking libpython3-dev:amd64 (3.10.6-1~22.04.1) ...
@@ -727,8 +736,8 @@ Selecting previously unselected package manpages-dev.
 Preparing to unpack .../131-manpages-dev_5.10-1ubuntu1_all.deb ...
 Unpacking manpages-dev (5.10-1ubuntu1) ...
 Selecting previously unselected package python3.10-dev.
-Preparing to unpack .../132-python3.10-dev_3.10.12-1~22.04.9_amd64.deb ...
-Unpacking python3.10-dev (3.10.12-1~22.04.9) ...
+Preparing to unpack .../132-python3.10-dev_3.10.12-1~22.04.10_amd64.deb ...
+Unpacking python3.10-dev (3.10.12-1~22.04.10) ...
 Selecting previously unselected package python3-lib2to3.
 Preparing to unpack .../133-python3-lib2to3_3.10.8-1~22.04_all.deb ...
 Unpacking python3-lib2to3 (3.10.8-1~22.04) ...
@@ -739,14 +748,14 @@ Selecting previously unselected package python3-dev.
 Preparing to unpack .../135-python3-dev_3.10.6-1~22.04.1_amd64.deb ...
 Unpacking python3-dev (3.10.6-1~22.04.1) ...
 Selecting previously unselected package python3-setuptools.
-Preparing to unpack .../136-python3-setuptools_59.6.0-1.2ubuntu0.22.04.2_all.deb ...
-Unpacking python3-setuptools (59.6.0-1.2ubuntu0.22.04.2) ...
+Preparing to unpack .../136-python3-setuptools_59.6.0-1.2ubuntu0.22.04.3_all.deb ...
+Unpacking python3-setuptools (59.6.0-1.2ubuntu0.22.04.3) ...
 Selecting previously unselected package python3-wheel.
 Preparing to unpack .../137-python3-wheel_0.37.1-2ubuntu0.22.04.1_all.deb ...
 Unpacking python3-wheel (0.37.1-2ubuntu0.22.04.1) ...
 Selecting previously unselected package python3-pip.
-Preparing to unpack .../138-python3-pip_22.0.2+dfsg-1ubuntu0.5_all.deb ...
-Unpacking python3-pip (22.0.2+dfsg-1ubuntu0.5) ...
+Preparing to unpack .../138-python3-pip_22.0.2+dfsg-1ubuntu0.6_all.deb ...
+Unpacking python3-pip (22.0.2+dfsg-1ubuntu0.6) ...
 Setting up libksba8:amd64 (1.6.0-2ubuntu0.2) ...
 Setting up media-types (7.0.0) ...
 Setting up javascript-common (11+nmu1) ...
@@ -757,13 +766,13 @@ Setting up libpsl5:amd64 (0.21.0-1.2build2) ...
 Setting up manpages (5.10-1ubuntu1) ...
 Setting up libcbor0.8:amd64 (0.8.0-2ubuntu1) ...
 Setting up libbrotli1:amd64 (1.0.9-2build6) ...
-Setting up libsqlite3-0:amd64 (3.37.2-2ubuntu0.3) ...
+Setting up libsqlite3-0:amd64 (3.37.2-2ubuntu0.4) ...
 Setting up libsasl2-modules:amd64 (2.1.27+dfsg2-3ubuntu1.2) ...
 Setting up binutils-common:amd64 (2.38-4ubuntu2.8) ...
 Setting up libnghttp2-14:amd64 (1.43.0-1ubuntu0.2) ...
 Setting up libdeflate0:amd64 (1.10-2) ...
 Setting up less (590-1ubuntu0.22.04.3) ...
-Setting up linux-libc-dev:amd64 (5.15.0-139.149) ...
+Setting up linux-libc-dev:amd64 (5.15.0-142.152) ...
 Setting up libctf-nobfd0:amd64 (2.38-4ubuntu2.8) ...
 Setting up libnpth0:amd64 (1.6-3build2) ...
 Setting up libassuan0:amd64 (2.5.5-1build1) ...
@@ -826,7 +835,7 @@ Setting up libjs-jquery (3.6.0+dfsg+~3.5.13-1) ...
 Setting up libbinutils:amd64 (2.38-4ubuntu2.8) ...
 Setting up libfido2-1:amd64 (1.10.0-1) ...
 Setting up libisl23:amd64 (0.24-2build1) ...
-Setting up libc-dev-bin (2.35-0ubuntu3.9) ...
+Setting up libc-dev-bin (2.35-0ubuntu3.10) ...
 Setting up openssl (3.0.2-0ubuntu1.19) ...
 Setting up libbsd0:amd64 (0.11.5-1) ...
 Setting up readline-common (8.1.2-1) ...
@@ -852,7 +861,7 @@ Setting up libreadline8:amd64 (8.1.2-1) ...
 Setting up ccache (4.5.1-1) ...
 Updating symlinks in /usr/lib/ccache ...
 Setting up libldap-2.5-0:amd64 (2.5.19+dfsg-0ubuntu0.22.04.1) ...
-Setting up libpython3.10-stdlib:amd64 (3.10.12-1~22.04.9) ...
+Setting up libpython3.10-stdlib:amd64 (3.10.12-1~22.04.10) ...
 Setting up ca-certificates (20240203~22.04.1) ...
 Updating certificates in /etc/ssl/certs...
 146 added, 0 removed; done.
@@ -863,7 +872,7 @@ Setting up libgcc-11-dev:amd64 (11.4.0-1ubuntu1~22.04) ...
 Setting up cpp (4:11.2.0-1ubuntu1) ...
 Setting up gpgconf (2.2.27-3ubuntu2.3) ...
 Setting up libcurl4:amd64 (7.81.0-1ubuntu1.20) ...
-Setting up libc6-dev:amd64 (2.35-0ubuntu3.9) ...
+Setting up libc6-dev:amd64 (2.35-0ubuntu3.10) ...
 Setting up libx11-6:amd64 (2:1.7.5-1ubuntu0.3) ...
 Setting up libtiff5:amd64 (4.3.0-6ubuntu0.10) ...
 Setting up curl (7.81.0-1ubuntu1.20) ...
@@ -873,10 +882,10 @@ Setting up gpg (2.2.27-3ubuntu2.3) ...
 Setting up libpython3-stdlib:amd64 (3.10.6-1~22.04.1) ...
 Setting up gnupg-utils (2.2.27-3ubuntu2.3) ...
 Setting up binutils-x86-64-linux-gnu (2.38-4ubuntu2.8) ...
-Setting up libpython3.10:amd64 (3.10.12-1~22.04.9) ...
+Setting up libpython3.10:amd64 (3.10.12-1~22.04.10) ...
 Setting up libperl5.34:amd64 (5.34.0-3ubuntu1.4) ...
 Setting up gpg-agent (2.2.27-3ubuntu2.3) ...
-Setting up python3.10 (3.10.12-1~22.04.9) ...
+Setting up python3.10 (3.10.12-1~22.04.10) ...
 Setting up libxpm4:amd64 (1:3.5.12-1ubuntu0.22.04.2) ...
 Setting up openssh-client (1:8.9p1-3ubuntu0.13) ...
 update-alternatives: using /usr/bin/ssh to provide /usr/bin/rsh (rsh) in auto mode
@@ -901,10 +910,10 @@ Setting up zlib1g-dev:amd64 (1:1.2.11.dfsg-2ubuntu9.2) ...
 Setting up gcc-11 (11.4.0-1ubuntu1~22.04) ...
 Setting up xauth (1:1.1-1build2) ...
 Setting up python3-lib2to3 (3.10.8-1~22.04) ...
-Setting up libc-devtools (2.35-0ubuntu3.9) ...
-Setting up python3-pkg-resources (59.6.0-1.2ubuntu0.22.04.2) ...
+Setting up libc-devtools (2.35-0ubuntu3.10) ...
+Setting up python3-pkg-resources (59.6.0-1.2ubuntu0.22.04.3) ...
 Setting up python3-distutils (3.10.8-1~22.04) ...
-Setting up python3-setuptools (59.6.0-1.2ubuntu0.22.04.2) ...
+Setting up python3-setuptools (59.6.0-1.2ubuntu0.22.04.3) ...
 Setting up gpg-wks-client (2.2.27-3ubuntu2.3) ...
 Setting up g++-11 (11.4.0-1ubuntu1~22.04) ...
 Setting up libfile-fcntllock-perl (0.22-3build7) ...
@@ -913,10 +922,10 @@ Setting up python3-wheel (0.37.1-2ubuntu0.22.04.1) ...
 Setting up gcc (4:11.2.0-1ubuntu1) ...
 Setting up dpkg-dev (1.21.1ubuntu2.3) ...
 Setting up liberror-perl (0.17029-1) ...
-Setting up libpython3.10-dev:amd64 (3.10.12-1~22.04.9) ...
+Setting up libpython3.10-dev:amd64 (3.10.12-1~22.04.10) ...
 Setting up git (1:2.34.1-1ubuntu1.12) ...
-Setting up python3-pip (22.0.2+dfsg-1ubuntu0.5) ...
-Setting up python3.10-dev (3.10.12-1~22.04.9) ...
+Setting up python3-pip (22.0.2+dfsg-1ubuntu0.6) ...
+Setting up python3.10-dev (3.10.12-1~22.04.10) ...
 Setting up g++ (4:11.2.0-1ubuntu1) ...
 update-alternatives: using /usr/bin/g++ to provide /usr/bin/c++ (c++) in auto mode
 update-alternatives: warning: skip creation of /usr/share/man/man1/c++.1.gz because associated file /usr/share/man/man1/g++.1.gz (of link group c++) doesn't exist
@@ -932,10 +941,10 @@ Updating certificates in /etc/ssl/certs...
 0 added, 0 removed; done.
 Running hooks in /etc/ca-certificates/update.d...
 done.
- ---> Removed intermediate container e66873611074
- ---> 9912395399d0
+ ---> Removed intermediate container 4a4b9c684503
+ ---> fb40e2bdb5f0
 Step 10/21 : RUN         apt-get -y install -q                     autoconf                     automake                     build-essential                     ccache                     cmake                     cpufrequtils                     doxygen                     ethtool                     g++                     git                     inetutils-tools                     libboost-all-dev                     libncurses5                     libncurses5-dev                     libusb-1.0-0                     libusb-1.0-0-dev                     libusb-dev                     python3-dev                     python3-mako                     python3-numpy                     python3-requests                     python3-scipy                     python3-setuptools                     python3-ruamel.yaml
- ---> Running in 18d0c8d9e4fd
+ ---> Running in 10f3c0797dfe
 Reading package lists...
 Building dependency tree...
 Reading state information...
@@ -945,7 +954,7 @@ g++ set to manually installed.
 ccache is already the newest version (4.5.1-1).
 git is already the newest version (1:2.34.1-1ubuntu1.12).
 python3-dev is already the newest version (3.10.6-1~22.04.1).
-python3-setuptools is already the newest version (59.6.0-1.2ubuntu0.22.04.2).
+python3-setuptools is already the newest version (59.6.0-1.2ubuntu0.22.04.3).
 python3-setuptools set to manually installed.
 The following additional packages will be installed:
   autotools-dev cmake-data dh-elpa-helper emacsen-common file gfortran
@@ -1077,14 +1086,14 @@ The following NEW packages will be installed:
   python3-olefile python3-pil python3-ply python3-pythran python3-requests
   python3-ruamel.yaml python3-ruamel.yaml.clib python3-scipy python3-six
   python3-urllib3 shared-mime-info xdg-user-dirs
-0 upgraded, 224 newly installed, 0 to remove and 0 not upgraded.
+0 upgraded, 224 newly installed, 0 to remove and 13 not upgraded.
 Need to get 173 MB of archives.
 After this operation, 983 MB of additional disk space will be used.
 Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libcpufreq0 amd64 008-2build1 [12.3 kB]
 Get:2 http://archive.ubuntu.com/ubuntu jammy/universe amd64 cpufrequtils amd64 008-2build1 [34.5 kB]
 Get:3 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libfribidi0 amd64 1.0.8-2ubuntu3.1 [26.1 kB]
-Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libglib2.0-0 amd64 2.72.4-0ubuntu2.4 [1465 kB]
-Get:5 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libglib2.0-data all 2.72.4-0ubuntu2.4 [4582 B]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libglib2.0-0 amd64 2.72.4-0ubuntu2.5 [1466 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libglib2.0-data all 2.72.4-0ubuntu2.5 [4656 B]
 Get:6 http://archive.ubuntu.com/ubuntu jammy/main amd64 libicu70 amd64 70.1-2 [10.6 MB]
 Get:7 http://archive.ubuntu.com/ubuntu jammy/main amd64 libmnl0 amd64 1.0.4-3build2 [13.2 kB]
 Get:8 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libxml2 amd64 2.9.13+dfsg-1ubuntu0.7 [763 kB]
@@ -1101,7 +1110,7 @@ Get:18 http://archive.ubuntu.com/ubuntu jammy/main amd64 m4 amd64 1.4.18-5ubuntu
 Get:19 http://archive.ubuntu.com/ubuntu jammy/main amd64 autoconf all 2.71-2 [338 kB]
 Get:20 http://archive.ubuntu.com/ubuntu jammy/main amd64 autotools-dev all 20220109.1 [44.9 kB]
 Get:21 http://archive.ubuntu.com/ubuntu jammy/main amd64 automake all 1:1.16.5-1.3 [558 kB]
-Get:22 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libarchive13 amd64 3.6.0-1ubuntu1.4 [368 kB]
+Get:22 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libarchive13 amd64 3.6.0-1ubuntu1.5 [368 kB]
 Get:23 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjsoncpp25 amd64 1.9.5-3 [80.0 kB]
 Get:24 http://archive.ubuntu.com/ubuntu jammy/main amd64 librhash0 amd64 1.4.2-1ubuntu1 [125 kB]
 Get:25 http://archive.ubuntu.com/ubuntu jammy/main amd64 dh-elpa-helper all 2.0.9ubuntu1 [7610 B]
@@ -1299,13 +1308,13 @@ Get:216 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-pil am
 Get:217 http://archive.ubuntu.com/ubuntu jammy/main amd64 python3-ply all 3.11-5 [47.5 kB]
 Get:218 http://archive.ubuntu.com/ubuntu jammy/universe amd64 python3-pythran amd64 0.10.0+ds2-1 [423 kB]
 Get:219 http://archive.ubuntu.com/ubuntu jammy/main amd64 python3-six all 1.16.0-3ubuntu1 [12.6 kB]
-Get:220 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-urllib3 all 1.26.5-1~exp1ubuntu0.2 [98.3 kB]
-Get:221 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-requests all 2.25.1+dfsg-2ubuntu0.1 [48.8 kB]
+Get:220 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-urllib3 all 1.26.5-1~exp1ubuntu0.3 [98.6 kB]
+Get:221 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3-requests all 2.25.1+dfsg-2ubuntu0.3 [48.8 kB]
 Get:222 http://archive.ubuntu.com/ubuntu jammy/universe amd64 python3-ruamel.yaml.clib amd64 0.2.6-1build1 [134 kB]
 Get:223 http://archive.ubuntu.com/ubuntu jammy/universe amd64 python3-ruamel.yaml all 0.17.16-1 [86.3 kB]
 Get:224 http://archive.ubuntu.com/ubuntu jammy/universe amd64 python3-scipy amd64 1.8.0-1exp2ubuntu1 [14.7 MB]
 [91mdebconf: delaying package configuration, since apt-utils is not installed
-[0mFetched 173 MB in 3s (68.5 MB/s)
+[0mFetched 173 MB in 9s (19.3 MB/s)
 Selecting previously unselected package libcpufreq0.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 17325 files and directories currently installed.)
 Preparing to unpack .../000-libcpufreq0_008-2build1_amd64.deb ...
@@ -1317,11 +1326,11 @@ Selecting previously unselected package libfribidi0:amd64.
 Preparing to unpack .../002-libfribidi0_1.0.8-2ubuntu3.1_amd64.deb ...
 Unpacking libfribidi0:amd64 (1.0.8-2ubuntu3.1) ...
 Selecting previously unselected package libglib2.0-0:amd64.
-Preparing to unpack .../003-libglib2.0-0_2.72.4-0ubuntu2.4_amd64.deb ...
-Unpacking libglib2.0-0:amd64 (2.72.4-0ubuntu2.4) ...
+Preparing to unpack .../003-libglib2.0-0_2.72.4-0ubuntu2.5_amd64.deb ...
+Unpacking libglib2.0-0:amd64 (2.72.4-0ubuntu2.5) ...
 Selecting previously unselected package libglib2.0-data.
-Preparing to unpack .../004-libglib2.0-data_2.72.4-0ubuntu2.4_all.deb ...
-Unpacking libglib2.0-data (2.72.4-0ubuntu2.4) ...
+Preparing to unpack .../004-libglib2.0-data_2.72.4-0ubuntu2.5_all.deb ...
+Unpacking libglib2.0-data (2.72.4-0ubuntu2.5) ...
 Selecting previously unselected package libicu70:amd64.
 Preparing to unpack .../005-libicu70_70.1-2_amd64.deb ...
 Unpacking libicu70:amd64 (70.1-2) ...
@@ -1371,8 +1380,8 @@ Selecting previously unselected package automake.
 Preparing to unpack .../020-automake_1%3a1.16.5-1.3_all.deb ...
 Unpacking automake (1:1.16.5-1.3) ...
 Selecting previously unselected package libarchive13:amd64.
-Preparing to unpack .../021-libarchive13_3.6.0-1ubuntu1.4_amd64.deb ...
-Unpacking libarchive13:amd64 (3.6.0-1ubuntu1.4) ...
+Preparing to unpack .../021-libarchive13_3.6.0-1ubuntu1.5_amd64.deb ...
+Unpacking libarchive13:amd64 (3.6.0-1ubuntu1.5) ...
 Selecting previously unselected package libjsoncpp25:amd64.
 Preparing to unpack .../022-libjsoncpp25_1.9.5-3_amd64.deb ...
 Unpacking libjsoncpp25:amd64 (1.9.5-3) ...
@@ -1965,11 +1974,11 @@ Selecting previously unselected package python3-six.
 Preparing to unpack .../218-python3-six_1.16.0-3ubuntu1_all.deb ...
 Unpacking python3-six (1.16.0-3ubuntu1) ...
 Selecting previously unselected package python3-urllib3.
-Preparing to unpack .../219-python3-urllib3_1.26.5-1~exp1ubuntu0.2_all.deb ...
-Unpacking python3-urllib3 (1.26.5-1~exp1ubuntu0.2) ...
+Preparing to unpack .../219-python3-urllib3_1.26.5-1~exp1ubuntu0.3_all.deb ...
+Unpacking python3-urllib3 (1.26.5-1~exp1ubuntu0.3) ...
 Selecting previously unselected package python3-requests.
-Preparing to unpack .../220-python3-requests_2.25.1+dfsg-2ubuntu0.1_all.deb ...
-Unpacking python3-requests (2.25.1+dfsg-2ubuntu0.1) ...
+Preparing to unpack .../220-python3-requests_2.25.1+dfsg-2ubuntu0.3_all.deb ...
+Unpacking python3-requests (2.25.1+dfsg-2ubuntu0.3) ...
 Selecting previously unselected package python3-ruamel.yaml.clib:amd64.
 Preparing to unpack .../221-python3-ruamel.yaml.clib_0.2.6-1build1_amd64.deb ...
 Unpacking python3-ruamel.yaml.clib:amd64 (0.2.6-1build1) ...
@@ -1991,7 +2000,7 @@ Setting up libgpm2:amd64 (1.20.7-10build1) ...
 Setting up libboost-atomic1.74.0:amd64 (1.74.0-14ubuntu3) ...
 Setting up xdg-user-dirs (0.17-2ubuntu4) ...
 Setting up libmagic-mgc (1:5.41-3ubuntu0.1) ...
-Setting up libglib2.0-0:amd64 (2.72.4-0ubuntu2.4) ...
+Setting up libglib2.0-0:amd64 (2.72.4-0ubuntu2.5) ...
 No schema files found: doing nothing.
 Setting up libboost-iostreams1.74.0:amd64 (1.74.0-14ubuntu3) ...
 Setting up libboost-program-options1.74.0:amd64 (1.74.0-14ubuntu3) ...
@@ -2020,7 +2029,7 @@ Setting up python3-decorator (4.4.2-0ubuntu1) ...
 Setting up autotools-dev (20220109.1) ...
 Setting up libblas3:amd64 (3.10.0-2ubuntu1) ...
 update-alternatives: using /usr/lib/x86_64-linux-gnu/blas/libblas.so.3 to provide /usr/lib/x86_64-linux-gnu/libblas.so.3 (libblas.so.3-x86_64-linux-gnu) in auto mode
-Setting up libglib2.0-data (2.72.4-0ubuntu2.4) ...
+Setting up libglib2.0-data (2.72.4-0ubuntu2.5) ...
 Setting up libuv1:amd64 (1.43.0-1ubuntu0.1) ...
 Setting up python3-chardet (4.0.0-1) ...
 Setting up libjs-jquery-ui (1.13.1+dfsg-1) ...
@@ -2045,7 +2054,7 @@ Setting up libjsoncpp25:amd64 (1.9.5-3) ...
 Setting up libboost1.74-tools-dev (1.74.0-14ubuntu3) ...
 Setting up libltdl7:amd64 (2.4.6-15build2) ...
 Setting up libgfortran5:amd64 (12.3.0-1ubuntu1~22.04) ...
-Setting up python3-urllib3 (1.26.5-1~exp1ubuntu0.2) ...
+Setting up python3-urllib3 (1.26.5-1~exp1ubuntu0.3) ...
 Setting up libboost-atomic1.74-dev:amd64 (1.74.0-14ubuntu3) ...
 Setting up libboost-math1.74.0:amd64 (1.74.0-14ubuntu3) ...
 Setting up python3-ruamel.yaml (0.17.16-1) ...
@@ -2116,7 +2125,7 @@ Setting up libnl-route-3-200:amd64 (3.5.0-0.1) ...
 Setting up libboost-test-dev:amd64 (1.74.0.3ubuntu7) ...
 Setting up libraqm0:amd64 (0.7.0-4ubuntu1) ...
 Setting up libboost-regex1.74.0:amd64 (1.74.0-14ubuntu3) ...
-Setting up python3-requests (2.25.1+dfsg-2ubuntu0.1) ...
+Setting up python3-requests (2.25.1+dfsg-2ubuntu0.3) ...
 Setting up cpufrequtils (008-2build1) ...
 update-rc.d: warning: start and stop actions are no longer supported; falling back to defaults
 invoke-rc.d: could not determine current runlevel
@@ -2156,7 +2165,7 @@ Setting up libboost-log1.74.0 (1.74.0-14ubuntu3) ...
 Setting up libibverbs1:amd64 (39.0-1) ...
 Setting up libboost-wave1.74-dev:amd64 (1.74.0-14ubuntu3) ...
 Setting up ibverbs-providers:amd64 (39.0-1) ...
-Setting up libarchive13:amd64 (3.6.0-1ubuntu1.4) ...
+Setting up libarchive13:amd64 (3.6.0-1ubuntu1.5) ...
 Setting up libboost-random-dev:amd64 (1.74.0.3ubuntu7) ...
 Setting up libboost-wave-dev:amd64 (1.74.0.3ubuntu7) ...
 Setting up libhwloc-plugins:amd64 (2.7.0-2ubuntu1) ...
@@ -2243,37 +2252,37 @@ Setting up libboost-all-dev (1.74.0.3ubuntu7) ...
 Processing triggers for ccache (4.5.1-1) ...
 Updating symlinks in /usr/lib/ccache ...
 Processing triggers for libc-bin (2.35-0ubuntu3.9) ...
- ---> Removed intermediate container 18d0c8d9e4fd
- ---> 385252674b23
+ ---> Removed intermediate container 10f3c0797dfe
+ ---> 037391ab683c
 Step 11/21 : RUN          rm -rf /var/lib/apt/lists/*
- ---> Running in 25e3c01088cf
- ---> Removed intermediate container 25e3c01088cf
- ---> c7e834be84e4
+ ---> Running in 68298732e4e8
+ ---> Removed intermediate container 68298732e4e8
+ ---> 101ffd393101
 Step 12/21 : RUN          mkdir -p /usr/local/src
- ---> Running in 7fec46c5bd55
- ---> Removed intermediate container 7fec46c5bd55
- ---> 2cbb71baca10
+ ---> Running in 9d31e7535278
+ ---> Removed intermediate container 9d31e7535278
+ ---> 613c6904b991
 Step 13/21 : RUN          git clone https://github.com/EttusResearch/uhd.git /usr/local/src/uhd
- ---> Running in edc7d2a2a36a
+ ---> Running in dff4facce1d9
 [91mCloning into '/usr/local/src/uhd'...
-[0m ---> Removed intermediate container edc7d2a2a36a
- ---> 4b77c4697d75
+[0m ---> Removed intermediate container dff4facce1d9
+ ---> 21f5a104aed0
 Step 14/21 : RUN          cd /usr/local/src/uhd/ && git checkout $UHD_TAG
- ---> Running in 6dbf3a0ae6b5
+ ---> Running in cfb81d2e1743
 [91mSwitched to a new branch 'UHD-4.0'
 [0mBranch 'UHD-4.0' set up to track remote branch 'UHD-4.0' from 'origin'.
- ---> Removed intermediate container 6dbf3a0ae6b5
- ---> ad049bd953e2
+ ---> Removed intermediate container cfb81d2e1743
+ ---> 964fe7a51c8b
 Step 15/21 : RUN          mkdir -p /usr/local/src/uhd/host/build
- ---> Running in 747e62615e63
- ---> Removed intermediate container 747e62615e63
- ---> 5ad8f0a8d900
+ ---> Running in f14c2419eeaa
+ ---> Removed intermediate container f14c2419eeaa
+ ---> 3d0bf2b35e09
 Step 16/21 : WORKDIR      /usr/local/src/uhd/host/build
- ---> Running in eaadd2745c61
- ---> Removed intermediate container eaadd2745c61
- ---> 90fe1629cb35
+ ---> Running in 232701315a1c
+ ---> Removed intermediate container 232701315a1c
+ ---> f673110d973f
 Step 17/21 : RUN          cmake .. -DENABLE_PYTHON3=ON -DUHD_RELEASE_MODE=release -DCMAKE_INSTALL_PREFIX=/usr
- ---> Running in d4affce60aba
+ ---> Running in e62f8304e813
 -- The CXX compiler identification is GNU 11.4.0
 -- The C compiler identification is GNU 11.4.0
 -- Detecting CXX compiler ABI info
@@ -2585,41 +2594,40 @@ Step 17/21 : RUN          cmake .. -DENABLE_PYTHON3=ON -DUHD_RELEASE_MODE=releas
 
 
 [0m-- Build files have been written to: /usr/local/src/uhd/host/build
- ---> Removed intermediate container d4affce60aba
- ---> b0913c90fd8f
+ ---> Removed intermediate container e62f8304e813
+ ---> fefbf89c00ec
 Step 18/21 : RUN          make -j $MAKEWIDTH
- ---> Running in 7d2baefb05e9
-[  0%] Generating intermediate file for /usr/local/src/uhd/host/lib/rc/cal/test.cal
+ ---> Running in d40b3db08175
 [  0%] Generating uhd-resources resource loader
+[  0%] Generating intermediate file for /usr/local/src/uhd/host/lib/rc/cal/test.cal
 [  0%] Building C object examples/getopt/CMakeFiles/getopt.dir/getopt.c.o
+[  0%] Building CXX object tests/common/CMakeFiles/uhd_test.dir/mock_zero_copy.cpp.o
 [  0%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/dispatcher.cc.o
-[  1%] Building CXX object tests/common/CMakeFiles/uhd_test.dir/mock_zero_copy.cpp.o
-[  1%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/server.cc.o
+[  0%] Generating documentation with doxygen
+[  1%] Generating uhd_cal_tx_dc_offset man page
 [  1%] Generating octoclock_firmware_burner man page
-[  1%] Generating documentation with doxygen
+[  1%] Generating uhd_cal_rx_iq_balance man page
+[  1%] Building CXX object lib/rc/CMakeFiles/uhd-resources.dir/__cmrc_uhd-resources/lib.cpp.o
 [  1%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/client.cc.o
-[  2%] Generating uhd_cal_rx_iq_balance man page
-[  2%] Generating uhd_cal_tx_dc_offset man page
-[  2%] Building CXX object lib/rc/CMakeFiles/uhd-resources.dir/__cmrc_uhd-resources/lib.cpp.o
-[  2%] Generating uhd_cal_tx_iq_balance man page
 [91mwarning: Tag 'TCL_SUBST' at line 271 of file '/usr/local/src/uhd/host/build/docs/Doxyfile' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
-warning: Tag 'COLS_IN_ALPHA_INDEX' at line 1145 of file '/usr/local/src/uhd/host/build/docs/Doxyfile' has become obsolete.
+[0m[91mwarning: Tag 'COLS_IN_ALPHA_INDEX' at line 1145 of file '/usr/local/src/uhd/host/build/docs/Doxyfile' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
 [0m[91mwarning: argument 'a4wide' for option PAPER_TYPE is not a valid enum value
 Using the default: a4!
-[0m[  2%] Generating uhd_config_info man page
+[0m[  2%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/server.cc.o
+[  2%] Generating uhd_cal_tx_iq_balance man page
+[  2%] Generating uhd_config_info man page
 [  2%] Linking C static library libgetopt.a
 [  2%] Generating uhd_find_devices man page
-[  2%] Generating uhd_image_loader man page
-[  2%] Built target getopt
 [91m/usr/local/src/uhd/host/docs/calibration.dox:240: warning: Reached end of file while still inside a (nested) comment. Nesting level 1 (probable line reference: 1)
-[0m[  2%] Building CXX object lib/rc/CMakeFiles/uhd-resources.dir/__cmrc_uhd-resources/intermediate/cal/test.cal.cpp.o
+[0m[  2%] Generating uhd_image_loader man page
 [  2%] Generating uhd_images_downloader man page
+[  2%] Built target getopt
 [  3%] Generating uhd_usrp_probe man page
 [  3%] Generating usrp_n2xx_simple_net_burner man page
-[  3%] Generating usrp_x3xx_fpga_burner man page
 [  3%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/this_handler.cc.o
+[  3%] Generating usrp_x3xx_fpga_burner man page
 [  3%] Generating usrp2_card_burner man page
 [  3%] Built target man_page_gzips
 [  3%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/this_session.cc.o
@@ -2627,13 +2635,14 @@ Using the default: a4!
 [  3%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/rpc_error.cc.o
 [  3%] Linking CXX static library libuhd_test.a
 [  3%] Built target uhd_test
+[  3%] Building CXX object lib/rc/CMakeFiles/uhd-resources.dir/__cmrc_uhd-resources/intermediate/cal/test.cal.cpp.o
 [  3%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/detail/server_session.cc.o
 [  3%] Linking CXX static library libuhd-resources.a
 [  3%] Built target uhd-resources
 [  4%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/detail/response.cc.o
+[  4%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/detail/client_error.cc.o
 [91m/usr/local/src/uhd/host/docs/configuration.dox:28: warning: unable to resolve reference to 'ignore_cal_file' for \ref command
-[0m[  4%] Building CXX object lib/deps/rpclib/CMakeFiles/uhd_rpclib.dir/lib/rpc/detail/client_error.cc.o
-[91m/usr/local/src/uhd/host/docs/devices.dox:12: warning: unable to resolve reference to 'page_calibration' for \ref command
+[0m[91m/usr/local/src/uhd/host/docs/devices.dox:12: warning: unable to resolve reference to 'page_calibration' for \ref command
 [0m[91m/usr/local/src/uhd/host/docs/configuration.dox:28: warning: unable to resolve reference to 'ignore_cal_file' for \ref command
 [0m[91m/usr/local/src/uhd/host/docs/usrp_n3xx.dox:1423: warning: unable to resolve reference to 'page_calibration' for \ref command
 [0m[91m/usr/local/src/uhd/host/docs/usrp_e3xx.dox:119: warning: Unsupported xml/html tag <speedgrade> found
@@ -2642,17 +2651,17 @@ Using the default: a4!
 [0m
 [  4%] Built target doxygen_docs
 [  4%] Built target uhd_rpclib
-[  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/ad5623_regs.hpp
-[  4%] Generating /usr/local/src/uhd/host/build/lib/convert/convert_general.cpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/transport/vrt_if_packet.cpp
+[  4%] Generating /usr/local/src/uhd/host/build/lib/convert/convert_general.cpp
+[  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/ad5623_regs.hpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/ad7922_regs.hpp
-[  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/ad9510_regs.hpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/ad9522_regs.hpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/ad9777_regs.hpp
+[  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/ad9510_regs.hpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/ad9862_regs.hpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/adf4350_regs.hpp
-[  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/adf4351_regs.hpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/adf4360_regs.hpp
+[  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/adf4351_regs.hpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/adf5355_regs.hpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/adf5356_regs.hpp
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/ads62p44_regs.hpp
@@ -2660,26 +2669,26 @@ Using the default: a4!
 [  4%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/lmk04816_regs.hpp
 [  5%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/lmk04828_regs.hpp
 [  5%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/lmx2592_regs.hpp
-[  5%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/max2112_regs.hpp
 [  5%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/magnesium_cpld_regs.hpp
+[  5%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/max2112_regs.hpp
 [  5%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/max2118_regs.hpp
 [  6%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/max2829_regs.hpp
 [  6%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/max2870_regs.hpp
 [  7%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/max2871_regs.hpp
-[  7%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/tda18272hnm_regs.hpp
 [  7%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/rhodium_cpld_regs.hpp
+[  7%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/tda18272hnm_regs.hpp
 [  8%] Generating /usr/local/src/uhd/host/build/lib/ic_reg_maps/tuner_4937di5_regs.hpp
 [  8%] Generating /usr/local/src/uhd/host/build/lib/include/uhdlib/usrp/common/rpc.hpp
 [  8%] Generating /usr/local/src/uhd/host/build/lib/transport/nirio/lvbitx/x300_lvbitx.cpp
 [  8%] Generating /usr/local/src/uhd/host/build/lib/transport/nirio/lvbitx/x310_lvbitx.cpp
-[  8%] Building CXX object lib/CMakeFiles/uhd.dir/cal/iq_cal.cpp.o
-[  8%] Building CXX object lib/CMakeFiles/uhd.dir/features/discoverable_feature_registry.cpp.o
 [  8%] Building CXX object lib/CMakeFiles/uhd.dir/cal/pwr_cal.cpp.o
-[  8%] Building CXX object lib/CMakeFiles/uhd.dir/types/mac_addr.cpp.o
-[  8%] Building CXX object lib/CMakeFiles/uhd.dir/types/ranges.cpp.o
+[  8%] Building CXX object lib/CMakeFiles/uhd.dir/cal/iq_cal.cpp.o
 [  9%] Building CXX object lib/CMakeFiles/uhd.dir/cal/database.cpp.o
+[  9%] Building CXX object lib/CMakeFiles/uhd.dir/types/device_addr.cpp.o
+[  9%] Building CXX object lib/CMakeFiles/uhd.dir/types/mac_addr.cpp.o
 [ 10%] Building CXX object lib/CMakeFiles/uhd.dir/types/metadata.cpp.o
-[ 10%] Building CXX object lib/CMakeFiles/uhd.dir/types/device_addr.cpp.o
+[ 10%] Building CXX object lib/CMakeFiles/uhd.dir/features/discoverable_feature_registry.cpp.o
+[ 10%] Building CXX object lib/CMakeFiles/uhd.dir/types/ranges.cpp.o
 [ 10%] Building CXX object lib/CMakeFiles/uhd.dir/types/sensors.cpp.o
 [ 10%] Building CXX object lib/CMakeFiles/uhd.dir/types/serial.cpp.o
 [ 10%] Building CXX object lib/CMakeFiles/uhd.dir/types/time_spec.cpp.o
@@ -2906,8 +2915,8 @@ Using the default: a4!
 [ 44%] Building CXX object lib/CMakeFiles/uhd.dir/usrp/b200/b200_cores.cpp.o
 [ 44%] Building CXX object lib/CMakeFiles/uhd.dir/usrp/b200/b200_mb_eeprom.cpp.o
 [ 44%] Building CXX object lib/CMakeFiles/uhd.dir/usrp/b200/b200_radio_ctrl_core.cpp.o
-[ 44%] Building CXX object lib/CMakeFiles/uhd.dir/usrp_clock/usrp_clock_c.cpp.o
 [ 44%] Building CXX object lib/CMakeFiles/uhd.dir/usrp_clock/multi_usrp_clock.cpp.o
+[ 44%] Building CXX object lib/CMakeFiles/uhd.dir/usrp_clock/usrp_clock_c.cpp.o
 [ 45%] Building CXX object lib/CMakeFiles/uhd.dir/usrp_clock/octoclock/octoclock_eeprom.cpp.o
 [ 45%] Building CXX object lib/CMakeFiles/uhd.dir/usrp_clock/octoclock/octoclock_image_loader.cpp.o
 [ 45%] Building CXX object lib/CMakeFiles/uhd.dir/usrp_clock/octoclock/octoclock_impl.cpp.o
@@ -2993,34 +3002,34 @@ Using the default: a4!
 [ 54%] Building CXX object lib/CMakeFiles/uhd.dir/version_c.cpp.o
 [ 55%] Linking CXX shared library libuhd.so
 [ 55%] Built target uhd
-[ 55%] Building CXX object examples/CMakeFiles/benchmark_rate.dir/benchmark_rate.cpp.o
-[ 55%] Building CXX object examples/CMakeFiles/rx_multi_samples.dir/rx_multi_samples.cpp.o
+[ 56%] Building CXX object examples/CMakeFiles/benchmark_rate.dir/benchmark_rate.cpp.o
 [ 55%] Building CXX object examples/CMakeFiles/network_relay.dir/network_relay.cpp.o
-[ 56%] Building CXX object examples/CMakeFiles/rx_timed_samples.dir/rx_timed_samples.cpp.o
-[ 56%] Building CXX object examples/CMakeFiles/test_dboard_coercion.dir/test_dboard_coercion.cpp.o
-[ 57%] Building CXX object examples/CMakeFiles/rx_samples_to_file.dir/rx_samples_to_file.cpp.o
-[ 57%] Building CXX object examples/CMakeFiles/rx_samples_to_udp.dir/rx_samples_to_udp.cpp.o
+[ 55%] Building CXX object examples/CMakeFiles/rx_multi_samples.dir/rx_multi_samples.cpp.o
+[ 56%] Building CXX object examples/CMakeFiles/rx_samples_to_udp.dir/rx_samples_to_udp.cpp.o
+[ 56%] Building CXX object examples/CMakeFiles/rx_samples_to_file.dir/rx_samples_to_file.cpp.o
+[ 57%] Building CXX object examples/CMakeFiles/rx_timed_samples.dir/rx_timed_samples.cpp.o
 [ 58%] Building CXX object examples/CMakeFiles/test_messages.dir/test_messages.cpp.o
+[ 58%] Building CXX object examples/CMakeFiles/test_dboard_coercion.dir/test_dboard_coercion.cpp.o
 [ 58%] Linking CXX executable test_messages
-[ 58%] Built target test_messages
-[ 58%] Building CXX object examples/CMakeFiles/test_pps_input.dir/test_pps_input.cpp.o
 [ 58%] Linking CXX executable rx_samples_to_udp
+[ 58%] Built target test_messages
+[ 58%] Linking CXX executable rx_timed_samples
+[ 58%] Building CXX object examples/CMakeFiles/test_pps_input.dir/test_pps_input.cpp.o
 [ 58%] Built target rx_samples_to_udp
 [ 58%] Building CXX object examples/CMakeFiles/test_timed_commands.dir/test_timed_commands.cpp.o
-[ 58%] Linking CXX executable rx_timed_samples
 [ 58%] Built target rx_timed_samples
 [ 58%] Building CXX object examples/CMakeFiles/tx_bursts.dir/tx_bursts.cpp.o
 [ 58%] Linking CXX executable rx_multi_samples
-[ 58%] Built target rx_multi_samples
 [ 58%] Linking CXX executable test_dboard_coercion
+[ 58%] Built target rx_multi_samples
 [ 59%] Building CXX object examples/CMakeFiles/tx_samples_from_file.dir/tx_samples_from_file.cpp.o
-[ 59%] Linking CXX executable network_relay
 [ 59%] Built target test_dboard_coercion
 [ 59%] Building CXX object examples/CMakeFiles/tx_timed_samples.dir/tx_timed_samples.cpp.o
-[ 59%] Built target network_relay
-[ 59%] Building CXX object examples/CMakeFiles/tx_waveforms.dir/tx_waveforms.cpp.o
 [ 59%] Linking CXX executable rx_samples_to_file
+[ 59%] Linking CXX executable network_relay
 [ 59%] Built target rx_samples_to_file
+[ 59%] Building CXX object examples/CMakeFiles/tx_waveforms.dir/tx_waveforms.cpp.o
+[ 59%] Built target network_relay
 [ 59%] Building CXX object examples/CMakeFiles/txrx_loopback_to_file.dir/txrx_loopback_to_file.cpp.o
 [ 59%] Linking CXX executable benchmark_rate
 [ 59%] Built target benchmark_rate
@@ -3035,9 +3044,9 @@ Using the default: a4!
 [ 61%] Built target usrp_list_sensors
 [ 61%] Building CXX object examples/CMakeFiles/sync_to_gps.dir/sync_to_gps.cpp.o
 [ 61%] Linking CXX executable tx_timed_samples
-[ 61%] Linking CXX executable tx_bursts
 [ 61%] Built target tx_timed_samples
 [ 61%] Building CXX object examples/CMakeFiles/rfnoc_nullsource_ce_rx.dir/rfnoc_nullsource_ce_rx.cpp.o
+[ 61%] Linking CXX executable tx_bursts
 [ 61%] Built target tx_bursts
 [ 61%] Building CXX object examples/CMakeFiles/rfnoc_rx_to_file.dir/rfnoc_rx_to_file.cpp.o
 [ 61%] Linking CXX executable tx_samples_from_file
@@ -3053,9 +3062,9 @@ Using the default: a4!
 [ 62%] Built target txrx_loopback_to_file
 [ 62%] Building CXX object examples/CMakeFiles/rx_ascii_art_dft.dir/rx_ascii_art_dft.cpp.o
 [ 63%] Linking CXX executable sync_to_gps
-[ 63%] Linking CXX executable gpio
 [ 63%] Built target sync_to_gps
 [ 64%] Building CXX object examples/CMakeFiles/twinrx_freq_hopping.dir/twinrx_freq_hopping.cpp.o
+[ 64%] Linking CXX executable gpio
 [ 64%] Built target gpio
 [ 64%] Building C object examples/CMakeFiles/rx_samples_c.dir/rx_samples_c.c.o
 [ 64%] Linking CXX executable rx_samples_c
@@ -3068,35 +3077,32 @@ Using the default: a4!
 [ 64%] Built target rfnoc_nullsource_ce_rx
 [ 64%] Building CXX object tests/CMakeFiles/buffer_test.dir/buffer_test.cpp.o
 [ 64%] Linking CXX executable rfnoc_radio_loopback
+[ 64%] Built target rfnoc_radio_loopback
+[ 64%] Building CXX object tests/CMakeFiles/byteswap_test.dir/byteswap_test.cpp.o
 [ 65%] Linking CXX executable rfnoc_rx_to_file
-[ 65%] Built target rfnoc_radio_loopback
 [ 65%] Built target rfnoc_rx_to_file
-[ 65%] Building CXX object tests/CMakeFiles/byteswap_test.dir/byteswap_test.cpp.o
 [ 65%] Building CXX object tests/CMakeFiles/cast_test.dir/cast_test.cpp.o
 [ 65%] Linking CXX executable rfnoc_replay_samples_from_file
+[ 65%] Linking CXX executable byteswap_test
 [ 65%] Built target rfnoc_replay_samples_from_file
 [ 65%] Building CXX object tests/CMakeFiles/cal_database_test.dir/cal_database_test.cpp.o
-[ 65%] Linking CXX executable byteswap_test
 [ 65%] Built target byteswap_test
 [ 65%] Building CXX object tests/CMakeFiles/cal_data_iq_test.dir/cal_data_iq_test.cpp.o
 [ 65%] Linking CXX executable cast_test
 [ 65%] Built target cast_test
 [ 65%] Building CXX object tests/CMakeFiles/cal_data_gain_pwr_test.dir/cal_data_gain_pwr_test.cpp.o
 [ 65%] Linking CXX executable test_clock_synch
-[ 65%] Linking CXX executable buffer_test
 [ 65%] Built target test_clock_synch
 [ 66%] Building CXX object tests/CMakeFiles/chdr_parse_test.dir/chdr_parse_test.cpp.o
-[ 66%] Built target buffer_test
-[ 66%] Building CXX object tests/CMakeFiles/chdr_test.dir/chdr_test.cpp.o
 [ 66%] Linking CXX executable addr_test
 [ 66%] Built target addr_test
+[ 66%] Linking CXX executable buffer_test
+[ 66%] Building CXX object tests/CMakeFiles/chdr_test.dir/chdr_test.cpp.o
+[ 66%] Built target buffer_test
 [ 66%] Building CXX object tests/CMakeFiles/constrained_device_args_test.dir/constrained_device_args_test.cpp.o
 [ 66%] Linking CXX executable cal_data_iq_test
 [ 66%] Built target cal_data_iq_test
-[ 66%] Linking CXX executable cal_database_test
 [ 66%] Building CXX object tests/CMakeFiles/convert_test.dir/convert_test.cpp.o
-[ 66%] Built target cal_database_test
-[ 67%] Building CXX object tests/CMakeFiles/dict_test.dir/dict_test.cpp.o
 [91mIn file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
                  from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
                  from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
@@ -3112,10 +3118,13 @@ Using the default: a4!
 /usr/include/boost/bind.hpp:36:1: note: '#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.'
    36 | BOOST_PRAGMA_MESSAGE(
       | ^~~~~~~~~~~~~~~~~~~~
-[0m[ 68%] Linking CXX executable cal_data_gain_pwr_test
+[0m[ 66%] Linking CXX executable cal_database_test
+[ 66%] Built target cal_database_test
+[ 67%] Building CXX object tests/CMakeFiles/dict_test.dir/dict_test.cpp.o
+[ 68%] Linking CXX executable cal_data_gain_pwr_test
 [ 68%] Built target cal_data_gain_pwr_test
-[ 68%] Linking CXX executable rx_ascii_art_dft
 [ 68%] Building CXX object tests/CMakeFiles/eeprom_utils_test.dir/eeprom_utils_test.cpp.o
+[ 68%] Linking CXX executable rx_ascii_art_dft
 [ 68%] Built target rx_ascii_art_dft
 [ 68%] Building CXX object tests/CMakeFiles/error_test.dir/error_test.cpp.o
 [ 68%] Linking CXX executable chdr_test
@@ -3130,59 +3139,59 @@ Using the default: a4!
 [ 69%] Linking CXX executable convert_test
 [ 69%] Linking CXX executable constrained_device_args_test
 [ 69%] Built target convert_test
-[ 69%] Built target constrained_device_args_test
 [ 69%] Building CXX object tests/CMakeFiles/interpolation_test.dir/interpolation_test.cpp.o
+[ 69%] Built target constrained_device_args_test
 [ 69%] Building CXX object tests/CMakeFiles/isatty_test.dir/isatty_test.cpp.o
-[ 69%] Linking CXX executable dict_test
-[ 69%] Built target dict_test
+[ 69%] Linking CXX executable gain_group_test
+[ 69%] Built target gain_group_test
+[ 69%] Linking CXX executable fp_compare_delta_test
 [ 70%] Building CXX object tests/CMakeFiles/log_test.dir/log_test.cpp.o
-[ 70%] Linking CXX executable error_test
-[ 70%] Linking CXX executable fp_compare_delta_test
-[ 70%] Built target error_test
-[ 70%] Building CXX object tests/CMakeFiles/math_test.dir/math_test.cpp.o
 [ 70%] Linking CXX executable isatty_test
-[ 70%] Linking CXX executable gain_group_test
 [ 70%] Built target fp_compare_delta_test
-[ 70%] Building CXX object tests/CMakeFiles/mb_controller_test.dir/mb_controller_test.cpp.o
+[ 70%] Building CXX object tests/CMakeFiles/math_test.dir/math_test.cpp.o
+[ 70%] Linking CXX executable dict_test
 [ 70%] Built target isatty_test
+[ 70%] Building CXX object tests/CMakeFiles/mb_controller_test.dir/mb_controller_test.cpp.o
+[ 70%] Built target dict_test
 [ 70%] Building CXX object tests/CMakeFiles/narrow_cast_test.dir/narrow_cast_test.cpp.o
-[ 70%] Built target gain_group_test
-[ 70%] Building CXX object tests/CMakeFiles/property_test.dir/property_test.cpp.o
+[ 70%] Linking CXX executable error_test
 [ 71%] Linking CXX executable fp_compare_epsilon_test
+[ 71%] Built target error_test
+[ 71%] Building CXX object tests/CMakeFiles/property_test.dir/property_test.cpp.o
 [ 71%] Built target fp_compare_epsilon_test
 [ 71%] Building CXX object tests/CMakeFiles/ranges_test.dir/ranges_test.cpp.o
 [ 71%] Linking CXX executable eeprom_utils_test
 [ 71%] Built target eeprom_utils_test
 [ 71%] Building CXX object tests/CMakeFiles/rfnoc_node_test.dir/rfnoc_node_test.cpp.o
-[ 71%] Linking CXX executable math_test
-[ 71%] Built target math_test
 [ 71%] Linking CXX executable narrow_cast_test
-[ 71%] Building CXX object tests/CMakeFiles/scope_exit_test.dir/scope_exit_test.cpp.o
-[ 71%] Built target narrow_cast_test
-[ 71%] Building CXX object tests/CMakeFiles/sensors_test.dir/sensors_test.cpp.o
+[ 71%] Linking CXX executable math_test
 [ 71%] Linking CXX executable interpolation_test
-[ 71%] Linking CXX executable log_test
+[ 71%] Built target narrow_cast_test
+[ 71%] Building CXX object tests/CMakeFiles/scope_exit_test.dir/scope_exit_test.cpp.o
+[ 71%] Built target math_test
+[ 71%] Building CXX object tests/CMakeFiles/sensors_test.dir/sensors_test.cpp.o
 [ 71%] Built target interpolation_test
 [ 71%] Building CXX object tests/CMakeFiles/soft_reg_test.dir/soft_reg_test.cpp.o
+[ 71%] Linking CXX executable log_test
 [ 71%] Built target log_test
 [ 71%] Building CXX object tests/CMakeFiles/sph_recv_test.dir/sph_recv_test.cpp.o
 [ 72%] Linking CXX executable mb_controller_test
+[ 72%] Linking CXX executable ranges_test
 [ 72%] Built target mb_controller_test
 [ 72%] Building CXX object tests/CMakeFiles/sph_send_test.dir/sph_send_test.cpp.o
-[ 72%] Linking CXX executable ranges_test
 [ 72%] Built target ranges_test
 [ 72%] Building CXX object tests/CMakeFiles/subdev_spec_test.dir/subdev_spec_test.cpp.o
 [ 72%] Linking CXX executable scope_exit_test
+[ 72%] Built target scope_exit_test
+[ 72%] Building CXX object tests/CMakeFiles/time_spec_test.dir/time_spec_test.cpp.o
 [ 73%] Linking CXX executable property_test
-[ 73%] Built target scope_exit_test
-[ 73%] Building CXX object tests/CMakeFiles/time_spec_test.dir/time_spec_test.cpp.o
 [ 73%] Built target property_test
 [ 73%] Building CXX object tests/CMakeFiles/tasks_test.dir/tasks_test.cpp.o
-[ 74%] Linking CXX executable sensors_test
 [ 73%] Linking CXX executable soft_reg_test
-[ 74%] Built target sensors_test
-[ 74%] Building CXX object tests/CMakeFiles/vrt_test.dir/vrt_test.cpp.o
+[ 74%] Linking CXX executable sensors_test
 [ 74%] Built target soft_reg_test
+[ 74%] Building CXX object tests/CMakeFiles/vrt_test.dir/vrt_test.cpp.o
+[ 74%] Built target sensors_test
 [ 74%] Building CXX object tests/CMakeFiles/expert_test.dir/expert_test.cpp.o
 [ 74%] Linking CXX executable subdev_spec_test
 [ 74%] Built target subdev_spec_test
@@ -3190,23 +3199,23 @@ Using the default: a4!
 [ 74%] Linking CXX executable tasks_test
 [ 74%] Built target tasks_test
 [ 74%] Building CXX object tests/CMakeFiles/link_test.dir/link_test.cpp.o
-[ 75%] Linking CXX executable rfnoc_node_test
-[ 76%] Linking CXX executable fe_conn_test
+[ 74%] Linking CXX executable sph_send_test
+[ 75%] Linking CXX executable fe_conn_test
+[ 75%] Built target fe_conn_test
+[ 75%] Built target sph_send_test
+[ 75%] Building CXX object tests/CMakeFiles/rx_streamer_test.dir/rx_streamer_test.cpp.o
+[ 75%] Building CXX object tests/CMakeFiles/tx_streamer_test.dir/tx_streamer_test.cpp.o
+[ 76%] Linking CXX executable rfnoc_node_test
 [ 76%] Built target rfnoc_node_test
-[ 76%] Linking CXX executable sph_send_test
-[ 76%] Building CXX object tests/CMakeFiles/rx_streamer_test.dir/rx_streamer_test.cpp.o
-[ 76%] Built target fe_conn_test
-[ 76%] Building CXX object tests/CMakeFiles/tx_streamer_test.dir/tx_streamer_test.cpp.o
-[ 76%] Built target sph_send_test
-[ 76%] Linking CXX executable vrt_test
 [ 76%] Building CXX object tests/CMakeFiles/block_id_test.dir/block_id_test.cpp.o
+[ 76%] Linking CXX executable vrt_test
 [ 76%] Built target vrt_test
 [ 76%] Building CXX object tests/CMakeFiles/rfnoc_property_test.dir/rfnoc_property_test.cpp.o
 [ 76%] Linking CXX executable link_test
 [ 76%] Linking CXX executable time_spec_test
 [ 76%] Built target link_test
-[ 76%] Built target time_spec_test
 [ 77%] Building CXX object tests/CMakeFiles/multichan_register_iface_test.dir/multichan_register_iface_test.cpp.o
+[ 77%] Built target time_spec_test
 [ 77%] Building C object tests/CMakeFiles/eeprom_c_test.dir/eeprom_c_test.c.o
 [ 77%] Linking CXX executable eeprom_c_test
 [ 77%] Built target eeprom_c_test
@@ -3218,15 +3227,15 @@ Using the default: a4!
 [ 78%] Built target ranges_c_test
 [ 78%] Building C object tests/CMakeFiles/sensors_c_test.dir/sensors_c_test.c.o
 [ 78%] Linking CXX executable sensors_c_test
-[ 78%] Linking CXX executable rfnoc_property_test
-[ 78%] Built target rfnoc_property_test
-[ 78%] Building C object tests/CMakeFiles/string_vector_c_test.dir/string_vector_c_test.c.o
 [ 78%] Built target sensors_c_test
-[ 78%] Building C object tests/CMakeFiles/subdev_spec_c_test.dir/subdev_spec_c_test.c.o
+[ 78%] Building C object tests/CMakeFiles/string_vector_c_test.dir/string_vector_c_test.c.o
 [ 78%] Linking CXX executable string_vector_c_test
+[ 78%] Built target string_vector_c_test
+[ 78%] Building C object tests/CMakeFiles/subdev_spec_c_test.dir/subdev_spec_c_test.c.o
 [ 79%] Linking CXX executable subdev_spec_c_test
+[ 79%] Linking CXX executable rfnoc_property_test
 [ 79%] Built target subdev_spec_c_test
-[ 79%] Built target string_vector_c_test
+[ 79%] Built target rfnoc_property_test
 [ 79%] Building CXX object tests/CMakeFiles/system_time_test.dir/system_time_test.cpp.o
 [ 79%] Building CXX object tests/CMakeFiles/streamer_benchmark.dir/streamer_benchmark.cpp.o
 [ 79%] Linking CXX executable expert_test
@@ -3236,177 +3245,177 @@ Using the default: a4!
 [ 79%] Linking CXX executable system_time_test
 [ 79%] Built target system_time_test
 [ 79%] Building CXX object tests/CMakeFiles/config_parser_test.dir/config_parser_test.cpp.o
-[ 79%] Linking CXX executable multichan_register_iface_test
-[ 79%] Built target multichan_register_iface_test
+[ 79%] Linking CXX executable tx_streamer_test
+[ 79%] Built target tx_streamer_test
 [ 79%] Building CXX object tests/CMakeFiles/streamer_benchmark.dir/__/lib/rfnoc/chdr_packet_writer.cpp.o
 [ 80%] Linking CXX executable error_c_test
-[ 80%] Linking CXX executable tx_streamer_test
+[ 80%] Linking CXX executable multichan_register_iface_test
 [ 80%] Built target error_c_test
+[ 80%] Built target multichan_register_iface_test
 [ 80%] Building CXX object tests/CMakeFiles/config_parser_test.dir/__/lib/utils/config_parser.cpp.o
-[ 80%] Built target tx_streamer_test
-[ 80%] Building CXX object tests/CMakeFiles/streamer_benchmark.dir/__/lib/rfnoc/chdr_ctrl_xport.cpp.o
-[ 80%] Linking CXX executable sph_recv_test
-[ 80%] Built target sph_recv_test
-[ 80%] Building CXX object tests/CMakeFiles/streamer_benchmark.dir/__/lib/rfnoc/chdr_rx_data_xport.cpp.o
 [ 80%] Building CXX object tests/CMakeFiles/paths_test.dir/paths_test.cpp.o
+[ 80%] Building CXX object tests/CMakeFiles/rfnoc_propprop_test.dir/rfnoc_propprop_test.cpp.o
+[ 80%] Linking CXX executable sph_recv_test
+[ 80%] Building CXX object tests/CMakeFiles/rfnoc_propprop_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 80%] Built target sph_recv_test
 [ 80%] Building CXX object tests/CMakeFiles/paths_test.dir/__/lib/utils/pathslib.cpp.o
+[ 80%] Building CXX object tests/CMakeFiles/streamer_benchmark.dir/__/lib/rfnoc/chdr_ctrl_xport.cpp.o
+[ 80%] Linking CXX executable paths_test
+[ 80%] Linking CXX executable rx_streamer_test
+[ 80%] Built target paths_test
+[ 80%] Building CXX object tests/CMakeFiles/streamer_benchmark.dir/__/lib/rfnoc/chdr_rx_data_xport.cpp.o
+[ 80%] Built target rx_streamer_test
 [ 81%] Building CXX object tests/CMakeFiles/streamer_benchmark.dir/__/lib/rfnoc/chdr_tx_data_xport.cpp.o
-[ 81%] Linking CXX executable rx_streamer_test
-[ 81%] Building CXX object tests/CMakeFiles/rfnoc_propprop_test.dir/rfnoc_propprop_test.cpp.o
-[ 81%] Built target rx_streamer_test
-[ 81%] Building CXX object tests/CMakeFiles/rfnoc_detailgraph_test.dir/rfnoc_detailgraph_test.cpp.o
-[ 81%] Linking CXX executable paths_test
-[ 81%] Built target paths_test
-[ 81%] Building CXX object tests/CMakeFiles/actions_test.dir/actions_test.cpp.o
 [ 81%] Linking CXX executable config_parser_test
 [ 81%] Built target config_parser_test
 [ 81%] Building CXX object tests/CMakeFiles/streamer_benchmark.dir/__/lib/transport/inline_io_service.cpp.o
-[ 81%] Building CXX object tests/CMakeFiles/rfnoc_propprop_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 81%] Building CXX object tests/CMakeFiles/rfnoc_detailgraph_test.dir/rfnoc_detailgraph_test.cpp.o
+[ 81%] Building CXX object tests/CMakeFiles/rfnoc_detailgraph_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 81%] Linking CXX executable packet_handler_benchmark
 [ 81%] Built target packet_handler_benchmark
+[ 81%] Building CXX object tests/CMakeFiles/actions_test.dir/actions_test.cpp.o
 [ 82%] Building CXX object tests/CMakeFiles/rfnoc_chdr_test.dir/rfnoc_chdr_test.cpp.o
-[ 82%] Building CXX object tests/CMakeFiles/rfnoc_detailgraph_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 82%] Building CXX object tests/CMakeFiles/rfnoc_chdr_test.dir/__/lib/rfnoc/chdr_packet_writer.cpp.o
 [ 82%] Linking CXX executable streamer_benchmark
-[ 82%] Building CXX object tests/CMakeFiles/actions_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 82%] Built target streamer_benchmark
 [ 82%] Building CXX object tests/CMakeFiles/client_zero_test.dir/client_zero_test.cpp.o
-[ 82%] Linking CXX executable rfnoc_chdr_test
-[ 82%] Built target rfnoc_chdr_test
 [ 82%] Building CXX object tests/CMakeFiles/client_zero_test.dir/__/lib/rfnoc/client_zero.cpp.o
 [ 82%] Building CXX object tests/CMakeFiles/addsub_block_test.dir/rfnoc_block_tests/addsub_block_test.cpp.o
-[ 83%] Building CXX object tests/CMakeFiles/addsub_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 83%] Building CXX object tests/CMakeFiles/ddc_block_test.dir/rfnoc_block_tests/ddc_block_test.cpp.o
-[ 83%] Linking CXX executable rfnoc_detailgraph_test
-[ 84%] Linking CXX executable rfnoc_propprop_test
-[ 84%] Built target rfnoc_detailgraph_test
-[ 84%] Building CXX object tests/CMakeFiles/ddc_block_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 82%] Linking CXX executable rfnoc_chdr_test
+[ 83%] Linking CXX executable rfnoc_propprop_test
+[ 83%] Built target rfnoc_chdr_test
+[ 84%] Building CXX object tests/CMakeFiles/addsub_block_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 84%] Built target rfnoc_propprop_test
+[ 84%] Building CXX object tests/CMakeFiles/ddc_block_test.dir/rfnoc_block_tests/ddc_block_test.cpp.o
+[ 84%] Building CXX object tests/CMakeFiles/actions_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 84%] Building CXX object tests/CMakeFiles/duc_block_test.dir/rfnoc_block_tests/duc_block_test.cpp.o
+[ 84%] Linking CXX executable rfnoc_detailgraph_test
+[ 84%] Built target rfnoc_detailgraph_test
 [ 85%] Building CXX object tests/CMakeFiles/duc_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 85%] Linking CXX executable actions_test
-[ 85%] Built target actions_test
 [ 85%] Building CXX object tests/CMakeFiles/fft_block_test.dir/rfnoc_block_tests/fft_block_test.cpp.o
 [ 86%] Linking CXX executable client_zero_test
 [ 86%] Built target client_zero_test
+[ 86%] Building CXX object tests/CMakeFiles/ddc_block_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 86%] Building CXX object tests/CMakeFiles/fir_filter_block_test.dir/rfnoc_block_tests/fir_filter_block_test.cpp.o
-[ 86%] Building CXX object tests/CMakeFiles/fir_filter_block_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 86%] Linking CXX executable addsub_block_test
 [ 86%] Built target addsub_block_test
 [ 87%] Building CXX object tests/CMakeFiles/fosphor_block_test.dir/rfnoc_block_tests/fosphor_block_test.cpp.o
+[ 87%] Linking CXX executable actions_test
+[ 87%] Built target actions_test
+[ 87%] Building CXX object tests/CMakeFiles/fosphor_block_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 87%] Building CXX object tests/CMakeFiles/fft_block_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 88%] Building CXX object tests/CMakeFiles/keep_one_in_n_test.dir/rfnoc_block_tests/keep_one_in_n_test.cpp.o
-[ 88%] Building CXX object tests/CMakeFiles/fosphor_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 88%] Linking CXX executable ddc_block_test
-[ 88%] Built target ddc_block_test
-[ 88%] Building CXX object tests/CMakeFiles/keep_one_in_n_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 88%] Linking CXX executable duc_block_test
 [ 88%] Built target duc_block_test
+[ 88%] Building CXX object tests/CMakeFiles/keep_one_in_n_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 88%] Linking CXX executable ddc_block_test
 [ 88%] Building CXX object tests/CMakeFiles/logpwr_block_test.dir/rfnoc_block_tests/logpwr_block_test.cpp.o
+[ 88%] Built target ddc_block_test
 [ 88%] Building CXX object tests/CMakeFiles/logpwr_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 88%] Building CXX object tests/CMakeFiles/fft_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 88%] Linking CXX executable fir_filter_block_test
-[ 88%] Built target fir_filter_block_test
+[ 88%] Building CXX object tests/CMakeFiles/fir_filter_block_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 88%] Building CXX object tests/CMakeFiles/moving_average_block_test.dir/rfnoc_block_tests/moving_average_block_test.cpp.o
+[ 88%] Linking CXX executable fft_block_test
+[ 88%] Built target fft_block_test
+[ 88%] Building CXX object tests/CMakeFiles/moving_average_block_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 88%] Linking CXX executable fosphor_block_test
+[ 88%] Built target fosphor_block_test
 [ 88%] Building CXX object tests/CMakeFiles/null_block_test.dir/rfnoc_block_tests/null_block_test.cpp.o
 [ 89%] Building CXX object tests/CMakeFiles/null_block_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 89%] Linking CXX executable keep_one_in_n_test
+[ 89%] Built target keep_one_in_n_test
 [ 90%] Building CXX object tests/CMakeFiles/replay_block_test.dir/rfnoc_block_tests/replay_block_test.cpp.o
-[ 90%] Linking CXX executable keep_one_in_n_test
-[ 90%] Linking CXX executable fosphor_block_test
-[ 90%] Built target keep_one_in_n_test
 [ 90%] Building CXX object tests/CMakeFiles/replay_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 90%] Built target fosphor_block_test
-[ 90%] Building CXX object tests/CMakeFiles/moving_average_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 90%] Linking CXX executable fft_block_test
-[ 90%] Built target fft_block_test
 [ 90%] Linking CXX executable logpwr_block_test
-[ 90%] Building CXX object tests/CMakeFiles/siggen_block_test.dir/rfnoc_block_tests/siggen_block_test.cpp.o
 [ 90%] Built target logpwr_block_test
+[ 90%] Building CXX object tests/CMakeFiles/siggen_block_test.dir/rfnoc_block_tests/siggen_block_test.cpp.o
+[ 90%] Linking CXX executable fir_filter_block_test
+[ 90%] Built target fir_filter_block_test
+[ 90%] Building CXX object tests/CMakeFiles/siggen_block_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 91%] Building CXX object tests/CMakeFiles/split_stream_block_test.dir/rfnoc_block_tests/split_stream_block_test.cpp.o
 [ 91%] Building CXX object tests/CMakeFiles/switchboard_block_test.dir/rfnoc_block_tests/switchboard_block_test.cpp.o
-[ 91%] Building CXX object tests/CMakeFiles/vector_iir_block_test.dir/rfnoc_block_tests/vector_iir_block_test.cpp.o
+[ 91%] Linking CXX executable moving_average_block_test
+[ 91%] Built target moving_average_block_test
+[ 91%] Building CXX object tests/CMakeFiles/switchboard_block_test.dir/__/lib/rfnoc/graph.cpp.o
 [ 91%] Linking CXX executable null_block_test
 [ 91%] Built target null_block_test
-[ 92%] Building CXX object tests/CMakeFiles/vector_iir_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 92%] Building CXX object tests/CMakeFiles/split_stream_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 92%] Linking CXX executable moving_average_block_test
-[ 92%] Built target moving_average_block_test
-[ 92%] Building CXX object tests/CMakeFiles/switchboard_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 92%] Linking CXX executable replay_block_test
-[ 92%] Building CXX object tests/CMakeFiles/window_block_test.dir/rfnoc_block_tests/window_block_test.cpp.o
+[ 91%] Building CXX object tests/CMakeFiles/split_stream_block_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 91%] Building CXX object tests/CMakeFiles/vector_iir_block_test.dir/rfnoc_block_tests/vector_iir_block_test.cpp.o
+[ 91%] Building CXX object tests/CMakeFiles/window_block_test.dir/rfnoc_block_tests/window_block_test.cpp.o
+[ 92%] Linking CXX executable siggen_block_test
+[ 92%] Built target siggen_block_test
 [ 92%] Building CXX object tests/CMakeFiles/window_block_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 92%] Linking CXX executable replay_block_test
 [ 92%] Built target replay_block_test
-[ 92%] Building CXX object tests/CMakeFiles/siggen_block_test.dir/__/lib/rfnoc/graph.cpp.o
-[ 92%] Building CXX object tests/CMakeFiles/transport_test.dir/transport_test.cpp.o
-[ 92%] Building CXX object tests/CMakeFiles/offload_io_srv_test.dir/offload_io_srv_test.cpp.o
-[ 92%] Linking CXX executable vector_iir_block_test
-[ 92%] Built target vector_iir_block_test
-[ 92%] Building CXX object tests/CMakeFiles/serial_number_test.dir/serial_number_test.cpp.o
-[ 92%] Linking CXX executable split_stream_block_test
-[ 92%] Built target split_stream_block_test
-[ 92%] Building CXX object tests/CMakeFiles/serial_number_test.dir/__/lib/utils/serial_number.cpp.o
-[ 92%] Building CXX object tests/CMakeFiles/transport_test.dir/__/lib/transport/inline_io_service.cpp.o
-[ 92%] Building CXX object tests/CMakeFiles/offload_io_srv_test.dir/__/lib/transport/offload_io_service.cpp.o
-[ 92%] Linking CXX executable serial_number_test
-[ 92%] Built target serial_number_test
-[ 92%] Building CXX object tests/CMakeFiles/pwr_cal_mgr_test.dir/pwr_cal_mgr_test.cpp.o
-[ 92%] Building CXX object tests/CMakeFiles/pwr_cal_mgr_test.dir/__/lib/usrp/common/pwr_cal_mgr.cpp.o
-[ 92%] Linking CXX executable switchboard_block_test
-[ 92%] Built target switchboard_block_test
-[ 92%] Building CXX object tests/CMakeFiles/discoverable_feature_test.dir/discoverable_feature_test.cpp.o
-[ 92%] Building CXX object tests/CMakeFiles/discoverable_feature_test.dir/__/lib/features/discoverable_feature_registry.cpp.o
-[ 93%] Linking CXX executable siggen_block_test
-[ 93%] Built target siggen_block_test
-[ 93%] Building CXX object tests/CMakeFiles/module_test.dir/module_test.cpp.o
-[ 93%] Building CXX object utils/CMakeFiles/uhd_config_info.dir/uhd_config_info.cpp.o
-[ 93%] Linking CXX executable discoverable_feature_test
-[ 93%] Linking CXX shared module libmodule_test.so
-[ 93%] Built target discoverable_feature_test
-[ 93%] Building CXX object utils/CMakeFiles/uhd_find_devices.dir/uhd_find_devices.cpp.o
-[ 93%] Built target module_test
-[ 93%] Building CXX object utils/CMakeFiles/uhd_usrp_probe.dir/uhd_usrp_probe.cpp.o
+[ 93%] Building CXX object tests/CMakeFiles/vector_iir_block_test.dir/__/lib/rfnoc/graph.cpp.o
+[ 93%] Building CXX object tests/CMakeFiles/transport_test.dir/transport_test.cpp.o
+[ 93%] Building CXX object tests/CMakeFiles/offload_io_srv_test.dir/offload_io_srv_test.cpp.o
+[ 93%] Linking CXX executable switchboard_block_test
+[ 93%] Built target switchboard_block_test
+[ 93%] Building CXX object tests/CMakeFiles/transport_test.dir/__/lib/transport/inline_io_service.cpp.o
+[ 93%] Linking CXX executable split_stream_block_test
+[ 93%] Built target split_stream_block_test
+[ 93%] Building CXX object tests/CMakeFiles/offload_io_srv_test.dir/__/lib/transport/offload_io_service.cpp.o
+[ 93%] Building CXX object tests/CMakeFiles/serial_number_test.dir/serial_number_test.cpp.o
+[ 93%] Building CXX object tests/CMakeFiles/pwr_cal_mgr_test.dir/pwr_cal_mgr_test.cpp.o
+[ 93%] Building CXX object tests/CMakeFiles/serial_number_test.dir/__/lib/utils/serial_number.cpp.o
+[ 93%] Linking CXX executable serial_number_test
+[ 93%] Built target serial_number_test
+[ 93%] Building CXX object tests/CMakeFiles/pwr_cal_mgr_test.dir/__/lib/usrp/common/pwr_cal_mgr.cpp.o
+[ 93%] Building CXX object tests/CMakeFiles/discoverable_feature_test.dir/discoverable_feature_test.cpp.o
 [ 93%] Linking CXX executable transport_test
 [ 93%] Built target transport_test
-[ 93%] Building CXX object utils/CMakeFiles/uhd_image_loader.dir/uhd_image_loader.cpp.o
-[ 94%] Linking CXX executable window_block_test
-[ 94%] Built target window_block_test
-[ 95%] Linking CXX executable offload_io_srv_test
+[ 93%] Building CXX object tests/CMakeFiles/module_test.dir/module_test.cpp.o
+[ 93%] Linking CXX shared module libmodule_test.so
+[ 93%] Building CXX object utils/CMakeFiles/uhd_config_info.dir/uhd_config_info.cpp.o
+[ 93%] Built target module_test
+[ 93%] Building CXX object tests/CMakeFiles/discoverable_feature_test.dir/__/lib/features/discoverable_feature_registry.cpp.o
+[ 93%] Linking CXX executable vector_iir_block_test
+[ 93%] Built target vector_iir_block_test
+[ 94%] Linking CXX executable offload_io_srv_test
+[ 94%] Building CXX object utils/CMakeFiles/uhd_find_devices.dir/uhd_find_devices.cpp.o
+[ 94%] Building CXX object utils/CMakeFiles/uhd_usrp_probe.dir/uhd_usrp_probe.cpp.o
+[ 94%] Built target offload_io_srv_test
+[ 94%] Building CXX object utils/CMakeFiles/uhd_image_loader.dir/uhd_image_loader.cpp.o
+[ 95%] Linking CXX executable window_block_test
+[ 95%] Built target window_block_test
 [ 96%] Building CXX object utils/CMakeFiles/uhd_cal_rx_iq_balance.dir/uhd_cal_rx_iq_balance.cpp.o
+[ 96%] Linking CXX executable discoverable_feature_test
+[ 96%] Built target discoverable_feature_test
 [ 96%] Building CXX object utils/CMakeFiles/uhd_cal_tx_dc_offset.dir/uhd_cal_tx_dc_offset.cpp.o
-[ 96%] Built target offload_io_srv_test
 [ 96%] Building CXX object utils/CMakeFiles/uhd_cal_tx_iq_balance.dir/uhd_cal_tx_iq_balance.cpp.o
 [ 96%] Linking CXX executable pwr_cal_mgr_test
 [ 96%] Built target pwr_cal_mgr_test
 [ 96%] Building CXX object utils/CMakeFiles/converter_benchmark.dir/converter_benchmark.cpp.o
 [ 96%] Linking CXX executable uhd_image_loader
+[ 96%] Built target uhd_image_loader
+[ 96%] Building CXX object utils/CMakeFiles/query_gpsdo_sensors.dir/query_gpsdo_sensors.cpp.o
 [ 97%] Linking CXX executable uhd_config_info
-[ 97%] Built target uhd_image_loader
 [ 97%] Built target uhd_config_info
-[ 97%] Building CXX object utils/CMakeFiles/query_gpsdo_sensors.dir/query_gpsdo_sensors.cpp.o
 [ 98%] Building CXX object utils/CMakeFiles/usrp_burn_db_eeprom.dir/usrp_burn_db_eeprom.cpp.o
 [ 98%] Linking CXX executable uhd_find_devices
 [ 98%] Built target uhd_find_devices
 [ 98%] Building CXX object utils/CMakeFiles/usrp_burn_mb_eeprom.dir/usrp_burn_mb_eeprom.cpp.o
 [ 98%] Linking CXX executable uhd_cal_rx_iq_balance
-[ 98%] Linking CXX executable uhd_cal_tx_iq_balance
 [ 98%] Built target uhd_cal_rx_iq_balance
-[ 98%] Linking CXX executable converter_benchmark
 [ 98%] Building CXX object utils/CMakeFiles/fx2_init_eeprom.dir/fx2_init_eeprom.cpp.o
-[ 98%] Built target uhd_cal_tx_iq_balance
-[ 98%] Building CXX object utils/CMakeFiles/b2xx_fx3_utils.dir/b2xx_fx3_utils.cpp.o
-[ 98%] Linking CXX executable uhd_cal_tx_dc_offset
-[ 98%] Built target converter_benchmark
-[ 98%] Building CXX object utils/CMakeFiles/octoclock_burn_eeprom.dir/octoclock_burn_eeprom.cpp.o
-[ 98%] Built target uhd_cal_tx_dc_offset
 [ 98%] Linking CXX executable uhd_usrp_probe
-[ 98%] Building CXX object utils/latency/CMakeFiles/responder.dir/responder.cpp.o
 [ 98%] Built target uhd_usrp_probe
+[ 98%] Linking CXX executable uhd_cal_tx_dc_offset
+[ 98%] Building CXX object utils/CMakeFiles/b2xx_fx3_utils.dir/b2xx_fx3_utils.cpp.o
+[ 98%] Built target uhd_cal_tx_dc_offset
+[ 98%] Building CXX object utils/CMakeFiles/octoclock_burn_eeprom.dir/octoclock_burn_eeprom.cpp.o
+[ 98%] Linking CXX executable converter_benchmark
+[ 98%] Linking CXX executable uhd_cal_tx_iq_balance
+[ 98%] Built target converter_benchmark
+[ 98%] Building CXX object utils/latency/CMakeFiles/responder.dir/responder.cpp.o
+[ 98%] Built target uhd_cal_tx_iq_balance
 [ 98%] Building CXX object utils/latency/CMakeFiles/responder.dir/lib/Responder.cpp.o
 [ 98%] Linking CXX executable usrp_burn_mb_eeprom
 [ 98%] Built target usrp_burn_mb_eeprom
 [ 98%] Building CXX object python/CMakeFiles/pyuhd.dir/pyuhd.cpp.o
 [ 98%] Linking CXX executable usrp_burn_db_eeprom
-[ 98%] Linking CXX executable query_gpsdo_sensors
 [ 98%] Built target usrp_burn_db_eeprom
+[ 98%] Linking CXX executable query_gpsdo_sensors
 [ 98%] Built target query_gpsdo_sensors
 [91mIn file included from /usr/local/src/uhd/host/lib/deps/pybind11/include/pybind11/cast.h:16,
                  from /usr/local/src/uhd/host/lib/deps/pybind11/include/pybind11/attr.h:13,
@@ -3417,7 +3426,7 @@ Using the default: a4!
 /usr/local/src/uhd/host/lib/deps/pybind11/include/pybind11/detail/internals.h:200:27: warning: 'void PyEval_InitThreads()' is deprecated [-Wdeprecated-declarations]
   200 |         PyEval_InitThreads();
       |         ~~~~~~~~~~~~~~~~~~^~
-[0m[91mIn file included from /usr/include/python3.10/Python.h:130,
+In file included from /usr/include/python3.10/Python.h:130,
                  from /usr/local/src/uhd/host/lib/deps/pybind11/include/pybind11/detail/common.h:113,
                  from /usr/local/src/uhd/host/lib/deps/pybind11/include/pybind11/pytypes.h:13,
                  from /usr/local/src/uhd/host/lib/deps/pybind11/include/pybind11/cast.h:13,
@@ -3445,10 +3454,10 @@ Using the default: a4!
 [100%] Generating build/timestamp
 Including packages in pyuhd: ['uhd', 'uhd.dsp', 'uhd.usrp', 'uhd.imgbuilder', 'uhd.usrp.cal']
 [100%] Built target pyuhd_library
- ---> Removed intermediate container 7d2baefb05e9
- ---> d754796f7d99
+ ---> Removed intermediate container d40b3db08175
+ ---> 1fac0bef015f
 Step 19/21 : RUN          make install
- ---> Running in dec836bdab8c
+ ---> Running in c862db08687f
 Consolidate compiler generated dependencies of target uhd_rpclib
 [  2%] Built target uhd_rpclib
 Consolidate compiler generated dependencies of target uhd-resources
@@ -6144,10 +6153,10 @@ Install the project...
 -- Installing: /usr/lib/python3/dist-packages/uhd/usrp/multi_usrp.py
 -- Installing: /usr/lib/python3/dist-packages/uhd/libpyuhd.cpython-310-x86_64-linux-gnu.so
 -- Set runtime path of "/usr/lib/python3/dist-packages/uhd/libpyuhd.cpython-310-x86_64-linux-gnu.so" to ""
- ---> Removed intermediate container dec836bdab8c
- ---> 43aeca4d8086
+ ---> Removed intermediate container c862db08687f
+ ---> 8263ca46f498
 Step 20/21 : RUN          uhd_images_downloader
- ---> Running in ba6ab8e60f50
+ ---> Running in 538d08df8bb8
 [91m[INFO] Using base URL: https://files.ettus.com/binaries/cache/
 [INFO] Images destination: /usr/share/uhd/images
 [0m[91m[INFO] No inventory file found at /usr/share/uhd/images/inventory.json. Creating an empty one.
@@ -6183,11 +6192,11 @@ Step 20/21 : RUN          uhd_images_downloader
 [0m[91m[INFO] Downloading octoclock_octoclock_fw_default-g14000041.zip, total size: 16.249 kB
 [0m[91m[INFO] Downloading usb_common_windrv_default-g14000041.zip, total size: 4838.302 kB
 [0m[91m[INFO] Images download complete.
-[0m ---> Removed intermediate container ba6ab8e60f50
- ---> 1b685c56f288
+[0m ---> Removed intermediate container 538d08df8bb8
+ ---> b1aa8c42c858
 Step 21/21 : WORKDIR      /
- ---> Running in 4f0da968db6c
- ---> Removed intermediate container 4f0da968db6c
- ---> 78f013a8c6f2
-Successfully built 78f013a8c6f2
+ ---> Running in 27f875914ce9
+ ---> Removed intermediate container 27f875914ce9
+ ---> ef8d1f8eb49c
+Successfully built ef8d1f8eb49c
 Successfully tagged lkschu/uhd:4.0

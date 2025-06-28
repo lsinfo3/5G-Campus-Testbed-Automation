@@ -1,0 +1,54 @@
+The push refers to repository [docker.io/lkschu/oai]
+35bc196515d0: Preparing
+2a60752d01bf: Preparing
+07cf6c5ee2ee: Preparing
+8638d3da470a: Preparing
+5be5a8e2b41b: Preparing
+106f854d4b1a: Preparing
+2b3095a5d486: Preparing
+f37256a88fac: Preparing
+50fa9c6abf46: Preparing
+f6305ed80f18: Preparing
+dbf53edd7d79: Preparing
+183f640f9aaa: Preparing
+f0e0aa68de84: Preparing
+deb519ca31b3: Preparing
+5317536ec664: Preparing
+1deb8aa395e3: Preparing
+e80c01d2707c: Preparing
+52294217b877: Preparing
+346f14bf17b9: Preparing
+2b3095a5d486: Waiting
+f37256a88fac: Waiting
+deb519ca31b3: Waiting
+50fa9c6abf46: Waiting
+f6305ed80f18: Waiting
+5317536ec664: Waiting
+dbf53edd7d79: Waiting
+1deb8aa395e3: Waiting
+183f640f9aaa: Waiting
+f0e0aa68de84: Waiting
+e80c01d2707c: Waiting
+346f14bf17b9: Waiting
+52294217b877: Waiting
+106f854d4b1a: Waiting
+2a60752d01bf: Pushed
+8638d3da470a: Pushed
+2b3095a5d486: Layer already exists
+f37256a88fac: Layer already exists
+50fa9c6abf46: Layer already exists
+f6305ed80f18: Layer already exists
+dbf53edd7d79: Layer already exists
+183f640f9aaa: Layer already exists
+f0e0aa68de84: Layer already exists
+deb519ca31b3: Layer already exists
+5317536ec664: Layer already exists
+1deb8aa395e3: Layer already exists
+106f854d4b1a: Pushed
+e80c01d2707c: Layer already exists
+52294217b877: Layer already exists
+346f14bf17b9: Layer already exists
+07cf6c5ee2ee: Pushed
+5be5a8e2b41b: Pushed
+35bc196515d0: Pushed
+2.1.0_3.15: digest: sha256:af5ebf53d9224f9beb2a791c4c2bfd9efc0ec7742e28785de3120ffe89925626 size: 4329

@@ -1,60 +1,60 @@
 The push refers to repository [docker.io/lkschu/srsran]
-b5087dd52968: Preparing
-46c69777d37e: Preparing
-942ec9e824e3: Preparing
-ee386debb4d4: Preparing
-beb0e4399357: Preparing
-752dc624a4bb: Preparing
-d279464185ce: Preparing
-40c5ad9fa187: Preparing
-7c1216be9071: Preparing
-fe83532d601e: Preparing
-5c77171448ea: Preparing
-73a82e019aa7: Preparing
-2ca189721fec: Preparing
-1c4323bc2c10: Preparing
-0f66057c0ac5: Preparing
-39babf8e7471: Preparing
-07e969afd120: Preparing
-689a56030c96: Preparing
-90c58fe780a5: Preparing
-d790657ad8c9: Preparing
+c665ff505bcc: Preparing
+5ba1457a8561: Preparing
+5a81a3a40560: Preparing
+d435cd457d86: Preparing
+61245574c29a: Preparing
+128a094d1334: Preparing
+55e3cf1dcf5b: Preparing
+8e3bc4c9b88a: Preparing
+c22403d7496b: Preparing
+c17eff6a7c29: Preparing
+4256eb7d9ff2: Preparing
+27c9e42fd8a8: Preparing
+97deb2f9a43e: Preparing
+119c318f4db5: Preparing
+0dd2163918ee: Preparing
+128a094d1334: Waiting
+55e3cf1dcf5b: Waiting
+a15c1e4db831: Preparing
+0dac4502025d: Preparing
+8e3bc4c9b88a: Waiting
+6227c4ab1845: Preparing
+3a911006ed5c: Preparing
+c22403d7496b: Waiting
+c17eff6a7c29: Waiting
+4256eb7d9ff2: Waiting
+27c9e42fd8a8: Waiting
+97deb2f9a43e: Waiting
+119c318f4db5: Waiting
+c839517f1f1e: Preparing
+a15c1e4db831: Waiting
+0dd2163918ee: Waiting
 346f14bf17b9: Preparing
-40c5ad9fa187: Waiting
-7c1216be9071: Waiting
-fe83532d601e: Waiting
-5c77171448ea: Waiting
-73a82e019aa7: Waiting
-2ca189721fec: Waiting
-1c4323bc2c10: Waiting
-0f66057c0ac5: Waiting
-39babf8e7471: Waiting
-752dc624a4bb: Waiting
-d279464185ce: Waiting
-07e969afd120: Waiting
-689a56030c96: Waiting
+0dac4502025d: Waiting
 346f14bf17b9: Waiting
-d790657ad8c9: Waiting
-90c58fe780a5: Waiting
-ee386debb4d4: Pushed
-942ec9e824e3: Pushed
-beb0e4399357: Pushed
-d279464185ce: Pushed
-b5087dd52968: Pushed
-40c5ad9fa187: Pushed
-fe83532d601e: Mounted from lkschu/uhd
-752dc624a4bb: Pushed
-5c77171448ea: Mounted from lkschu/uhd
-7c1216be9071: Pushed
-73a82e019aa7: Mounted from lkschu/uhd
-1c4323bc2c10: Mounted from lkschu/uhd
-2ca189721fec: Mounted from lkschu/uhd
-0f66057c0ac5: Mounted from lkschu/uhd
-39babf8e7471: Mounted from lkschu/uhd
-689a56030c96: Mounted from lkschu/uhd
-07e969afd120: Mounted from lkschu/uhd
-90c58fe780a5: Mounted from lkschu/uhd
+6227c4ab1845: Waiting
+3a911006ed5c: Waiting
+c839517f1f1e: Waiting
+d435cd457d86: Pushed
+5a81a3a40560: Pushed
+61245574c29a: Pushed
+55e3cf1dcf5b: Pushed
+c665ff505bcc: Pushed
+8e3bc4c9b88a: Pushed
+c17eff6a7c29: Mounted from lkschu/uhd
+4256eb7d9ff2: Mounted from lkschu/uhd
+128a094d1334: Pushed
+27c9e42fd8a8: Mounted from lkschu/uhd
+97deb2f9a43e: Mounted from lkschu/uhd
+c22403d7496b: Pushed
+119c318f4db5: Mounted from lkschu/uhd
+0dd2163918ee: Mounted from lkschu/uhd
+a15c1e4db831: Mounted from lkschu/uhd
+0dac4502025d: Mounted from lkschu/uhd
+6227c4ab1845: Mounted from lkschu/uhd
 346f14bf17b9: Layer already exists
-d790657ad8c9: Mounted from lkschu/uhd
-46c69777d37e: Pushed
-24.10_4.0: digest: sha256:a464f59ac95d7af3078876e41db4edafba87afcfc673670c264ca8b4450978c5 size: 4749
+3a911006ed5c: Mounted from lkschu/uhd
+c839517f1f1e: Mounted from lkschu/uhd
+5ba1457a8561: Pushed
+24.10_4.0: digest: sha256:690428fc51dc0573dc5b529f7850cf3474aa8da3b7c766e5ec3867db5ca6a023 size: 4750

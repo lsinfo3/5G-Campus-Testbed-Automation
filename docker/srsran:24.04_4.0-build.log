@@ -1,0 +1,1218 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  3.072kB
+Step 1/20 : FROM        lkschu/uhd:4.0
+ ---> ef8d1f8eb49c
+Step 2/20 : MAINTAINER  Lukas K. Schumann
+ ---> Running in f1d7f678a7b0
+ ---> Removed intermediate container f1d7f678a7b0
+ ---> b2c29dea6bd2
+Step 3/20 : ENV         security_updates_as_of 2024-06-27
+ ---> Running in 17624569b130
+ ---> Removed intermediate container 17624569b130
+ ---> 8cc2ec592f48
+Step 4/20 : ARG         DEBIAN_FRONTEND=noninteractive
+ ---> Running in 9e470f97cde3
+ ---> Removed intermediate container 9e470f97cde3
+ ---> e29ec6cf6537
+Step 5/20 : ARG         SRS_VERSION=24.04
+ ---> Running in 2b0c489ebdec
+ ---> Removed intermediate container 2b0c489ebdec
+ ---> 6385ec6f0dab
+Step 6/20 : ARG         SRS_VERSION_COMMIT=c33cacba7d940e734ac7bad08935cbc35578fad9
+ ---> Running in 1d6a5133e72c
+ ---> Removed intermediate container 1d6a5133e72c
+ ---> 8dba20685918
+Step 7/20 : ARG         MAKEWIDTH=8
+ ---> Running in 3bc92ada353e
+ ---> Removed intermediate container 3bc92ada353e
+ ---> dce2cfbf37a6
+Step 8/20 : RUN         apt-get update
+ ---> Running in f7736e3c4477
+Get:1 http://archive.ubuntu.com/ubuntu jammy InRelease [270 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Get:4 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [266 kB]
+Get:6 http://archive.ubuntu.com/ubuntu jammy/main amd64 Packages [1792 kB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [17.5 MB]
+Get:8 http://archive.ubuntu.com/ubuntu jammy/restricted amd64 Packages [164 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1561 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [3351 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [4741 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [55.7 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [83.2 kB]
+Get:14 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [35.2 kB]
+Get:15 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1254 kB]
+Get:16 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [47.7 kB]
+Get:17 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [4587 kB]
+Get:18 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3040 kB]
+Fetched 39.1 MB in 2s (18.3 MB/s)
+Reading package lists...
+ ---> Removed intermediate container f7736e3c4477
+ ---> 44b66339dc10
+Step 9/20 : RUN         apt-get -y install -q                     cmake                     make                     gcc                     g++                     pkg-config                     libfftw3-dev                     libmbedtls-dev                     libsctp-dev                     libyaml-cpp-dev                     libgtest-dev
+ ---> Running in af72a0ed94d5
+Reading package lists...
+Building dependency tree...
+Reading state information...
+g++ is already the newest version (4:11.2.0-1ubuntu1).
+gcc is already the newest version (4:11.2.0-1ubuntu1).
+gcc set to manually installed.
+make is already the newest version (4.3-4.1build1).
+make set to manually installed.
+cmake is already the newest version (3.22.1-1ubuntu1.22.04.2).
+The following additional packages will be installed:
+  googletest libfftw3-bin libfftw3-double3 libfftw3-long3 libfftw3-quad3
+  libfftw3-single3 libmbedcrypto7 libmbedtls14 libmbedx509-1 libsctp1
+  libyaml-cpp0.7
+Suggested packages:
+  libfftw3-doc libmbedtls-doc lksctp-tools
+The following NEW packages will be installed:
+  googletest libfftw3-bin libfftw3-dev libfftw3-double3 libfftw3-long3
+  libfftw3-quad3 libfftw3-single3 libgtest-dev libmbedcrypto7 libmbedtls-dev
+  libmbedtls14 libmbedx509-1 libsctp-dev libsctp1 libyaml-cpp-dev
+  libyaml-cpp0.7 pkg-config
+0 upgraded, 17 newly installed, 0 to remove and 13 not upgraded.
+Need to get 6783 kB of archives.
+After this operation, 36.1 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 googletest all 1.11.0-3 [541 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfftw3-double3 amd64 3.3.8-2ubuntu8 [770 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfftw3-long3 amd64 3.3.8-2ubuntu8 [335 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfftw3-quad3 amd64 3.3.8-2ubuntu8 [614 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfftw3-single3 amd64 3.3.8-2ubuntu8 [800 kB]
+Get:6 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfftw3-bin amd64 3.3.8-2ubuntu8 [35.5 kB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfftw3-dev amd64 3.3.8-2ubuntu8 [2101 kB]
+Get:8 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libgtest-dev amd64 1.11.0-3 [250 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libmbedcrypto7 amd64 2.28.0-1build1 [204 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libmbedx509-1 amd64 2.28.0-1build1 [47.2 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libmbedtls14 amd64 2.28.0-1build1 [82.7 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libmbedtls-dev amd64 2.28.0-1build1 [629 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy/main amd64 libsctp1 amd64 1.0.19+dfsg-1build1 [9370 B]
+Get:14 http://archive.ubuntu.com/ubuntu jammy/main amd64 libsctp-dev amd64 1.0.19+dfsg-1build1 [51.1 kB]
+Get:15 http://archive.ubuntu.com/ubuntu jammy/main amd64 libyaml-cpp0.7 amd64 0.7.0+dfsg-8build1 [97.7 kB]
+Get:16 http://archive.ubuntu.com/ubuntu jammy/main amd64 libyaml-cpp-dev amd64 0.7.0+dfsg-8build1 [169 kB]
+Get:17 http://archive.ubuntu.com/ubuntu jammy/main amd64 pkg-config amd64 0.29.2-1ubuntu3 [48.2 kB]
+[91mdebconf: delaying package configuration, since apt-utils is not installed
+[0mFetched 6783 kB in 0s (27.0 MB/s)
+Selecting previously unselected package googletest.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46485 files and directories currently installed.)
+Preparing to unpack .../00-googletest_1.11.0-3_all.deb ...
+Unpacking googletest (1.11.0-3) ...
+Selecting previously unselected package libfftw3-double3:amd64.
+Preparing to unpack .../01-libfftw3-double3_3.3.8-2ubuntu8_amd64.deb ...
+Unpacking libfftw3-double3:amd64 (3.3.8-2ubuntu8) ...
+Selecting previously unselected package libfftw3-long3:amd64.
+Preparing to unpack .../02-libfftw3-long3_3.3.8-2ubuntu8_amd64.deb ...
+Unpacking libfftw3-long3:amd64 (3.3.8-2ubuntu8) ...
+Selecting previously unselected package libfftw3-quad3:amd64.
+Preparing to unpack .../03-libfftw3-quad3_3.3.8-2ubuntu8_amd64.deb ...
+Unpacking libfftw3-quad3:amd64 (3.3.8-2ubuntu8) ...
+Selecting previously unselected package libfftw3-single3:amd64.
+Preparing to unpack .../04-libfftw3-single3_3.3.8-2ubuntu8_amd64.deb ...
+Unpacking libfftw3-single3:amd64 (3.3.8-2ubuntu8) ...
+Selecting previously unselected package libfftw3-bin.
+Preparing to unpack .../05-libfftw3-bin_3.3.8-2ubuntu8_amd64.deb ...
+Unpacking libfftw3-bin (3.3.8-2ubuntu8) ...
+Selecting previously unselected package libfftw3-dev:amd64.
+Preparing to unpack .../06-libfftw3-dev_3.3.8-2ubuntu8_amd64.deb ...
+Unpacking libfftw3-dev:amd64 (3.3.8-2ubuntu8) ...
+Selecting previously unselected package libgtest-dev:amd64.
+Preparing to unpack .../07-libgtest-dev_1.11.0-3_amd64.deb ...
+Unpacking libgtest-dev:amd64 (1.11.0-3) ...
+Selecting previously unselected package libmbedcrypto7:amd64.
+Preparing to unpack .../08-libmbedcrypto7_2.28.0-1build1_amd64.deb ...
+Unpacking libmbedcrypto7:amd64 (2.28.0-1build1) ...
+Selecting previously unselected package libmbedx509-1:amd64.
+Preparing to unpack .../09-libmbedx509-1_2.28.0-1build1_amd64.deb ...
+Unpacking libmbedx509-1:amd64 (2.28.0-1build1) ...
+Selecting previously unselected package libmbedtls14:amd64.
+Preparing to unpack .../10-libmbedtls14_2.28.0-1build1_amd64.deb ...
+Unpacking libmbedtls14:amd64 (2.28.0-1build1) ...
+Selecting previously unselected package libmbedtls-dev:amd64.
+Preparing to unpack .../11-libmbedtls-dev_2.28.0-1build1_amd64.deb ...
+Unpacking libmbedtls-dev:amd64 (2.28.0-1build1) ...
+Selecting previously unselected package libsctp1:amd64.
+Preparing to unpack .../12-libsctp1_1.0.19+dfsg-1build1_amd64.deb ...
+Unpacking libsctp1:amd64 (1.0.19+dfsg-1build1) ...
+Selecting previously unselected package libsctp-dev:amd64.
+Preparing to unpack .../13-libsctp-dev_1.0.19+dfsg-1build1_amd64.deb ...
+Unpacking libsctp-dev:amd64 (1.0.19+dfsg-1build1) ...
+Selecting previously unselected package libyaml-cpp0.7:amd64.
+Preparing to unpack .../14-libyaml-cpp0.7_0.7.0+dfsg-8build1_amd64.deb ...
+Unpacking libyaml-cpp0.7:amd64 (0.7.0+dfsg-8build1) ...
+Selecting previously unselected package libyaml-cpp-dev.
+Preparing to unpack .../15-libyaml-cpp-dev_0.7.0+dfsg-8build1_amd64.deb ...
+Unpacking libyaml-cpp-dev (0.7.0+dfsg-8build1) ...
+Selecting previously unselected package pkg-config.
+Preparing to unpack .../16-pkg-config_0.29.2-1ubuntu3_amd64.deb ...
+Unpacking pkg-config (0.29.2-1ubuntu3) ...
+Setting up libfftw3-single3:amd64 (3.3.8-2ubuntu8) ...
+Setting up libfftw3-long3:amd64 (3.3.8-2ubuntu8) ...
+Setting up googletest (1.11.0-3) ...
+Setting up libmbedcrypto7:amd64 (2.28.0-1build1) ...
+Setting up libyaml-cpp0.7:amd64 (0.7.0+dfsg-8build1) ...
+Setting up libfftw3-quad3:amd64 (3.3.8-2ubuntu8) ...
+Setting up pkg-config (0.29.2-1ubuntu3) ...
+Setting up libfftw3-double3:amd64 (3.3.8-2ubuntu8) ...
+Setting up libsctp1:amd64 (1.0.19+dfsg-1build1) ...
+Setting up libgtest-dev:amd64 (1.11.0-3) ...
+Setting up libmbedx509-1:amd64 (2.28.0-1build1) ...
+Setting up libmbedtls14:amd64 (2.28.0-1build1) ...
+Setting up libfftw3-bin (3.3.8-2ubuntu8) ...
+Setting up libyaml-cpp-dev (0.7.0+dfsg-8build1) ...
+Setting up libmbedtls-dev:amd64 (2.28.0-1build1) ...
+Setting up libsctp-dev:amd64 (1.0.19+dfsg-1build1) ...
+Setting up libfftw3-dev:amd64 (3.3.8-2ubuntu8) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.9) ...
+ ---> Removed intermediate container af72a0ed94d5
+ ---> 08cc970824ef
+Step 10/20 : RUN          rm -rf /var/lib/apt/lists/*
+ ---> Running in f97051baa276
+ ---> Removed intermediate container f97051baa276
+ ---> d492b3e11741
+Step 11/20 : RUN          mkdir -p /usr/local/src
+ ---> Running in d1c2b8af0e29
+ ---> Removed intermediate container d1c2b8af0e29
+ ---> ba46139a72ac
+Step 12/20 : RUN          git clone https://github.com/srsran/srsRAN_Project.git /usr/local/src/srsRAN
+ ---> Running in bf3b65210bc2
+[91mCloning into '/usr/local/src/srsRAN'...
+[0m ---> Removed intermediate container bf3b65210bc2
+ ---> 2b4954a22e23
+Step 13/20 : RUN          cd /usr/local/src/srsRAN/ && git checkout $SRS_VERSION_COMMIT
+ ---> Running in 307919bcc1b0
+[91mNote: switching to 'c33cacba7d940e734ac7bad08935cbc35578fad9'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at c33cacba7d Update main
+[0m ---> Removed intermediate container 307919bcc1b0
+ ---> 04262b2244b6
+Step 14/20 : RUN          mkdir -p /usr/local/src/srsRAN/build
+ ---> Running in d8864f4e3758
+ ---> Removed intermediate container d8864f4e3758
+ ---> 4955bc84f98f
+Step 15/20 : WORKDIR      /usr/local/src/srsRAN/build
+ ---> Running in a16ebc21f6ea
+ ---> Removed intermediate container a16ebc21f6ea
+ ---> 04d4f3797e40
+Step 16/20 : RUN          cmake ../
+ ---> Running in ff6a798b36e4
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Build type not specified: defaulting to Release.
+-- Performing Test HAS_MAYBE_UNINITIALIZED
+-- Performing Test HAS_MAYBE_UNINITIALIZED - Success
+-- Performing Test HAS_STRINGOP_OVERFLOW
+-- Performing Test HAS_STRINGOP_OVERFLOW - Success
+-- Performing Test HAVE_NON_VIRTUAL_DTOR
+-- Performing Test HAVE_NON_VIRTUAL_DTOR - Success
+-- Performing Test HAVE_SUGGEST_OVERRIDE
+-- Performing Test HAVE_SUGGEST_OVERRIDE - Success
+-- Performing Test HAVE_SHADOW
+-- Performing Test HAVE_SHADOW - Success
+-- Assertion level set to NORMAL
+-- Could NOT find libdw (missing: LIBDW_LIBRARY LIBDW_INCLUDE_DIR) 
+-- Could NOT find libbfd (missing: LIBBFD_LIBRARY LIBBFD_INCLUDE_DIR) 
+-- Could NOT find libdwarf (missing: LIBDWARF_LIBRARY LIBDWARF_INCLUDE_DIR LIBELF_LIBRARY LIBELF_INCLUDE_DIR) 
+-- Found Backward: /usr/local/src/srsRAN/cmake/modules  
+-- Backward-cpp found, but external libraries are missing.
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.2") 
+-- Checking for module 'mbedtls'
+--   No package 'mbedtls' found
+-- MBEDTLS LIBRARIES: /usr/lib/x86_64-linux-gnu/libmbedcrypto.so
+-- MBEDTLS STATIC LIBRARIES: /usr/lib/x86_64-linux-gnu/libmbedcrypto.a
+-- MBEDTLS INCLUDE DIRS: /usr/include
+-- Found MbedTLS: /usr/lib/x86_64-linux-gnu/libmbedcrypto.so  
+-- Checking for module 'fftw3f >= 3.0'
+--   Found fftw3f , version 3.3.8
+-- FFTW3F LIBRARIES: /usr/lib/x86_64-linux-gnu/libfftw3f.so
+-- FFTW3F STATIC LIBRARIES: /usr/lib/x86_64-linux-gnu/libfftw3f.a
+-- FFTW3F INCLUDE DIRS: /usr/include
+-- Found FFTW3F: /usr/lib/x86_64-linux-gnu/libfftw3f.so  
+-- Found GTest: /usr/lib/x86_64-linux-gnu/cmake/GTest/GTestConfig.cmake (found version "1.11.0")  
+-- Found Threads: TRUE  
+-- UHD LIBRARIES /lib/libuhd.so
+-- UHD INCLUDE DIRS /usr/include
+-- Found UHD: /lib/libuhd.so  
+-- Checking for module 'yaml-cpp'
+--   Found yaml-cpp, version 0.7.0
+-- YAMLCPP LIBRARIES: /usr/lib/x86_64-linux-gnu/libyaml-cpp.so
+-- YAMLCPP INCLUDE DIRS: /usr/include
+-- Found YAMLCPP: /usr/lib/x86_64-linux-gnu/libyaml-cpp.so  
+-- Performing Test HAVE_SSE
+-- Performing Test HAVE_SSE - Success
+-- SSE4.1 is enabled - target CPU must support it
+-- Performing Test HAVE_AVX
+-- Performing Test HAVE_AVX - Success
+-- AVX is enabled - target CPU must support it
+-- Performing Test HAVE_AVX2
+-- Performing Test HAVE_AVX2 - Success
+-- AVX2 is enabled - target CPU must support it
+-- Performing Test HAVE_FMA
+-- Performing Test HAVE_FMA - Success
+-- FMA is enabled - target CPU must support it
+-- Performing Test HAVE_AVX512
+-- Performing Test HAVE_AVX512 - Failed
+-- Performing Test HAVE_MARCH
+-- Performing Test HAVE_MARCH - Success
+-- Enabling ccache for C
+-- Enabling ccache for CXX
+-- Found Doxygen: /usr/bin/doxygen (found version "1.9.1") found components: doxygen missing components: dot
+-- Checking for module 'sctp'
+--   No package 'sctp' found
+-- SCTP LIBRARIES: /usr/lib/x86_64-linux-gnu/libsctp.so
+-- SCTP INCLUDE DIRS: /usr/include
+-- Found SCTP: /usr/lib/x86_64-linux-gnu/libsctp.so  
+-- FFT_LIBRARIES: /usr/lib/x86_64-linux-gnu/libfftw3f.so
+-- Building srsRAN version 24.04.0
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /usr/local/src/srsRAN/build
+ ---> Removed intermediate container ff6a798b36e4
+ ---> c43ea6212293
+Step 17/20 : RUN          make -j $MAKEWIDTH
+ ---> Running in 0955a8fbd4fc
+[  0%] Building CXX object lib/du/CMakeFiles/srsran_du_config_validators.dir/du_cell_config_validation.cpp.o
+[  0%] Building CXX object lib/scheduler/cell/CMakeFiles/sched_cell.dir/vrb_alloc.cpp.o
+[  0%] Building CXX object lib/pcap/CMakeFiles/srsran_pcap.dir/backend_pcap_writer.cpp.o
+[  0%] Building CXX object lib/f1u/CMakeFiles/srsran_f1u_du.dir/du/f1u_bearer_impl.cpp.o
+[  0%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/harq_process.cpp.o
+[  0%] Building CXX object lib/scheduler/common_scheduling/CMakeFiles/common_sched.dir/ra_scheduler.cpp.o
+[  0%] Building CXX object lib/du_manager/du_ue/CMakeFiles/du_ue.dir/du_bearer.cpp.o
+[  0%] Building CXX object external/fmt/CMakeFiles/fmt.dir/src/format.cc.o
+[  1%] Building CXX object lib/scheduler/cell/CMakeFiles/sched_cell.dir/resource_block_group.cpp.o
+[  1%] Building CXX object lib/pcap/CMakeFiles/srsran_pcap.dir/dlt_pcap_impl.cpp.o
+[  1%] Building CXX object lib/scheduler/cell/CMakeFiles/sched_cell.dir/resource_grid.cpp.o
+[  1%] Building CXX object lib/f1u/CMakeFiles/srsran_f1u_du.dir/du/f1u_bearer_factory.cpp.o
+[  1%] Building CXX object lib/pcap/CMakeFiles/srsran_pcap.dir/mac_pcap_impl.cpp.o
+[  1%] Building CXX object external/fmt/CMakeFiles/fmt.dir/src/os.cc.o
+[  1%] Building CXX object lib/du_manager/du_ue/CMakeFiles/du_ue.dir/du_ue_bearer_manager.cpp.o
+[  1%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/dl_logical_channel_manager.cpp.o
+[  1%] Linking CXX static library libsrsran_f1u_du.a
+[  1%] Built target srsran_f1u_du
+[  1%] Building CXX object lib/scheduler/cell/CMakeFiles/sched_cell.dir/scheduler_prb.cpp.o
+[  1%] Building CXX object lib/pcap/CMakeFiles/srsran_pcap.dir/pcap_file_writer.cpp.o
+[  1%] Linking CXX static library libfmt.a
+[  1%] Built target fmt
+[  1%] Building CXX object lib/pcap/CMakeFiles/srsran_pcap.dir/rlc_pcap_impl.cpp.o
+[  1%] Building CXX object lib/du/CMakeFiles/srsran_du_config_validators.dir/du_update_config_helpers.cpp.o
+[  1%] Building CXX object lib/scheduler/common_scheduling/CMakeFiles/common_sched.dir/sib_scheduler.cpp.o
+[  1%] Building CXX object lib/du_manager/du_ue/CMakeFiles/du_ue.dir/du_ue_adapters.cpp.o
+[  1%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ul_logical_channel_manager.cpp.o
+[  1%] Building CXX object lib/du_manager/du_ue/CMakeFiles/du_ue.dir/du_ue_controller_impl.cpp.o
+[  1%] Building CXX object lib/pcap/CMakeFiles/srsran_pcap.dir/pcap_rlc_pdu_context.cpp.o
+[  1%] Built target sched_cell
+[  2%] Building CXX object lib/scheduler/common_scheduling/CMakeFiles/common_sched.dir/ssb_scheduler.cpp.o
+[  2%] Building CXX object lib/fapi/message_buffering/CMakeFiles/srsran_fapi_message_buffering.dir/buffered_decorator_factories.cpp.o
+[  2%] Building CXX object lib/scheduler/common_scheduling/CMakeFiles/common_sched.dir/prach_scheduler.cpp.o
+[  2%] Linking CXX static library libsrsran_pcap.a
+[  2%] Built target srsran_pcap
+[  2%] Building CXX object lib/phy/upper/CMakeFiles/srsran_upper_phy_support.dir/rb_allocation.cpp.o
+[  2%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ta_manager.cpp.o
+[  2%] Building CXX object lib/fapi/message_buffering/CMakeFiles/srsran_fapi_message_buffering.dir/buffered_decorator_impl.cpp.o
+[  2%] Linking CXX static library libsrsran_du_config_validators.a
+[  2%] Built target srsran_du_config_validators
+[  2%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ue_channel_state_manager.cpp.o
+[  2%] Building CXX object lib/phy/upper/CMakeFiles/srsran_upper_phy_support.dir/rx_buffer_pool_impl.cpp.o
+[  2%] Building CXX object lib/fapi/message_buffering/CMakeFiles/srsran_fapi_message_buffering.dir/buffered_slot_gateway_impl.cpp.o
+[  2%] Building CXX object lib/phy/generic_functions/precoding/CMakeFiles/srsran_channel_precoder.dir/channel_precoder_impl.cpp.o
+[  2%] Building CXX object lib/fapi/message_buffering/CMakeFiles/srsran_fapi_message_buffering.dir/buffered_slot_gateway_task_dispatcher.cpp.o
+[  2%] Building CXX object lib/scheduler/common_scheduling/CMakeFiles/common_sched.dir/paging_scheduler.cpp.o
+[  2%] Building CXX object lib/phy/lower/processors/adaptors/CMakeFiles/srsran_lower_phy_adaptors.dir/processor_handler_adaptor.cpp.o
+[  2%] Building CXX object lib/phy/generic_functions/precoding/CMakeFiles/srsran_channel_precoder.dir/channel_precoder_generic.cpp.o
+[  2%] Linking CXX static library libdu_ue.a
+[  2%] Built target du_ue
+[  2%] Building CXX object lib/phy/generic_functions/precoding/CMakeFiles/srsran_channel_precoder.dir/precoding_factories.cpp.o
+[  2%] Building CXX object lib/phy/upper/CMakeFiles/srsran_upper_phy_support.dir/vrb_to_prb_mapper.cpp.o
+[  2%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ue_link_adaptation_controller.cpp.o
+[  2%] Building CXX object lib/phy/lower/processors/adaptors/CMakeFiles/srsran_lower_phy_adaptors.dir/processor_notifier_adaptor.cpp.o
+[  2%] Linking CXX static library libsrsran_upper_phy_support.a
+[  2%] Building CXX object lib/scheduler/common_scheduling/CMakeFiles/common_sched.dir/csi_rs_scheduler.cpp.o
+[  2%] Building CXX object lib/phy/generic_functions/precoding/CMakeFiles/srsran_channel_precoder.dir/channel_precoder_avx2.cpp.o
+[  2%] Building CXX object lib/phy/generic_functions/precoding/CMakeFiles/srsran_channel_precoder.dir/channel_precoder_avx512.cpp.o
+[  2%] Built target srsran_upper_phy_support
+[  2%] Building CXX object lib/phy/upper/channel_coding/CMakeFiles/srsran_crc_calculator.dir/crc_calculator_generic_impl.cpp.o
+[  2%] Linking CXX static library libsrsran_lower_phy_adaptors.a
+[  2%] Built target srsran_lower_phy_adaptors
+[  2%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ue.cpp.o
+[  2%] Building CXX object lib/fapi/message_buffering/CMakeFiles/srsran_fapi_message_buffering.dir/buffered_slot_time_notifier_decorator.cpp.o
+[  2%] Building CXX object lib/phy/upper/channel_coding/CMakeFiles/srsran_crc_calculator.dir/crc_calculator_lut_impl.cpp.o
+[  2%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ue_cell.cpp.o
+[  2%] Linking CXX static library libsrsran_channel_precoder.a
+[  2%] Built target srsran_channel_precoder
+[  2%] Building CXX object lib/phy/upper/channel_processors/CMakeFiles/srsran_pucch_processor.dir/pucch_processor_impl.cpp.o
+[  2%] Building CXX object lib/scheduler/common_scheduling/CMakeFiles/common_sched.dir/si_message_scheduler.cpp.o
+[  2%] Building CXX object lib/phy/upper/channel_coding/CMakeFiles/srsran_crc_calculator.dir/crc_calculator_clmul_impl.cpp.o
+[  2%] Linking CXX static library libsrsran_fapi_message_buffering.a
+[  2%] Built target srsran_fapi_message_buffering
+[  2%] Building CXX object lib/phy/upper/channel_processors/CMakeFiles/srsran_pucch_detector.dir/pucch_detector_format0.cpp.o
+[  2%] Building CXX object lib/phy/upper/channel_processors/CMakeFiles/srsran_pucch_demodulator.dir/pucch_demodulator_impl.cpp.o
+[  2%] Building CXX object lib/phy/upper/channel_processors/CMakeFiles/srsran_pucch_detector.dir/pucch_detector_impl.cpp.o
+[  2%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ue_cell_grid_allocator.cpp.o
+[  2%] Linking CXX static library libsrsran_crc_calculator.a
+[  2%] Built target srsran_crc_calculator
+[  2%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ue_event_manager.cpp.o
+[  2%] Linking CXX static library libsrsran_pucch_processor.a
+[  2%] Built target srsran_pucch_processor
+[  2%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ue_fallback_scheduler.cpp.o
+[  2%] Building CXX object lib/support/version/CMakeFiles/srsran_version.dir/version.cpp.o
+[  2%] Linking CXX static library libsrsran_version.a
+[  2%] Built target srsran_version
+[  2%] Building CXX object apps/units/cu_cp/CMakeFiles/srsran_cu_cp_app_unit.dir/cu_cp_application_unit_impl.cpp.o
+[  3%] Linking CXX static library libsrsran_pucch_demodulator.a
+[  3%] Built target common_sched
+[  3%] Building CXX object apps/units/cu_cp/CMakeFiles/srsran_cu_cp_app_unit.dir/cu_cp_builder.cpp.o
+[  3%] Built target srsran_pucch_demodulator
+[  3%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ue_scheduler_impl.cpp.o
+[  3%] Linking CXX static library libsrsran_pucch_detector.a
+[  3%] Built target srsran_pucch_detector
+[  3%] Building CXX object lib/scheduler/ue_scheduling/CMakeFiles/ue_sched.dir/ue_repository.cpp.o
+[  3%] Building CXX object lib/f1u/CMakeFiles/srsran_f1u_cu_up.dir/cu_up/f1u_bearer_impl.cpp.o
+[  3%] Building CXX object lib/f1u/CMakeFiles/srsran_f1u_cu_up.dir/cu_up/f1u_bearer_factory.cpp.o
+[  3%] Building CXX object apps/units/cu_cp/CMakeFiles/srsran_cu_cp_app_unit.dir/cu_cp_config_translators.cpp.o
+[  3%] Linking CXX static library libsrsran_f1u_cu_up.a
+[  3%] Built target srsran_f1u_cu_up
+[  3%] Building CXX object apps/units/cu_cp/CMakeFiles/srsran_cu_cp_app_unit.dir/cu_cp_unit_config_validator.cpp.o
+[  3%] Building CXX object lib/security/CMakeFiles/srsran_security.dir/security.cpp.o
+[  3%] Building CXX object lib/sdap/CMakeFiles/srsran_sdap.dir/sdap_factory.cpp.o
+[  3%] Building CXX object lib/security/CMakeFiles/srsran_security.dir/s3g.cpp.o
+[  3%] Building CXX object apps/units/cu_cp/CMakeFiles/srsran_cu_cp_app_unit.dir/cu_cp_unit_config_cli11_schema.cpp.o
+[  3%] Built target ue_sched
+[  3%] Building CXX object lib/security/CMakeFiles/srsran_security.dir/zuc.cpp.o
+[  3%] Building CXX object apps/services/CMakeFiles/srsran_app_services.dir/console_helper.cpp.o
+[  3%] Building CXX object apps/services/CMakeFiles/srsran_app_services.dir/metrics_log_helper.cpp.o
+[  3%] Building CXX object lib/cu_cp/up_resource_manager/CMakeFiles/srsran_up_resource_manager.dir/up_resource_manager_factory.cpp.o
+[  3%] Building CXX object lib/cu_cp/up_resource_manager/CMakeFiles/srsran_up_resource_manager.dir/up_resource_manager_impl.cpp.o
+[  3%] Linking CXX static library libsrsran_security.a
+[  3%] Built target srsran_security
+[  3%] Building CXX object lib/f1u/CMakeFiles/srsgnb_app_f1u_cu_up_split_connector.dir/cu_up/split_connector/f1u_split_connector.cpp.o
+[  3%] Linking CXX static library libsrsran_sdap.a
+[  3%] Built target srsran_sdap
+[  3%] Building CXX object apps/services/CMakeFiles/srsran_app_services.dir/e2_metric_connector_manager.cpp.o
+[  4%] Building CXX object lib/cu_cp/up_resource_manager/CMakeFiles/srsran_up_resource_manager.dir/up_resource_manager_helpers.cpp.o
+-- Generating build information
+[  4%] Built target gen_build_info
+[  4%] Building CXX object apps/units/flexible_du/fapi/CMakeFiles/srsran_fapi_app_unit.dir/fapi_config_cli11_schema.cpp.o
+[  5%] Building CXX object apps/services/CMakeFiles/srsran_app_services.dir/metrics_hub.cpp.o
+[  6%] Building CXX object apps/units/flexible_du/support/CMakeFiles/srsran_flexible_du_helpers.dir/cli11_cpu_affinities_parser_helper.cpp.o
+[  6%] Building CXX object apps/services/CMakeFiles/srsran_app_services.dir/metrics_plotter_json.cpp.o
+[  6%] Linking CXX static library libsrsgnb_app_f1u_cu_up_split_connector.a
+[  6%] Built target srsgnb_app_f1u_cu_up_split_connector
+[  6%] Building CXX object apps/services/CMakeFiles/srsran_app_services.dir/metrics_plotter_stdout.cpp.o
+[  6%] Building CXX object apps/services/CMakeFiles/srsran_app_services.dir/rlc_metrics_plotter_json.cpp.o
+[  6%] Building CXX object apps/services/CMakeFiles/srsran_app_services.dir/worker_manager.cpp.o
+[  6%] Building CXX object lib/f1u/CMakeFiles/srsgnb_app_f1u_connector.dir/local_connector/f1u_local_connector.cpp.o
+[  6%] Linking CXX static library libsrsran_flexible_du_helpers.a
+[  6%] Built target srsran_flexible_du_helpers
+[  6%] Building CXX object lib/f1u/CMakeFiles/srsgnb_app_f1u_du_split_connector.dir/du/split_connector/f1u_split_connector.cpp.o
+[  6%] Building CXX object tests/unittests/fapi/CMakeFiles/srsran_fapi_message_builder_test_helpers.dir/message_builder_helpers.cpp.o
+[  6%] Linking CXX static library libsrsran_up_resource_manager.a
+[  6%] Built target srsran_up_resource_manager
+[  6%] Building CXX object tests/unittests/fapi_adaptor/mac/messages/CMakeFiles/srsran_mac_translator_helpers.dir/helpers.cpp.o
+[  6%] Building CXX object tests/unittests/support/CMakeFiles/function_signature_test.dir/function_signature_test.cpp.o
+[  6%] Linking CXX executable function_signature_test
+[  6%] Built target function_signature_test
+[  6%] Building CXX object tests/integrationtests/rlc/CMakeFiles/rlc_stress_test_mac.dir/rlc_stress_test_mac.cpp.o
+[  7%] Linking CXX static library libsrsgnb_app_f1u_connector.a
+[  7%] Built target srsgnb_app_f1u_connector
+[  7%] Linking CXX static library libsrsgnb_app_f1u_du_split_connector.a
+[  7%] Building CXX object tests/integrationtests/rlc/CMakeFiles/rlc_stress_test_traffic.dir/rlc_stress_test_traffic.cpp.o
+[  7%] Built target srsgnb_app_f1u_du_split_connector
+[  7%] Building CXX object lib/srslog/CMakeFiles/srslog.dir/backend_worker.cpp.o
+[  7%] Building CXX object lib/srslog/CMakeFiles/srslog.dir/srslog.cpp.o
+[  7%] Linking CXX static library libsrsran_mac_translator_helpers.a
+[  7%] Built target srsran_mac_translator_helpers
+[  7%] Building CXX object lib/support/build_info/CMakeFiles/srsran_build_info.dir/build_info.cpp.o
+[  7%] Linking CXX static library libsrsran_build_info.a
+[  7%] Linking CXX static library librlc_stress_test_mac.a
+[  7%] Built target srsran_build_info
+[  7%] Building CXX object lib/srslog/CMakeFiles/srslog.dir/srslog_c.cpp.o
+[  7%] Linking CXX static library librlc_stress_test_traffic.a
+[  7%] Built target rlc_stress_test_mac
+[  7%] Building CXX object lib/srslog/CMakeFiles/srslog.dir/event_trace.cpp.o
+[  7%] Built target rlc_stress_test_traffic
+[  7%] Building CXX object lib/srslog/CMakeFiles/srslog.dir/formatters/json_formatter.cpp.o
+[  7%] Linking CXX static library libsrsran_fapi_message_builder_test_helpers.a
+[  7%] Built target srsran_fapi_message_builder_test_helpers
+[  7%] Building CXX object lib/srslog/CMakeFiles/srslog.dir/formatters/text_formatter.cpp.o
+[  7%] Linking CXX static library libsrsran_fapi_app_unit.a
+[  7%] Built target srsran_fapi_app_unit
+[  7%] Linking CXX static library libsrsran_app_services.a
+[  7%] Built target srsran_app_services
+[  7%] Linking CXX static library libsrslog.a
+[  7%] Built target srslog
+[  7%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/cause/ngap_cause_converters.cpp.o
+[  7%] Building CXX object lib/support/network/CMakeFiles/srsran_network.dir/transport_layer_address.cpp.o
+[  8%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/dl_csi_pdu.cpp.o
+[  9%] Building CXX object lib/fapi_adaptor/phy/CMakeFiles/srsran_phy_to_fapi_translator.dir/phy_to_fapi_error_event_translator.cpp.o
+[  9%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/accumulate.cpp.o
+[  9%] Building CXX object lib/fapi/loggers/CMakeFiles/srsran_fapi_loggers.dir/message_loggers.cpp.o
+[  9%] Building CXX object lib/radio/uhd/CMakeFiles/srsran_radio_uhd.dir/radio_config_uhd_validator.cpp.o
+[  9%] Linking CXX static library libsrsran_cu_cp_app_unit.a
+[  9%] Built target srsran_cu_cp_app_unit
+[  9%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/add.cpp.o
+[  9%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/cause/f1ap_cause_converters.cpp.o
+[  9%] Building CXX object lib/support/network/CMakeFiles/srsran_network.dir/io_broker_factory.cpp.o
+[  9%] Building CXX object lib/support/network/CMakeFiles/srsran_network.dir/io_broker_epoll.cpp.o
+[  9%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/dl_pdcch_pdu.cpp.o
+[  9%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/aligned_vec.cpp.o
+[  9%] Building CXX object lib/fapi_adaptor/phy/CMakeFiles/srsran_phy_to_fapi_translator.dir/phy_to_fapi_results_event_translator.cpp.o
+[  9%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/cause/e1ap_cause_converters.cpp.o
+[ 10%] Building CXX object lib/fapi/loggers/CMakeFiles/srsran_fapi_loggers.dir/logging_decorator_factories.cpp.o
+[ 10%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/bit.cpp.o
+[ 10%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/csi_report/csi_report_config_helpers.cpp.o
+[ 10%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/csi_report/csi_report_on_pucch_helpers.cpp.o
+[ 10%] Building CXX object lib/fapi/loggers/CMakeFiles/srsran_fapi_loggers.dir/logging_slot_data_notifier_decorator.cpp.o
+[ 10%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/dl_pdsch_pdu.cpp.o
+[ 10%] Building CXX object lib/fapi/loggers/CMakeFiles/srsran_fapi_loggers.dir/logging_slot_error_notifier_decorator.cpp.o
+[ 10%] Building CXX object lib/support/network/CMakeFiles/srsran_network.dir/io_timer_source.cpp.o
+[ 10%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/clip.cpp.o
+[ 10%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/csi_report/csi_report_on_pusch_helpers.cpp.o
+[ 10%] Building CXX object lib/fapi/loggers/CMakeFiles/srsran_fapi_loggers.dir/logging_slot_gateway_decorator.cpp.o
+[ 11%] Building CXX object lib/fapi_adaptor/phy/CMakeFiles/srsran_phy_to_fapi_translator.dir/phy_to_fapi_time_event_translator.cpp.o
+[ 11%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/dl_ssb_pdu.cpp.o
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/compare.cpp.o
+[ 11%] Building CXX object lib/support/network/CMakeFiles/srsran_network.dir/sctp_socket.cpp.o
+[ 11%] Building CXX object lib/fapi/loggers/CMakeFiles/srsran_fapi_loggers.dir/logging_slot_time_notifier_decorator.cpp.o
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/conversion.cpp.o
+[ 11%] Linking CXX static library libsrsran_fapi_loggers.a
+[ 11%] Built target srsran_fapi_loggers
+[ 11%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/message_validators.cpp.o
+[ 11%] Building CXX object lib/support/network/CMakeFiles/srsran_network.dir/sockets.cpp.o
+[ 11%] Building CXX object lib/ofh/ecpri/CMakeFiles/srsran_ofh_ecpri.dir/ecpri_factories.cpp.o
+[ 11%] Linking CXX static library libsrsran_phy_to_fapi_translator.a
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_cplane_message_builder_dynamic_compression_impl.cpp.o
+[ 11%] Built target srsran_phy_to_fapi_translator
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_cplane_message_builder_impl.cpp.o
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/convolution.cpp.o
+[ 11%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/csi_report/csi_report_on_puxch_helpers.cpp.o
+[ 11%] Building CXX object lib/ofh/ecpri/CMakeFiles/srsran_ofh_ecpri.dir/ecpri_packet_builder_impl.cpp.o
+[ 11%] Building CXX object lib/radio/uhd/CMakeFiles/srsran_radio_uhd.dir/radio_uhd_impl.cpp.o
+[ 11%] Linking CXX static library libsrsran_network.a
+[ 11%] Built target srsran_network
+[ 11%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/tx_precoding_and_beamforming_pdu.cpp.o
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_cplane_message_builder_static_compression_impl.cpp.o
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_serdes_factories.cpp.o
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/division.cpp.o
+[ 11%] Building CXX object lib/ofh/ecpri/CMakeFiles/srsran_ofh_ecpri.dir/ecpri_packet_decoder_impl.cpp.o
+[ 11%] Building CXX object lib/radio/uhd/CMakeFiles/srsran_radio_uhd.dir/radio_uhd_rx_stream.cpp.o
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_uplane_message_builder_impl.cpp.o
+[ 11%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/uci_pdus.cpp.o
+[ 11%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/csi_rs/csi_rs_pattern.cpp.o
+[ 11%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/csi_rs/csi_rs_config_helpers.cpp.o
+[ 11%] Linking CXX static library libsrsran_ofh_ecpri.a
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/dot_prod.cpp.o
+[ 11%] Built target srsran_ofh_ecpri
+[ 11%] Building CXX object lib/radio/uhd/CMakeFiles/srsran_radio_uhd.dir/radio_uhd_tx_stream.cpp.o
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_uplane_message_builder_dynamic_compression_impl.cpp.o
+[ 11%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/csi_rs/frequency_allocation_type.cpp.o
+[ 11%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/ul_prach_pdu.cpp.o
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/modulus_square.cpp.o
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_uplane_message_builder_static_compression_impl.cpp.o
+[ 11%] Building CXX object lib/ru/dummy/CMakeFiles/srsran_ru_dummy.dir/ru_dummy_factory.cpp.o
+[ 11%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pdcch/cce_to_prb_mapping.cpp.o
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_uplane_message_decoder_impl.cpp.o
+[ 11%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/ul_pucch_pdu.cpp.o
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/prod.cpp.o
+[ 11%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pdcch/dci_packing.cpp.o
+[ 11%] Building CXX object lib/ru/dummy/CMakeFiles/srsran_ru_dummy.dir/ru_dummy_impl.cpp.o
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/sc_prod.cpp.o
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_uplane_message_decoder_dynamic_compression_impl.cpp.o
+[ 11%] Building CXX object lib/fapi/validators/CMakeFiles/srsran_fapi_validators.dir/ul_pusch_pdu.cpp.o
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/subtract.cpp.o
+[ 11%] Building CXX object lib/srsvec/CMakeFiles/srsvec.dir/unwrap.cpp.o
+[ 11%] Building CXX object lib/ofh/serdes/CMakeFiles/srsran_ofh_message_serdes.dir/ofh_uplane_message_decoder_static_compression_impl.cpp.o
+[ 11%] Linking CXX static library libsrsran_ru_dummy.a
+[ 11%] Built target srsran_ru_dummy
+[ 11%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pdcch/pdcch_candidates.cpp.o
+[ 11%] Building CXX object tests/unittests/adt/CMakeFiles/bounded_bitset_test.dir/bounded_bitset_test.cpp.o
+[ 12%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pdcch/pdcch_type0_css_coreset_config.cpp.o
+[ 12%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pdcch/pdcch_type0_css_occasions.cpp.o
+[ 12%] Linking CXX static library libsrsvec.a
+[ 12%] Built target srsvec
+[ 12%] Building CXX object tests/unittests/adt/CMakeFiles/interval_test.dir/interval_test.cpp.o
+[ 12%] Linking CXX static library libsrsran_fapi_validators.a
+[ 12%] Built target srsran_fapi_validators
+[ 12%] Building CXX object tests/unittests/adt/CMakeFiles/circular_map_test.dir/circular_map_test.cpp.o
+[ 12%] Linking CXX static library libsrsran_radio_uhd.a
+[ 12%] Built target srsran_radio_uhd
+[ 12%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pdcch/search_space.cpp.o
+[ 12%] Linking CXX static library libsrsran_ofh_message_serdes.a
+[ 12%] Built target srsran_ofh_message_serdes
+[ 12%] Building CXX object tests/unittests/adt/CMakeFiles/circular_map_test_alt.dir/circular_map_test_alt.cpp.o
+[ 12%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pdsch/dlsch_info.cpp.o
+[ 12%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pdsch/pdsch_mcs.cpp.o
+[ 12%] Building CXX object tests/unittests/adt/CMakeFiles/expected_test.dir/expected_test.cpp.o
+[ 12%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pdsch/pdsch_antenna_port_mapping.cpp.o
+[ 12%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/prach/prach_configuration.cpp.o
+[ 13%] Building CXX object tests/unittests/adt/CMakeFiles/tiny_optional_test.dir/tiny_optional_test.cpp.o
+[ 13%] Linking CXX executable circular_map_test
+[ 13%] Built target circular_map_test
+[ 13%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/prach/prach_cyclic_shifts.cpp.o
+[ 13%] Linking CXX executable interval_test
+[ 13%] Linking CXX executable circular_map_test_alt
+[ 13%] Built target interval_test
+[ 13%] Building CXX object tests/unittests/adt/CMakeFiles/slotted_array_test.dir/slotted_array_test.cpp.o
+[ 13%] Linking CXX executable expected_test
+[ 13%] Built target expected_test
+[ 13%] Built target circular_map_test_alt
+[ 13%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/prach/prach_frequency_mapping.cpp.o
+[ 13%] Building CXX object tests/unittests/adt/CMakeFiles/span_formatter_test.dir/span_formatter_test.cpp.o
+[ 13%] Building CXX object tests/unittests/adt/CMakeFiles/static_vector_test.dir/static_vector_test.cpp.o
+[ 13%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/prach/prach_preamble_information.cpp.o
+[ 13%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/prach/prach_helper.cpp.o
+[ 13%] Linking CXX executable tiny_optional_test
+[ 13%] Built target tiny_optional_test
+[ 13%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/precoding/precoding_codebooks.cpp.o
+[ 13%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pusch/pusch_mcs.cpp.o
+[ 14%] Linking CXX executable span_formatter_test
+[ 14%] Built target span_formatter_test
+[ 14%] Building CXX object tests/unittests/adt/CMakeFiles/unique_function_test.dir/unique_function_test.cpp.o
+[ 14%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pusch/pusch_tpmi_select.cpp.o
+[ 14%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pusch/pusch_uci_beta_offset.cpp.o
+[ 14%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/pusch/ulsch_info.cpp.o
+[ 14%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/qos/five_qi_qos_mapping.cpp.o
+[ 14%] Linking CXX executable unique_function_test
+[ 14%] Built target unique_function_test
+[ 14%] Building CXX object tests/unittests/adt/CMakeFiles/filter_view_test.dir/filter_view_test.cpp.o
+[ 14%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/uci/uci_part2_size_calculator.cpp.o
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/band_helper.cpp.o
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/sch/tbs_calculator.cpp.o
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/resource_allocation/resource_allocation_frequency.cpp.o
+[ 15%] Building CXX object tests/unittests/adt/CMakeFiles/strong_type_test.dir/strong_type_test.cpp.o
+[ 15%] Linking CXX executable filter_view_test
+[ 15%] Built target filter_view_test
+[ 15%] Building CXX object tests/unittests/adt/CMakeFiles/bounded_integer_test.dir/bounded_integer_test.cpp.o
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/sch/sch_segmentation.cpp.o
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/srs/srs_bandwidth_configuration.cpp.o
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/srs/srs_information.cpp.o
+[ 15%] Linking CXX executable static_vector_test
+[ 15%] Built target static_vector_test
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/ssb_freq_position_generator.cpp.o
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/ssb_gscn.cpp.o
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/ssb_mapping.cpp.o
+[ 15%] Linking CXX executable strong_type_test
+[ 15%] Built target strong_type_test
+[ 15%] Building CXX object lib/ran/CMakeFiles/srsran_ran.dir/tdd_ul_dl_config.cpp.o
+[ 15%] Building CXX object tests/unittests/ofh/CMakeFiles/slot_symbol_point_test.dir/slot_symbol_point_test.cpp.o
+[ 15%] Building CXX object tests/unittests/phy/upper/CMakeFiles/channel_state_information_test.dir/channel_state_information_test.cpp.o
+[ 15%] Building CXX object tests/unittests/phy/upper/CMakeFiles/vrb_to_prb_mapper_test.dir/vrb_to_prb_mapper_test.cpp.o
+[ 15%] Building CXX object tests/unittests/phy/support/CMakeFiles/precoding_configuration_test.dir/precoding_configuration_test.cpp.o
+[ 15%] Linking CXX executable bounded_integer_test
+[ 15%] Built target bounded_integer_test
+[ 15%] Linking CXX static library libsrsran_ran.a
+[ 15%] Building CXX object tests/unittests/srslog/CMakeFiles/srslog_frontend_latency.dir/benchmarks/frontend_latency.cpp.o
+[ 15%] Built target srsran_ran
+[ 15%] Building CXX object tests/unittests/srslog/CMakeFiles/srslog_test.dir/srslog_test.cpp.o
+[ 15%] Linking CXX executable slotted_array_test
+[ 15%] Built target slotted_array_test
+[ 15%] Building CXX object tests/unittests/srslog/CMakeFiles/log_channel_test.dir/log_channel_test.cpp.o
+[ 16%] Linking CXX executable vrb_to_prb_mapper_test
+[ 16%] Linking CXX executable srslog_test
+[ 16%] Linking CXX executable srslog_frontend_latency
+[ 16%] Built target vrb_to_prb_mapper_test
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/log_backend_test.dir/log_backend_test.cpp.o
+[ 16%] Built target srslog_frontend_latency
+[ 16%] Linking CXX executable slot_symbol_point_test
+[ 16%] Built target srslog_test
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/logger_test.dir/logger_test.cpp.o
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/any_test.dir/any_test.cpp.o
+[ 16%] Built target slot_symbol_point_test
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/file_sink_test.dir/file_sink_test.cpp.o
+[ 16%] Linking CXX executable any_test
+[ 16%] Built target any_test
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/syslog_sink_test.dir/syslog_sink_test.cpp.o
+[ 16%] Linking CXX executable logger_test
+[ 16%] Linking CXX executable log_channel_test
+[ 16%] Built target logger_test
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/file_utils_test.dir/file_utils_test.cpp.o
+[ 16%] Built target log_channel_test
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/tracer_test.dir/event_trace_test.cpp.o
+[ 16%] Linking CXX executable log_backend_test
+[ 16%] Built target log_backend_test
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/text_formatter_test.dir/text_formatter_test.cpp.o
+[ 16%] Linking CXX executable syslog_sink_test
+[ 16%] Built target syslog_sink_test
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/json_formatter_test.dir/json_formatter_test.cpp.o
+[ 16%] Linking CXX executable file_sink_test
+[ 16%] Built target file_sink_test
+[ 16%] Building CXX object tests/unittests/srslog/CMakeFiles/context_test.dir/context_test.cpp.o
+[ 16%] Linking CXX executable channel_state_information_test
+[ 16%] Built target channel_state_information_test
+[ 16%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_add_test.dir/srsvec_add_test.cpp.o
+[ 16%] Linking CXX executable tracer_test
+[ 16%] Linking CXX executable precoding_configuration_test
+[ 16%] Built target tracer_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_aligned_test.dir/srsvec_aligned_test.cpp.o
+[ 17%] Built target precoding_configuration_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_bit_test.dir/srsvec_bit_test.cpp.o
+[ 17%] Linking CXX executable context_test
+[ 17%] Linking CXX executable file_utils_test
+[ 17%] Built target context_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_compare_test.dir/srsvec_compare_test.cpp.o
+[ 17%] Built target file_utils_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_binary_test.dir/srsvec_binary_test.cpp.o
+[ 17%] Linking CXX executable text_formatter_test
+[ 17%] Built target text_formatter_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_convert_test.dir/srsvec_convert_test.cpp.o
+[ 17%] Linking CXX executable json_formatter_test
+[ 17%] Built target json_formatter_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_division_test.dir/srsvec_division_test.cpp.o
+[ 17%] Linking CXX executable srsvec_add_test
+[ 17%] Built target srsvec_add_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_dot_prod_test.dir/srsvec_dot_prod_test.cpp.o
+[ 17%] Linking CXX executable srsvec_aligned_test
+[ 17%] Built target srsvec_aligned_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_modulus_square_test.dir/srsvec_modulus_square_test.cpp.o
+[ 17%] Linking CXX executable srsvec_binary_test
+[ 17%] Linking CXX executable srsvec_compare_test
+[ 17%] Built target srsvec_binary_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_prod_test.dir/srsvec_prod_test.cpp.o
+[ 17%] Built target srsvec_compare_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_sc_prod_test.dir/srsvec_sc_prod_test.cpp.o
+[ 17%] Linking CXX executable srsvec_convert_test
+[ 17%] Linking CXX executable srsvec_division_test
+[ 17%] Built target srsvec_convert_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_clipping_test.dir/srsvec_clipping_test.cpp.o
+[ 17%] Built target srsvec_division_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_convolution_test.dir/srsvec_convolution_test.cpp.o
+[ 17%] Linking CXX executable srsvec_dot_prod_test
+[ 17%] Built target srsvec_dot_prod_test
+[ 17%] Building CXX object tests/unittests/srsvec/CMakeFiles/srsvec_unwrap_test.dir/srsvec_unwrap_test.cpp.o
+[ 18%] Linking CXX executable srsvec_modulus_square_test
+[ 18%] Built target srsvec_modulus_square_test
+[ 18%] Building CXX object tests/unittests/support/CMakeFiles/async_event_test.dir/async_event_test.cpp.o
+[ 18%] Linking CXX executable srsvec_prod_test
+[ 18%] Built target srsvec_prod_test
+[ 18%] Building CXX object tests/unittests/support/CMakeFiles/async_task_test.dir/async_task_test.cpp.o
+[ 18%] Linking CXX executable srsvec_sc_prod_test
+[ 18%] Built target srsvec_sc_prod_test
+[ 18%] Building CXX object tests/unittests/support/CMakeFiles/stats_test.dir/stats_test.cpp.o
+[ 18%] Linking CXX executable srsvec_bit_test
+[ 18%] Built target srsvec_bit_test
+[ 18%] Building CXX object tests/unittests/support/CMakeFiles/complex_normal_random_test.dir/complex_normal_random_test.cpp.o
+[ 18%] Linking CXX executable srsvec_clipping_test
+[ 18%] Built target srsvec_clipping_test
+[ 18%] Building CXX object tests/benchmarks/adt/CMakeFiles/bounded_bitset_count_benchmark.dir/bounded_bitset_count_benchmark.cpp.o
+[ 18%] Linking CXX executable srsvec_convolution_test
+[ 18%] Built target srsvec_convolution_test
+[ 18%] Building CXX object tests/benchmarks/adt/CMakeFiles/bounded_bitset_range_benchmark.dir/bounded_bitset_range_benchmark.cpp.o
+[ 19%] Linking CXX executable stats_test
+[ 19%] Linking CXX executable srsvec_unwrap_test
+[ 19%] Built target stats_test
+[ 19%] Building CXX object tests/benchmarks/phy/upper/precoding/CMakeFiles/channel_precoder_benchmark.dir/channel_precoder_benchmark.cpp.o
+[ 19%] Built target srsvec_unwrap_test
+[ 19%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/backtrace.cpp.o
+[ 19%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/math_utils.cpp.o
+[ 19%] Linking CXX executable async_event_test
+[ 19%] Built target async_event_test
+[ 19%] Linking CXX executable bounded_bitset_count_benchmark
+[ 19%] Building CXX object lib/scheduler/config/CMakeFiles/sched_config_manager.dir/cell_configuration.cpp.o
+[ 19%] Built target bounded_bitset_count_benchmark
+[ 19%] Building CXX object lib/fapi_adaptor/CMakeFiles/srsran_fapi_precoding_matrix_tools.dir/precoding_matrix_mapper.cpp.o
+[ 19%] Linking CXX executable async_task_test
+[ 19%] Built target async_task_test
+[ 19%] Building CXX object lib/fapi_adaptor/CMakeFiles/srsran_fapi_precoding_matrix_tools.dir/precoding_matrix_repository.cpp.o
+[ 19%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/executors/priority_task_queue.cpp.o
+[ 19%] Linking CXX executable bounded_bitset_range_benchmark
+[ 19%] Built target bounded_bitset_range_benchmark
+[ 19%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/executors/priority_task_worker.cpp.o
+[ 19%] Linking CXX executable complex_normal_random_test
+[ 19%] Built target complex_normal_random_test
+[ 19%] Building CXX object lib/fapi_adaptor/CMakeFiles/srsran_fapi_precoding_matrix_tools.dir/precoding_matrix_table_generator.cpp.o
+[ 19%] Building CXX object lib/scheduler/config/CMakeFiles/sched_config_manager.dir/ue_configuration.cpp.o
+[ 19%] Linking CXX executable channel_precoder_benchmark
+[ 19%] Built target channel_precoder_benchmark
+[ 19%] Building CXX object lib/scheduler/config/CMakeFiles/sched_config_manager.dir/sched_config_manager.cpp.o
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/executors/unique_thread.cpp.o
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/executors/task_worker.cpp.o
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/executors/task_worker_pool.cpp.o
+[ 20%] Building CXX object lib/fapi_adaptor/CMakeFiles/srsran_fapi_uci_part2_tools.dir/uci_part2_correspondence_generator.cpp.o
+[ 20%] Building CXX object lib/fapi_adaptor/CMakeFiles/srsran_fapi_uci_part2_tools.dir/uci_part2_correspondence_mapper.cpp.o
+[ 20%] Linking CXX static library libsrsran_fapi_precoding_matrix_tools.a
+[ 20%] Built target srsran_fapi_precoding_matrix_tools
+[ 20%] Building CXX object lib/fapi_adaptor/CMakeFiles/srsran_fapi_uci_part2_tools.dir/uci_part2_correspondence_repository.cpp.o
+[ 20%] Building CXX object lib/phy/generic_functions/CMakeFiles/srsran_generic_funcs_dft.dir/dft_processor_generic_impl.cpp.o
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/executors/task_execution_manager.cpp.o
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/timers.cpp.o
+[ 20%] Building CXX object lib/phy/generic_functions/CMakeFiles/srsran_generic_funcs_dft.dir/dft_processor_fftw_impl.cpp.o
+[ 20%] Linking CXX static library libsrsran_fapi_uci_part2_tools.a
+[ 20%] Built target srsran_fapi_uci_part2_tools
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/bit_encoding.cpp.o
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/config_yaml.cpp.o
+[ 20%] Building CXX object lib/phy/lower/modulation/CMakeFiles/srsran_lower_phy_modulation.dir/modulation_factories.cpp.o
+[ 20%] Building CXX object lib/phy/lower/modulation/CMakeFiles/srsran_lower_phy_modulation.dir/ofdm_modulator_impl.cpp.o
+[ 20%] Building CXX object lib/phy/lower/processors/downlink/CMakeFiles/srsran_lower_phy_downlink_processor.dir/downlink_processor_baseband_impl.cpp.o
+[ 20%] Building CXX object lib/phy/lower/modulation/CMakeFiles/srsran_lower_phy_modulation.dir/ofdm_demodulator_impl.cpp.o
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/signal_handler.cpp.o
+[ 20%] Building CXX object lib/phy/lower/processors/downlink/CMakeFiles/srsran_lower_phy_downlink_processor.dir/downlink_processor_factories.cpp.o
+[ 20%] Linking CXX static library libsrsran_generic_funcs_dft.a
+[ 20%] Built target srsran_generic_funcs_dft
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/event_tracing.cpp.o
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/sysinfo.cpp.o
+[ 20%] Building CXX object lib/phy/lower/modulation/CMakeFiles/srsran_lower_phy_modulation.dir/ofdm_prach_demodulator_impl.cpp.o
+[ 20%] Building CXX object lib/phy/lower/processors/downlink/CMakeFiles/srsran_lower_phy_downlink_processor.dir/downlink_processor_impl.cpp.o
+[ 20%] Linking CXX executable bounded_bitset_test
+[ 20%] Built target bounded_bitset_test
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/byte_buffer.cpp.o
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/byte_buffer_chain.cpp.o
+[ 20%] Built target sched_config_manager
+[ 20%] Building CXX object lib/support/CMakeFiles/srsran_support.dir/cpu_architecture_info.cpp.o
+[ 20%] Linking CXX static library libsrsran_lower_phy_modulation.a
+[ 20%] Built target srsran_lower_phy_modulation
+[ 20%] Building CXX object lib/phy/lower/amplitude_controller/CMakeFiles/srsran_lower_phy_amplitude_controller.dir/amplitude_controller_clipping_impl.cpp.o
+[ 20%] Building CXX object lib/phy/upper/CMakeFiles/log_likelihood_ratio.dir/log_likelihood_ratio.cpp.o
+[ 20%] Linking CXX static library libsrsran_lower_phy_downlink_processor.a
+[ 20%] Built target srsran_lower_phy_downlink_processor
+[ 20%] Building CXX object lib/phy/upper/channel_processors/CMakeFiles/srsran_pdcch_modulator.dir/pdcch_modulator_impl.cpp.o
+[ 20%] Building CXX object lib/phy/lower/amplitude_controller/CMakeFiles/srsran_lower_phy_amplitude_controller.dir/amplitude_controller_scaling_impl.cpp.o
+[ 20%] Building CXX object lib/phy/upper/channel_processors/CMakeFiles/srsran_pdcch_processor.dir/pdcch_processor_impl.cpp.o
+[ 20%] Linking CXX static library liblog_likelihood_ratio.a
+[ 20%] Built target log_likelihood_ratio
+[ 21%] Building CXX object lib/phy/lower/amplitude_controller/CMakeFiles/srsran_lower_phy_amplitude_controller.dir/amplitude_controller_factories.cpp.o
+[ 21%] Building CXX object lib/phy/upper/channel_processors/CMakeFiles/srsran_prach_detector.dir/prach_detector_generic_impl.cpp.o
+[ 21%] Building CXX object lib/phy/upper/channel_processors/pusch/CMakeFiles/srsran_pusch_processor.dir/pusch_codeblock_decoder.cpp.o
+[ 21%] Building CXX object lib/phy/upper/channel_processors/CMakeFiles/srsran_prach_detector.dir/prach_generator_impl.cpp.o
+[ 22%] Linking CXX static library libsrsran_pdcch_modulator.a
+[ 22%] Built target srsran_pdcch_modulator
+[ 22%] Building CXX object lib/phy/upper/channel_processors/pusch/CMakeFiles/srsran_pusch_processor.dir/pusch_decoder_empty_impl.cpp.o
+[ 22%] Linking CXX static library libsrsran_lower_phy_amplitude_controller.a
+[ 22%] Built target srsran_lower_phy_amplitude_controller
+[ 22%] Building CXX object lib/phy/upper/channel_processors/pusch/CMakeFiles/srsran_pusch_processor.dir/pusch_decoder_impl.cpp.o
+[ 22%] Building CXX object lib/phy/upper/equalization/CMakeFiles/srsran_channel_equalizer.dir/channel_equalizer_zf_impl.cpp.o
+[ 22%] Building CXX object lib/phy/upper/channel_processors/CMakeFiles/srsran_prach_detector.dir/prach_detector_phy_validator_impl.cpp.o
+[ 22%] Linking CXX static library libsrsran_pdcch_processor.a
+[ 22%] Built target srsran_pdcch_processor
+[ 22%] Building CXX object lib/phy/upper/equalization/CMakeFiles/srsran_channel_equalizer.dir/equalization_factories.cpp.o
+[ 22%] Building CXX object lib/phy/upper/channel_processors/pusch/CMakeFiles/srsran_pusch_processor.dir/pusch_demodulator_impl.cpp.o
+[ 22%] Building CXX object lib/phy/upper/channel_processors/pusch/CMakeFiles/srsran_pusch_processor.dir/factories.cpp.o
+[ 22%] Building CXX object lib/radio/CMakeFiles/srsran_radio.dir/plugin_radio_factory.cpp.o
+[ 22%] Linking CXX static library libsrsran_prach_detector.a
+[ 22%] Built target srsran_prach_detector
+[ 22%] Building CXX object lib/radio/CMakeFiles/srsran_radio.dir/radio_factory.cpp.o
+[ 22%] Building CXX object lib/phy/upper/channel_processors/pusch/CMakeFiles/srsran_pusch_processor.dir/pusch_processor_impl.cpp.o
+[ 22%] Building CXX object lib/phy/upper/channel_processors/pusch/CMakeFiles/srsran_pusch_processor.dir/pusch_processor_validator_impl.cpp.o
+[ 23%] Building CXX object lib/cu_cp/cell_meas_manager/CMakeFiles/srsran_cu_cp_cell_meas_manager.dir/cell_meas_manager_impl.cpp.o
+[ 23%] Linking CXX static library libsrsran_support.a
+[ 23%] Built target srsran_support
+[ 23%] Building CXX object lib/cu_cp/cell_meas_manager/CMakeFiles/srsran_cu_cp_cell_meas_manager.dir/cell_meas_manager_helpers.cpp.o
+[ 23%] Building CXX object lib/phy/upper/channel_processors/pusch/CMakeFiles/srsran_pusch_processor.dir/pusch_decoder_hw_impl.cpp.o
+[ 23%] Linking CXX static library libsrsran_channel_equalizer.a
+[ 23%] Built target srsran_channel_equalizer
+[ 23%] Building CXX object lib/cu_cp/mobility_manager/CMakeFiles/srsran_cu_cp_mobility_manager.dir/mobility_manager_factory.cpp.o
+[ 23%] Building CXX object lib/cu_cp/mobility_manager/CMakeFiles/srsran_cu_cp_mobility_manager.dir/mobility_manager_impl.cpp.o
+[ 23%] Building CXX object lib/phy/upper/channel_processors/pusch/CMakeFiles/srsran_pusch_processor.dir/ulsch_demultiplex_impl.cpp.o
+[ 23%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/compressed_prb_packer.cpp.o
+[ 23%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/compressed_prb_unpacker.cpp.o
+[ 23%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/compression_factory.cpp.o
+[ 24%] Linking CXX static library libsrsran_radio.a
+[ 24%] Built target srsran_radio
+[ 24%] Building CXX object tests/test_doubles/mac/CMakeFiles/mac_test_doubles.dir/dummy_mac_result_notifier.cpp.o
+[ 24%] Building CXX object tests/test_doubles/mac/CMakeFiles/mac_test_doubles.dir/mac_test_messages.cpp.o
+[ 25%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/iq_compression_none_impl.cpp.o
+[ 25%] Building CXX object tests/test_doubles/pdcp/CMakeFiles/pdcp_test_doubles.dir/Unity/unity_0_cxx.cxx.o
+[ 25%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/iq_compression_bfp_impl.cpp.o
+[ 25%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/iq_compression_death_impl.cpp.o
+[ 25%] Linking CXX static library libsrsran_cu_cp_mobility_manager.a
+[ 25%] Built target srsran_cu_cp_mobility_manager
+[ 25%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/iq_compressor_selector.cpp.o
+[ 25%] Linking CXX static library libsrsran_pusch_processor.a
+[ 25%] Built target srsran_pusch_processor
+[ 25%] Building CXX object tests/unittests/adt/CMakeFiles/byte_buffer_test.dir/byte_buffer_segment_test.cpp.o
+[ 25%] Linking CXX static library libsrsran_cu_cp_cell_meas_manager.a
+[ 25%] Built target srsran_cu_cp_cell_meas_manager
+[ 25%] Building CXX object tests/unittests/adt/CMakeFiles/byte_buffer_test.dir/byte_buffer_test.cpp.o
+[ 25%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/iq_decompressor_selector.cpp.o
+[ 25%] Building CXX object tests/unittests/adt/CMakeFiles/ring_buffer_test.dir/ring_buffer_test.cpp.o
+[ 25%] Linking CXX static library libpdcp_test_doubles.a
+[ 25%] Built target pdcp_test_doubles
+[ 25%] Building CXX object tests/unittests/apps/services/CMakeFiles/metrics_plotter_stdout_test.dir/metrics_plotter_stdout_test.cpp.o
+[ 25%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/iq_compression_bfp_avx2.cpp.o
+[ 25%] Building CXX object tests/unittests/adt/CMakeFiles/byte_buffer_test.dir/byte_buffer_chain_test.cpp.o
+[ 25%] Linking CXX static library libmac_test_doubles.a
+[ 25%] Built target mac_test_doubles
+[ 25%] Building CXX object tests/unittests/adt/CMakeFiles/ring_buffer_test.dir/blocking_queue_test.cpp.o
+[ 25%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/iq_compression_bfp_avx512.cpp.o
+[ 25%] Linking CXX executable metrics_plotter_stdout_test
+[ 25%] Built target metrics_plotter_stdout_test
+[ 25%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/iq_compression_none_avx512.cpp.o
+[ 25%] Building CXX object tests/unittests/rrc/CMakeFiles/rrc_ue_test_helpers.dir/rrc_ue_test_messages.cpp.o
+[ 25%] Building CXX object tests/unittests/adt/CMakeFiles/ring_buffer_test.dir/concurrent_queue_test.cpp.o
+[ 25%] Building CXX object tests/unittests/cu_cp/cell_meas_manager/CMakeFiles/cell_meas_manager_helpers.dir/cell_meas_manager_test_helpers.cpp.o
+[ 25%] Building CXX object lib/ofh/compression/CMakeFiles/srsran_ofh_compression.dir/iq_compression_none_avx2.cpp.o
+[ 25%] Building CXX object tests/unittests/f1u/CMakeFiles/f1u_local_connector_test.dir/common/f1u_connector_test.cpp.o
+[ 25%] Linking CXX static library libsrsran_ofh_compression.a
+[ 25%] Built target srsran_ofh_compression
+[ 25%] Building CXX object tests/unittests/f1u/cu_up/CMakeFiles/f1u_cu_up_bearer_test.dir/f1u_cu_up_bearer_test.cpp.o
+[ 25%] Building CXX object tests/unittests/f1u/du/CMakeFiles/f1u_du_bearer_test.dir/f1u_du_bearer_test.cpp.o
+[ 25%] Linking CXX executable f1u_local_connector_test
+[ 25%] Built target f1u_local_connector_test
+[ 25%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/crc_indication_builder_test.dir/crc_indication_test.cpp.o
+[ 25%] Linking CXX static library librrc_ue_test_helpers.a
+[ 25%] Built target rrc_ue_test_helpers
+[ 25%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/dl_csi_pdu_builder_test.dir/dl_csi_pdu_test.cpp.o
+[ 25%] Linking CXX executable f1u_cu_up_bearer_test
+[ 25%] Built target f1u_cu_up_bearer_test
+[ 25%] Linking CXX static library libcell_meas_manager_helpers.a
+[ 25%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/dl_pdcch_builder_test.dir/dl_pdcch_pdu_test.cpp.o
+[ 25%] Built target cell_meas_manager_helpers
+[ 25%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/dl_pdsch_builder_test.dir/dl_pdsch_pdu_test.cpp.o
+[ 25%] Linking CXX executable f1u_du_bearer_test
+[ 25%] Built target f1u_du_bearer_test
+[ 25%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/dl_ssb_builder_test.dir/dl_ssb_pdu_test.cpp.o
+[ 26%] Linking CXX executable crc_indication_builder_test
+[ 26%] Built target crc_indication_builder_test
+[ 26%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/dl_tti_request_test.dir/dl_tti_request_test.cpp.o
+[ 26%] Linking CXX executable dl_csi_pdu_builder_test
+[ 26%] Built target dl_csi_pdu_builder_test
+[ 26%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/error_indication_builder_test.dir/error_indication_test.cpp.o
+[ 26%] Linking CXX executable dl_pdcch_builder_test
+[ 26%] Built target dl_pdcch_builder_test
+[ 26%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/rach_indication_builder_test.dir/rach_indication_test.cpp.o
+[ 26%] Linking CXX executable dl_pdsch_builder_test
+[ 26%] Built target dl_pdsch_builder_test
+[ 26%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/rx_data_indication_builder_test.dir/rx_data_indication_test.cpp.o
+[ 26%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/slot_indication_builder_test.dir/slot_indication_test.cpp.o
+[ 26%] Linking CXX executable ring_buffer_test
+[ 27%] Linking CXX executable dl_ssb_builder_test
+[ 27%] Built target dl_ssb_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/srs_indication_builder_test.dir/srs_indication_test.cpp.o
+[ 27%] Built target ring_buffer_test
+[ 27%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/tx_data_request_builder_test.dir/tx_data_request_test.cpp.o
+[ 27%] Linking CXX executable dl_tti_request_test
+[ 27%] Linking CXX executable error_indication_builder_test
+[ 27%] Built target dl_tti_request_test
+[ 27%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/tx_precoding_and_beamforming_pdu_builder_test.dir/tx_precoding_and_beamforming_pdu_test.cpp.o
+[ 27%] Built target error_indication_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/uci_indication_builder_test.dir/uci_indication_test.cpp.o
+[ 27%] Linking CXX executable byte_buffer_test
+[ 27%] Built target byte_buffer_test
+[ 27%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/ul_dci_request_builder_test.dir/ul_dci_request_test.cpp.o
+[ 27%] Linking CXX executable rach_indication_builder_test
+[ 27%] Built target rach_indication_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/ul_prach_builder_test.dir/ul_prach_pdu_test.cpp.o
+[ 27%] Linking CXX executable slot_indication_builder_test
+[ 27%] Built target slot_indication_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/ul_pucch_builder_test.dir/ul_pucch_pdu_test.cpp.o
+[ 27%] Linking CXX executable rx_data_indication_builder_test
+[ 27%] Built target rx_data_indication_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/ul_pusch_builder_test.dir/ul_pusch_pdu_test.cpp.o
+[ 27%] Linking CXX executable tx_data_request_builder_test
+[ 27%] Built target tx_data_request_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/builders/CMakeFiles/ul_tti_request_builder_test.dir/ul_tti_request_test.cpp.o
+[ 27%] Linking CXX executable tx_precoding_and_beamforming_pdu_builder_test
+[ 27%] Built target tx_precoding_and_beamforming_pdu_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/message_buffering/CMakeFiles/buffered_slot_gateway_impl_test.dir/buffered_slot_gateway_impl_test.cpp.o
+[ 27%] Linking CXX executable srs_indication_builder_test
+[ 27%] Linking CXX executable ul_dci_request_builder_test
+[ 27%] Built target srs_indication_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/crc_indication_validator_test.dir/crc_indication_test.cpp.o
+[ 27%] Built target ul_dci_request_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/dl_csi_pdu_validator_test.dir/dl_csi_pdu_test.cpp.o
+[ 27%] Linking CXX executable ul_prach_builder_test
+[ 27%] Built target ul_prach_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/dl_pdcch_pdu_validator_test.dir/dl_pdcch_pdu_test.cpp.o
+[ 27%] Linking CXX executable uci_indication_builder_test
+[ 27%] Built target uci_indication_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/dl_pdsch_pdu_validator_test.dir/dl_pdsch_pdu_test.cpp.o
+[ 27%] Linking CXX executable ul_pucch_builder_test
+[ 27%] Built target ul_pucch_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/dl_ssb_pdu_validator_test.dir/dl_ssb_pdu_test.cpp.o
+[ 27%] Linking CXX executable ul_tti_request_builder_test
+[ 27%] Built target ul_tti_request_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/dl_tti_request_validator_test.dir/dl_tti_request_test.cpp.o
+[ 27%] Linking CXX executable ul_pusch_builder_test
+[ 27%] Built target ul_pusch_builder_test
+[ 27%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/error_indication_validator_test.dir/error_indication_test.cpp.o
+[ 27%] Linking CXX executable buffered_slot_gateway_impl_test
+[ 27%] Built target buffered_slot_gateway_impl_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/rach_indication_validator_test.dir/rach_indication_test.cpp.o
+[ 28%] Linking CXX executable crc_indication_validator_test
+[ 28%] Built target crc_indication_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/rx_data_indication_validator_test.dir/rx_data_indication_test.cpp.o
+[ 28%] Linking CXX executable dl_csi_pdu_validator_test
+[ 28%] Built target dl_csi_pdu_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/slot_indication_validator_test.dir/slot_indication_test.cpp.o
+[ 28%] Linking CXX executable dl_pdcch_pdu_validator_test
+[ 28%] Built target dl_pdcch_pdu_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/srs_indication_validator_test.dir/srs_indication_test.cpp.o
+[ 28%] Linking CXX executable dl_ssb_pdu_validator_test
+[ 28%] Built target dl_ssb_pdu_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/tx_data_request_validator_test.dir/tx_data_request_test.cpp.o
+[ 28%] Linking CXX executable dl_tti_request_validator_test
+[ 28%] Built target dl_tti_request_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/tx_precoding_and_beamforming_pdu_validator_test.dir/tx_precoding_and_beamforming_pdu_test.cpp.o
+[ 28%] Linking CXX executable dl_pdsch_pdu_validator_test
+[ 28%] Linking CXX executable error_indication_validator_test
+[ 28%] Built target dl_pdsch_pdu_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/uci_indication_validator_test.dir/uci_indication_test.cpp.o
+[ 28%] Built target error_indication_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/ul_dci_request_validator_test.dir/ul_dci_request_test.cpp.o
+[ 28%] Linking CXX executable rach_indication_validator_test
+[ 28%] Built target rach_indication_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/ul_prach_pdu_validator_test.dir/ul_prach_pdu_test.cpp.o
+[ 28%] Linking CXX executable rx_data_indication_validator_test
+[ 28%] Built target rx_data_indication_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/ul_pucch_pdu_validator_test.dir/ul_pucch_pdu_test.cpp.o
+[ 28%] Linking CXX executable slot_indication_validator_test
+[ 28%] Built target slot_indication_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/ul_pusch_pdu_validator_test.dir/ul_pusch_pdu_test.cpp.o
+[ 28%] Linking CXX executable srs_indication_validator_test
+[ 28%] Built target srs_indication_validator_test
+[ 28%] Building CXX object tests/unittests/fapi/validators/CMakeFiles/ul_tti_request_validator_test.dir/ul_tti_request_test.cpp.o
+[ 28%] Linking CXX executable tx_data_request_validator_test
+[ 28%] Built target tx_data_request_validator_test
+[ 28%] Building CXX object tests/unittests/fapi_adaptor/CMakeFiles/precoding_matrix_table_generator_test.dir/precoding_matrix_table_generator_test.cpp.o
+[ 28%] Linking CXX executable tx_precoding_and_beamforming_pdu_validator_test
+[ 28%] Built target tx_precoding_and_beamforming_pdu_validator_test
+[ 28%] Building CXX object tests/unittests/fapi_adaptor/CMakeFiles/uci_part2_correspondence_test.dir/uci_part2_correspondence_test.cpp.o
+[ 28%] Linking CXX executable ul_dci_request_validator_test
+[ 28%] Built target ul_dci_request_validator_test
+[ 28%] Building CXX object tests/unittests/ofh/ecpri/CMakeFiles/ecpri_packet_builder_impl_test.dir/ecpri_packet_builder_test.cpp.o
+[ 29%] Linking CXX executable ul_prach_pdu_validator_test
+[ 29%] Built target ul_prach_pdu_validator_test
+[ 29%] Building CXX object tests/unittests/ofh/ecpri/CMakeFiles/ecpri_packet_decoder_impl_test.dir/ecpri_packet_decoder_impl_test.cpp.o
+[ 29%] Linking CXX executable ecpri_packet_builder_impl_test
+[ 29%] Built target ecpri_packet_builder_impl_test
+[ 29%] Building CXX object tests/unittests/ofh/receiver/CMakeFiles/ofh_sequence_id_checker_test.dir/ofh_sequence_id_checker_impl_test.cpp.o
+[ 30%] Linking CXX executable ecpri_packet_decoder_impl_test
+[ 30%] Linking CXX executable precoding_matrix_table_generator_test
+[ 30%] Built target precoding_matrix_table_generator_test
+[ 30%] Building CXX object tests/unittests/ofh/serdes/CMakeFiles/ofh_cplane_packet_builder_dynamic_compression_impl_test.dir/ofh_cplane_packet_builder_dynamic_compression_impl_test.cpp.o
+[ 30%] Built target ecpri_packet_decoder_impl_test
+[ 30%] Building CXX object tests/unittests/ofh/serdes/CMakeFiles/ofh_cplane_packet_builder_impl_test.dir/ofh_cplane_packet_builder_impl_test.cpp.o
+[ 30%] Linking CXX executable ul_tti_request_validator_test
+[ 30%] Linking CXX executable uci_part2_correspondence_test
+[ 30%] Built target ul_tti_request_validator_test
+[ 30%] Built target uci_part2_correspondence_test
+[ 30%] Building CXX object tests/unittests/ofh/serdes/CMakeFiles/ofh_cplane_packet_builder_static_compression_impl_test.dir/ofh_cplane_packet_builder_static_compression_impl_test.cpp.o
+[ 30%] Building CXX object tests/unittests/ofh/serdes/CMakeFiles/ofh_uplane_packet_decoder_dynamic_impl.dir/ofh_uplane_packet_decoder_dynamic_impl_test.cpp.o
+[ 30%] Linking CXX executable ul_pusch_pdu_validator_test
+[ 30%] Built target ul_pusch_pdu_validator_test
+[ 30%] Building CXX object tests/unittests/ofh/serdes/CMakeFiles/ofh_uplane_packet_decoder_static_impl.dir/ofh_uplane_packet_decoder_static_impl_test.cpp.o
+[ 30%] Linking CXX executable ofh_sequence_id_checker_test
+[ 30%] Linking CXX executable ofh_cplane_packet_builder_dynamic_compression_impl_test
+[ 30%] Built target ofh_sequence_id_checker_test
+[ 30%] Linking CXX executable ofh_cplane_packet_builder_impl_test
+[ 30%] Building CXX object tests/unittests/ofh/transmitter/CMakeFiles/sequence_identifier_generator_test.dir/sequence_identifier_generator_test.cpp.o
+[ 30%] Built target ofh_cplane_packet_builder_dynamic_compression_impl_test
+[ 30%] Building CXX object tests/unittests/pcap/CMakeFiles/pcap_mac_test.dir/mac_pcap_test.cpp.o
+[ 30%] Built target ofh_cplane_packet_builder_impl_test
+[ 30%] Building CXX object tests/unittests/pcap/CMakeFiles/pcap_rlc_test.dir/rlc_pcap_test.cpp.o
+[ 30%] Linking CXX executable ofh_cplane_packet_builder_static_compression_impl_test
+[ 30%] Built target ofh_cplane_packet_builder_static_compression_impl_test
+[ 30%] Building CXX object tests/unittests/pcap/CMakeFiles/pcap_ngap_test.dir/ngap_pcap_test.cpp.o
+[ 30%] Linking CXX executable uci_indication_validator_test
+[ 30%] Built target uci_indication_validator_test
+[ 30%] Building CXX object tests/unittests/phy/generic_functions/precoding/CMakeFiles/channel_precoder_test.dir/channel_precoder_test.cpp.o
+[ 30%] Linking CXX executable sequence_identifier_generator_test
+[ 30%] Linking CXX executable ofh_uplane_packet_decoder_dynamic_impl
+[ 30%] Built target sequence_identifier_generator_test
+[ 30%] Building CXX object tests/unittests/phy/lower/modulation/CMakeFiles/ofdm_modulator_unittest.dir/ofdm_modulator_unittest.cpp.o
+[ 30%] Built target ofh_uplane_packet_decoder_dynamic_impl
+[ 30%] Building CXX object tests/unittests/phy/lower/modulation/CMakeFiles/ofdm_demodulator_unittest.dir/ofdm_demodulator_unittest.cpp.o
+[ 30%] Linking CXX executable pcap_mac_test
+[ 30%] Built target pcap_mac_test
+[ 30%] Building CXX object tests/unittests/phy/lower/processors/downlink/CMakeFiles/lower_phy_downlink_processor_test.dir/lower_phy_downlink_processor_test.cpp.o
+[ 30%] Linking CXX executable pcap_rlc_test
+[ 30%] Linking CXX executable ofh_uplane_packet_decoder_static_impl
+[ 30%] Linking CXX executable pcap_ngap_test
+[ 30%] Built target pcap_rlc_test
+[ 30%] Building CXX object tests/unittests/phy/upper/CMakeFiles/hard_decision_test.dir/hard_decision_test.cpp.o
+[ 30%] Built target ofh_uplane_packet_decoder_static_impl
+[ 30%] Building CXX object tests/unittests/phy/upper/CMakeFiles/log_likelihood_ratio_test.dir/log_likelihood_ratio_test.cpp.o
+[ 30%] Linking CXX executable ul_pucch_pdu_validator_test
+[ 30%] Built target pcap_ngap_test
+[ 30%] Building CXX object tests/unittests/phy/upper/CMakeFiles/rx_buffer_pool_test.dir/rx_buffer_pool_test.cpp.o
+[ 30%] Built target ul_pucch_pdu_validator_test
+[ 30%] Building CXX object tests/unittests/ran/CMakeFiles/csi_report_on_pucch_helpers_test.dir/csi_report/csi_report_on_pucch_helpers_test.cpp.o
+[ 31%] Linking CXX executable log_likelihood_ratio_test
+[ 31%] Built target log_likelihood_ratio_test
+[ 31%] Building CXX object tests/unittests/ran/CMakeFiles/csi_report_on_pucch_validator_test.dir/csi_report/csi_report_on_pucch_validator_test.cpp.o
+[ 31%] Linking CXX executable ofdm_modulator_unittest
+[ 31%] Linking CXX executable ofdm_demodulator_unittest
+[ 32%] Linking CXX executable hard_decision_test
+[ 32%] Built target ofdm_modulator_unittest
+[ 32%] Built target ofdm_demodulator_unittest
+[ 32%] Building CXX object tests/unittests/ran/CMakeFiles/csi_report_on_pusch_helpers_test.dir/csi_report/csi_report_on_pusch_helpers_test.cpp.o
+[ 32%] Building CXX object tests/unittests/ran/CMakeFiles/csi_report_on_pusch_validator_test.dir/csi_report/csi_report_on_pusch_validator_test.cpp.o
+[ 32%] Built target hard_decision_test
+[ 32%] Building CXX object tests/unittests/ran/CMakeFiles/du_test_suite.dir/ssb_coreset0_freq_pos_checker.cpp.o
+[ 32%] Linking CXX executable rx_buffer_pool_test
+[ 32%] Linking CXX executable channel_precoder_test
+[ 32%] Built target channel_precoder_test
+[ 32%] Building CXX object tests/unittests/ran/CMakeFiles/dci_packing_test.dir/pdcch/dci_packing_test.cpp.o
+[ 32%] Built target rx_buffer_pool_test
+[ 33%] Building CXX object tests/unittests/ran/CMakeFiles/dci_packing_validator_test.dir/pdcch/dci_packing_validator_test.cpp.o
+[ 33%] Linking CXX static library libdu_test_suite.a
+[ 33%] Built target du_test_suite
+[ 33%] Building CXX object tests/unittests/ran/CMakeFiles/pdcch_candidates_common.dir/pdcch/pdcch_candidates_common_test.cpp.o
+[ 33%] Linking CXX executable csi_report_on_pucch_helpers_test
+[ 33%] Built target csi_report_on_pucch_helpers_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/pdcch_candidates_ue.dir/pdcch/pdcch_candidates_ue_test.cpp.o
+[ 34%] Linking CXX executable csi_report_on_pucch_validator_test
+[ 34%] Built target csi_report_on_pucch_validator_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/pdcch_type0_css_coreset_config_test.dir/pdcch/pdcch_type0_css_coreset_config_test.cpp.o
+[ 34%] Linking CXX executable csi_report_on_pusch_validator_test
+[ 34%] Linking CXX executable dci_packing_validator_test
+[ 34%] Built target csi_report_on_pusch_validator_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/pdsch_mcs_table_test.dir/pdsch/pdsch_mcs_table_test.cpp.o
+[ 34%] Built target dci_packing_validator_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/prach_configuration_test.dir/prach/prach_configuration_test.cpp.o
+[ 34%] Linking CXX executable lower_phy_downlink_processor_test
+[ 34%] Built target lower_phy_downlink_processor_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/prach_cyclic_shifts_test.dir/prach/prach_cyclic_shifts_test.cpp.o
+[ 34%] Linking CXX executable csi_report_on_pusch_helpers_test
+[ 34%] Built target csi_report_on_pusch_helpers_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/prach_frequency_mapping_test.dir/prach/prach_frequency_mapping_test.cpp.o
+[ 34%] Linking CXX executable pdcch_candidates_common
+[ 34%] Linking CXX executable pdcch_type0_css_coreset_config_test
+[ 34%] Built target pdcch_candidates_common
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/pucch_info_test.dir/pucch/pucch_info_test.cpp.o
+[ 34%] Built target pdcch_type0_css_coreset_config_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/pusch_mcs_table_test.dir/pusch/pusch_mcs_table_test.cpp.o
+[ 34%] Linking CXX executable pdsch_mcs_table_test
+[ 34%] Linking CXX executable prach_cyclic_shifts_test
+[ 34%] Built target pdsch_mcs_table_test
+[ 34%] Linking CXX executable pdcch_candidates_ue
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/pusch_tpmi_select_test.dir/pusch/pusch_tpmi_select_test.cpp.o
+[ 34%] Built target prach_cyclic_shifts_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/ulsch_info_test.dir/pusch/ulsch_info_test.cpp.o
+[ 34%] Built target pdcch_candidates_ue
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/resource_allocation_frequency_test.dir/resource_allocation/resource_allocation_frequency_test.cpp.o
+[ 34%] Linking CXX executable dci_packing_test
+[ 34%] Built target dci_packing_test
+[ 34%] Linking CXX executable resource_allocation_frequency_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/uci_part2_size_calculator_test.dir/uci/uci_part2_size_calculator_test.cpp.o
+[ 34%] Built target resource_allocation_frequency_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/slot_point_test.dir/slot_point_test.cpp.o
+[ 34%] Linking CXX executable prach_configuration_test
+[ 34%] Linking CXX executable prach_frequency_mapping_test
+[ 34%] Built target prach_configuration_test
+[ 34%] Building CXX object tests/unittests/ran/CMakeFiles/band_helper_test.dir/band_helper_test.cpp.o
+[ 35%] Linking CXX executable uci_part2_size_calculator_test
+[ 35%] Built target prach_frequency_mapping_test
+[ 35%] Building CXX object tests/unittests/ran/CMakeFiles/ssb_gscn_test.dir/ssb_gscn_test.cpp.o
+[ 35%] Built target uci_part2_size_calculator_test
+[ 35%] Building CXX object tests/unittests/ran/CMakeFiles/ssb_mapping_test.dir/ssb_mapping_test.cpp.o
+[ 35%] Linking CXX executable slot_point_test
+[ 35%] Built target slot_point_test
+[ 35%] Building CXX object tests/unittests/ran/CMakeFiles/srs_bandwidth_configuration_test.dir/srs/srs_bandwidth_configuration_test.cpp.o
+[ 35%] Linking CXX executable pusch_tpmi_select_test
+[ 35%] Linking CXX executable pucch_info_test
+[ 35%] Built target pusch_tpmi_select_test
+[ 35%] Building CXX object tests/unittests/ran/CMakeFiles/bcd_helpers_test.dir/bcd_helpers_test.cpp.o
+[ 35%] Built target pucch_info_test
+[ 35%] Building CXX object tests/unittests/ran/CMakeFiles/nr_cgi_helpers_test.dir/nr_cgi_helpers_test.cpp.o
+[ 35%] Linking CXX executable ssb_mapping_test
+[ 35%] Built target ssb_mapping_test
+[ 35%] Linking CXX executable pusch_mcs_table_test
+[ 35%] Building CXX object tests/unittests/rlc/CMakeFiles/rlc_um_pdu_test.dir/rlc_um_pdu_test.cpp.o
+[ 35%] Built target pusch_mcs_table_test
+[ 35%] Building CXX object tests/unittests/rlc/CMakeFiles/rlc_sdu_queue_test.dir/rlc_sdu_queue_test.cpp.o
+[ 35%] Linking CXX executable nr_cgi_helpers_test
+[ 35%] Linking CXX executable bcd_helpers_test
+[ 35%] Linking CXX executable srs_bandwidth_configuration_test
+[ 35%] Built target nr_cgi_helpers_test
+[ 35%] Building CXX object tests/unittests/rlc/CMakeFiles/rlc_sdu_queue_lockfree_test.dir/rlc_sdu_queue_lockfree_test.cpp.o
+[ 35%] Built target bcd_helpers_test
+[ 35%] Built target srs_bandwidth_configuration_test
+[ 35%] Building CXX object tests/unittests/rlc/CMakeFiles/rlc_retx_queue_test.dir/rlc_retx_queue_test.cpp.o
+[ 35%] Building CXX object tests/unittests/sdap/CMakeFiles/sdap_test.dir/sdap_test.cpp.o
+[ 35%] Linking CXX executable ulsch_info_test
+[ 35%] Built target ulsch_info_test
+[ 35%] Building CXX object tests/unittests/sdap/CMakeFiles/sdap_tx_test.dir/sdap_tx_test.cpp.o
+[ 35%] Linking CXX executable ssb_gscn_test
+[ 35%] Built target ssb_gscn_test
+[ 35%] Building CXX object tests/unittests/sdap/CMakeFiles/sdap_rx_test.dir/sdap_rx_test.cpp.o
+[ 35%] Linking CXX executable rlc_sdu_queue_test
+[ 35%] Built target rlc_sdu_queue_test
+[ 35%] Building CXX object tests/unittests/security/CMakeFiles/security_test.dir/security_test.cpp.o
+[ 35%] Linking CXX executable rlc_um_pdu_test
+[ 35%] Built target rlc_um_pdu_test
+[ 35%] Building CXX object tests/unittests/support/CMakeFiles/timer_test.dir/timer_test.cpp.o
+[ 35%] Linking CXX executable rlc_sdu_queue_lockfree_test
+[ 35%] Built target rlc_sdu_queue_lockfree_test
+[ 35%] Building CXX object tests/unittests/support/CMakeFiles/async_exec_test.dir/async_exec_test.cpp.o
+[ 35%] Linking CXX executable rlc_retx_queue_test
+[ 35%] Built target rlc_retx_queue_test
+[ 35%] Building CXX object tests/unittests/support/CMakeFiles/async_queue_test.dir/async_queue_test.cpp.o
+[ 35%] Linking CXX executable band_helper_test
+[ 35%] Built target band_helper_test
+[ 35%] Linking CXX executable sdap_tx_test
+[ 35%] Building CXX object tests/unittests/support/CMakeFiles/fifo_async_task_scheduler_test.dir/fifo_async_task_scheduler_test.cpp.o
+[ 35%] Linking CXX executable sdap_rx_test
+[ 35%] Linking CXX executable sdap_test
+[ 35%] Built target sdap_tx_test
+[ 35%] Built target sdap_rx_test
+[ 35%] Built target sdap_test
+[ 35%] Building CXX object tests/unittests/support/CMakeFiles/unique_thread_test.dir/unique_thread_test.cpp.o
+[ 36%] Building CXX object tests/unittests/support/CMakeFiles/bit_encoding_test.dir/bit_encoding_test.cpp.o
+[ 36%] Building CXX object tests/unittests/support/CMakeFiles/async_event_observer_test.dir/async_event_observer_test.cpp.o
+[91m/usr/local/src/srsRAN/tests/unittests/support/fifo_async_task_scheduler_test.cpp:56:1: fatal error: error writing to /tmp/ccEY8C14.s: No space left on device
+   56 | }
+      | ^
+compilation terminated.
+[0m[91mmake[2]: *** [tests/unittests/support/CMakeFiles/fifo_async_task_scheduler_test.dir/build.make:76: tests/unittests/support/CMakeFiles/fifo_async_task_scheduler_test.dir/fifo_async_task_scheduler_test.cpp.o] Error 1
+[0m[91mmake[1]: *** [CMakeFiles/Makefile2:23656: tests/unittests/support/CMakeFiles/fifo_async_task_scheduler_test.dir/all] Error 2
+[0m[91mmake[1]: *** Waiting for unfinished jobs....
+[0m[ 36%] Building CXX object tests/unittests/support/CMakeFiles/async_event_observer_test.dir/protocol_transaction_manager_test.cpp.o
+[91m/usr/local/src/srsRAN/tests/unittests/support/async_exec_test.cpp:104:1: fatal error: error writing to /tmp/ccG46gaJ.s: No space left on device
+  104 | }
+      | ^
+compilation terminated.
+[0m[91mmake[2]: *** [tests/unittests/support/CMakeFiles/async_exec_test.dir/build.make:76: tests/unittests/support/CMakeFiles/async_exec_test.dir/async_exec_test.cpp.o] Error 1
+[0m[91mmake[1]: *** [CMakeFiles/Makefile2:23598: tests/unittests/support/CMakeFiles/async_exec_test.dir/all] Error 2
+[0m[ 37%] Linking CXX executable unique_thread_test
+[ 37%] Built target unique_thread_test
+[91m/usr/local/src/srsRAN/tests/unittests/support/async_queue_test.cpp:172:1: fatal error: error writing to /tmp/ccOBFkut.s: No space left on device
+  172 | }
+      | ^
+compilation terminated.
+[0m[91mmake[2]: *** [tests/unittests/support/CMakeFiles/async_queue_test.dir/build.make:76: tests/unittests/support/CMakeFiles/async_queue_test.dir/async_queue_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:23627: tests/unittests/support/CMakeFiles/async_queue_test.dir/all] Error 2
+[0m[ 37%] Linking CXX executable bit_encoding_test
+[91m/usr/local/src/srsRAN/tests/unittests/support/timer_test.cpp:497:1: fatal error: error writing to /tmp/ccIaVRHN.s: No space left on device
+  497 | }
+      | ^
+compilation terminated.
+[0m[91mmake[2]: *** [tests/unittests/support/CMakeFiles/timer_test.dir/build.make:76: tests/unittests/support/CMakeFiles/timer_test.dir/timer_test.cpp.o] Error 1
+[0m[91mmake[1]: *** [CMakeFiles/Makefile2:23489: tests/unittests/support/CMakeFiles/timer_test.dir/all] Error 2
+[0m[ 37%] Built target bit_encoding_test
+[91m/usr/local/src/srsRAN/tests/unittests/security/security_test.cpp:1490:1: fatal error: error writing to /tmp/ccyFR9fB.s: No space left on device
+ 1490 | }
+      | ^
+compilation terminated.
+[0m[91mmake[2]: *** [tests/unittests/security/CMakeFiles/security_test.dir/build.make:76: tests/unittests/security/CMakeFiles/security_test.dir/security_test.cpp.o] Error 1
+[0m[91mmake[1]: *** [CMakeFiles/Makefile2:22717: tests/unittests/security/CMakeFiles/security_test.dir/all] Error 2
+[0m[ 37%] Linking CXX executable async_event_observer_test
+[ 37%] Built target async_event_observer_test
+[91mmake: *** [Makefile:146: all] Error 2
+[0mThe command '/bin/sh -c make -j $MAKEWIDTH' returned a non-zero code: 2
