@@ -1,2 +1,60 @@
 The push refers to repository [docker.io/lkschu/srsran]
-tag does not exist: lkschu/srsran:24.04_4.0
+f7af7eacf6d2: Preparing
+1a66c5743403: Preparing
+586998967152: Preparing
+e939063d685c: Preparing
+c590b99ba597: Preparing
+f278cda55eaa: Preparing
+ea2753281791: Preparing
+f34eb5b9b11a: Preparing
+70d62ad95f6e: Preparing
+c17eff6a7c29: Preparing
+4256eb7d9ff2: Preparing
+27c9e42fd8a8: Preparing
+97deb2f9a43e: Preparing
+119c318f4db5: Preparing
+0dd2163918ee: Preparing
+a15c1e4db831: Preparing
+0dac4502025d: Preparing
+6227c4ab1845: Preparing
+3a911006ed5c: Preparing
+c839517f1f1e: Preparing
+346f14bf17b9: Preparing
+4256eb7d9ff2: Waiting
+27c9e42fd8a8: Waiting
+97deb2f9a43e: Waiting
+119c318f4db5: Waiting
+0dd2163918ee: Waiting
+a15c1e4db831: Waiting
+0dac4502025d: Waiting
+6227c4ab1845: Waiting
+3a911006ed5c: Waiting
+c839517f1f1e: Waiting
+346f14bf17b9: Waiting
+ea2753281791: Waiting
+f34eb5b9b11a: Waiting
+70d62ad95f6e: Waiting
+c17eff6a7c29: Waiting
+f278cda55eaa: Waiting
+e939063d685c: Pushed
+586998967152: Pushed
+c590b99ba597: Pushed
+ea2753281791: Pushed
+f7af7eacf6d2: Pushed
+f34eb5b9b11a: Pushed
+c17eff6a7c29: Layer already exists
+4256eb7d9ff2: Layer already exists
+27c9e42fd8a8: Layer already exists
+97deb2f9a43e: Layer already exists
+119c318f4db5: Layer already exists
+0dd2163918ee: Layer already exists
+a15c1e4db831: Layer already exists
+0dac4502025d: Layer already exists
+6227c4ab1845: Layer already exists
+3a911006ed5c: Layer already exists
+f278cda55eaa: Pushed
+c839517f1f1e: Layer already exists
+346f14bf17b9: Layer already exists
+70d62ad95f6e: Pushed
+1a66c5743403: Pushed
+24.04_4.0: digest: sha256:4cee5b440686a13ef1a53bd6a24d09924248ff2dbe12cad64414f37e6fd1a83b size: 4750

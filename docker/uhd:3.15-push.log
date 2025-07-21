@@ -14,23 +14,9 @@ e80c01d2707c: Preparing
 346f14bf17b9: Preparing
 deb519ca31b3: Waiting
 5317536ec664: Waiting
-52294217b877: Waiting
-e80c01d2707c: Waiting
 1deb8aa395e3: Waiting
+e80c01d2707c: Waiting
+52294217b877: Waiting
 346f14bf17b9: Waiting
 183f640f9aaa: Waiting
 f0e0aa68de84: Waiting
-dbf53edd7d79: Pushed
-f6305ed80f18: Pushed
-183f640f9aaa: Pushed
-f37256a88fac: Pushed
-f0e0aa68de84: Pushed
-5317536ec664: Pushed
-50fa9c6abf46: Pushed
-52294217b877: Pushed
-346f14bf17b9: Layer already exists
-deb519ca31b3: Pushed
-2b3095a5d486: Pushed
-e80c01d2707c: Pushed
-1deb8aa395e3: Pushed
-3.15: digest: sha256:5267e15aa5d47df2124886376d689eac45e2525fb7296cc4483dde56ef5382e4 size: 3061
