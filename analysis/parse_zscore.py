@@ -16,22 +16,12 @@ def build_zscore(path: str):
     stats = { "filename":path, "nonnumeric_val_in_col":[], "zero_val_in_col":[] }
     try:
         df = pd.read_csv(path)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
-        df.drop(columns=[col for col in df.columns if col.endswith("_z")], inplace=True)
 
         for col in df.columns:
             if col.casefold() == "timestamp".casefold():
                 continue
             if len(df) == 0:
-                df.columns = df.columns + [f"{col}_z"]
+                df[f"{col}_z"] = pd.Series(dtype="float")
                 continue
 
             # cleanup
@@ -52,7 +42,7 @@ def build_zscore(path: str):
                 df.loc[df[col].notnull(), f"{col}_z"] = 0.0
             else:
                 df.loc[df[col].notnull(), f"{col}_z"] = zscore(df.loc[df[col].notnull(), col])
-        df.to_csv(f"{path}")
+        df.to_csv(f"{path[:-4]}_z.csv", index=False)
     except Exception as e:
         raise ValueError(f"Error during execution of '{path}'!") from e
     print(json.dumps(stats))
@@ -65,7 +55,6 @@ def main(path: str):
     test_configurations = [e.path for e in os.scandir(path) if e.is_dir()]
     runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
     metrics_csvs = [os.path.join(r,"gnb_snr.csv") for r in runs] + [os.path.join(r,"modem-snr.csv") for r in runs]
-    metrics_csvs =[ "/mnt/ext1/5g-masterarbeit-daten/main_measurement/9ff091db/9ff091db__a6f1d465__004/gnb_snr_1.csv" ]
     # pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
 
     with Pool(8) as p:

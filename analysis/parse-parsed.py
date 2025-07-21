@@ -187,12 +187,14 @@ def percentile(n):
     percentile_.__name__ = f'percent_{int(n*100):02d}'
     return percentile_
 
+
 def mean_confidence_interval(confidence=0.90):
     """
     Get -mean- and the lower and upper limit for the confidence interval
     """
     def mcd(data):
-        a = 1.0 * np.array(data)
+        data2 = [d for d in data if not np.isnan(d)] # INFO: drop NaNs!
+        a = 1.0 * np.array(data2)
         n = len(a)
         m, se = np.mean(a), scipy.stats.sem(a)
         h = se * scipy.stats.t.ppf((1 + confidence) / 2., n-1)
@@ -255,6 +257,19 @@ def main(dir):
     assert(os.path.isdir(dir))
     assert(os.path.isfile(f"{dir}/all_runs.parquet"))
     df = pd.read_parquet(f"{dir}/all_runs.parquet")
+
+    defaults = {
+        'jammer':                                False,
+        'dockerization':                         False,
+        'performance_tuning':                    False,
+        'distance_floor':                        0.2,
+        'distance_nearest_wall':                 0.2,
+        'location':                              "A202"
+    }
+    for k,v in defaults.items():
+        if k not in df.columns:
+            df[k] = v
+
     try :
         assert(set(df.columns) == set(all_columns))
     except AssertionError as ae:

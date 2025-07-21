@@ -11,6 +11,7 @@ BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot"
 # BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/antenna-gain-b205/"
 # BASEPATH="/mnt/ext1/5g-masterarbeit-daten/tdd-pattern-algo/"
 BASEPATH="/mnt/ext1/5g-masterarbeit-daten/main_measurement/"
+BASEPATH="/mnt/ext1/5g-masterarbeit-daten/dockerization/"
 
 
 # LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__0/gnb.log.gz"

@@ -186,7 +186,15 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         #     print("No egress?, how?")
         #     return False
         for s in relevant_stats:
-            metrics[f"delay__{s}"] = ret["delay"][s].loc["gnb"]
+            try:
+                metrics[f"delay__{s}"] = ret["delay"][s].loc["gnb"]
+            except:
+                print(f"ERROR: {run_directory}")
+                print(f"ERROR: {run_directory}")
+                print(f"ERROR: {run_directory}")
+                print(f"ERROR: {run_directory}")
+                print(f"ERROR: {run_directory}")
+                return False
         metrics["direction"] = "Ul"
         # df_query = df.query(f"trafficflow == 'ingress' and location == 'gnb'")
         df_query = df_gnb_ingress
@@ -194,7 +202,15 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         metrics["sent_pkts"] = len(df_query)
         ret1 = {**metrics, **config}
         for s in relevant_stats:
-            metrics[f"delay__{s}"] = ret["delay"][s].loc["ue"]
+            try:
+                metrics[f"delay__{s}"] = ret["delay"][s].loc["ue"]
+            except:
+                print(f"ERROR: {run_directory}")
+                print(f"ERROR: {run_directory}")
+                print(f"ERROR: {run_directory}")
+                print(f"ERROR: {run_directory}")
+                print(f"ERROR: {run_directory}")
+                return False
         metrics["direction"] = "Dl"
         # df_query = df.query(f"trafficflow == 'ingress' and location == 'ue'")
         df_query = df_ue_ingress
