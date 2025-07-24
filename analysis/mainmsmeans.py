@@ -4,6 +4,7 @@ import scipy.stats
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 from itertools import combinations, product
+import natsort
 
 pd.options.display.float_format = "{:,.6f}".format
 pd.set_option('display.max_rows', 200)
@@ -30,7 +31,8 @@ def mean_confidence_interval(confidence=0.90):
 
 
 
-df = pd.read_csv("/mnt/ext1/5g-masterarbeit-daten/main_measurement_qam64256/all_runs.csv.gz")
+# df = pd.read_csv("/mnt/ext1/5g-masterarbeit-daten/main_measurement_qam64256/all_runs.csv.gz")
+df = pd.read_csv("/mnt/ext1/5g-masterarbeit-daten/main_measurement/all_runs.csv.gz")
 print(df)
 print(df.columns)
 print(len(df))
@@ -54,6 +56,11 @@ df.rename(columns={
 df.loc[:,"traffic_type_config"] = "" + df["traffic_type"].astype(str) + "__" + df["direction"].astype(str) + \
         "__" + df["traffic_config__iat"].astype(str) + "__" + df["traffic_config__size"].astype(str)
 df.loc[:,"throughput__mean"] = df.loc[:,"throughput__mean"] / 1000000
+
+
+# df['tdd_ratio'] = df["tdd_ratio"].astype(str) + ":1"
+# df['tdd_ratio'] = pd.Categorical(df['tdd_ratio'], ordered=True, categories= natsort.natsorted(df['tdd_ratio'].unique()))
+df['tdd_ratio'] = pd.Categorical(df['tdd_ratio'], ordered=True, categories=[1, 2, 4] )
 
 factors = [
 # "direction",
@@ -111,15 +118,38 @@ print(collected_data)
 
 
 metrics = "throughput__mean"
-cnsm_like_table =pd.DataFrame(None, pd.MultiIndex.from_product([["A"],["b"]], names=["gNB", "Ratio"]),["Dl","Ul"]).dropna()
-df_q = df[ df["traffic_type"] == 'iperfthroughput' ]
+cnsm_multiindex = pd.MultiIndex.from_product([["A"],["b"]], names=["gNB", "Ratio"])
+# cnsm_multiindex.sortlevel("Ratio", ascending=True)
+cnsm_like_table =pd.DataFrame(None, cnsm_multiindex ,["Dl","Ul"]).dropna()
+df_q = df.loc[ (df["traffic_type"] == 'iperfthroughput') & (df["uhd_version"] == "UHD-3.15.LTS") & ( (df["gnb_version"] == "release_24_04")|(df["gnb_version"] == "v2.1.0") ) ]
 cnsm_factors = ["direction", "gnb_type", "tdd_ratio"]
 for gnb in df_q["gnb_type"].unique():
-    for ratio in df_q["tdd_ratio"].unique():
+    # for ratio in df_q["tdd_ratio"].unique():
+    for ratio in [1,2,4]:
         for direction in df_q["direction"].unique():
             mean = df_q.loc[ (df["gnb_type"] == gnb) & (df["tdd_ratio"] == ratio) & (df["direction"] == direction), metrics].mean()
             ci = df_q.loc[ (df["gnb_type"] == gnb) & (df["tdd_ratio"] == ratio) & (df["direction"] == direction),metrics].agg(mean_confidence_interval(0.95))
             cnsm_like_table.loc[(gnb,ratio),direction] = f"{mean:.2f}±{ci:.2f}"
 
-print("Same dimensions as in cnsm paper")
+# cnsm_like_table.sort_index(level=[1],inplace=True)
+print("\nSame dimensions and versions as in cnsm paper")
+print(cnsm_like_table)
+
+
+metrics = "throughput__mean"
+cnsm_multiindex = pd.MultiIndex.from_product([["A"],["b"]], names=["gNB", "Ratio"])
+# cnsm_multiindex.sortlevel("Ratio", ascending=True)
+cnsm_like_table =pd.DataFrame(None, cnsm_multiindex ,["Dl","Ul"]).dropna()
+df_q = df.loc[ (df["traffic_type"] == 'iperfthroughput') ]
+cnsm_factors = ["direction", "gnb_type", "tdd_ratio"]
+for gnb in df_q["gnb_type"].unique():
+    # for ratio in df_q["tdd_ratio"].unique():
+    for ratio in [1,2,4]:
+        for direction in df_q["direction"].unique():
+            mean = df_q.loc[ (df["gnb_type"] == gnb) & (df["tdd_ratio"] == ratio) & (df["direction"] == direction), metrics].mean()
+            ci = df_q.loc[ (df["gnb_type"] == gnb) & (df["tdd_ratio"] == ratio) & (df["direction"] == direction),metrics].agg(mean_confidence_interval(0.95))
+            cnsm_like_table.loc[(gnb,ratio),direction] = f"{mean:.2f}±{ci:.2f}"
+
+# cnsm_like_table.sort_index(level=[1],inplace=True)
+print("\n\nSame dimensions as in cnsm paper, but agg. over gnb/uhd versions")
 print(cnsm_like_table)

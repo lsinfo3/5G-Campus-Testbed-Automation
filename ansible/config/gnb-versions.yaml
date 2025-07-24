@@ -46,7 +46,15 @@ srs_versions:
 
 
 docker_tags:
+  release_24_04:
+    UHD-3.15: lkschu/srsran:24.04_3.15
+    UHD-4.0: lkschu/srsran:24.04_4.0
   release_24_10:
+    UHD-3.15: lkschu/srsran:24.10_3.15
     UHD-4.0: lkschu/srsran:24.10_4.0
+  v2.1.0:
+    UHD-3.15: lkschu/oai:2.1.0_3.15
+    UHD-4.0: lkschu/oai:2.1.0_4.0
   v2.2.0:
+    UHD-3.15: lkschu/oai:2.2.0_3.15
     UHD-4.0: lkschu/oai:2.2.0_4.0

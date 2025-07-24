@@ -16,11 +16,24 @@
 
 # ansible_log="/home/lks/Documents/datastore/5g-masterarbeit/tdd-pattern-algo/ansible_task.log"
 # ansible_log="/mnt/ext1/5g-masterarbeit-daten/tdd-pattern-algo/ansible_task.log"
-ansible_log="/mnt/ext1/5g-masterarbeit-daten/main_measurement/ansible_task.log"
+# ansible_log="/mnt/ext1/5g-masterarbeit-daten/main_measurement/ansible_task.log"
 # ansible_log="/mnt/ext1/5g-masterarbeit-daten/main_measurement_run5-10/ansible_task.log"
 # Ansible_Playbook_Extra_Vars="skip_until_id=4343fe5c__94c63a77__001"
 # Ansible_Playbook_Extra_Vars="skip_until_id=4343fe5c__9ba06c22__000"
+# ansible_log="/mnt/ext1/5g-masterarbeit-daten/dockerization/ansible_task.log"
+# ansible_log="/mnt/ext1/5g-masterarbeit-daten/distance/ansible_task.log"
+# ansible_log="/mnt/ext1/5g-masterarbeit-daten/distance_wall/ansible_task.log"
+# ansible_log="/mnt/ext1/5g-masterarbeit-daten/modem/ansible_task.log"
+# ansible_log="/mnt/ext1/5g-masterarbeit-daten/dockerization/ansible_task.log"
+# ansible_log="/mnt/ext1/5g-masterarbeit-daten/performance-tuning_cstate_recommends/ansible_task.log"
+# ansible_log="/mnt/ext1/5g-masterarbeit-daten/throughput-overshoot/ansible_task.log"
+ansible_log="/mnt/ext1/5g-masterarbeit-daten/antenna-gain-b205/ansible_task.log"
+ansible_log="/mnt/ext1/5g-masterarbeit-daten/height/ansible_task.log"
+
+# Ansible_Playbook_Extra_Vars="skip_until_id=9ff091db__357caee6__003"
+# Ansible_Playbook_Extra_Vars="skip_until_id=9ff091db__Ul__OAI__rx-28__000"
 Ansible_Playbook_Extra_Vars=""
+
 
 
 
@@ -83,6 +96,7 @@ build_ansible_playbook_extra_vars() {
 
 
 
+gotify "playbook start" "Starting new playbook."
 
 start_scapy_server_on_gnodeb &
 while true; do

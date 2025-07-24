@@ -40,8 +40,27 @@
       # include_vars: ../tdd-pattern-algo-old.yaml
       # include_vars: ../tdd-pattern-algo-new.yaml
       # include_vars: ../main_measurement.yaml
-      include_vars: ../main_measurement_repeat_ping_pkt_big.yaml
+      # include_vars: ../main_measurement_repeat_ping_pkt_big.yaml
       # include_vars: ../main_measurement_run5-10.yaml
+      # include_vars: ../dockerization_main.yaml
+      # include_vars: ../dockerization_main_complete_tdd.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/distance/distance_msm_1.0m.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/distance/distance_msm_2.0m.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/distance/distance_msm_2.5m.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/distance_wall/distance_wall.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/modem/modem_2.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/dockerization/docker_qam256_r0-3.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/performance-tuning_cstate_recommends/perf-tuning-off__only_srsran_r0-3.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/performance-tuning_cstate_recommends/perf-tuning-on__only_srsran_r0-3.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/throughput-overshoot/throughput-overshoot-iperf__only_srsran.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/antenna-gain-b205/antenna-gain-b205-DlandUl-__only_srsran_runs0-1_1.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/throughput-overshoot/throughput_overshoot_missingTDD_r0-1.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/antenna-gain-b205/antenna-gain-b205-DlandUl-___repeat_failed.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/main_measurement/main_measurement__only_srsran.yaml
+      # include_vars: /mnt/ext1/5g-masterarbeit-daten/antenna-gain-b205/antenna-gain-b205-repeat_OAI_low_gain_r0-1.yaml
+      include_vars: /mnt/ext1/5g-masterarbeit-daten/height/height__r0-1.yaml
+
+
 
 
   tasks:

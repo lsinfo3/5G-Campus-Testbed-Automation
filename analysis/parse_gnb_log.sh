@@ -1,17 +1,17 @@
 #!/bin/bash
 
 
-BASEPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps"
-BASEPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
-BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/dockerization"
-BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/gnb-versions-delay"
-BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot"
+# BASEPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps"
+# BASEPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/antenna-gain/"
+# BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/dockerization"
+# BASEPATH="/home/lks/Akten/datastore/5g-masterarbeit/gnb-versions-delay"
+# BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot"
 # BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/throughput-overshoot-scapy"
 # BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/performance-tuning"
 # BASEPATH="/home/lks/Documents/datastore/5g-masterarbeit/antenna-gain-b205/"
 # BASEPATH="/mnt/ext1/5g-masterarbeit-daten/tdd-pattern-algo/"
-BASEPATH="/mnt/ext1/5g-masterarbeit-daten/main_measurement/"
-BASEPATH="/mnt/ext1/5g-masterarbeit-daten/dockerization/"
+# BASEPATH="/mnt/ext1/5g-masterarbeit-daten/main_measurement/"
+# BASEPATH="/mnt/ext1/5g-masterarbeit-daten/dockerization/"
 
 
 # LOGPATH="/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/578de3b8/578de3b8__0/gnb.log.gz"
@@ -48,10 +48,10 @@ parse_oai() {
     gzip -dc "$gnb_log_path" | grep " RSRP \| MCS \| SNR " | grep -e '^[0-9]' | while read -r line; do
         ts="$(echo -n "$line" | awk '{print $1}')"
         cqi=""
-        snr="$(echo -n "$line" | grep " SNR " | awk '{print $21}')"
-        rsrp="$(echo -n "$line" | grep " RSRP " | awk '{print $16}')"
-        mcs_dl="$(echo -n "$line" | grep " MCS " | grep -v "dlsch_rounds" | awk '{print $14}')"
-        mcs_ul="$(echo -n "$line" | grep " MCS " | grep -v "ulsch_rounds" | awk '{print $14}')"
+        snr="$(echo -n "$line" | grep -oP " SNR \K(\d+.?\d+)(?= dB)")"
+        rsrp="$(echo -n "$line" | grep -oP " RSRP \K(-?\d+.?\d+)(?= \()")"
+        mcs_dl="$(echo -n "$line" | grep -oP " dlsch_rounds .*\d\d\d MCS \([0,1]\) \K(\d+)")"
+        mcs_ul="$(echo -n "$line" | grep -oP " ulsch_rounds .*\d\d\d MCS \([0,1]\) \K(\d+)(?= \(Qm)")"
 
         # 1745504694.380505 UE RNTI e7eb CU-UE-ID 1 in-sync PH 52 dB PCMAX 21 dBm, average RSRP -70 (31 meas)
         # 1745504694.380582 UE e7eb: dlsch_rounds 22637/3/1/0, dlsch_errors 0, pucch0_DTX 3, BLER 0.00000 MCS (1) 9
@@ -78,7 +78,7 @@ detect_gnb_type() {
 
 
 walk_dir() {
-    for run_group in "$BASEPATH"/*/; do
+    for run_group in "$1"/*/; do
         for run in "$run_group"/*/; do
             detect_gnb_type "$run"
         done
@@ -88,7 +88,7 @@ walk_dir() {
 walkdir_parallel() {
     lines=()
     # I=0
-    for run_group in "$BASEPATH"/*/; do
+    for run_group in "$1"/*/; do
         for run in "$run_group"/*/; do
             lines+=("$run")
             # I=$((I+1))
@@ -108,7 +108,7 @@ export -f parse_srsran
 export -f parse_oai
 
 # time walk_dir
-time walkdir_parallel
+time walkdir_parallel "$1"
 
 
 

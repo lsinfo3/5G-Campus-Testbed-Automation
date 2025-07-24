@@ -16,6 +16,10 @@ cell_cfg:
         nof_dl_symbols: '12'
         nof_ul_slots: '4'
         nof_ul_symbols: '0'
+    pusch:
+        mcs_table: qam256
+    pdsch:
+        mcs_table: qam256
 amf:
     addr: 172.16.32.51
     bind_addr: 172.16.32.50

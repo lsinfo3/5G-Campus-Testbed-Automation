@@ -19,7 +19,7 @@ GLOBAL_COUNTER = 0
 
 system = {
     # "pcap_dump": "/home/lks/Documents/datastore/5g-masterarbeit/tdd-pattern-algo/",
-    "pcap_dump": "/mnt/ext1/5g-masterarbeit-daten/main_measurement/",
+    "pcap_dump": "/mnt/ext1/5g-masterarbeit-daten/height/",
     "identifier":0
     }
 
@@ -29,11 +29,12 @@ fixed_params = {
     "distance_nearest_wall": 1.0,
     "location": "B205",
     "distance_horizontal_in_m": 1.5,
-    "distance_vertical_in_m": 0.0,
+    "distance_vertical_in_m": 1.0,
     "gnb_antenna_inclanation_in_degree": 90,
     "gnb_antenna_rotation_in_degree": 0,
     "ue_antenna_inclanation_in_degree": 90,
     "ue_antenna_rotation_in_degree": 0,
+    # "modem": "X60",         # TODO: Verify!
     "modem": "SIM8200EA-M2 5G HAT",         # TODO: Verify!
     "interface_ue": "wwan0",
     "interface_gnb": "eno1",
@@ -191,7 +192,7 @@ def create_main_measurement_param_combinations():
     # period_lengths = [20]
 
     # runs = [ i for i in range(10,15) ]
-    runs = [ i for i in range(5,10) ]
+    runs = [ i for i in range(0,5) ]
     # runs = [ i for i in range(3,4) ]
 
     srsranconfs = [
@@ -345,15 +346,16 @@ def create_param_combinations():
     c = []
 
     ratios = [1,2,4]
-    ratios = [1,2]
-    # ratios = [2]
+    # ratios = [1,2]
+    # ratios = [1]
 
     period_lengths = [5, 10, 20]
-    period_lengths = [5, 20]
-    # period_lengths = [20]
+    # period_lengths = [5, 20]
+    # period_lengths = [5]
 
     # runs = [ i for i in range(10,15) ]
     runs = [ i for i in range(0,3) ]
+    # runs = [ i for i in range(0,10) ]
     # runs = [ i for i in range(3,4) ]
 
     srsranconfs = [
@@ -387,12 +389,14 @@ def create_param_combinations():
             run_to_run_params_default["traffic_config"]["target_port"] = "4455"
             run_to_run_params_default["traffic_config"]["iat"]="0.001"
             run_to_run_params_default["traffic_config"]["count"]="60000"
+            # for dockerization in [True, False]:
             for dockerization in [False]:
                 for direction in ["Dl", "Ul"]:
                     if direction == "Dl":
                         # rates = ["30M","40M","50M","60M","70M","100M", "200M"]
                         rates = ["100M"]
                     else:
+                        # rates = ["10M","20M","30M","50M","100M", "200M"]
                         rates = ["50M"]
                     for rate in rates:
                         run_to_run_params_default["traffic_config"]["direction"]=direction
@@ -408,6 +412,7 @@ def create_param_combinations():
                                     r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
                                     # r["identifier"] = r["identifier"] + f"__{run:03d}"
                                     r["run"] = run
+                                    # if r["tdd_config"]["tdd_dl_ul_ratio"] == 4 or r["tdd_config"]["tdd_dl_ul_tx_period"] == 10:
                                     c.append(r)
 
     # scapy-throughput
@@ -477,16 +482,19 @@ def create_param_combinations():
             run_to_run_params_default["traffic_config"]["count"]="60000"
             run_to_run_params_default["traffic_config"]["direction"]="UlDl"
             for ratio in ratios:
-                for period_length in period_lengths:
-                    for run in runs:
-                        r = new_per_run_config_base()
-                        r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
-                        r["gnb_version"] = gnb
-                        r["run"] = 0
-                        r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
-                        # r["identifier"] = r["identifier"] + f"__{run:03d}"
-                        r["run"] = run
-                        c.append(r)
+                # for dockerization in [True, False]:
+                for dockerization in [False]:
+                    for period_length in period_lengths:
+                        for run in runs:
+                            r = new_per_run_config_base()
+                            r["tdd_config"] = build_tdd_config(period=period_length, ratio=ratio, min_flex_slots=1)
+                            r["gnb_version"] = gnb
+                            r["dockerization"] = dockerization
+                            r["run"] = 0
+                            r["identifier"] = dict_to_small_hash(fixed_params) + "__" + dict_to_small_hash(r) + f"__{run:03d}"
+                            # r["identifier"] = r["identifier"] + f"__{run:03d}"
+                            r["run"] = run
+                            c.append(r)
     return c
 
 def create_antenna_gain_combinations():
@@ -495,8 +503,10 @@ def create_antenna_gain_combinations():
     period_lengths = [5]
 
     runs = [ i for i in range(0,3) ]
+    runs = [ i for i in range(0,2) ]
 
     OAI_RX_MIN = 20
+    OAI_RX_MIN = 12
     OAI_TX_MIN = 40
     SRS_RX_MIN = 0
     SRS_TX_MIN = 30
@@ -504,12 +514,16 @@ def create_antenna_gain_combinations():
     OAI_RX_MAX_RANGE = [0, 70]
     OAI_TX_MAX_RANGE = [0, 89]
     OAI_RX_RANGE = [i for i in range(OAI_RX_MIN, 70, 4)]
+    OAI_RX_RANGE = [i for i in range(OAI_RX_MIN, 36, 4)]
     OAI_TX_RANGE = [i for i in range(OAI_TX_MIN, 89, 4)]
+    OAI_TX_RANGE = []
 
     SRS_RX_MAX_RANGE = [0, 76]
     SRS_TX_MAX_RANGE = [0, 89]
     SRS_RX_RANGE = [i for i in range(SRS_RX_MIN, 76, 4)]
+    SRS_RX_RANGE = []
     SRS_TX_RANGE = [i for i in range(SRS_TX_MIN, 89, 4)]
+    SRS_TX_RANGE = []
 
 
     srsranconfs = [
@@ -526,8 +540,9 @@ def create_antenna_gain_combinations():
             ]
 
     for gnb in srsranconfs + oairanconfs:
-        # for direction in ["Ul", "Dl"]:
-        for direction in ["Ul"]:
+        for direction in ["Ul", "Dl"]:
+        # for direction in ["Ul"]:
+        # for direction in ["Dl"]:
             for rxtx in ["rx", "tx"]:
                 # iperf
                 run_to_run_params_default["traffic_config"]["traffic_type"] = "iperfthroughput"
@@ -594,9 +609,11 @@ if __name__ == "__main__":
         run_config_str = yaml.dump(d, sort_keys=False, indent=4)
         print(run_config_str)
     else:
-        # d = {"system":system, "run_to_run_variation":create_param_combinations()}
-        print("Generating huge parameter combination configuration", file=sys.stderr)
-        d = {"system":system, "run_to_run_variation":create_main_measurement_param_combinations()}
+        d = {"system":system, "run_to_run_variation":create_param_combinations()}
+
+        # print("Generating huge parameter combination configuration", file=sys.stderr)
+        # d = {"system":system, "run_to_run_variation":create_main_measurement_param_combinations()}
+
         run_config_str = yaml.dump(d, sort_keys=False, indent=4)
         print(run_config_str)
 

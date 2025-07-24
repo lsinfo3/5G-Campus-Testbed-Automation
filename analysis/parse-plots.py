@@ -2,7 +2,9 @@ import plotninesettings
 import natsort
 import itertools
 import math
+import yaml
 import scipy
+import scipy.stats
 import plots
 import pandas as pd
 import numpy as np
@@ -68,6 +70,90 @@ def _scenario_main_measurements():
         plot_dir = f"{ansible_dump}/.plots/"
         if not os.path.isdir(plot_dir):
             os.mkdir(plot_dir)
+
+            # CDFs
+        for cdf_msm_location, cdf_run in [
+                # iperf
+                ("gnb","9ff091db__0ba354c8"), ("gnb","9ff091db__580213e7"), ("gnb","9ff091db__2ef697cf"), ("gnb","9ff091db__5394720c"),
+                # scapy
+                ("ue","9ff091db__4b3d60f0")
+                ]:
+
+
+            df_r0 = pd.read_csv(f"/mnt/ext1/5g-masterarbeit-daten/main_measurement/9ff091db/{cdf_run}__000/combined.csv.gz")
+            df_r0 = df_r0[ df_r0["location"]==cdf_msm_location ]
+            df_r0["run"] = "0"
+            df_r0["delay_cdf"] = df_r0["delay"].apply(lambda x : scipy.stats.percentileofscore(df_r0["delay"], x, kind='weak'))
+            df_r0["Timestamp"] = df_r0["Timestamp"] - df_r0["Timestamp"].min()
+            df_r1 = pd.read_csv(f"/mnt/ext1/5g-masterarbeit-daten/main_measurement/9ff091db/{cdf_run}__001/combined.csv.gz")
+            df_r1 = df_r1[ df_r1["location"]==cdf_msm_location ]
+            df_r1["run"] = "1"
+            df_r1["delay_cdf"] = df_r1["delay"].apply(lambda x : scipy.stats.percentileofscore(df_r1["delay"], x, kind='weak'))
+            df_r1["Timestamp"] = df_r1["Timestamp"] - df_r1["Timestamp"].min()
+            df_r2 = pd.read_csv(f"/mnt/ext1/5g-masterarbeit-daten/main_measurement/9ff091db/{cdf_run}__002/combined.csv.gz")
+            df_r2 = df_r2[ df_r2["location"]==cdf_msm_location ]
+            df_r2["run"] = "2"
+            df_r2["delay_cdf"] = df_r2["delay"].apply(lambda x : scipy.stats.percentileofscore(df_r2["delay"], x, kind='weak'))
+            df_r2["Timestamp"] = df_r2["Timestamp"] - df_r2["Timestamp"].min()
+            df_r3 = pd.read_csv(f"/mnt/ext1/5g-masterarbeit-daten/main_measurement/9ff091db/{cdf_run}__003/combined.csv.gz")
+            df_r3 = df_r3[ df_r3["location"]==cdf_msm_location ]
+            df_r3["run"] = "3"
+            df_r3["delay_cdf"] = df_r3["delay"].apply(lambda x : scipy.stats.percentileofscore(df_r3["delay"], x, kind='weak'))
+            df_r3["Timestamp"] = df_r3["Timestamp"] - df_r3["Timestamp"].min()
+            df_r4 = pd.read_csv(f"/mnt/ext1/5g-masterarbeit-daten/main_measurement/9ff091db/{cdf_run}__004/combined.csv.gz")
+            df_r4 = df_r4[ df_r4["location"]==cdf_msm_location ]
+            df_r4["run"] = "4"
+            df_r4["delay_cdf"] = df_r4["delay"].apply(lambda x : scipy.stats.percentileofscore(df_r4["delay"], x, kind='weak'))
+            df_r4["Timestamp"] = df_r4["Timestamp"] - df_r4["Timestamp"].min()
+            df_cdf = pd.concat([df_r0,df_r1, df_r2, df_r3, df_r4])
+            df_cdf["datavolume"] = df_cdf["SeqNum"] * df_cdf["PacketSize"]
+            plots.simple_line_plot(df=df_cdf.loc[ df_cdf.index %31 == 0 ], filename=f"{plot_dir}/CDF_datavolume_{cdf_run}_full",
+                                   # facets={"facet":p9.facet_grid("direction",cols=["tdd_period"], scales="free_y")},
+                                   labels={"y":"cumulative data [MB]", "x":"time [s]", "color": "run"},
+                                   errorbars=False,
+                                   points=False,
+                                   ratio="16:9",
+                                   aesthetics=p9.aes(y="datavolume / 1000000",
+                                                     # ymin="(throughput__mean___mean - throughput__mean___ci_95) / 1000000",
+                                                     # ymax="(throughput__mean___mean + throughput__mean___ci_95) / 1000000",
+                                                     x="Timestamp", color="run", group="run")
+                                   )
+            plots.simple_line_plot(df=df_cdf.loc[ df_cdf["Timestamp"] < 10 ], filename=f"{plot_dir}/CDF_datavolume_{cdf_run}_10s",
+                                   # facets={"facet":p9.facet_grid("direction",cols=["tdd_period"], scales="free_y")},
+                                   labels={"y":"cumulative data [MB]", "x":"time [s]", "color": "run"},
+                                   errorbars=False,
+                                   points=False,
+                                   ratio="16:9",
+                                   aesthetics=p9.aes(y="datavolume / 1000000",
+                                                     # ymin="(throughput__mean___mean - throughput__mean___ci_95) / 1000000",
+                                                     # ymax="(throughput__mean___mean + throughput__mean___ci_95) / 1000000",
+                                                     x="Timestamp", color="run", group="run")
+                                   )
+            plots.simple_line_plot(df=df_cdf.loc[ df_cdf.index %31 == 0 ], filename=f"{plot_dir}/CDF_delay_{cdf_run}_full",
+                                   # facets={"facet":p9.facet_grid("direction",cols=["tdd_period"], scales="free_y")},
+                                   labels={"y":"CDF(delay)", "x":"delay [s]", "color": "run"},
+                                   errorbars=False,
+                                   points=False,
+                                   ratio="16:9",
+                                   aesthetics=p9.aes(y="delay_cdf / 100",
+                                                     # ymin="(throughput__mean___mean - throughput__mean___ci_95) / 1000000",
+                                                     # ymax="(throughput__mean___mean + throughput__mean___ci_95) / 1000000",
+                                                     x="delay", color="run", group="run")
+                                   )
+            plots.simple_line_plot(df=df_cdf.loc[ df_cdf.index %31 == 0 ], filename=f"{plot_dir}/CDF_delay_{cdf_run}_full_4:3",
+                                   # facets={"facet":p9.facet_grid("direction",cols=["tdd_period"], scales="free_y")},
+                                   labels={"y":"CDF(delay)", "x":"delay [s]", "color": "run"},
+                                   errorbars=False,
+                                   points=False,
+                                   ratio="4:3",
+                                   size=(plotninesettings.PLOT_W/2,plotninesettings.PLOT_W/2),
+                                   aesthetics=p9.aes(y="delay_cdf / 100",
+                                                     # ymin="(throughput__mean___mean - throughput__mean___ci_95) / 1000000",
+                                                     # ymax="(throughput__mean___mean + throughput__mean___ci_95) / 1000000",
+                                                     x="delay", color="run", group="run")
+                                   )
+
+
         df = pd.read_parquet(f"{ansible_dump}/all_runs.parquet")
         def labeler(x):
             if x == "release_24_04":
@@ -88,6 +174,56 @@ def _scenario_main_measurements():
                 { "str": "traffic_config__traffic_type == 'scapyudpping'", "label": "q_traf_scapyping"},
                 { "str": "traffic_config__traffic_type == 'iperfthroughput'", "label": "q_traf_iperf"},
                 ]
+
+
+        params_base = [
+        "direction",
+        "gnb_type",
+        "tdd_ratio",
+        "tdd_period",
+        "gnb_version",
+        "uhd_version",
+        ]
+
+        df["direction"] = df["direction"].apply(lambda x : x.upper())
+        df["gnb_type"] = df["gnb_version__type"].astype(str)
+        df["tdd_ratio"] = df["tdd_config__tdd_dl_ul_ratio"].astype(str) + ":1"
+        df['tdd_ratio'] = pd.Categorical(df['tdd_ratio'], ordered=True, categories= natsort.natsorted(df['tdd_ratio'].unique()))
+        df["tdd_period"] = df["tdd_config__tdd_dl_ul_tx_period"].astype(str) + " slots"
+        df['tdd_period'] = pd.Categorical(df['tdd_period'], ordered=True, categories= natsort.natsorted(df['tdd_period'].unique()))
+
+        ### TDD patterns
+        df_tdd = df[ df["traffic_config__traffic_type"] == "iperfthroughput" ].drop(columns=[c for c in df.columns if c != "throughput__mean" and c not in params_base ])
+        df_tdd_agg = df_tdd.groupby(["direction", "gnb_type","tdd_period", "tdd_ratio"]).agg(["mean",mean_confidence_interval(0.95)]).reset_index()
+        df_tdd_agg.columns = ['___'.join(filter(None,col)) for col in df_tdd_agg.columns.values]
+        plots.simple_line_plot(df=df_tdd_agg, filename=f"{plot_dir}/TDD__iperf_throughput",
+                               facets={"facet":p9.facet_grid("direction",cols=["tdd_period"], scales="free_y")},
+                               labels={"y":"throughput [Mbps]", "x":"DL:UL ratio", "color": "gNB"},
+                               errorbars=True,
+                               aesthetics=p9.aes(y="throughput__mean___mean / 1000000",
+                                                 ymin="(throughput__mean___mean - throughput__mean___ci_95) / 1000000",
+                                                 ymax="(throughput__mean___mean + throughput__mean___ci_95) / 1000000",
+                                                 x="tdd_ratio", color="gnb_type", group="gnb_type")
+                               )
+        plots.simple_line_plot(df=df_tdd_agg, filename=f"{plot_dir}/TDD__iperf_throughput_alt01",
+                               facets={"facet":p9.facet_grid("direction",cols=["gnb_type"], scales="free_y")},
+                               labels={"y":"throughput [Mbps]", "x":"DL:UL ratio", "color": "TDD period"},
+                               errorbars=True,
+                               aesthetics=p9.aes(y="throughput__mean___mean / 1000000",
+                                                 ymin="(throughput__mean___mean - throughput__mean___ci_95) / 1000000",
+                                                 ymax="(throughput__mean___mean + throughput__mean___ci_95) / 1000000",
+                                                 x="tdd_ratio", color="tdd_period", group="tdd_period")
+                               )
+        plots.simple_line_plot(df=df_tdd_agg, filename=f"{plot_dir}/TDD__iperf_throughput_alt02",
+                               facets={"facet":p9.facet_grid("direction",cols=["gnb_type"], scales="free_y")},
+                               labels={"y":"throughput [Mbps]", "x":"TDD period", "color": "UL:DL ratio"},
+                               errorbars=True,
+                               aesthetics=p9.aes(y="throughput__mean___mean / 1000000",
+                                                 ymin="(throughput__mean___mean - throughput__mean___ci_95) / 1000000",
+                                                 ymax="(throughput__mean___mean + throughput__mean___ci_95) / 1000000",
+                                                 x="tdd_period", color="tdd_ratio", group="tdd_ratio")
+                               )
+
         for query in querys:
             df_queried = df.query(query["str"])
 
@@ -575,13 +711,34 @@ def _scenario_qam():
     df_plot = df
     df_plot["gnb_version_label"] = df_plot["gnb_version__version"].apply(labeler)
     # df_plot["docker_label"] = df_plot["dockerization"].apply(lambda x: "docker" if x else "bare")
-    df_plot["tdd_ratio_label"]=df_plot["tdd_config__tdd_dl_ul_ratio"].apply(lambda x: f"TDD Dl/Ul {x}")
+    df_plot["tdd_ratio_label"]=df_plot["tdd_config__tdd_dl_ul_ratio"].apply(lambda x: f"{x}:1")
+    df_plot['tdd_ratio_label'] = pd.Categorical(df_plot['tdd_ratio_label'], ordered=True, categories= natsort.natsorted(df_plot['tdd_ratio_label'].unique()))
+    df_plot["tdd_period_label"]=df_plot["tdd_config__tdd_dl_ul_tx_period"].apply(lambda x: f"{x} slots")
+    df_plot['tdd_period_label'] = pd.Categorical(df_plot['tdd_period_label'], ordered=True, categories= natsort.natsorted(df_plot['tdd_period_label'].unique()))
     df_plot["tdd_label"]="Dl/Ul: " + df_plot["tdd_config__tdd_dl_ul_ratio"].astype(str) + "; #: " + df_plot["tdd_config__tdd_dl_ul_tx_period"].astype(str)
 
     df_plot['tdd_config__tdd_dl_ul_ratio'] = pd.Categorical(df_plot['tdd_config__tdd_dl_ul_ratio'], ordered=True, categories= natsort.natsorted(df_plot['tdd_config__tdd_dl_ul_ratio'].unique()))
     df_plot['tdd_config__tdd_dl_ul_tx_period'] = pd.Categorical(df_plot['tdd_config__tdd_dl_ul_tx_period'], ordered=True, categories= natsort.natsorted(df_plot['tdd_config__tdd_dl_ul_tx_period'].unique()))
     df_plot['qam'] = pd.Categorical(df_plot['qam'], ordered=True, categories= natsort.natsorted(df_plot['qam'].unique()))
     df_plot['qam_label'] = df_plot['qam'].astype(str) + "QAM"
+    df_plot['qam_label'] = pd.Categorical(df_plot['qam_label'], ordered=True, categories= natsort.natsorted(df_plot['qam_label'].unique()))
+
+    with open(f"{plot_dir}/raw.txt", "w") as f:
+        collected_data =pd.DataFrame(None, pd.MultiIndex.from_product([["tt"],["A"],["b"]], names=["Dir","Period", "Ratio"]),["speedup"]).dropna()
+        dd = df_plot.query("traffic_config__traffic_type == 'iperfthroughput' and gnb_version__version == 'release_24_10'")
+        for dir in ["Ul", "Dl"]:
+            for per in [5,10,20]:
+                for ratio in [1,2,4]:
+                    mean_64qam = dd.loc[ (dd["qam_label"] == "64QAM") & (dd["direction"] == dir) &
+                                             (dd["tdd_config__tdd_dl_ul_tx_period"] == per ) &
+                                             (dd["tdd_config__tdd_dl_ul_ratio"] == ratio) , "throughput__mean__agg__mean" ].mean()
+                    mean_256qam = dd.loc[ (dd["qam_label"] == "256QAM") & (dd["direction"] == dir) &
+                                             (dd["tdd_config__tdd_dl_ul_tx_period"] == per ) &
+                                             (dd["tdd_config__tdd_dl_ul_ratio"] == ratio) , "throughput__mean__agg__mean" ].mean()
+                    collected_data.loc[ (str(dir),str(per),str(ratio)), "speedup"] = mean_256qam/mean_64qam
+                    collected_data.loc[ (str(dir),str(per),str(ratio)), "calc"] = f"{mean_256qam}/{mean_64qam}"
+        # f.write(f" 64QAM:{mean_64qam}\n256QAM:{mean_256qam}")
+        print(collected_data, file=f)
 
     # iperf
     df_plot_q = df_plot.query("traffic_config__traffic_type == 'iperfthroughput'")
@@ -611,11 +768,55 @@ def _scenario_qam():
                           aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="qam", color="factor(tdd_config__tdd_dl_ul_ratio)"),
                           )
     plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-24_10-alt-169",
-                          facets={"facet":p9.facet_grid("direction",cols=["tdd_config__tdd_dl_ul_tx_period"], scales="free_y")},
-                          labels={"y":"throughput [Mps]", "x":"QAM", "color":"TDD ratio"},
+                          facets={"facet":p9.facet_grid("direction",cols=["tdd_period_label"], scales="free_y")},
+                          labels={"y":"throughput [Mps]", "x":"", "color":"TDD ratio"},
                           errorbars=True, ratio="16:9",
-                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="qam", color="factor(tdd_config__tdd_dl_ul_ratio)"),
+                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="qam_label", color="tdd_ratio_label"),
                           )
+
+
+def _scenario_height():
+    scenarios = ["/mnt/ext1/5g-masterarbeit-daten/height"]
+    for ansible_dump in scenarios:
+        plot_dir = ansible_dump
+        df = pd.read_parquet(f"{ansible_dump}/all_runs_groupby_agg.parquet")
+        print(df)
+
+        def labeler(x):
+            if x == "release_24_04":
+                return "srsRAN 24.04"
+            elif x == "release_24_10":
+                return "srsRAN 24.10"
+            elif x == "v2.1.0":
+                return "OAI 2.1.0"
+            elif x == "v2.2.0":
+                return "OAI 2.2.0"
+            else:
+                return x
+
+        df_plot = df
+        df_plot["gnb_version_label"] = df_plot["gnb_version__version"].apply(labeler)
+        df_plot["docker_label"] = df_plot["dockerization"].apply(lambda x: "docker" if x else "bare")
+        df_plot["tdd_ratio_label"]=df_plot["tdd_config__tdd_dl_ul_ratio"].apply(lambda x: f"{x}:1")
+        df_plot['tdd_ratio_label'] = pd.Categorical(df_plot['tdd_ratio_label'], ordered=True, categories= natsort.natsorted(df_plot['tdd_ratio_label'].unique()))
+        df_plot["tdd_period_label"]=df_plot["tdd_config__tdd_dl_ul_tx_period"].apply(lambda x: f"{x} slots")
+        df_plot['tdd_period_label'] = pd.Categorical(df_plot['tdd_period_label'], ordered=True, categories= natsort.natsorted(df_plot['tdd_period_label'].unique()))
+        df_plot["tdd_label"]="Dl/Ul: " + df_plot["tdd_config__tdd_dl_ul_ratio"].astype(str) + "; #: " + df_plot["tdd_config__tdd_dl_ul_tx_period"].astype(str)
+        df_plot.loc[:,"height_difference"]=df_plot["distance_vertical_in_m"].astype(str)
+
+
+        # iperf
+        df_plot_q = df_plot.query("traffic_config__traffic_type == 'iperfthroughput'")
+        plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_height_iperf-throughput",
+                              facets={"facet":p9.facet_grid(["gnb_version_label", "direction"],cols=["tdd_period_label"], scales="fixed")},
+                              labels={"y":"throughput [Mps]", "x":"height difference [m]", "color":"tdd ratio", "shape":"direction"},
+                              errorbars=True,
+                              aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",
+                                                ymax="throughput__mean__agg__ci_95_u / 1000000", x="height_difference",
+                                                color="tdd_ratio_label"),
+                              )
+
+
 
 
 def _scenario_dockerization():
@@ -1467,9 +1668,163 @@ def plots_antenna_gain_single_runs(ansible_dump):
 
 def plots_antenna_gain_aggregated_runs(ansible_dump):
     plot_dir = ansible_dump
-    df = pd.read_parquet(f"{ansible_dump}/all_runs_groupby_agg.parquet")
+    df = pd.read_csv(f"{ansible_dump}/all_runs_groupby_agg.csv")
     df["gain_type"] = df["rx_gain"].apply(lambda x: "Rx" if x >= 0 else "Tx")
     df["gain_value"] = df.apply(lambda x: x["rx_gain"] if x["rx_gain"] >= 0 else x["tx_gain"], axis=1)
+
+    series_dirs = [ f"{ansible_dump}/{d}" for d in os.listdir(ansible_dump) if os.path.isdir(f"{ansible_dump}/{d}") and not os.path.basename(f"{ansible_dump}/{d}").startswith(".")]
+    run_dirs = [ r.path[:-5] for series in series_dirs for r in os.scandir(series) if r.is_dir() and not os.path.basename(r).startswith(".")]
+    run_dirs = list(dict.fromkeys(run_dirs))
+    # print(ansible_dump)
+    # print(run_dirs)
+
+
+    ## Get SNR and channel metrics
+    run_dir_stats = {}
+    # TODO: erst auf einen run kürzen!
+    runs_total = 0
+    runs_failed = 0
+    runs_asserts = 0
+    for d in run_dirs:
+        runs_total += 1
+        config = {}
+        modem_snr = []
+        modem_sinr = []
+        modem_rsrp = []
+        modem_rsrq = []
+        gnb_snr = []
+        gnb_cqi = []
+        gnb_rsrp = []
+        gnb_mcs_dl = []
+        gnb_mcs_ul = []
+        for i in range(10):
+            this_dir = f"{d}__{i:03d}"
+            if not os.path.isdir(this_dir):
+                continue
+            if os.path.exists(f"{this_dir}/FAILED"):
+                runs_failed += 0
+                continue
+
+            modem_df = pd.read_csv(f"{this_dir}/modem-snr.csv")
+            for col in modem_df.columns:
+                if col.casefold() == "timestamp".casefold():
+                    continue
+                # cleanup
+                modem_df.loc[lambda x:x[col] == 0, col ] = np.nan    # drop all 0s
+                modem_df[col] = pd.to_numeric(modem_df.loc[:,col], errors="coerce")
+            ###k
+            gnb_df = pd.read_csv(f"{this_dir}/gnb_snr.csv")
+            for col in gnb_df.columns:
+                if col.casefold() == "timestamp".casefold():
+                    continue
+                # cleanup
+                gnb_df.loc[lambda x:x[col] == 0, col ] = np.nan    # drop all 0s
+                gnb_df[col] = pd.to_numeric(gnb_df.loc[:,col], errors="coerce")
+
+            if config == {}:
+                with open(f"{this_dir}/{os.path.basename(this_dir)}.yaml", "r") as f:
+                    config = yaml.unsafe_load(f)
+                    dc = pd.json_normalize(config, sep="__")
+                    config = dc.to_dict(orient='records')[0]
+            # find single run
+            if config["rx_gain"] != None:
+                loc_query = (df["gain_value"] == config["rx_gain"]) & (df["gain_type"] == "Rx") \
+                   & (df["gnb_version__type"] == config["gnb_version__type"]) & (df["traffic_config__traffic_type"] == config["traffic_config__traffic_type"]) \
+                   & (df["traffic_config__direction"] == config["traffic_config__direction"]) \
+                   & (df["tdd_config__tdd_dl_ul_tx_period"] == config["tdd_config__tdd_dl_ul_tx_period"]) \
+                   & (df["tdd_config__tdd_dl_ul_ratio"] == config["tdd_config__tdd_dl_ul_ratio"])
+            elif config["tx_gain"] != None:
+                loc_query = (df["gain_value"] == config["tx_gain"]) & (df["gain_type"] == "Tx") \
+                   & (df["gnb_version__type"] == config["gnb_version__type"]) & (df["traffic_config__traffic_type"] == config["traffic_config__traffic_type"]) \
+                   & (df["traffic_config__direction"] == config["traffic_config__direction"]) \
+                   & (df["tdd_config__tdd_dl_ul_tx_period"] == config["tdd_config__tdd_dl_ul_tx_period"]) \
+                   & (df["tdd_config__tdd_dl_ul_ratio"] == config["tdd_config__tdd_dl_ul_ratio"])
+            else:
+                raise ValueError("Oops")
+            assert(len(df.loc[loc_query,:]) == 1)
+            runs_asserts += 1
+            # df.loc[loc_query,"GNB_SNR"] = gnb_df["SNR"].mean()
+            modem_snr.append(modem_df["SNR"].mean())
+            modem_sinr.append(modem_df["SINR"].mean())
+            modem_rsrp.append(modem_df["RSRP"].mean())
+            modem_rsrq.append(modem_df["RSRQ"].mean())
+            gnb_snr.append(gnb_df["SNR"].mean())
+            gnb_cqi.append(gnb_df["CQI"].mean())
+            gnb_rsrp.append(gnb_df["RSRP"].mean())
+            gnb_mcs_dl.append(gnb_df["MCS_DL"].mean())
+            gnb_mcs_ul.append(gnb_df["MCS_UL"].mean())
+
+        def mean(data):
+            return sum(data)/len(data)
+        ci95 = mean_confidence_interval(0.95)
+        if config == {}:
+            continue
+        df.loc[loc_query,"MODEM_SNR"] = mean(modem_snr)
+        df.loc[loc_query,"MODEM_SNR_ci"] = ci95(modem_snr)
+        df.loc[loc_query,"MODEM_SINR"] = mean(modem_sinr)
+        df.loc[loc_query,"MODEM_SINR_ci"] = ci95(modem_sinr)
+        df.loc[loc_query,"MODEM_RSRP"] = mean(modem_rsrp)
+        df.loc[loc_query,"MODEM_RSRP_ci"] = ci95(modem_rsrp)
+        df.loc[loc_query,"MODEM_RSRQ"] = mean(modem_rsrq)
+        df.loc[loc_query,"MODEM_RSRQ_ci"] = ci95(modem_rsrq)
+        df.loc[loc_query,"GNB_SNR"] = mean(gnb_snr)
+        df.loc[loc_query,"GNB_SNR_ci"] = ci95(gnb_snr)
+        df.loc[loc_query,"GNB_CQI"] = mean(gnb_cqi)
+        df.loc[loc_query,"GNB_CQI_ci"] = ci95(gnb_cqi)
+        df.loc[loc_query,"GNB_RSRP"] = mean(gnb_rsrp)
+        df.loc[loc_query,"GNB_RSRP_ci"] = ci95(gnb_rsrp)
+        df.loc[loc_query,"GNB_MCS_DL"] = mean(gnb_mcs_dl)
+        df.loc[loc_query,"GNB_MCS_DL_ci"] = ci95(gnb_mcs_dl)
+        df.loc[loc_query,"GNB_MCS_UL"] = mean(gnb_mcs_ul)
+        df.loc[loc_query,"GNB_MCS_UL_ci"] = ci95(gnb_mcs_ul)
+    print(f"Total:{runs_total}\nFailed:{runs_failed}\nAsserts:{runs_asserts}\n")
+
+    print(df.loc[:,["MODEM_SNR","MODEM_SINR"]])
+
+    # df_ = pd.melt(df, id_vars=["gain_value", "direction", "gnb_version__type"], value_vars=["MODEM_SNR", "GNB_SNR"] )
+    # plots.simple_line_plot(df=df, filename=f"{plot_dir}/rxtx-gain-modem_snr-agg_alt01",
+    #         facets={"facet":p9.facet_grid('direction', cols="gnb_version__type", scales="free_y")},
+    #         labels={"y":"SNR [dB]", "x":"gain [dB]", "color":"gain_type"},
+    #         aesthetics=p9.aes(y="MODEM_SNR", x="gain_value", color="factor(gain_type)"),
+    #         ratio="16:9",
+    #         errorbars=False
+    #         )
+    plots.simple_line_plot(df=df, filename=f"{plot_dir}/rxtx-gain-modem_snr-agg_alt01",
+            facets={"facet":p9.facet_grid('direction', cols="gnb_version__type", scales="free_y")},
+            labels={"y":"SNR [dB]", "x":"gain [dB]", "color":"gain_type"},
+            aesthetics=p9.aes(y="MODEM_SNR",ymax="MODEM_SNR + MODEM_SNR_ci", ymin="MODEM_SNR - MODEM_SNR_ci", x="gain_value", color="factor(gain_type)"),
+            ratio="16:9",
+            errorbars=True
+            )
+    plots.simple_line_plot(df=df[ df["MODEM_SNR"] == df["MODEM_SNR"] ], filename=f"{plot_dir}/rxtx-gain-modem_snr-agg_alt01_nona",
+            facets={"facet":p9.facet_grid('direction', cols="gnb_version__type", scales="free_y")},
+            labels={"y":"SNR [dB]", "x":"gain [dB]", "color":"gain_type"},
+            aesthetics=p9.aes(y="MODEM_SNR", x="gain_value", color="factor(gain_type)"),
+            ratio="16:9",
+            errorbars=False
+            )
+    plots.simple_line_plot(df=df, filename=f"{plot_dir}/rxtx-gain-gnb_snr-agg_alt01",
+            facets={"facet":p9.facet_grid('direction', cols="gnb_version__type", scales="free_y")},
+            labels={"y":"SNR [dB]", "x":"gain [dB]", "color":"gain_type"},
+            aesthetics=p9.aes(y="GNB_SNR",ymax="GNB_SNR + GNB_SNR_ci", ymin="GNB_SNR - GNB_SNR_ci",  x="gain_value", color="factor(gain_type)"),
+            ratio="16:9",
+            errorbars=True
+            )
+    plots.simple_line_plot(df=df, filename=f"{plot_dir}/rxtx-gain-gnb_snr-agg_alt01-noebar",
+            facets={"facet":p9.facet_grid('direction', cols="gnb_version__type", scales="free_y")},
+            labels={"y":"SNR [dB]", "x":"gain [dB]", "color":"gain_type"},
+            aesthetics=p9.aes(y="GNB_SNR",ymax="GNB_SNR + GNB_SNR_ci", ymin="GNB_SNR - GNB_SNR_ci",  x="gain_value", color="factor(gain_type)"),
+            ratio="16:9",
+            errorbars=False
+            )
+    plots.simple_line_plot(df=df[ df["MODEM_SNR"] == df["MODEM_SNR"] ], filename=f"{plot_dir}/rxtx-gain-gnb_snr-agg_alt01_nona",
+            facets={"facet":p9.facet_grid('direction', cols="gnb_version__type", scales="free_y")},
+            labels={"y":"SNR [dB]", "x":"gain [dB]", "color":"gain_type"},
+            aesthetics=p9.aes(y="GNB_SNR", x="gain_value", color="factor(gain_type)"),
+            ratio="16:9",
+            errorbars=False
+            )
+
 
     plots.simple_line_plot(df=df, filename=f"{plot_dir}/rxtx-gain-throughput-agg",
             facets={"facet":p9.facet_grid('gnb_version__type', cols="direction", scales="free_y")},
@@ -1537,16 +1892,17 @@ def plots_antenna_gain_aggregated_runs(ansible_dump):
 
 if __name__ == "__main__":
 
-    _antenna_gain()
+    # _antenna_gain()
     # # _scenario_gnb_versions_delay()
     # _scenario_throughput_overshoot()
     # _scenario_performance_tuning()
     # _scenario_tdd_algo()
     # _scenario_dockerization()
     # _scenario_qam()
+    # _scenario_height()
     # _scenario_distance()
     # _scenario_distance_wall()
-    # _scenario_main_measurements()
+    _scenario_main_measurements()
 
 
 

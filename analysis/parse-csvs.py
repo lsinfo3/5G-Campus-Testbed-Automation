@@ -354,8 +354,8 @@ def handle_run(run_directory: str):
 def main():
     start = time.time()
 
-    test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir()]
-    runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir()]
+    test_configurations = [e.path for e in os.scandir(ansible_dump) if e.is_dir() and not os.path.basename(e).startswith(".")]
+    runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir() and not os.path.basename(r).startswith(".")]
     pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
 
     # handle_run("../ansible/dumps/f353745a/f353745a__c9d26484__001")

@@ -16,7 +16,7 @@ ANOVA_TYPE=3
 
 
 
-df = pd.read_csv("/mnt/ext1/5g-masterarbeit-daten/main_measurement_qam64256/all_runs.csv.gz")
+df = pd.read_csv("/mnt/ext1/5g-masterarbeit-daten/main_measurement/all_runs.csv.gz")
 print(df)
 print(df.columns)
 print(len(df))
@@ -69,6 +69,7 @@ def build_factor_combinations(factors: list, length: int):
 # factors_combine_6 = " + ".join([f"C({f1}):C({f2}):C({f3}):C({f4}):C({f5}):C({f6})" for f1,f2,f3,f4,f5,f6 in combinations(factors, 6)])
 # factors_combine_7 = " + ".join([f"C({f1}):C({f2}):C({f3}):C({f4}):C({f5}):C({f6}):C({f7})" for f1,f2,f3,f4,f5,f6,f7 in combinations(factors, 7)])
 
+f = open("mainmsmanova.txt", "w")
 
 for anova_metric, data_query in product(["throughput__mean", "delay__mean"], ["traffic_type=='scapyudpping'", "traffic_type=='iperfthroughput'"]):
     print(f"ANOVA: {anova_metric} for {data_query}")
@@ -89,8 +90,16 @@ for anova_metric, data_query in product(["throughput__mean", "delay__mean"], ["t
         anova_result = sm.stats.anova_lm(model, type=ANOVA_TYPE)
         anova_result.loc[:,"SS/SST"] = anova_result.loc[:,"sum_sq"]/  anova_result.loc[:,"sum_sq"].sum()
         anova_result.sort_values(by=['SS/SST'] , ascending=False, inplace=True)
-        print(anova_result[ (anova_result["PR(>F)"] < 0.05) & (anova_result["SS/SST"] > 0.01) | (anova_result.index == "Residual") ])
+        print(anova_result[ (anova_result["PR(>F)"] < 0.05) & (anova_result["SS/SST"] > 0.001) | (anova_result.index == "Residual") ].head(50))
+
+        with open(f"mainmsmanova_{anova_metric}__{data_query}.csv", "w") as f:
+            f.write(f"Param,DF,.p,SS/SST\n")
+            for i,row in anova_result[ (anova_result["PR(>F)"] < 0.05) & (anova_result["SS/SST"] > 0.001) | (anova_result.index == "Residual") ].iterrows():
+                f.write(f"{i},{int(row["df"]):04d},{row["PR(>F)"]:.6f},{row["SS/SST"]:.6f}\n")
+
+        print("\n")
     except Exception as e:
         print(e)
         pass
+f.close()
 
