@@ -58,6 +58,7 @@ df.loc[:,"traffic_type_config"] = "" + df["traffic_type"].astype(str) + "__" + d
 
 
 
+df["direction"] = df["direction"].apply(lambda x : x.upper())
 df["tdd_ratio"] = df["tdd_ratio"].astype(str) + ":1"
 df["tdd_period"] = df["tdd_period"].astype(str) + " slots"
 
@@ -147,7 +148,7 @@ for interaction_plot_metric, interaction_plot_params in [("throughput",params_ba
                 + p9.facet_grid("param_1", cols="param_2", scales="free_x")
                 + p9.aes(x="value_2",y="throughput/1000000",ymin="throughput_l/1000000",ymax="throughput_u/1000000",
                          group="value_1", color="value_1")
-                + p9.labs(x=None,y="throughput [Mbps]")
+                + p9.labs(x="",y="throughput [Mbps]", color="")
                 + p9.geom_line(size=LINE_SIZE)
                 + p9.geom_errorbar()
                 + p9.geom_point(size=POINT_SIZE*1.5)
@@ -161,7 +162,7 @@ for interaction_plot_metric, interaction_plot_params in [("throughput",params_ba
                 + p9.facet_grid("param_1", cols="param_2", scales="free_x")
                 + p9.aes(x="value_2",y="delay",ymin="delay_l",ymax="delay_u", group="value_1", color="value_1")
                 + p9.geom_line(size=LINE_SIZE)
-                + p9.labs(x=None,y="delay [s]")
+                + p9.labs(x="",y="delay [s]", color="")
                 + p9.geom_errorbar()
                 + p9.geom_point(size=POINT_SIZE*1.5)
                 + p9.scale_color_manual(values=assign_colors, limits=list(assign_colors.keys()))
