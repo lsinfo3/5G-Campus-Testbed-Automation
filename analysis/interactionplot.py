@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import scipy.stats
 import natsort
+import copy
 
 from itertools import combinations
 
@@ -38,23 +39,22 @@ def mean_confidence_interval(confidence=0.90):
 
 # df = pd.read_csv("/mnt/ext1/5g-masterarbeit-daten/main_measurement_qam64256/all_runs.csv.gz")
 df = pd.read_csv("/mnt/ext1/5g-masterarbeit-daten/main_measurement/all_runs.csv.gz")
-df.drop(df[ df["traffic_config__traffic_type"] == "scapyudpping" ].index, inplace=True )
-df.drop(df[ df["failed_run"] == True ].index, inplace=True )
-df.reset_index(drop=True, inplace=True)
-print(df)
-print(df.columns)
-print(len(df))
+# print(df)
+# print(df.columns)
+# print(len(df))
 
 df.rename(columns={
 "gnb_version__type": "gnb_type",
 "gnb_version__version":"gnb_version",
 "gnb_version__uhd_version":"uhd_version",
 "traffic_config__traffic_type" : "traffic_type",
+"traffic_config__iat" : "iat",
+"traffic_config__size" : "size",
 "tdd_config__tdd_dl_ul_ratio" : "tdd_ratio",
 "tdd_config__tdd_dl_ul_tx_period" : "tdd_period",
     }, inplace=True)
 df.loc[:,"traffic_type_config"] = "" + df["traffic_type"].astype(str) + "__" + df["direction"].astype(str) + \
-        "__" + df["traffic_config__iat"].astype(str) + "__" + df["traffic_config__size"].astype(str)
+        "__" + df["iat"].astype(str) + "__" + df["size"].astype(str)
 
 
 
@@ -66,7 +66,7 @@ df["tdd_period"] = df["tdd_period"].astype(str) + " slots"
 id = "identifier"
 metrics = ["throughput__mean", "delay__mean"]
 
-params_base = [
+params_base_iperf = [
 "direction",
 "gnb_type",
 "tdd_ratio",
@@ -76,28 +76,57 @@ params_base = [
         ]
 
 
-df_means_dict = {
+params_base_ping = [
+"direction",
+"size",
+"iat",
+"gnb_type",
+"tdd_period",
+# "uhd_version",
+        ]
+
+
+df_means_dict_base = {
         "throughput":[],"throughput_l":[],"throughput_u":[],
         "delay":[],"delay_l":[],"delay_u":[],
         "param_1":[], "value_1":[],
         "param_2":[], "value_2":[]
         }
 
-for interaction_plot_metric, interaction_plot_params in [("throughput",params_base[:3]), ("throughput",params_base[:4]),("throughput",params_base[:5])]:
-    df_copy = df.drop(columns=[ c for c in df.columns if c not in interaction_plot_params and c != id and c not in metrics ])
+for interaction_plot_metric, interaction_plot_params in [
+        ("throughput",params_base_iperf[:3]), ("throughput",params_base_iperf[:4]),("throughput",params_base_iperf[:5]),
+        ("delay",params_base_ping[:3]), ("delay",params_base_ping[:4]), ("delay",params_base_ping[:5]),
+        ]:
+    df_means_dict = copy.deepcopy(df_means_dict_base)
+    df_copy = df.copy(deep=True)
+    if interaction_plot_metric == "throughput":
+        df_copy = df_copy.drop(df_copy[ df_copy["traffic_type"] == "scapyudpping" ].index)
+    else:
+        df_copy = df_copy.drop(df_copy[ df_copy["traffic_type"] == "iperfthroughput" ].index)
+    df_copy.drop(df_copy[ df_copy["failed_run"] == True ].index, inplace=True )
+    df_copy.reset_index(drop=True, inplace=True)
+    df_copy = df_copy.drop(columns=[ c for c in df.columns if c not in interaction_plot_params and c != id and c not in metrics ])
     df_copy.reset_index(drop=True, inplace=True)
     print(df_copy)
     print(df_copy.columns)
 
     for p in interaction_plot_params:
         df_copy[p] = pd.Categorical(df_copy[p], ordered=True, categories=natsort.natsorted(df_copy[p].unique()) )
-    df_melted = df_copy.melt(id_vars=[id]+metrics)
-    print(df_melted)
+    # df_melted = df_copy.melt(id_vars=[id]+metrics)
+    # print(df_melted)
 
-    df_melted = df_melted.merge(df_melted, how='outer', on="identifier")
-    df_melted.rename( { "throughput__mean_x":"throughput" }, inplace=True )
-    df_melted.drop(columns=["throughput__mean_y"],inplace=True)
-    print(df_melted)
+    # df_melted = df_melted.merge(df_melted, how='outer', on="identifier")
+    # if interaction_plot_metric == "throughput":
+    #     df_melted.rename( { "throughput__mean_x":"throughput" }, inplace=True )
+    #     df_melted.drop(columns=["throughput__mean_y"],inplace=True)
+    # else:
+    #     df_melted.rename( { "delay__mean_x":"throughput" }, inplace=True )
+    #     df_melted.drop(columns=["delay__mean_y"],inplace=True)
+    # print(df_melted)
+    # print(df_melted.columns)
+    # print(df_melted["variable_x"].value_counts())
+    # print(df_melted["value_x"].value_counts())
+    # print("df_melted\n")
 
 
     for p1 in interaction_plot_params:
@@ -127,8 +156,16 @@ for interaction_plot_metric, interaction_plot_params in [("throughput",params_ba
         df_interactions[c] = pd.Categorical(df_interactions[c], ordered=True, categories=natsort.natsorted(df_interactions[c].unique()) )
     print(df_interactions)
     print(df_interactions.dtypes)
-    df_interactions.dropna(inplace=True)
+    # df_interactions.dropna(inplace=True)
+    df_interactions.drop(df_interactions[ df_interactions[interaction_plot_metric].isna() ].index, inplace=True )
     print(df_interactions)
+    print(df_interactions.columns)
+    print(df_interactions["param_1"].value_counts())
+    print(df_interactions["value_1"].value_counts())
+    print("df_interactions\n")
+
+    print(df)
+    print("DF BASE *2")
 
 
     max_params = max([df[p].nunique() for p in interaction_plot_params])
@@ -158,6 +195,8 @@ for interaction_plot_metric, interaction_plot_params in [("throughput",params_ba
         plot.save(f"main_interactions_{len(interaction_plot_params)}_iperf_{interaction_plot_metric}.pdf", width=PLOT_W, height=PLOT_H)
         plot.save(f"main_interactions_{len(interaction_plot_params)}_iperf_{interaction_plot_metric}.jpg", width=PLOT_W, height=PLOT_H)
     elif interaction_plot_metric == "delay":
+        print(df_interactions)
+        print(df_interactions[ df_interactions["param_1"] == "iat" ].value_counts())
         plot = (p9.ggplot(df_interactions)
                 + p9.facet_grid("param_1", cols="param_2", scales="free_x")
                 + p9.aes(x="value_2",y="delay",ymin="delay_l",ymax="delay_u", group="value_1", color="value_1")
@@ -168,8 +207,8 @@ for interaction_plot_metric, interaction_plot_params in [("throughput",params_ba
                 + p9.scale_color_manual(values=assign_colors, limits=list(assign_colors.keys()))
                 + GLOBAL_THEME()
                 )
-        plot.save(f"main_interactions_{len(interaction_plot_params)}_iperf_{interaction_plot_metric}.pdf", width=PLOT_W, height=PLOT_H)
-        plot.save(f"main_interactions_{len(interaction_plot_params)}_iperf_{interaction_plot_metric}.jpg", width=PLOT_W, height=PLOT_H)
+        plot.save(f"main_interactions_{len(interaction_plot_params)}_scapy_{interaction_plot_metric}.pdf", width=PLOT_W, height=PLOT_H)
+        plot.save(f"main_interactions_{len(interaction_plot_params)}_scapy_{interaction_plot_metric}.jpg", width=PLOT_W, height=PLOT_H)
     else:
         raise ValueError()
 

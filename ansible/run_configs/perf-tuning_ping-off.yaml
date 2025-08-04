@@ -1,0 +1,1257 @@
+system:
+    pcap_dump: /home/lks/Documents/datastore/5g-masterarbeit/performance-tuning/
+    identifier: 4343fe5c
+    fixed_params:
+        distance_horizontal_in_m: 0.5
+        distance_vertical_in_m: 0.0
+        gnb_antenna_inclanation_in_degree: 90
+        gnb_antenna_rotation_in_degree: 0
+        ue_antenna_inclanation_in_degree: 90
+        ue_antenna_rotation_in_degree: 0
+        modem: SIM8200EA-M2 5G HAT
+        interface_ue: wwan0
+        interface_gnb: eno1
+        jammer: false
+        sdr: B210
+        performance_tuning: false
+run_to_run_variation:
+-   identifier: 4343fe5c__6f594eda__000
+    run: 0
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__6f594eda__001
+    run: 1
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__6f594eda__002
+    run: 2
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__6f594eda__003
+    run: 3
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__6f594eda__004
+    run: 4
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__8abf0c17__000
+    run: 0
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__8abf0c17__001
+    run: 1
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__8abf0c17__002
+    run: 2
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__8abf0c17__003
+    run: 3
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__8abf0c17__004
+    run: 4
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__b43f590e__000
+    run: 0
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__b43f590e__001
+    run: 1
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__b43f590e__002
+    run: 2
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__b43f590e__003
+    run: 3
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__b43f590e__004
+    run: 4
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__7e03bb42__000
+    run: 0
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__7e03bb42__001
+    run: 1
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__7e03bb42__002
+    run: 2
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__7e03bb42__003
+    run: 3
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__7e03bb42__004
+    run: 4
+    dockerization: false
+    gnb_version:
+        type: srsRAN
+        uhd_version: UHD-4.0
+        version: release_24_10
+        commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__d5bd4e7b__000
+    run: 0
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__d5bd4e7b__001
+    run: 1
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__d5bd4e7b__002
+    run: 2
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__d5bd4e7b__003
+    run: 3
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__d5bd4e7b__004
+    run: 4
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__13727a52__000
+    run: 0
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__13727a52__001
+    run: 1
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__13727a52__002
+    run: 2
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__13727a52__003
+    run: 3
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__13727a52__004
+    run: 4
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 10
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 9
+        tdd_ul_symbols: 7
+-   identifier: 4343fe5c__f1012d8b__000
+    run: 0
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__f1012d8b__001
+    run: 1
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__f1012d8b__002
+    run: 2
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__f1012d8b__003
+    run: 3
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__f1012d8b__004
+    run: 4
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__60d2f031__000
+    run: 0
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__60d2f031__001
+    run: 1
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__60d2f031__002
+    run: 2
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__60d2f031__003
+    run: 3
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4
+-   identifier: 4343fe5c__60d2f031__004
+    run: 4
+    dockerization: false
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapyudpping
+        direction: UlDl
+        traffic_duration: 60
+        proto: udp
+        dist: det
+        iat: '0.001'
+        rate: 100M
+        size: small
+        count: '60000'
+        target_ip: 10.45.0.1
+        target_port: '3344'
+        burst: '1'
+    rx_gain: null
+    tx_gain: null
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 20
+        tdd_dl_slots: 13
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 6
+        tdd_ul_symbols: 4

@@ -506,7 +506,7 @@ def _scenario_distance_wall():
                               )
         plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput",
                               facets={"facet":p9.facet_grid(["gnb_version__type", "direction"],cols=["tdd_period_label", "tdd_ratio_label"], scales="free_y")},
-                              labels={"y":"throughput [Mps]", "x":"distance [m]", "color":"", "shape":"direction"},
+                              labels={"y":"throughput [Mbps]", "x":"distance [m]", "color":"", "shape":"direction"},
                               errorbars=False,
                               points=False,
                               lines=False,
@@ -775,53 +775,53 @@ def _scenario_distance():
 
         plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput",
                               facets={"facet":p9.facet_grid(["gnb_version_label", "direction"],cols=["tdd_period_label", "tdd_ratio_label"], scales="fixed")},
-                              labels={"y":"throughput [Mps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
+                              labels={"y":"throughput [Mbps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="distance_horizontal_in_m"),
                               )
 
         plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-c",
                               facets={"facet":p9.facet_grid(["gnb_version__type", "direction"],cols=["tdd_period_label"], scales="free_y")},
-                               labels={"y":"throughput [Mps]", "x":"distance [m]", "color":"DL:UL", "shape":"direction"},
+                               labels={"y":"throughput [Mbps]", "x":"distance [m]", "color":"DL:UL", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="distance_horizontal_in_m", color="tdd_ratio_label"),
                               )
         df_plot_qs = df_plot.query("traffic_config__traffic_type == 'iperfthroughput' and tdd_config__tdd_dl_ul_ratio == 2 and tdd_config__tdd_dl_ul_tx_period == 10")
         plots.simple_line_plot(df=df_plot_qs, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-free-s01",
                               facets={"facet":p9.facet_grid(["direction"],cols=["gnb_version_label"], scales="free_y")},
-                              labels={"y":"throughput [Mps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
+                              labels={"y":"throughput [Mbps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="distance_horizontal_in_m"),
                               )
         plots.simple_line_plot(df=df_plot_qs, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-free-s01-flip",
                               facets={"facet":p9.facet_grid(["gnb_version_label", "direction"], scales="free_y")},
-                              labels={"y":"throughput [Mps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
+                              labels={"y":"throughput [Mbps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="distance_horizontal_in_m"),
                               )
         df_plot_qs = df_plot.query("traffic_config__traffic_type == 'iperfthroughput' and tdd_config__tdd_dl_ul_ratio == 4 and tdd_config__tdd_dl_ul_tx_period == 10")
         plots.simple_line_plot(df=df_plot_qs, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-free-s02",
                               facets={"facet":p9.facet_grid(["direction"],cols=["gnb_version_label"], scales="free_y")},
-                              labels={"y":"throughput [Mps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
+                              labels={"y":"throughput [Mbps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="distance_horizontal_in_m"),
                               )
         plots.simple_line_plot(df=df_plot_qs, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-free-s02-flip",
                               facets={"facet":p9.facet_grid(["gnb_version_label", "direction"], scales="free_y")},
-                              labels={"y":"throughput [Mps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
+                              labels={"y":"throughput [Mbps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="distance_horizontal_in_m"),
                               )
         df_plot_qs = df_plot.query("traffic_config__traffic_type == 'iperfthroughput' and tdd_config__tdd_dl_ul_ratio == 1 and tdd_config__tdd_dl_ul_tx_period == 5")
         plots.simple_line_plot(df=df_plot_qs, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-free-s03",
                               facets={"facet":p9.facet_grid(["direction"],cols=["gnb_version_label"], scales="free_y")},
-                              labels={"y":"throughput [Mps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
+                              labels={"y":"throughput [Mbps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="distance_horizontal_in_m"),
                               )
         plots.simple_line_plot(df=df_plot_qs, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-free-s03-flip",
                               facets={"facet":p9.facet_grid(["gnb_version_label", "direction"], scales="free_y")},
-                              labels={"y":"throughput [Mps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
+                              labels={"y":"throughput [Mbps]", "x":"distance [m]", "color":"TDD period", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="distance_horizontal_in_m"),
                               )
@@ -995,32 +995,42 @@ def _scenario_qam():
                           facets={"facet":p9.facet_grid("gnb_version_label",cols=["direction", "qam_label"], scales="free_y")},
                           labels={"y":"delay [s]", "x":"tdd dl/ul ratio", "color":"TDD period", "shape":"direction"},
                           errorbars=True,
-                          aesthetics=p9.aes(y="delay__mean__agg__mean", ymin="delay__mean__agg__ci_95_l",ymax="delay__mean__agg__ci_95_u", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)"),
+                          aesthetics=p9.aes(y="delay__mean__agg__mean", ymin="delay__mean__agg__ci_95_l"
+                                            ,ymax="delay__mean__agg__ci_95_u", x="factor(tdd_config__tdd_dl_ul_ratio)"
+                                            , color="factor(tdd_config__tdd_dl_ul_tx_period)"),
                           )
     plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput",
                           facets={"facet":p9.facet_grid("gnb_version_label",cols=["direction", "qam_label"], scales="fixed")},
-                          labels={"y":"throughput [Mps]", "x":"tdd dl/ul ratio", "color":"TDD period", "shape":"direction"},
+                          labels={"y":"throughput [Mbps]", "x":"tdd dl/ul ratio", "color":"TDD period", "shape":"direction"},
                           errorbars=True,
-                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)"),
+                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000"
+                                            ,ymax="throughput__mean__agg__ci_95_u / 1000000", x="factor(tdd_config__tdd_dl_ul_ratio)"
+                                            , color="factor(tdd_config__tdd_dl_ul_tx_period)"),
                           )
     df_plot_q = df_plot.query("traffic_config__traffic_type == 'iperfthroughput' and gnb_version__version == 'release_24_10'")
     plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-24_10",
                           facets={"facet":p9.facet_grid("gnb_version_label",cols=["direction", "qam_label"], scales="fixed")},
-                          labels={"y":"throughput [Mps]", "x":"tdd dl/ul ratio", "color":"TDD period", "shape":"direction"},
+                          labels={"y":"throughput [Mbps]", "x":"tdd dl/ul ratio", "color":"TDD period", "shape":"direction"},
                           errorbars=True,
-                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="factor(tdd_config__tdd_dl_ul_ratio)", color="factor(tdd_config__tdd_dl_ul_tx_period)"),
+                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000"
+                                            ,ymax="throughput__mean__agg__ci_95_u / 1000000", x="factor(tdd_config__tdd_dl_ul_ratio)"
+                                            , color="factor(tdd_config__tdd_dl_ul_tx_period)"),
                           )
     plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-24_10-alt",
                           facets={"facet":p9.facet_grid("direction",cols=["tdd_config__tdd_dl_ul_tx_period"], scales="free_y")},
-                          labels={"y":"throughput [Mps]", "x":"QAM", "color":"TDD ratio"},
+                          labels={"y":"throughput [Mbps]", "x":"QAM", "color":"TDD ratio"},
                           errorbars=True,
-                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="qam", color="factor(tdd_config__tdd_dl_ul_ratio)"),
+                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000"
+                                            ,ymax="throughput__mean__agg__ci_95_u / 1000000", x="qam"
+                                            , color="tdd_ratio_label", group="tdd_ratio_label"),
                           )
     plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_tuning_iperf-throughput-24_10-alt-169",
                           facets={"facet":p9.facet_grid("direction",cols=["tdd_period_label"], scales="free_y")},
-                          labels={"y":"throughput [Mps]", "x":"", "color":"TDD ratio"},
+                          labels={"y":"throughput [Mbps]", "x":"", "color":"TDD ratio"},
                           errorbars=True, ratio="16:9",
-                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="qam_label", color="tdd_ratio_label"),
+                          aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000"
+                                            ,ymax="throughput__mean__agg__ci_95_u / 1000000", x="qam_label"
+                                            , color="tdd_ratio_label", group="tdd_ratio_label"),
                           )
 
 def __height_snr( ansible_dump, df):
@@ -1135,11 +1145,11 @@ def __height_snr( ansible_dump, df):
 
     df_plot_q = df.query("traffic_config__traffic_type == 'iperfthroughput'")
     plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_height_iperf-modemsnr",
-                          facets={"facet":p9.facet_grid(["gnb_version_label", "direction"],cols=["tdd_period_label"], scales="fixed")},
+                          facets={"facet":p9.facet_grid(["gnb_version__type", "direction"],cols=["tdd_period_label"], scales="fixed")},
                            labels={"y":"modem SNR [dB]", "x":"height difference [m]", "color":"DL:UL", "shape":"direction"},
                           errorbars=True,
                           aesthetics=p9.aes(y="MODEM_SNR", ymin="MODEM_SNR - MODEM_SNR_ci",ymax="MODEM_SNR + MODEM_SNR_ci", x="height_difference",
-                                            color="tdd_ratio_label"),
+                                            color="tdd_ratio_label", group="tdd_ratio_label"),
                           )
 
     plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_height_iperf-gnbsnr",
@@ -1147,7 +1157,7 @@ def __height_snr( ansible_dump, df):
                            labels={"y":"gNB SNR [dB]", "x":"height difference [m]", "color":"DL:UL", "shape":"direction"},
                           errorbars=True,
                           aesthetics=p9.aes(y="GNB_SNR", ymin="GNB_SNR - GNB_SNR_ci",ymax="GNB_SNR + GNB_SNR_ci", x="height_difference",
-                                            color="tdd_ratio_label"),
+                                            color="tdd_ratio_label", group="tdd_ratio_label"),
                           )
     df_p_agg = df.query("traffic_config__traffic_type == 'iperfthroughput'").groupby(["height_difference"]) \
             ["MODEM_SNR"].agg(["mean",mean_confidence_interval(0.95)]).reset_index()
@@ -1210,7 +1220,7 @@ def _scenario_height():
         df_plot_q = df_plot.query("traffic_config__traffic_type == 'iperfthroughput'")
         plots.simple_line_plot(df=df_plot_q, filename=f"{plot_dir}/agg_performance_height_iperf-throughput",
                               facets={"facet":p9.facet_grid(["gnb_version_label", "direction"],cols=["tdd_period_label"], scales="fixed")},
-                               labels={"y":"throughput [Mps]", "x":"height difference [m]", "color":"DL:UL", "shape":"direction"},
+                               labels={"y":"throughput [Mbps]", "x":"height difference [m]", "color":"DL:UL", "shape":"direction"},
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",
                                                 ymax="throughput__mean__agg__ci_95_u / 1000000", x="height_difference",
@@ -1396,6 +1406,13 @@ def _scenario_throughput_overshoot():
                               errorbars=True,
                               aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="bandwidth_sent", color="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction", group="group"),
                               )
+        plots.simple_line_plot(df=df_plot, filename=f"{plot_dir}/agg_throughput_compare-bandwidth_169",
+                              facets={"facet":p9.facet_grid("gnb_version__type",cols="tdd_ratio_label", scales="fixed")},
+                              labels={"y":"throughput [Mbps]", "x":"offered load [Mbps]", "color":"TDD period", "linetype":"direction", "shape":"direction"},
+                              errorbars=True,
+                              ratio="16:9",
+                              aesthetics=p9.aes(y="throughput__mean__agg__mean / 1000000", ymin="throughput__mean__agg__ci_95_l / 1000000",ymax="throughput__mean__agg__ci_95_u / 1000000", x="bandwidth_sent", color="factor(tdd_config__tdd_dl_ul_tx_period)", linetype="direction", group="group"),
+                              )
         df_plot.loc[:,"5gcalcthroughput"] = np.nan
         df_plot.loc[(df_plot["direction"] == "Dl") & (df_plot["tdd_config__tdd_dl_ul_tx_period"] == 5)
                     & (df_plot["tdd_config__tdd_dl_ul_ratio"] == 1),"5gcalcthroughput"] = 58.471 # 56.132
@@ -1438,15 +1455,17 @@ def _scenario_throughput_overshoot():
                               )
 
         # FIXME:
-        # # for p in get_pcap_paths(ansible_dump)[:4]:
-        # for p in get_pcap_paths(ansible_dump):
-        #     if not p.endswith("__000/combined.csv.gz"):
-        #         continue
-        #     try:
-        #         plot_per_run(p)
-        #     except Exception as e:
-        #         print(f"Exception during per_run plots for <{p}>")
-        #         raise e
+        if ansible_dump.endswith("scapy"):
+            continue
+        # for p in get_pcap_paths(ansible_dump)[:4]:
+        for p in get_pcap_paths(ansible_dump):
+            if not p.endswith("__000/combined.csv.gz"):
+                continue
+            try:
+                plot_per_run(p)
+            except Exception as e:
+                print(f"Exception during per_run plots for <{p}>")
+                raise e
 
 
 def _scenario_performance_tuning():
@@ -1935,43 +1954,43 @@ def plot_per_run(p: str):
     query_range1 = int(df["SeqNum"].max() * 0.6)
     query_range2 = int(df["SeqNum"].max() * 0.5)
 
-    for l in [100, 1000]:
-        if query_range -l < 50:
-            continue
-        plots.simple_line_plot(df=df.query(f"SeqNum > {query_range -l } and SeqNum < {query_range}"), filename=f"{os.path.dirname(p)}/timeline-delay-{l}",
-                labels={"y":"delay [s]", "x":"sequence number [#]", "color":"trafficflow"},
-                aesthetics=p9.aes(y="delay", x="SeqNum", color="trafficflow"),
-                errorbars=False
-                )
-        plots.simple_line_plot(df=df.query(f"SeqNum > {query_range -l } and SeqNum < {query_range}"), filename=f"{os.path.dirname(p)}/timeline-delay-{l}",
-                labels={"y":"IAT [s]", "x":"sequence number [#]", "color":"trafficflow"},
-                aesthetics=p9.aes(y="IAT", x="SeqNum", color="trafficflow"),
-                errorbars=False
-                )
+    ##   for l in [100, 1000]:
+    ##       if query_range -l < 50:
+    ##           continue
+    ##       plots.simple_line_plot(df=df.query(f"SeqNum > {query_range -l } and SeqNum < {query_range}"), filename=f"{os.path.dirname(p)}/timeline-delay-{l}",
+    ##               labels={"y":"delay [s]", "x":"sequence number [#]", "color":"trafficflow"},
+    ##               aesthetics=p9.aes(y="delay", x="SeqNum", color="trafficflow"),
+    ##               errorbars=False
+    ##               )
+    ##       plots.simple_line_plot(df=df.query(f"SeqNum > {query_range -l } and SeqNum < {query_range}"), filename=f"{os.path.dirname(p)}/timeline-delay-{l}",
+    ##               labels={"y":"IAT [s]", "x":"sequence number [#]", "color":"trafficflow"},
+    ##               aesthetics=p9.aes(y="IAT", x="SeqNum", color="trafficflow"),
+    ##               errorbars=False
+    ##               )
 
-    """ time x seq.num plots """
-    for s in [query_range2, query_range1, query_range]:
-        for l in [100, 1000, 10000]:
-            if s -l < 50:
-                continue
-            plots.simple_line_plot(df=df.query(f"SeqNum > {s -l } and SeqNum < {s}"), filename=f"{os.path.dirname(p)}/timeline-sending-{l}-s{s}",
-                    lines= False,
-                    labels={"y":"seq. number [#]", "x":"timestamp [s]", "color":"location"},
-                    aesthetics=p9.aes(y="SeqNum", x="Timestamp", color="location"),
-                    errorbars=False
-                    )
+    ##   """ time x seq.num plots """
+    ##   for s in [query_range2, query_range1, query_range]:
+    ##       for l in [100, 1000, 10000]:
+    ##           if s -l < 50:
+    ##               continue
+    ##           plots.simple_line_plot(df=df.query(f"SeqNum > {s -l } and SeqNum < {s}"), filename=f"{os.path.dirname(p)}/timeline-sending-{l}-s{s}",
+    ##                   lines= False,
+    ##                   labels={"y":"seq. number [#]", "x":"timestamp [s]", "color":"location"},
+    ##                   aesthetics=p9.aes(y="SeqNum", x="Timestamp", color="location"),
+    ##                   errorbars=False
+    ##                   )
 
-    """ delay vs IAT -> retransmission? """
-    for s in [query_range2, query_range1, query_range]:
-        for l in [100, 1000, 10000]:
-            if s -l < 50:
-                continue
-            plots.simple_line_plot(df=df.query(f"SeqNum > {s -l } and SeqNum < {s}"), filename=f"{os.path.dirname(p)}/timeline-delay_x_iat-{l}-s{s}",
-                    lines= False,
-                    labels={"y":"seq. number [#]", "x":"timestamp [s]", "color":"location"},
-                    aesthetics=p9.aes(y="SeqNum", x="Timestamp", color="location"),
-                    errorbars=False
-                    )
+    ##   """ delay vs IAT -> retransmission? """
+    ##   for s in [query_range2, query_range1, query_range]:
+    ##       for l in [100, 1000, 10000]:
+    ##           if s -l < 50:
+    ##               continue
+    ##           plots.simple_line_plot(df=df.query(f"SeqNum > {s -l } and SeqNum < {s}"), filename=f"{os.path.dirname(p)}/timeline-delay_x_iat-{l}-s{s}",
+    ##                   lines= False,
+    ##                   labels={"y":"seq. number [#]", "x":"timestamp [s]", "color":"location"},
+    ##                   aesthetics=p9.aes(y="SeqNum", x="Timestamp", color="location"),
+    ##                   errorbars=False
+    ##                   )
 
 
     """ timeline plots, showing delay in combination with channel values """
@@ -1985,12 +2004,14 @@ def plot_per_run(p: str):
         return column_name !="TIMESTAMP" and ret
 
 
-    for zstd in [True, False]:
-        for l in [100, 1000, 10000, 20000]:
+    # for zstd in [True, False]:
+    for zstd in [True]:
+        # for l in [100, 1000, 10000, 20000]:
+        for l in [20000]:
             if query_range -l < 50:
                 continue
             dft = df.query(f"SeqNum > {query_range - l} and SeqNum < {query_range}")
-            dft["channel"] = "Delay"
+            dft["channel"] = "delay"
             ts_min = dft["Timestamp"].min()
             ts_max = dft["Timestamp"].max()
             if pd.isna(ts_min) or pd.isna(ts_max):
@@ -2012,7 +2033,7 @@ def plot_per_run(p: str):
             df_gnb_t = df_gnb.query(f"TIMESTAMP >= {ts_min} and TIMESTAMP <= {ts_max}")
             if len(df_gnb_t)>0:
                 # df_gnb_t["channel"] = "GNB"
-                df_gnb_t.loc[:,"channel"] = "GNB"
+                df_gnb_t.loc[:,"channel"] = "gNB metric"
                 # df_gnb_t["value"] = pd.to_numeric(df_gnb_t["value"], errors="coerce")
                 df_gnb_t.loc[:,"value"] = pd.to_numeric(df_gnb_t["value"], errors="coerce")
 
@@ -2023,28 +2044,84 @@ def plot_per_run(p: str):
             dft[f"delay_r500"] = dft["delay"].rolling(500).sum() / 500
             dft[f"delay_r1000"] = dft["delay"].rolling(1000).sum() / 1000
             zstd_label = "-zstd" if zstd else ""
-            plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel{zstd_label}-{l}",
-                    facets={"facet":p9.facet_grid('channel', scales="free")},
-                    labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
-                    aesthetics=p9.aes(y="delay", x="Timestamp"),
-                    points=False,
-                    errorbars=False,
-                    add_to_plot=[
-                        p9.geom_point(p9.aes(y="delay",x="Timestamp"),data=dft, size=plots.POINT_SIZE*0.5),
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
-                        ]
-                    )
-            plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel_r10{zstd_label}-{l}",
-                    facets={"facet":p9.facet_grid('channel', scales="free")},
-                    labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
-                    aesthetics=p9.aes(y="delay_r10", x="Timestamp"),
-                    errorbars=False,
-                    add_to_plot=[
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
-                        ]
-                    )
+
+            dft_copy = dft.copy(deep=True)
+            # dft_copy["metric"] = dft_copy["metric"].apply( lambda x: x[:-2] )
+            df_gnb_t_copy = df_gnb_t.copy(deep=True)
+            df_gnb_t_copy["metrictype"] = df_gnb_t_copy["metrictype"].apply(lambda x:x[:-2])
+            plot = (p9.ggplot(dft_copy)
+                + p9.facet_grid('channel', scales="free")
+                # + p9.aes(x="Timestamp",y="delay",ymin="delay_l",ymax="delay_u", group="value_1", color="value_1")
+                + p9.aes(x="Timestamp",y="delay")
+                # + p9.geom_line(size=plotninesettings.LINE_SIZE)
+                    + p9.geom_point(p9.aes(y="delay",x="Timestamp"),data=dft.iloc[::11,:], size=plots.POINT_SIZE*0.5)
+                + p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t_copy, size=plots.LINE_SIZE)
+                + p9.geom_point(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t_copy, size=plots.POINT_SIZE*0.5)
+                + p9.labs(x="time [s]",y="delay [s] / dB", color="metric")
+                # + p9.geom_errorbar()
+                # + p9.geom_point(size=plotninesettings.POINT_SIZE*1.5)
+                # + p9.scale_color_manual(values=assign_colors, limits=list(assign_colors.keys()))
+                + p9.scale_color_manual(plotninesettings.COLOR_MAP_EXTRACTOR(5))
+                + plotninesettings.GLOBAL_THEME()
+                )
+            plot_width = plotninesettings.PLOT_W
+            plot_height = plotninesettings.PLOT_H
+            plot.save(f"{os.path.dirname(p)}/iat-channel--nomodem-{zstd_label}-{l}.pdf",width = plot_width, height= plot_height, verbose=False, dpi=450)
+            plot = (p9.ggplot(dft_copy)
+                + p9.facet_grid('channel', scales="free")
+                # + p9.aes(x="Timestamp",y="delay",ymin="delay_l",ymax="delay_u", group="value_1", color="value_1")
+                + p9.aes(x="Timestamp",y="delay")
+                # + p9.geom_line(size=plotninesettings.LINE_SIZE)
+                + p9.geom_point(p9.aes(y="delay",x="Timestamp"),data=dft, size=plots.POINT_SIZE*0.5)
+                # + p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t_copy, size=plots.LINE_SIZE)
+                + p9.geom_step(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),direction="vh",data=df_gnb_t_copy, size=plots.LINE_SIZE)
+                + p9.labs(x="time [s]",y="delay [s] / dB", color="metric")
+                # + p9.geom_errorbar()
+                # + p9.geom_point(size=plotninesettings.POINT_SIZE*1.5)
+                # + p9.scale_color_manual(values=assign_colors, limits=list(assign_colors.keys()))
+                + p9.scale_color_manual(plotninesettings.COLOR_MAP_EXTRACTOR(5))
+                + plotninesettings.GLOBAL_THEME()
+                )
+            plot_width = plotninesettings.PLOT_W
+            plot_height = plotninesettings.PLOT_H
+            plot.save(f"{os.path.dirname(p)}/iat-channel--nomodem-steps-{zstd_label}-{l}.pdf",width = plot_width, height= plot_height, verbose=False, dpi=450)
+
+
+            ## plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel{zstd_label}-{l}",
+            ##         facets={"facet":p9.facet_grid('channel', scales="free")},
+            ##         labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
+            ##         aesthetics=p9.aes(y="delay", x="Timestamp"),
+            ##         points=False,
+            ##         errorbars=False,
+            ##         add_to_plot=[
+            ##             p9.geom_point(p9.aes(y="delay",x="Timestamp"),data=dft, size=plots.POINT_SIZE*0.5),
+            ##             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
+            ##             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
+            ##             ]
+            ##         )
+            ## plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel--nomodem-{zstd_label}-{l}",
+            ##         facets={"facet":p9.facet_grid('channel', scales="free")},
+            ##         labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
+            ##         aesthetics=p9.aes(y="delay", x="Timestamp"),
+            ##         points=False,
+            ##         errorbars=False,
+            ##         add_to_plot=[
+            ##             p9.geom_point(p9.aes(y="delay",x="Timestamp"),data=dft, size=plots.POINT_SIZE*0.5),
+            ##             # p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
+            ##             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
+            ##             ]
+            ##         )
+
+            # plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel_r10{zstd_label}-{l}",
+            #         facets={"facet":p9.facet_grid('channel', scales="free")},
+            #         labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
+            #         aesthetics=p9.aes(y="delay_r10", x="Timestamp"),
+            #         errorbars=False,
+            #         add_to_plot=[
+            #             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
+            #             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
+            #             ]
+            #         )
             plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel_r50{zstd_label}-{l}",
                     facets={"facet":p9.facet_grid('channel', scales="free")},
                     labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
@@ -2055,36 +2132,36 @@ def plot_per_run(p: str):
                         p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
                         ]
                     )
-            plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel_r100{zstd_label}-{l}",
-                    facets={"facet":p9.facet_grid('channel', scales="free")},
-                    labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
-                    aesthetics=p9.aes(y="delay_r100", x="Timestamp"),
-                    errorbars=False,
-                    add_to_plot=[
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
-                        ]
-                    )
-            plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel_r500{zstd_label}-{l}",
-                    facets={"facet":p9.facet_grid('channel', scales="free")},
-                    labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
-                    aesthetics=p9.aes(y="delay_r500", x="Timestamp"),
-                    errorbars=False,
-                    add_to_plot=[
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
-                        ]
-                    )
-            plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel_r1000{zstd_label}-{l}",
-                    facets={"facet":p9.facet_grid('channel', scales="free")},
-                    labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
-                    aesthetics=p9.aes(y="delay_r1000", x="Timestamp"),
-                    errorbars=False,
-                    add_to_plot=[
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
-                        p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
-                        ]
-                    )
+            # plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel_r100{zstd_label}-{l}",
+            #         facets={"facet":p9.facet_grid('channel', scales="free")},
+            #         labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
+            #         aesthetics=p9.aes(y="delay_r100", x="Timestamp"),
+            #         errorbars=False,
+            #         add_to_plot=[
+            #             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
+            #             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
+            #             ]
+            #         )
+            # plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel_r500{zstd_label}-{l}",
+            #         facets={"facet":p9.facet_grid('channel', scales="free")},
+            #         labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
+            #         aesthetics=p9.aes(y="delay_r500", x="Timestamp"),
+            #         errorbars=False,
+            #         add_to_plot=[
+            #             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
+            #             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
+            #             ]
+            #         )
+            # plots.simple_line_plot(df=dft, filename=f"{os.path.dirname(p)}/iat-channel_r1000{zstd_label}-{l}",
+            #         facets={"facet":p9.facet_grid('channel', scales="free")},
+            #         labels={"y":"delay [s] / dB", "x":"time [s]", "color":"metric"},
+            #         aesthetics=p9.aes(y="delay_r1000", x="Timestamp"),
+            #         errorbars=False,
+            #         add_to_plot=[
+            #             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_modem_t, size=plots.LINE_SIZE),
+            #             p9.geom_line(p9.aes(y="value",x="TIMESTAMP",color="metrictype"),data=df_gnb_t, size=plots.LINE_SIZE),
+            #             ]
+            #         )
     print(f"Completed: {p}\n\n")
 
 
@@ -2358,11 +2435,22 @@ if __name__ == "__main__":
     # _scenario_dockerization()
     # _scenario_qam()
     # _scenario_height()
-    _scenario_distance()
-    _scenario_distance_wall()
-    _scenario_main_measurements()
+    # _scenario_distance()
+    # _scenario_distance_wall()
+    # _scenario_main_measurements()
 
 
+    for p in get_pcap_paths("/mnt/ext1/5g-masterarbeit-daten/throughput-overshoot_qam64256/"):
+        if not p.endswith("__000/combined.csv.gz"):
+            continue
+
+        if not (p.endswith("4343fe5c__4a6f739b__000/combined.csv.gz") or p.endswith("4343fe5c__143f416b__000/combined.csv.gz")):
+            continue
+        try:
+            plot_per_run(p)
+        except Exception as e:
+            print(f"Exception during per_run plots for <{p}>")
+            raise e
 
 
 

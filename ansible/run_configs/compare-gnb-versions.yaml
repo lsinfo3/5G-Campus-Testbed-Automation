@@ -1,0 +1,846 @@
+system:
+    pcap_dump: ../dumps/
+    identifier: 578de3b8
+    fixed_params:
+        distance_horizontal_in_m: 0.5
+        distance_vertical_in_m: 0.34
+        gnb_antenna_inclanation_in_degree: 90
+        gnb_antenna_rotation_in_degree: 0
+        ue_antenna_inclanation_in_degree: 90
+        ue_antenna_rotation_in_degree: 0
+        modem: SIM8200EA-M2 5G HAT
+        interface_ue: wwan0
+        interface_gnb: eno1
+run_to_run_variation:
+  # -   identifier: 578de3b8__0
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-3.15.LTS
+  #         version: release_24_04
+  #         commit: c33cacba7d940e734ac7bad08935cbc35578fad9
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 1
+  #         tdd_flex_slots: 1
+  #         tdd_dl_ul_tx_period: 5
+  #         tdd_dl_slots: 2
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 2
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__1
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-3.15.LTS
+  #         version: release_24_04
+  #         commit: c33cacba7d940e734ac7bad08935cbc35578fad9
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 1
+  #         tdd_flex_slots: 0
+  #         tdd_dl_ul_tx_period: 10
+  #         tdd_dl_slots: 5
+  #         tdd_dl_symbols: 5
+  #         tdd_ul_slots: 4
+  #         tdd_ul_symbols: 7
+  # -   identifier: 578de3b8__2
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-3.15.LTS
+  #         version: release_24_04
+  #         commit: c33cacba7d940e734ac7bad08935cbc35578fad9
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 2
+  #         tdd_flex_slots: 2
+  #         tdd_dl_ul_tx_period: 5
+  #         tdd_dl_slots: 3
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 1
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__3
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-3.15.LTS
+  #         version: release_24_04
+  #         commit: c33cacba7d940e734ac7bad08935cbc35578fad9
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 2
+  #         tdd_flex_slots: 1
+  #         tdd_dl_ul_tx_period: 10
+  #         tdd_dl_slots: 6
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 3
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__4
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-3.15.LTS
+  #         version: release_24_10
+  #         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 1
+  #         tdd_flex_slots: 1
+  #         tdd_dl_ul_tx_period: 5
+  #         tdd_dl_slots: 2
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 2
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__5
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-3.15.LTS
+  #         version: release_24_10
+  #         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 1
+  #         tdd_flex_slots: 0
+  #         tdd_dl_ul_tx_period: 10
+  #         tdd_dl_slots: 5
+  #         tdd_dl_symbols: 5
+  #         tdd_ul_slots: 4
+  #         tdd_ul_symbols: 7
+  # -   identifier: 578de3b8__6
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-3.15.LTS
+  #         version: release_24_10
+  #         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 2
+  #         tdd_flex_slots: 2
+  #         tdd_dl_ul_tx_period: 5
+  #         tdd_dl_slots: 3
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 1
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__7
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-3.15.LTS
+  #         version: release_24_10
+  #         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 2
+  #         tdd_flex_slots: 1
+  #         tdd_dl_ul_tx_period: 10
+  #         tdd_dl_slots: 6
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 3
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__8
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-4.0
+  #         version: release_24_04
+  #         commit: c33cacba7d940e734ac7bad08935cbc35578fad9
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 1
+  #         tdd_flex_slots: 1
+  #         tdd_dl_ul_tx_period: 5
+  #         tdd_dl_slots: 2
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 2
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__9
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-4.0
+  #         version: release_24_04
+  #         commit: c33cacba7d940e734ac7bad08935cbc35578fad9
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 1
+  #         tdd_flex_slots: 0
+  #         tdd_dl_ul_tx_period: 10
+  #         tdd_dl_slots: 5
+  #         tdd_dl_symbols: 5
+  #         tdd_ul_slots: 4
+  #         tdd_ul_symbols: 7
+  # -   identifier: 578de3b8__10
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-4.0
+  #         version: release_24_04
+  #         commit: c33cacba7d940e734ac7bad08935cbc35578fad9
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 2
+  #         tdd_flex_slots: 2
+  #         tdd_dl_ul_tx_period: 5
+  #         tdd_dl_slots: 3
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 1
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__11
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-4.0
+  #         version: release_24_04
+  #         commit: c33cacba7d940e734ac7bad08935cbc35578fad9
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 2
+  #         tdd_flex_slots: 1
+  #         tdd_dl_ul_tx_period: 10
+  #         tdd_dl_slots: 6
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 3
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__12
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-4.0
+  #         version: release_24_10
+  #         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 1
+  #         tdd_flex_slots: 1
+  #         tdd_dl_ul_tx_period: 5
+  #         tdd_dl_slots: 2
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 2
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__13
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-4.0
+  #         version: release_24_10
+  #         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 1
+  #         tdd_flex_slots: 0
+  #         tdd_dl_ul_tx_period: 10
+  #         tdd_dl_slots: 5
+  #         tdd_dl_symbols: 5
+  #         tdd_ul_slots: 4
+  #         tdd_ul_symbols: 7
+  # -   identifier: 578de3b8__14
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-4.0
+  #         version: release_24_10
+  #         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 2
+  #         tdd_flex_slots: 2
+  #         tdd_dl_ul_tx_period: 5
+  #         tdd_dl_slots: 3
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 1
+  #         tdd_ul_symbols: 4
+  # -   identifier: 578de3b8__15
+  #     run: 1
+  #     gnb_version:
+  #         type: srsRAN
+  #         uhd_version: UHD-4.0
+  #         version: release_24_10
+  #         commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  #     traffic_config:
+  #         traffic_type: scapy
+  #         traffic_duration: 60
+  #         scapy_proto: udp
+  #         scapy_dist: det
+  #         scapy_iat: '0.001'
+  #         scapy_size: small
+  #         scapy_count: '60000'
+  #         scapy_ip: 10.45.0.1
+  #         scapy_port: '3344'
+  #         scapy_burst: '1'
+  #     tdd_config:
+  #         tdd_dl_ul_ratio: 2
+  #         tdd_flex_slots: 1
+  #         tdd_dl_ul_tx_period: 10
+  #         tdd_dl_slots: 6
+  #         tdd_dl_symbols: 8
+  #         tdd_ul_slots: 3
+  #         tdd_ul_symbols: 4
+-   identifier: 578de3b8__16
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-3.15.LTS
+        version: v2.1.0
+        commit: 9fab2124417cfe67fe09b1eab5e377e26c5cf3a5
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__17
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-3.15.LTS
+        version: v2.1.0
+        commit: 9fab2124417cfe67fe09b1eab5e377e26c5cf3a5
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 5
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 4
+        tdd_ul_symbols: 7
+-   identifier: 578de3b8__18
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-3.15.LTS
+        version: v2.1.0
+        commit: 9fab2124417cfe67fe09b1eab5e377e26c5cf3a5
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__19
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-3.15.LTS
+        version: v2.1.0
+        commit: 9fab2124417cfe67fe09b1eab5e377e26c5cf3a5
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 6
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 3
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__20
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-3.15.LTS
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__21
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-3.15.LTS
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 5
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 4
+        tdd_ul_symbols: 7
+-   identifier: 578de3b8__22
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-3.15.LTS
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__23
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-3.15.LTS
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 6
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 3
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__24
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.1.0
+        commit: 9fab2124417cfe67fe09b1eab5e377e26c5cf3a5
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__25
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.1.0
+        commit: 9fab2124417cfe67fe09b1eab5e377e26c5cf3a5
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 5
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 4
+        tdd_ul_symbols: 7
+-   identifier: 578de3b8__26
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.1.0
+        commit: 9fab2124417cfe67fe09b1eab5e377e26c5cf3a5
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__27
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.1.0
+        commit: 9fab2124417cfe67fe09b1eab5e377e26c5cf3a5
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 6
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 3
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__28
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 2
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 2
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__29
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 1
+        tdd_flex_slots: 0
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 5
+        tdd_dl_symbols: 5
+        tdd_ul_slots: 4
+        tdd_ul_symbols: 7
+-   identifier: 578de3b8__30
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 2
+        tdd_dl_ul_tx_period: 5
+        tdd_dl_slots: 3
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 1
+        tdd_ul_symbols: 4
+-   identifier: 578de3b8__31
+    run: 1
+    gnb_version:
+        type: OAI
+        uhd_version: UHD-4.0
+        version: v2.2.0
+        commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+    traffic_config:
+        traffic_type: scapy
+        traffic_duration: 60
+        scapy_proto: udp
+        scapy_dist: det
+        scapy_iat: '0.001'
+        scapy_size: small
+        scapy_count: '60000'
+        scapy_ip: 10.45.0.1
+        scapy_port: '3344'
+        scapy_burst: '1'
+    tdd_config:
+        tdd_dl_ul_ratio: 2
+        tdd_flex_slots: 1
+        tdd_dl_ul_tx_period: 10
+        tdd_dl_slots: 6
+        tdd_dl_symbols: 8
+        tdd_ul_slots: 3
+        tdd_ul_symbols: 4

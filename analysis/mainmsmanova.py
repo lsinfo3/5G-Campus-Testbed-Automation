@@ -77,7 +77,7 @@ for anova_metric, data_query in product(["throughput__mean", "delay__mean"], ["t
         # model = ols(f'{anova_metric} ~ {factors_combine_1} + {factors_combine_2} + {factors_combine_3} + '\
         #         f'{factors_combine_4} + {factors_combine_5} + {factors_combine_6}', data=df.query(data_query)).fit()
         if data_query == "traffic_type=='scapyudpping'":
-            q_factors = factors + ["traffic_config__size", "traffic_config__iat"]
+            q_factors = factors + ["traffic_config__size", "traffic_config__iat"] + [ "direction" ]
         elif data_query == "traffic_type=='iperfthroughput'":
             q_factors = factors + ["direction"]
         else:
@@ -94,7 +94,7 @@ for anova_metric, data_query in product(["throughput__mean", "delay__mean"], ["t
 
         with open(f"mainmsmanova_{anova_metric}__{data_query}.csv", "w") as f:
             f.write(f"Param,DF,.p,SS/SST\n")
-            for i,row in anova_result[ (anova_result["PR(>F)"] < 0.05) & (anova_result["SS/SST"] > 0.001) | (anova_result.index == "Residual") ].iterrows():
+            for i,row in anova_result[ (anova_result["PR(>F)"] < 0.15) & (anova_result["SS/SST"] > 0.0001) | (anova_result.index == "Residual") ].iterrows():
                 f.write(f"{i},{int(row["df"]):04d},{row["PR(>F)"]:.6f},{row["SS/SST"]:.6f}\n")
 
         print("\n")
