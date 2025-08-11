@@ -10,13 +10,6 @@ Known tags:
 
 
 
-## TODOS:
-
-- [ ] Set env variable for uhd images
-- [ ] pass config
-- [ ] mount directory for log files
-
-
 ## Running srsRAN image
 
 The usb bus must be passed through, so the B210 can be accessed.

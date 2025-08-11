@@ -1,7 +1,0 @@
----
-
-- name: Generate traffic
-  hosts: localhost
-  tasks:
-    - ansible.builtin.debug:
-        msg: "Extra vars: {{ extra }} "

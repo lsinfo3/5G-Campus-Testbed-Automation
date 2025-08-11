@@ -1,7 +1,0 @@
-/mnt/ext1/5g-masterarbeit-daten/throughput-overshoot_qam64256/4343fe5c/4343fe5c__143f416b__000/iat-channel-zstd-20000.pdf
-/mnt/ext1/5g-masterarbeit-daten/throughput-overshoot_qam64256/4343fe5c/4343fe5c__4a6f739b__000/iat-channel-zstd-20000.pdf
-
-
-
-/mnt/ext1/5g-masterarbeit-daten/throughput-overshoot_qam64256/4343fe5c/4343fe5c__183318a6__000/iat-channel-zstd-20000.pdf
-/mnt/ext1/5g-masterarbeit-daten/throughput-overshoot_qam64256/4343fe5c/4343fe5c__b9d715f7__000/iat-channel-zstd-20000.pdf
