@@ -6,7 +6,7 @@ cell_cfg:
     nof_antennas_dl: 1
     nof_antennas_ul: 1
     pci: 1
-    plmn: '99942'
+    plmn: '99903'
     ssb:
         ssb_period: 10
     tac: 7

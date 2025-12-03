@@ -1,12 +1,12 @@
 cell_cfg:
     band: 78
-    channel_bandwidth_MHz: 20
+    channel_bandwidth_MHz: 40
     common_scs: 30
     dl_arfcn: 650000
     nof_antennas_dl: 1
     nof_antennas_ul: 1
     pci: 1
-    plmn: '99942'
+    plmn: '99903'
     ssb:
         ssb_period: 10
     tac: 7
@@ -16,6 +16,10 @@ cell_cfg:
         nof_dl_symbols: '12'
         nof_ul_slots: '4'
         nof_ul_symbols: '0'
+    pusch:
+        mcs_table: qam256
+    pdsch:
+        mcs_table: qam256
 cu_cp:
     amf:
         addr: 172.16.32.51
@@ -23,7 +27,7 @@ cu_cp:
         port: 38412
         supported_tracking_areas:
         -   plmn_list:
-            -   plmn: '99942'
+            -   plmn: '99903'
                 tai_slice_support_list:
                 -   sst: 1
             tac: 7
@@ -41,5 +45,5 @@ ru_sdr:
     device_driver: uhd
     otw_format: sc12
     rx_gain: 38
-    srate: 23.04
+    srate: 46.08
     tx_gain: 76

@@ -5,10 +5,12 @@
 
 # INFO: kill running OAI/SRS instances
 - name: '"{{ item.identifier }}": killall running gnb instances'
+  # Pkill requires "[]"-matching shenanigans to prevent matching itself...
   ansible.builtin.shell: |
-     killall gnb || true
-     killall nr-softmodem || true
-     killall read-snr.sh || true
+     killall gnb 2>/dev/null || true
+     killall nr-softmodem 2>/dev/null || true
+     killall read-snr.sh 2>/dev/null || true
+     pkill -9 -f /[h]ome/{{ ansible_user_id }}/tinkerforge_power.py || true
   become: true
 - name:  '"{{ item.identifier }}": killall running gnb instances in docker containers'
   ansible.builtin.systemd:
@@ -35,13 +37,14 @@
 # INFO: powercycle USB hub and wait!
 - name: '"{{ item.identifier }}": power off modem'
   ansible.builtin.shell:
-    cmd: "uhubctl --action off --location 2-3 --location 3-3 2>&1"
+    # cmd: "uhubctl --action off --location 2-3 --location 3-3 2>&1"
+    cmd: "uhubctl --action off --location 3-4.2 --location 2-4.2  > {{ collected_logs }}/uhubctl 2>&1"
   become: true
 - wait_for:
     timeout: 2
 - name: '"{{ item.identifier }}": powercycle modem'
   ansible.builtin.shell:
-     cmd: "/home/gnb/usb_resetter --device 2109:0817 --reset-device > {{ collected_logs }}/usb 2>&1"
+     cmd: "/home/gnb/usb_resetter --device 2109:0817 --reset-device > {{ collected_logs }}/usb_resetter 2>&1"
   become: true
 - wait_for:
     timeout: 20
@@ -54,7 +57,7 @@
       ansible.builtin.copy:
         src: "../scripts/srsran_performance"
         dest: "srsran_performance"
-        mode: 755
+        mode: "755"
     - name: Run script
       ansible.builtin.shell: "bash /home/{{ ansible_user_id }}/srsran_performance > {{ collected_logs }}/srsran_performance 2>&1"
       become: true
@@ -72,7 +75,7 @@
     gnb_srs_binary: "/home/gnb/gnb_versions/{{ item.gnb_version.uhd_version }}/SRS--{{ item.gnb_version.version }}--{{ item.gnb_version.commit }}/build/apps/gnb/gnb"
   when: item.gnb_version.type== 'srsRAN' and item.dockerization != true
 - name: Launch SRS gNB (non-docker)
-  shell: "{{ gnb_srs_binary }} -c {{ gnb_srs_config_path }} > {{ collected_logs }}/srsran 2>&1"
+  shell: "perf stat -I 20 -e cycles,instructions,cache-misses,dTLB-load-misses --delay=5000 -o {{ perf_output_csv }} -- {{ gnb_srs_binary }} -c {{ gnb_srs_config_path }} 2>&1 | ts '%.s' > {{ collected_logs }}/srsran"
   become: true
   async: 900
   poll: 0
@@ -98,7 +101,7 @@
     gnb_oai_binary: "/home/gnb/gnb_versions/{{ item.gnb_version.uhd_version }}/OAI--{{ item.gnb_version.version }}--{{ item.gnb_version.commit }}/cmake_targets/ran_build/build/nr-softmodem"
   when: item.gnb_version.type== 'OAI' and item.dockerization != true
 - name: Launch OAI gNB (non-docker)
-  shell: "{{ gnb_oai_binary }} -O {{ gnb_oai_config_path }} --sa --continuous-tx 2>&1 | ts '%.s' > {{ gnb_oai_logfile_path }} 2>&1" # pipe stdout+stderr to ts to get timestamps in the log
+  shell: "perf stat -I 20 -e cycles,instructions,cache-misses,dTLB-load-misses --delay=5000 -o {{ perf_output_csv }} -- {{ gnb_oai_binary }} -O {{ gnb_oai_config_path }} -E --sa --continuous-tx 2>&1 | ts '%.s' > {{ gnb_oai_logfile_path }} 2>&1" # pipe stdout+stderr to ts to get timestamps in the log
   become: true
   async: 900
   poll: 0
@@ -152,7 +155,9 @@
 
 # INFO: get ip for modem
 - name: '"{{ item.identifier }}": Acquire IP for modem'
-  shell: "bash /home/gnb/setip.sh > {{ collected_logs }}/setip 2>&1"
+  # shell: "bash /home/gnb/setip.sh 2>&1 | ts '%.s' > {{ collected_logs }}/setip "
+  # shell: " ( f(){ \"$@\" 2>&1 | ts %.s; return ${PIPESTATUS[0]}; }; f bash /home/gnb/setip.sh > {{ collected_logs }}/setip ) "  # If we pipe, the first returncode get's swalloed. Therefore we wrap it in a function and use the PIPESTATUS array which stores return code
+  shell: "bash -c  '( f(){ \"$@\" 2>&1 | ts %.s; return ${PIPESTATUS[0]}; }; f bash /home/gnb/setip.sh > {{ collected_logs }}/setip )' "  # If we pipe, the first returncode get's swalloed. Therefore we wrap it in a function and use the PIPESTATUS array which stores return code
   register: get_ip_shell_script
   ignore_errors: true
   become: true
@@ -164,17 +169,41 @@
     gnb_job_failed: true
 
 
+# INFO: start power measurement
+- name: copy power msm script
+  ansible.builtin.copy:
+    src: "../scripts/tinkerforge_power.py"
+    dest: "/home/{{ ansible_user_id }}/tinkerforge_power.py"
+    mode: "755"
+- block:
+  - name: Start power msm script for ue
+    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.ue.host }} --uid={{ tinkerforge.ue.uid }} --path={{ tinkerforge.ue.output }} --duration={{ 898 }}  > {{ collected_logs }}/tinker_ue 2>&1"
+    become: true
+    async: 900
+    poll: 0
+    register: pwr_ue_job
+  when: tinkerforge is defined and tinkerforge.ue is defined
+- block:
+  - name: Start power msm script for sdr
+    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.sdr.host }} --uid={{ tinkerforge.sdr.uid }} --path={{ tinkerforge.sdr.output }} --duration={{ 898 }}  > {{ collected_logs }}/tinker_sdr 2>&1"
+    become: true
+    async: 900
+    poll: 0
+    register: pwr_sdr_job
+  when: tinkerforge is defined and tinkerforge.sdr is defined
+
+
 
 # INFO: log SNR,SiNR,PSRP, etc
 - name: copy qmi SNR monitor
   ansible.builtin.copy:
     src: "../config/read-snr.sh"
     dest: "{{ snr_msm_script }}"
-    mode: 755
+    mode: "755"
   become: true
 
 - name: Launch qmi SNR monitor
-  shell: "{{ snr_msm_script }}"
+  ansible.builtin.shell: "{{ snr_msm_script }}"
   become: true
   async: 120
   poll: 0
@@ -234,6 +263,13 @@
       icmp_intervall: "{{ item.traffic_config.iat }}"
       icmp_count: "{{ item.traffic_config.count }}"
     when: item.traffic_config.traffic_type== 'ping'
+  - name: '"{{ item.identifier }}": run idle role'
+    ansible.builtin.include_role:
+      name: traffic-generation
+      tasks_from: idle.yaml
+    vars:
+      tg_duration: "{{ item.traffic_config.traffic_duration }}"
+    when: item.traffic_config.traffic_type== 'idle'
   - name: '"{{ item.identifier }}": run udp scapy ping traffic gen role'
     ansible.builtin.include_role:
       name: traffic-generation
@@ -321,6 +357,14 @@
        state: directory
     delegate_to: localhost
 
+  - name: "{{ item.identifier }}: Remove perf stats counter"
+    ansible.builtin.file:
+       path: "{{ perf_output_csv }}"
+       state: absent
+    become: true
+    ignore_errors: true
+    when: gnb_job_failed
+
   - name: "{{ item.identifier }}: Write FAILED label"
     ansible.builtin.copy:
       content: "{{ gnb_job_failed_cause }}"
@@ -365,6 +409,34 @@
        path: "{{ collected_logs }}"
        state: absent
     become: true
+
+  - name: "{{ item.identifier }}: Stop power measurements"
+    ansible.builtin.shell: |
+      pkill -9 -f /[h]ome/{{ ansible_user_id }}/tinkerforge_power.py || true
+    become: true
+  - block:
+    - name: "{{ item.identifier }}: Copy ue power measurements to local"
+      ansible.builtin.fetch:
+        src: "{{ tinkerforge.ue.output }}"
+        dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+        flat: true
+        validate_checksum: false
+      become: true
+    # - name: "{{ item.identifier }}: Copy shell output to local: remove old pwr"
+    #   ansible.builtin.file:
+    #      path: "{{ tinkerforge.ue.output }}"
+    #      state: absent
+    #   become: true
+    when: tinkerforge is defined and tinkerforge.ue is defined
+  - block:
+    - name: "{{ item.identifier }}: Copy sdr power measurements to local"
+      ansible.builtin.fetch:
+        src: "{{ tinkerforge.sdr.output }}"
+        dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+        flat: true
+        validate_checksum: false
+      become: true
+    when: tinkerforge is defined and tinkerforge.sdr is defined
 
   - name: '"{{ item.identifier }}": Copy gnb config'
     ansible.builtin.fetch:
@@ -428,9 +500,20 @@
        become: true
     when: item.gnb_version.type== 'OAI'
 
-  - name: "{{ item.identifier }}: Handle pcaps"
+  - name: "{{ item.identifier }}: Handle pcaps, etc."
     when: not gnb_job_failed
     block:
+    - ansible.builtin.fetch:
+         src: "{{ perf_output_csv }}"
+         dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+         flat: true
+      become: true
+    - name: "{{ item.identifier }}: Remove perf stats counter"
+      ansible.builtin.file:
+         path: "{{ perf_output_csv }}"
+         state: absent
+      become: true
+      ignore_errors: true
     - name: '"{{ item.identifier }}": Compress pcaps'
       block:
       - community.general.archive:

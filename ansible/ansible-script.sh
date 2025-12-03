@@ -11,29 +11,17 @@
 
 # TODO: iperf server
 # TODO: scapy server x2
+#
+# TODO: get 'Ansible_Playbook_Extra_Vars' from log if requested
 
 
 
-# ansible_log="/home/lks/Documents/datastore/5g-masterarbeit/tdd-pattern-algo/ansible_task.log"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/tdd-pattern-algo/ansible_task.log"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/main_measurement/ansible_task.log"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/main_measurement_run5-10/ansible_task.log"
-# Ansible_Playbook_Extra_Vars="skip_until_id=4343fe5c__94c63a77__001"
-# Ansible_Playbook_Extra_Vars="skip_until_id=4343fe5c__9ba06c22__000"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/dockerization/ansible_task.log"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/distance/ansible_task.log"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/distance_wall/ansible_task.log"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/modem/ansible_task.log"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/dockerization/ansible_task.log"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/performance-tuning_cstate_recommends/ansible_task.log"
-# ansible_log="/mnt/ext1/5g-masterarbeit-daten/throughput-overshoot/ansible_task.log"
-ansible_log="/mnt/ext1/5g-masterarbeit-daten/antenna-gain-b205/ansible_task.log"
-ansible_log="/mnt/ext1/5g-masterarbeit-daten/height/ansible_task.log"
+# ansible_log="/storage/power_new_2xtinker_1xperf/ansible_task.log"
+# ansible_log="/storage/power_new_2xtinker_1xperf_02/ansible_task.log"
 
-# Ansible_Playbook_Extra_Vars="skip_until_id=9ff091db__357caee6__003"
-# Ansible_Playbook_Extra_Vars="skip_until_id=9ff091db__Ul__OAI__rx-28__000"
+
 Ansible_Playbook_Extra_Vars=""
-
+# Ansible_Playbook_Extra_Vars=""
 
 
 
@@ -56,9 +44,9 @@ reboot_and_check_interface() {
     Reboots=$((Reboots+1))
 }
 
-start_scapy_server_on_gnodeb() {
-    ssh gnodeb sudo python3 udp-server.py -i 0.0.0.0 -p 3344 -a false &
-}
+# start_scapy_server_on_gnodeb() {
+#     ssh gnodeb sudo python3 udp-server.py -i 0.0.0.0 -p 3344 -a true &
+# }
 
 handle_reboot() {
     reboot_and_check_interface
@@ -71,12 +59,12 @@ handle_reboot() {
             unsuccessfull_reboots=$((unsuccessfull_reboots+1))
         fi
     done
-    if [[ unsuccessfull_reboots -ge 5 ]]; then
+    if [[ unsuccessfull_reboots -ge 7 ]]; then
         echo "Can't find interface after reboot" 1>&2
         gotify "playbook aborted" "$(( ($(date +%s)- $Start_Date) /60 ))min, Exit after $unsuccessfull_reboots consecutive reboots without finding the interface."
         exit 43
     fi
-    start_scapy_server_on_gnodeb &
+    # start_scapy_server_on_gnodeb &
 }
 
 build_ansible_playbook_extra_vars() {
@@ -96,11 +84,50 @@ build_ansible_playbook_extra_vars() {
 
 
 
-gotify "playbook start" "Starting new playbook."
+yaml2json() {
+    python -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(str(sys.stdin.read())), sort_keys=False, indent=4))'
+}
 
-start_scapy_server_on_gnodeb &
+
+if [[ $# -ne 1 ]] && [[ $# -ne 2 ]]; then
+    echo "Requires path to test series definition and optionally the '--continuer' flag!" >&2
+    exit 1
+fi
+if [[ $# -eq 2 ]] && [[ $1 != "--continue" ]]; then
+    echo "Requires path to test series definition and optionally the '--continuer' flag!" >&2
+    exit 1
+fi
+
+gotify "playbook start" "Starting new playbook for $TEST_SERIES_PCAPDUMP."
+
+# $# == 2 ==> '--continue'
+TEST_SERIES_DEFINIITON="$1"
+if [[ $# -eq 2 ]]; then
+    TEST_SERIES_DEFINIITON="$2"
+fi
+
+# TODO: jq gibt aktuell noch "true" zurück
+if [[ -f "$TEST_SERIES_DEFINIITON" ]] && \
+    cat "$TEST_SERIES_DEFINIITON" | yaml2json | jq -e 'has("system")' && \
+    cat "$TEST_SERIES_DEFINIITON" | yaml2json | jq -e '.system | has("pcap_dump")'; then
+    TEST_SERIES_PCAPDUMP="$( cat "$TEST_SERIES_DEFINIITON" | yaml2json | jq -r '.system.pcap_dump' )"
+else
+    echo "Provided file must be existent and provide full definition!" >&2
+    exit 1
+fi
+ansible_log="$TEST_SERIES_PCAPDUMP/ansible_task.log"
+
+# $# == 2 ==> '--continue'
+if [[ $# -eq 2 ]]; then
+    Ansible_Playbook_Extra_Vars="$(build_ansible_playbook_extra_vars)"
+fi
+
+
+
+
+# start_scapy_server_on_gnodeb &
 while true; do
-    ansible-playbook playbooks/traffic-gen.yaml --extra-vars "$Ansible_Playbook_Extra_Vars"
+    ansible-playbook playbooks/traffic-gen.yaml --extra-vars "@${TEST_SERIES_DEFINIITON}" --extra-vars "$Ansible_Playbook_Extra_Vars"
     ansible_return_code=$?
     if [ $ansible_return_code -eq 0 ]; then
         break
@@ -112,5 +139,4 @@ while true; do
 done
 
 gotify "playbook done" "$(( ($(date +%s)- $Start_Date) /60 ))min, fully completed after $Reboots reboots."
-
 

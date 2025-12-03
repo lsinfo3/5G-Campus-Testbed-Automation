@@ -3,182 +3,8 @@ import scipy.stats
 import numpy as np
 import argparse
 import os
+from allcolumns import agg_percentiles, agg_mean, agg_min, agg_max, all_columns, all_msm_columns, columns_to_group_by
 
-
-agg_percentiles = [
-    'delay__mean',
-    'delay__std',
-    'throughput__mean',
-    'throughput__std',
-    'throughputin__mean',
-    'iat__mean',
-    'iat__std',
-    'sent_pkts',
-]
-
-agg_min = [
-    'delay__min',
-    'missing_pkts',
-    'sent_pkts',
-    'throughput__mean',
-    'throughput__min',
-    'iat__min',
-]
-agg_max = [
-    'delay__max',
-    'missing_pkts',
-    'sent_pkts',
-    'throughput__mean',
-    'throughput__max',
-    'iat__max',
-]
-
-
-agg_mean = [
-    'failed_run',
-    'missing_pkts',
-    'sent_pkts',
-    'delay__min',
-    'delay__max',
-    'delay__mean',
-    'delay__std',
-    'delay__5%',
-    'delay__25%',
-    'delay__50%',
-    'delay__75%',
-    'delay__95%',
-    'throughput__min',
-    'throughput__max',
-    'throughput__mean',
-    'throughput__std',
-    'throughput__5%',
-    'throughput__25%',
-    'throughput__50%',
-    'throughput__75%',
-    'throughput__95%',
-    'throughputin__mean',
-    'iat__max',
-    'iat__mean',
-    'iat__std',
-    'iat__5%',
-    'iat__25%',
-    'iat__50%',
-    'iat__75%',
-    'iat__95%',
-]
-
-all_msm_columns = [
-'failed_run',
-'missing_pkts',
-'sent_pkts',
-'delay__min',
-'delay__max',
-'delay__mean',
-'delay__std',
-'delay__5%',
-'delay__25%',
-'delay__50%',
-'delay__75%',
-'delay__95%',
-'throughput__min',
-'throughput__max',
-'throughput__mean',
-'throughput__std',
-'throughput__5%',
-'throughput__25%',
-'throughput__50%',
-'throughput__75%',
-'throughput__95%',
-'throughputin__mean',
-'iat__min',
-'iat__max',
-'iat__mean',
-'iat__std',
-'iat__5%',
-'iat__25%',
-'iat__50%',
-'iat__75%',
-'iat__95%',
-       ]
-
-all_columns = [
-'direction',
-'failed_run',
-'missing_pkts',
-'sent_pkts',
-'delay__min',
-'delay__max',
-'delay__mean',
-'delay__std',
-'delay__5%',
-'delay__25%',
-'delay__50%',
-'delay__75%',
-'delay__95%',
-'throughput__min',
-'throughput__max',
-'throughput__mean',
-'throughput__std',
-'throughput__5%',
-'throughput__25%',
-'throughput__50%',
-'throughput__75%',
-'throughput__95%',
-'throughputin__mean',
-'iat__min',
-'iat__max',
-'iat__mean',
-'iat__std',
-'iat__5%',
-'iat__25%',
-'iat__50%',
-'iat__75%',
-'iat__95%',
-'distance_horizontal_in_m',
-'distance_vertical_in_m',
-'gnb_antenna_inclanation_in_degree',
-'gnb_antenna_rotation_in_degree',
-'ue_antenna_inclanation_in_degree',
-'ue_antenna_rotation_in_degree',
-'modem',
-'interface_ue',
-'interface_gnb',
-'jammer',                               # DEFAULT: false
-'dockerization',                        # DEFAULT: false
-'performance_tuning',                   # DEFAULT: false
-'distance_floor',                       # DEFAULT: 0.2
-'distance_nearest_wall',                # DEFAULT: 0.2
-'location',                             # DEFAULT: A202?
-'sdr',
-'identifier',
-'run',
-'rx_gain',
-'tx_gain',
-'gnb_version__type',
-'gnb_version__uhd_version',
-'gnb_version__version',
-'gnb_version__commit',
-'traffic_config__traffic_type',
-'traffic_config__direction',
-'traffic_config__traffic_duration',
-'traffic_config__proto',
-'traffic_config__dist',
-'traffic_config__iat',
-'traffic_config__rate',
-'traffic_config__size',
-'traffic_config__count',
-'traffic_config__target_ip',
-'traffic_config__target_port',
-'traffic_config__burst',
-'tdd_config__tdd_dl_ul_ratio',
-'tdd_config__tdd_flex_slots',
-'tdd_config__tdd_dl_ul_tx_period',
-'tdd_config__tdd_dl_slots',
-'tdd_config__tdd_dl_symbols',
-'tdd_config__tdd_ul_slots',
-'tdd_config__tdd_ul_symbols',
-'gnb_version__combined'
-       ]
 
 def percentile(n):
     def percentile_(x):
@@ -241,7 +67,7 @@ def build_agg_dictionary() -> dict:
 
 
 def show_columns_with_differences(df : pd.DataFrame):
-    columns_to_group_by = list( set(all_columns).difference(set(all_msm_columns)).difference(set(["identifier"])) )
+    # columns_to_group_by = list( set(all_columns).difference(set(all_msm_columns)).difference(set(["identifier"])) )
     for c in columns_to_group_by:
         if not c in df.columns:
             continue
@@ -292,6 +118,11 @@ def main(dir):
     dfg.columns = list(map(lambda x: '__agg__'.join(filter(None,x)), dfg.columns.values))
     dfg.reset_index(inplace=True)
 
+    dfg['ue_power__agg__ci_95_l'] = dfg['ue_power__agg__mean'] - np.abs(dfg["ue_power__agg__ci_95"])
+    dfg['ue_power__agg__ci_95_u'] = dfg['ue_power__agg__mean'] + np.abs(dfg["ue_power__agg__ci_95"])
+    dfg['sdr_power__agg__ci_95_l'] = dfg['sdr_power__agg__mean'] - np.abs(dfg["sdr_power__agg__ci_95"])
+    dfg['sdr_power__agg__ci_95_u'] = dfg['sdr_power__agg__mean'] + np.abs(dfg["sdr_power__agg__ci_95"])
+
     dfg['throughput__mean__agg__ci_95_l'] = dfg['throughput__mean__agg__mean'] - np.abs(dfg["throughput__mean__agg__ci_95"])
     dfg['throughput__mean__agg__ci_95_u'] = dfg['throughput__mean__agg__mean'] + np.abs(dfg["throughput__mean__agg__ci_95"])
 
@@ -313,6 +144,9 @@ def main(dir):
 
     print("\n\nDifferent values aggregated:")
     show_columns_with_differences(dfg)
+
+    print("\n\nFinal columns:")
+    print( list(dfg.columns) )
 
 
 

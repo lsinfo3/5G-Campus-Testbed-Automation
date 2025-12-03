@@ -1,0 +1,15 @@
+---
+
+# INFO: this task runs the ping traffic generation
+
+# - name: Ping
+#   ansible.builtin.shell: |
+#     ip a ; exit 1
+#   become: false
+
+- name: Ping
+  ansible.builtin.command:
+     argv:
+        - sleep
+        - "{{ tg_duration }}"
+  become: true

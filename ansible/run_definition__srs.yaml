@@ -1,0 +1,52 @@
+description: initial test
+description_short: initial test
+system:
+  pcap_dump: /storage/check_for_ping_answer
+  identifier: 4433973f
+  fixed_params:
+    distance_floor: 1.0
+    distance_nearest_wall: 1.0
+    location: B205
+    distance_horizontal_in_m: 1.5
+    distance_vertical_in_m: 0.0
+    gnb_antenna_inclanation_in_degree: 90.0
+    gnb_antenna_rotation_in_degree: 0.0
+    ue_antenna_inclanation_in_degree: 90.0
+    ue_antenna_rotation_in_degree: 0.0
+    modem: SIM8200EA-M2 5G HAT
+    interface_ue: wwan0
+    interface_gnb: eno1
+    jammer: false
+    sdr: B210
+    performance_tuning: true
+run_definitions:
+- identifier: 4433973f__ac8db67e__000
+  run: 0
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: srsRAN
+    uhd_version: UHD-4.0
+    version: release_24_10
+    commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  traffic_config:
+    traffic_type: scapyudpping
+    traffic_duration: 60
+    count: '6000'
+    direction: UlDl
+    target_ip: 10.45.0.1
+    target_port: '3344'
+    proto: udp
+    rate: '0'
+    dist: det
+    iat: '0.01'
+    size: small
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 10
+    tdd_dl_slots: 6
+    tdd_dl_symbols: 8
+    tdd_ul_slots: 3
+    tdd_ul_symbols: 4

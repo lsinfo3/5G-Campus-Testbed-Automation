@@ -6,6 +6,7 @@
       - uhubctl               # Used to powercycle the modem
       - tcpdump
       - python3-scapy
+      - python3-tinkerforge
       - lm-sensors
     state: present
   become: true

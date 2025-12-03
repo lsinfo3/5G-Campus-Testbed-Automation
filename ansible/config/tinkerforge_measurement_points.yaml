@@ -1,0 +1,9 @@
+tinkerforge_powermsm_points:
+  ue:
+    uid: "21hP"
+    host: "172.16.32.5"
+    output: "/tmp/power_ue.csv"
+  sdr:
+    uid: "21hK"
+    host: "172.16.32.6"
+    output: "/tmp/power_sdr.csv"

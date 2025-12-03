@@ -12,63 +12,26 @@
     gnb_oai_binary: "/home/gnb/openairinterface5g/cmake_targets/ran_build/build/nr-softmodem"
     snr_msm_script: "/home/gnb/read-snr.sh"
     snr_msm_script_output: "/tmp/modem-snr.csv"
+    perf_output_csv: "/tmp/perfgnb.csv"
 
   pre_tasks:
     - name: include docker tags map
       include_vars: ../config/gnb-versions.yaml
-    - name: include test configuration
-      # include_vars: ../first-tests-0.35h-scapy.yaml
-      # include_vars: ../first-tests-0.35h-scapy-2.0.yaml
-      # include_vars: ../compare-gnb-versions.yaml
-      # include_vars: ../compare-gnb-versions-throughput.yaml
-      # include_vars: ../compare-gnb-versions-throughput-jammer.yaml
-      # include_vars: ../test.yaml
-      # include_vars: ../antenna-gain-Dl.yaml
-      # include_vars: ../throughput-uldl.yaml
-      # include_vars: ../dockerization.yaml
-      # include_vars: ../gnb-compare-delay.yaml
-      # include_vars: ../throughput-overshoot.yaml
-      # include_vars: ../throughput-overshoot-scapy.yaml
-      # include_vars: ../throughput-overshoot-scapy_addruns_3.yaml
-      # include_vars: ../perf-tuning.yaml
-      # include_vars: ../perf-tuning-on.yaml
-      # include_vars: ../perf-tuning_ping-on.yaml
-      # include_vars: ../perf-tuning_ping-off.yaml
-      # include_vars: ../antenna-gain-b205.yaml
-      # include_vars: ../antenna-gain-b205-run2.yaml
-      # include_vars: ../antenna-gain-b205-only_Ul-runs0-2.yaml
-      # include_vars: ../tdd-pattern-algo-old.yaml
-      # include_vars: ../tdd-pattern-algo-new.yaml
-      # include_vars: ../main_measurement.yaml
-      # include_vars: ../main_measurement_repeat_ping_pkt_big.yaml
-      # include_vars: ../main_measurement_run5-10.yaml
-      # include_vars: ../dockerization_main.yaml
-      # include_vars: ../dockerization_main_complete_tdd.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/distance/distance_msm_1.0m.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/distance/distance_msm_2.0m.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/distance/distance_msm_2.5m.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/distance_wall/distance_wall.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/modem/modem_2.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/dockerization/docker_qam256_r0-3.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/performance-tuning_cstate_recommends/perf-tuning-off__only_srsran_r0-3.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/performance-tuning_cstate_recommends/perf-tuning-on__only_srsran_r0-3.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/throughput-overshoot/throughput-overshoot-iperf__only_srsran.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/antenna-gain-b205/antenna-gain-b205-DlandUl-__only_srsran_runs0-1_1.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/throughput-overshoot/throughput_overshoot_missingTDD_r0-1.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/antenna-gain-b205/antenna-gain-b205-DlandUl-___repeat_failed.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/main_measurement/main_measurement__only_srsran.yaml
-      # include_vars: /mnt/ext1/5g-masterarbeit-daten/antenna-gain-b205/antenna-gain-b205-repeat_OAI_low_gain_r0-1.yaml
-      include_vars: /mnt/ext1/5g-masterarbeit-daten/height/height__r0-1.yaml
-
+    - name: include tinkerforge measurement points
+      include_vars: ../config/tinkerforge_measurement_points.yaml
+    # - name: include test configuration
+    #   # include_vars: "/home/lks/Akten/Projects/5G-energy-msm/5g-automated-measurements/ansible/messplan_power/01-ping.yaml"
+    #   # include_vars: /home/lks/Akten/Projects/5G-energy-msm/5g-automated-measurements/ansible/new_power_meter_test.yaml
+    #   # include_vars: /home/lks/Akten/Projects/5G-energy-msm/5g-automated-measurements/ansible/new_power_oai_test.yaml
 
 
 
   tasks:
      - name: iterate over test definition
        ansible.builtin.include_role:
-          # name: measurement_main
           name: loop-control
-       loop: "{{ run_to_run_variation }}"
+        # provided by testseries definition (--include_vars "@file.yaml")
+       loop: "{{ run_definitions }}"
        vars:
          docker_tags_map: "{{docker_tags}}"
-
+         tinkerforge: "{{ tinkerforge_powermsm_points }}"

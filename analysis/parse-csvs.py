@@ -1,5 +1,6 @@
 import os
 import sys
+import io
 import multiprocessing as mp
 import pandas as pd
 import numpy as np
@@ -7,9 +8,15 @@ import yaml
 import time
 import copy
 import argparse
+import gzip
+import tarfile
 
 
-""" Read CSVs in ansible pcap dump. Extract and aggregate data. Write back one parquet file """
+"""
+Read CSVs in ansible pcap dump. Extract and aggregate data.
+Also include additional data sources, like power consumption or perf counters.
+Write back one parquet file.
+"""
 
 
 
@@ -18,9 +25,165 @@ ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/data/dumps_c80/"
 # ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps_2025-03-28/"
 ansible_dump = "/home/lks/DocSync/Uni/5G-Masterarbeit/ansible/dumps/"
 
-def calc_channel_metrics(run_directory, relevant_stats):
-    assert(os.path.isfile(f"{run_directory}/modem-snr.csv"))
-    assert(os.path.isfile(f"{run_directory}/gnb_snr.csv"))
+
+def _get_power_metrics(run_directory, start, end, empty=False):
+    ret = {
+            "ue_power":np.nan,      # milli Watt
+            "ue_current":np.nan,    # milli Amp
+            "ue_voltage":np.nan,   # milli Volt
+            "sdr_power":np.nan,
+            "sdr_current":np.nan,
+            "sdr_voltage":np.nan,
+            }
+
+    for msm_location in ["ue", "sdr"]:
+        csv = f"{run_directory}/power_{msm_location}.csv"
+        if empty:
+            return ret
+        if not os.path.isfile(csv) or os.path.getsize(csv)<=200:
+            print(f"File does not exist!!! {csv}")
+            print(f"File does not exist!!! {csv}")
+            print(f"File does not exist!!! {csv}")
+            print(f"File does not exist!!! {csv}")
+            print(f"File does not exist!!! {csv}")
+            print(f"File does not exist!!! {csv}")
+            time.sleep(5)
+            ret[f"{msm_location}_power"] = np.nan
+            ret[f"{msm_location}_current"] = np.nan
+            ret[f"{msm_location}_voltage"] = np.nan
+            continue
+
+        df = pd.read_csv(csv)
+        try:
+            df = df.loc[(df["TIME"] < end) & (df["TIME"] > start),["VAL","TYPE"]]
+        except BaseException as e:
+            print(f"csv: {csv}")
+            print(f"end: {end}({type(end)}); start: {start}({type(start)})")
+            print(f"dftpes: {df.dtypes}")
+            raise e
+
+        if len(df) == 0:
+            return ret
+        ret[f"{msm_location}_power"] = df.groupby("TYPE").mean().loc["power", "VAL"]
+        ret[f"{msm_location}_current"] = df.groupby("TYPE").mean().loc["current", "VAL"]
+        ret[f"{msm_location}_voltage"] = df.groupby("TYPE").mean().loc["voltage", "VAL"]
+        del df
+    return ret
+
+def _get_channel_metrics(run_directory, start, end, empty=False):
+    ret = {
+            "modem_snr": np.nan,
+            "modem_sinr": np.nan,
+            "modem_rsrp": np.nan,
+            "modem_rsrq": np.nan,
+            "gnb_snr": np.nan,
+            "gnb_cqi": np.nan,
+            "gnb_rsrp": np.nan,
+            "gnb_mcs_dl": np.nan,
+            "gnb_mcs_ul": np.nan,
+            }
+    csv_modem = f"{run_directory}/modem-snr.csv"
+    csv_gnb = f"{run_directory}/gnb_snr.csv"
+
+    # TODO: this
+    if empty:
+        return ret
+    if not (os.path.isfile(csv_modem)):
+        raise ValueError(f"Missing modem channel metrics for '{run_directory}'")
+    df_modem = pd.read_csv(csv_modem)
+    if not (os.path.isfile(csv_gnb)):
+        raise ValueError(f"Missing gnb channel metrics for '{run_directory}'")
+    df_gnb = pd.read_csv(csv_gnb)
+
+    try:
+        for cm in df_modem.columns:
+            df_modem[cm] = pd.to_numeric(df_modem[cm], errors='coerce')
+        for cm in df_gnb.columns:
+            df_gnb[cm] = pd.to_numeric(df_gnb[cm], errors='coerce')
+
+        df_modem = df_modem.loc[(df_modem["TIMESTAMP"] < end) & (df_modem["TIMESTAMP"] > start), : ]
+        df_gnb = df_gnb.loc[(df_gnb["TIMESTAMP"] < end) & (df_gnb["TIMESTAMP"] > start), : ]
+    except BaseException as e:
+        print(f"dir: {run_directory}")
+        print(f"end: {end}({type(end)}); start: {start}({type(start)})")
+        print(f"dftpes: {df_modem.dtypes}")
+        raise e
+
+    if len(df_modem) > 10:
+        ret["modem_snr"] = df_modem["SNR"].mean()
+        ret["modem_sinr"] = df_modem["SINR"].mean()
+        ret["modem_rsrp"] = df_modem["RSRP"].mean()
+        ret["modem_rsrq"] = df_modem["RSRQ"].mean()
+    if len(df_gnb) > 10:
+        ret["gnb_snr"] = df_gnb["SNR"].mean()
+        ret["gnb_cqi"] = df_gnb["CQI"].mean()
+        ret["gnb_rsrp"] = df_gnb["RSRP"].mean()
+        ret["gnb_mcs_dl"] = df_gnb["MCS_DL"].mean()
+        ret["gnb_mcs_ul"] = df_gnb["MCS_UL"].mean()
+    del df_modem
+    del df_gnb
+    return ret
+
+def _parse_perf_csv(filepath: str):
+    with open(filepath, "r") as f:
+        content = f.read()
+    content_s = content.split("\n")
+    content_ss = [ [ w.replace(",","") for w in l.split(" ") if w != "" and not w.startswith("(")] for l in content_s if "<not counted>" not in l]
+    content_sd = [ l if "#" not in l else l[:l.index("#") ] for l in content_ss ]
+    content_csv_l = [ ";".join(l) for l in content_sd ]
+    content_csv = "\n".join(content_csv_l)
+    df = pd.read_csv(io.StringIO(content_csv), sep=";", names=["Timestamp", "Value", "Metric"])
+    df["Value"].astype(int)
+    return df
+
+def _get_perf_counters(run_directory, start, end):
+    run_config_path = f"{run_directory}/{os.path.basename(run_directory)}.yaml"
+    with open(run_config_path, "r") as rf:
+        run_config = yaml.safe_load(rf)
+
+    timeoffset_str = 0
+    if isinstance(run_config.get("gnb_version"), dict) and run_config.get("gnb_version").get("type") == "srsRAN":
+        print("Type srsRAN")
+        with tarfile.open(f"{run_directory}/shell_output.tar.gz", "r:gz") as tar:
+            member = tar.getmember("5ggnb-logs/srsran")
+            extracted = tar.extractfile(member)
+            assert(extracted != None)
+            gnb_log_content = extracted.read().decode('utf-8')
+    elif isinstance(run_config.get("gnb_version"), dict) and run_config.get("gnb_version").get("type") == "OAI":
+        print("Type OAI")
+        with gzip.open(f"{run_directory}/gnb.log.gz", "rt") as rf:
+            gnb_log_content = rf.read()
+    else:
+        raise ValueError(f"Invalid traffic configuration for run '{run_directory}'")
+
+    gnb_log_lines = gnb_log_content.split("\n")
+    idxs = [ i for i,l in enumerate(gnb_log_lines) if "Events enabled" in l ]
+    print(len(idxs))
+    if len(idxs) != 1 :
+        raise ValueError(f"Did perf really start? '{run_directory}'")
+    timeoffset_str = gnb_log_lines[idxs[0]].split(" ")[0]
+    timeoffset = float(timeoffset_str)
+
+    perfstats = f"{run_directory}/perfgnb.csv.gz"
+    if os.path.isfile(perfstats):
+        perf_metrics = _parse_perf_csv(perfstats)
+    elif os.path.isfile(perfstats[:-3]):
+        perf_metrics = _parse_perf_csv(perfstats[:-3])
+    else:
+        raise ValueError(f"Perfstats not found for run '{run_directory}'")
+    perf_metrics["Timestamp"] = perf_metrics["Timestamp"] + timeoffset
+    perf_metrics = perf_metrics.pivot(index="Timestamp", columns="Metric", values="Value").reset_index().rename_axis(None, axis="columns")
+    # INFO: columns:  Timestamp cache-misses      cycles dTLB-load-misses instructions
+
+    perf_metrics = perf_metrics.loc[(perf_metrics["Timestamp"] < end) & (perf_metrics["Timestamp"] > start), : ]
+
+    ret = { }
+    for m in ["cycles","instructions", "cache-misses", "dTLB-load-misses"]:
+        ret[f"perf_{m.strip("-")}"] = perf_metrics[m].mean()
+    del perf_metrics
+    return ret
+
+
 
 
 
@@ -28,12 +191,12 @@ def calc_channel_metrics(run_directory, relevant_stats):
 def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     log_report = f"{run_directory}\n"
 
-    gnb_rec = [f.path for f in os.scandir(run_directory) if f.path.endswith("gnb.csv") or f.path.endswith("gnb.csv.gz")]
+    gnb_rec = [f.path for f in os.scandir(run_directory) if f.path.endswith("tcpdump_gnb.csv") or f.path.endswith("tcpdump_gnb.csv.gz")]
     if len(gnb_rec) != 1:
         raise ValueError(f"Expected exactly 1 file like 'xyz_gnb.csv[.gz]' but found {len(gnb_rec)}; {run_directory}")
     gnb_rec = gnb_rec[0]
 
-    ue_rec = [f.path for f in os.scandir(run_directory) if f.path.endswith("ue.csv") or f.path.endswith("ue.csv.gz")]
+    ue_rec = [f.path for f in os.scandir(run_directory) if f.path.endswith("tcpdump_ue.csv") or f.path.endswith("tcpdump_ue.csv.gz")]
     if len(ue_rec) != 1:
         raise ValueError(f"Expected exactly 1 file like 'xyz_ue.csv[.gz]' but found {len(ue_rec)}; {run_directory}")
     ue_rec = ue_rec[0]
@@ -51,6 +214,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     indexer_ingress = lambda d:d["trafficflow"] == "ingress"
     df_ue.loc[indexer_egress,"IDT"] = df_ue.loc[indexer_egress,"Timestamp"] - df_ue.loc[indexer_egress,"Timestamp"].shift(1)
     df_ue.loc[indexer_ingress,"IAT"] = df_ue.loc[indexer_ingress,"Timestamp"] - df_ue.loc[indexer_ingress,"Timestamp"].shift(1)
+
 
     df_gnb = pd.read_csv(gnb_rec)
     try:
@@ -86,7 +250,7 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     df_gnb["IDT"] = np.nan
     df_gnb.loc[indexer_egress,"IDT"] = df_gnb.loc[indexer_egress,"Timestamp"] - df_gnb.loc[indexer_egress,"Timestamp"].shift(1)
     df_gnb.loc[indexer_ingress,"IAT"] = df_gnb.loc[indexer_ingress,"Timestamp"] - df_gnb.loc[indexer_ingress,"Timestamp"].shift(1)
-    if (len(df_ue)==0 and len(df_gnb)>0)  or (len(df_ue)>0 and len(df_gnb)==0):
+    if config["traffic_config__traffic_type"]!="idle" and ((len(df_ue)==0 and len(df_gnb)>0)  or (len(df_ue)>0 and len(df_gnb)==0)) :
         # INFO: this run is faulty; return without truthy value to mark failed
         log_report += f"Faulty run bcause of df len: {len(df_ue)} != {len(df_gnb)}\n"
         print(log_report)
@@ -122,9 +286,6 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         ue_seqs = df_ue.query(f"trafficflow == '{direction}'")["SeqNum"]
         gnb_seqs = df_gnb.query(f"trafficflow == '{direction_complement(direction)}'")["SeqNum"]
 
-        # print(f"ue: {df_ue}")
-        # print(f"gnb: {df_gnb}")
-
         try:
             assert(set(ue_seqs).symmetric_difference(set(range(ue_seqs.min(),ue_seqs.max()+1))) == set(gnb_seqs).symmetric_difference(set(range(gnb_seqs.min(),gnb_seqs.max()+1))))
         except Exception as e:
@@ -134,8 +295,9 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
             print(log_report)
             raise e
 
-    print(f"dropped {missing_pkts} pkts")
-    print(f"len ue: {len(df_ue)}, len gnb: {len(df_gnb)}")
+    if missing_pkts > 0:
+        print(f"dropped {missing_pkts} pkts")
+        print(f"len ue: {len(df_ue)}, len gnb: {len(df_gnb)}")
     df_gnb.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
     df_ue.sort_values(by=["trafficflow", "SeqNum"], ignore_index=True, inplace=True)
     try:
@@ -146,10 +308,10 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
         raise ae
 
     # Try to split the dataframes (along 'trafficflow') and use SeqNum as index
-    df_gnb_ingress = df_gnb[df_gnb['trafficflow'] == 'ingress']
-    df_gnb_egress = df_gnb[df_gnb['trafficflow'] == 'egress']
-    df_ue_ingress = df_ue[df_ue['trafficflow'] == 'ingress']
-    df_ue_egress = df_ue[df_ue['trafficflow'] == 'egress']
+    df_gnb_ingress = df_gnb[df_gnb['trafficflow'] == 'ingress'].copy()
+    df_gnb_egress = df_gnb[df_gnb['trafficflow'] == 'egress'].copy()
+    df_ue_ingress = df_ue[df_ue['trafficflow'] == 'ingress'].copy()
+    df_ue_egress = df_ue[df_ue['trafficflow'] == 'egress'].copy()
     # Use SeqNum as index from now on
     for d in [df_gnb_ingress,df_gnb_egress,df_ue_ingress,df_ue_egress]:
         d.loc[:,"SeqNum"] = d["SeqNum"].astype(np.int64)
@@ -158,9 +320,51 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     df_gnb_ingress.loc[:,"delay"] = df_gnb_ingress["Timestamp"] - df_ue_egress["Timestamp"]
     df_ue_ingress.loc[:,"delay"] = df_ue_ingress["Timestamp"] - df_gnb_egress["Timestamp"]
 
+    df_gnb_ingress.loc[:, "IBT_gnb"] = df_gnb_ingress["IAT"].apply(lambda x : np.nan if x < 0.001 else x)
+    df_gnb_ingress["IBT_ue"] = np.nan
+    df_ue_ingress["IBT_gnb"] = np.nan
+    df_ue_ingress.loc[:, "IBT_ue"] = df_ue_ingress["IAT"].apply(lambda x : np.nan if x < 0.001 else x)
+
+
+    # df_ue.loc[indexer_ingress,"IAT"] = df_ue.loc[indexer_ingress,"Timestamp"] - df_ue.loc[indexer_ingress,"Timestamp"].shift(1)
+    df_ue_ingress['batch_id'] = (df_ue_ingress['IAT'] > 0.001).cumsum()
+    df_batches_ue = (df_ue_ingress
+                     .groupby(['batch_id'])['Timestamp']
+                     .agg(lambda x : x.iloc[0])
+                     .reset_index()
+                     .rename({"Timestamp":"batch_start"}, axis='columns')
+                     .assign(location="ue")
+                     )
+    df_batches_ue["batch_stop"] = df_ue_ingress.groupby(['batch_id'])['Timestamp'].agg(lambda x : x.iloc[-1]).reset_index()["Timestamp"]
+    df_batches_ue["BD"] = df_batches_ue["batch_stop"] - df_batches_ue["batch_start"]
+    df_batches_ue["BT"] = df_batches_ue["batch_start"] - df_batches_ue["batch_start"].shift(1)
+    df_batches_ue["IBT"] = df_batches_ue["batch_start"] - df_batches_ue["batch_stop"].shift(1)
+    df_batches_ue["IBT_old_count"] = df_ue_ingress.groupby(['batch_id'])["IBT_ue"].count()
+    df_batches_ue["IBT_old"] = df_ue_ingress.groupby(['batch_id'])["IBT_ue"].mean()
+
+    df_gnb_ingress['batch_id'] = (df_gnb_ingress['IAT'] > 0.001).cumsum()
+    df_batches_gnb = (df_gnb_ingress
+                     .groupby(['batch_id'])['Timestamp']
+                     .agg(lambda x : x.iloc[0])
+                     .reset_index()
+                     .rename({"Timestamp":"batch_start"}, axis='columns')
+                     .assign(location="gnb")
+                     )
+    df_batches_gnb["batch_stop"] = df_gnb_ingress.groupby(['batch_id'])['Timestamp'].agg(lambda x : x.iloc[-1]).reset_index()["Timestamp"]
+    df_batches_gnb["BD"] = df_batches_gnb["batch_stop"] - df_batches_gnb["batch_start"]
+    df_batches_gnb["BT"] = df_batches_gnb["batch_start"] - df_batches_gnb["batch_start"].shift(1)
+    df_batches_gnb["IBT"] = df_batches_gnb["batch_start"] - df_batches_gnb["batch_stop"].shift(1)
+    df_batches = pd.concat([df_batches_ue, df_batches_gnb])
+    df_batches.to_csv(f"{run_directory}/batches.csv.gz", index=False, compression="gzip")
+
+
+
+
 
     #df_ue.dropna(subset=["delay"], inplace=True)
     df = pd.concat([df_ue_ingress.reset_index(), df_gnb_ingress.reset_index()]) # INFO: required to accurate determin missing pkts
+
+
     # df = pd.concat([df_ue])
     # df["SeqNum"] = df["SeqNum"].astype(np.int64)
     with open(f"/tmp/pandas-{os.path.basename(run_directory)}.txt", "w") as f:
@@ -175,41 +379,97 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
     # INFO: determine packet metrics (delay/missing/throughput) at the ingress
     ret = df.groupby("location").describe(percentiles=[0.05, 0.25, 0.5, 0.75, 0.95])
 
-    if config["traffic_config__direction"] == "UlDl":
+
+    try:
+        channel_msm = _get_channel_metrics(run_directory=run_directory, start=df["Timestamp"].min(), end=df["Timestamp"].max())
+        metrics = { **metrics, **channel_msm }
+
+        if config["traffic_config__traffic_type"] == "idle":
+            with tarfile.open(f"{run_directory}/shell_output.tar.gz", "r:gz") as tar:
+                member = tar.getmember("5ggnb-logs/setip")
+                extracted = tar.extractfile(member)
+                assert(extracted != None)
+                setip_content = extracted.read().decode('utf-8')
+                setip_content_lines = setip_content.split("\n")
+                setip_success_line = [ l for l in setip_content_lines if "New IP: " in l]
+                if len(setip_success_line) != 1:
+                    raise ValueError("Failed run?")
+                else:
+                    ts = float(setip_success_line[0].split(" ")[0])
+                    power_msm_results = _get_power_metrics(run_directory=run_directory, start=ts, end=ts+config["traffic_config__traffic_duration"])
+                    gnb_perf_results = _get_perf_counters(run_directory=run_directory, start=ts, end=ts+config["traffic_config__traffic_duration"])
+                metrics["actualduration"] = config["traffic_config__traffic_duration"]
+        else:
+            power_msm_results = _get_power_metrics(run_directory=run_directory, start=df["Timestamp"].min(), end=df["Timestamp"].max())
+            gnb_perf_results = _get_perf_counters(run_directory=run_directory, start=df["Timestamp"].min(), end=df["Timestamp"].max())
+            metrics["actualduration"] = df["Timestamp"].max() - df["Timestamp"].min()
+            if metrics["actualduration"] < 0.9 * config["traffic_config__traffic_duration"]:
+                return False
+        metrics = { **metrics, **power_msm_results }
+        metrics[f"ue_power_failed"] = np.isnan(power_msm_results["ue_power"])
+        metrics[f"sdr_power_failed"] = np.isnan(power_msm_results["sdr_power"])
+
+        metrics = { **metrics, **gnb_perf_results }
+
+        # WARN: what layer are we talking about?
+        metrics["pkt_size"] = 1376 if config["traffic_config__traffic_type"] == "iperfthroughput" else 36 if config["traffic_config__size"]=="small" else 1382
+
+
+    except BaseException as e:
+        raise ValueError(f"Error for: {run_directory}") from e
+
+    for i in range(0,101,1):
+        metrics[f"IBT_ue_{i:02d}"] = df_batches.query("location == 'ue'")["IBT"].dropna().quantile(i/100)
+    for i in range(0,101,1):
+        metrics[f"IBT_gnb_{i:02d}"] = df_batches.query("location == 'gnb'")["IBT"].dropna().quantile(i/100)
+    for i in range(0,101,1):
+        metrics[f"BT_ue_{i:02d}"] = df_batches.query("location == 'ue'")["BT"].dropna().quantile(i/100)
+    for i in range(0,101,1):
+        metrics[f"BT_gnb_{i:02d}"] = df_batches.query("location == 'gnb'")["BT"].dropna().quantile(i/100)
+    for i in range(0,101,1):
+        metrics[f"BD_ue_{i:02d}"] = df_batches.query("location == 'ue'")["BD"].dropna().quantile(i/100)
+    for i in range(0,101,1):
+        metrics[f"BD_gnb_{i:02d}"] = df_batches.query("location == 'gnb'")["BD"].dropna().quantile(i/100)
+
+    if config["traffic_config__traffic_type"] == "idle":
+        metrics["direction"] = "None"
+        return { **metrics, **config }
+
+    elif config["traffic_config__direction"] == "UlDl" :
         # Both Ul and Dl in the same pcaps
         if len(df.loc[df["trafficflow"] == "ingress"]) <= 0:
             log_report += "No ingress?, how?\n"
             print(log_report)
             return False
-        # if len(df.loc[df["trafficflow"] == "egress"]) <= 0:
-        #     print("No egress?, how?")
-        #     print("No egress?, how?")
-        #     return False
         for s in relevant_stats:
             try:
                 metrics[f"delay__{s}"] = ret["delay"][s].loc["gnb"]
-            except:
-                print(f"ERROR: {run_directory}")
-                print(f"ERROR: {run_directory}")
-                print(f"ERROR: {run_directory}")
-                print(f"ERROR: {run_directory}")
-                print(f"ERROR: {run_directory}")
+            except BaseException as e:
+                print(f"ERROR: {run_directory} - {repr(e)}")
+                print(f"ERROR: {run_directory} - {repr(e)}")
+                print(f"ERROR: {run_directory} - {repr(e)}")
+                print(f"ERROR: {run_directory} - {repr(e)}")
+                print(f"ERROR: {run_directory} - {repr(e)}")
                 return False
         metrics["direction"] = "Ul"
         # df_query = df.query(f"trafficflow == 'ingress' and location == 'gnb'")
         df_query = df_gnb_ingress
         metrics["missing_pkts"] = len( set(range(df_query.index.min(), df_query.index.max()+1)) .difference(set(df_query.index)) )
         metrics["sent_pkts"] = len(df_query)
+
         ret1 = {**metrics, **config}
         for s in relevant_stats:
             try:
                 metrics[f"delay__{s}"] = ret["delay"][s].loc["ue"]
-            except:
-                print(f"ERROR: {run_directory}")
-                print(f"ERROR: {run_directory}")
-                print(f"ERROR: {run_directory}")
-                print(f"ERROR: {run_directory}")
-                print(f"ERROR: {run_directory}")
+            except BaseException as e:
+                print(f"ERROR: {run_directory} -- {repr(e)}")
+                print(f"ERROR: {run_directory} -- {repr(e)}")
+                print(ret["delay"])
+                print("--")
+                print(ret["delay"][s])
+                print("--")
+                print(ret["delay"][s].loc["ue"])
+                print("--")
                 return False
         metrics["direction"] = "Dl"
         # df_query = df.query(f"trafficflow == 'ingress' and location == 'ue'")
@@ -297,6 +557,10 @@ def handle_ping_run(run_directory: str):
         if returnvalue:
             return returnvalue
 
+
+
+
+
     # INFO: faulty:
     #
     # with open(f"{run_directory}/FAILED", "r") as ff:
@@ -305,6 +569,10 @@ def handle_ping_run(run_directory: str):
     metrics["direction"]="Ul"
     metrics["failed_run"]=True
     ret1 = {**metrics, **config}
+    if config["traffic_config__traffic_type"] == "idle":
+        ret1["direction"] = "None"
+        return ret1
+
     ret2 = copy.deepcopy(ret1)
     ret2["direction"]="Dl"
     if config["traffic_config__direction"] == "UlDl":
@@ -316,8 +584,6 @@ def handle_ping_run(run_directory: str):
 
 
 def refactor_final_df(df: pd.DataFrame):
-    # df["gnb_version__combined"] = df["gnb_version__version"] + df["gnb_version__commit"]
-    # df["gnb_version__combined"] = df.apply(lambda x: x["gnb_version__version"] + str(x["gnb_version__commit"])[:7])
     df["gnb_version__combined"] = df["gnb_version__version"] + "__" + df["gnb_version__commit"].str.slice(0,7)
     return df
 
@@ -326,7 +592,7 @@ def refactor_final_df(df: pd.DataFrame):
 def handle_run(run_directory: str):
     dirname = os.path.basename(run_directory)
     run_config_path = f"{run_directory}/{dirname}.yaml"
-    print(run_config_path)
+    # print(run_config_path)
 
     with open(run_config_path, "r") as rf:
         run_config = yaml.safe_load(rf)
@@ -340,6 +606,10 @@ def handle_run(run_directory: str):
         # return handle_throughput_run(run_directory)
         return handle_ping_run(run_directory)
     elif traffic_type == "scapyudpthroughput":
+        # WARN: when changing this step: double check FAILED runs are marked correctly
+        # return handle_throughput_run(run_directory)
+        return handle_ping_run(run_directory)
+    elif traffic_type == "idle":
         # WARN: when changing this step: double check FAILED runs are marked correctly
         # return handle_throughput_run(run_directory)
         return handle_ping_run(run_directory)
@@ -358,20 +628,12 @@ def main():
     runs = [r.path for t in test_configurations for r in os.scandir(t) if r.is_dir() and not os.path.basename(r).startswith(".")]
     pcaps = [pcap.path for r in runs for pcap in os.scandir(r) if pcap.is_file() and (pcap.path.endswith(".pcap") or pcap.path.endswith(".pcap.gz"))]
 
-    # handle_run("../ansible/dumps/f353745a/f353745a__c9d26484__001")
-    # handle_run("../ansible/dumps/f353745a/f353745a__06e1f169__000")
-    # if True:
-    #     sys.exit(1)
-
-# runs = runs[:1]
 
     print(runs)
-    with mp.Pool(8) as p:
-        # returns = p.map(handle_ping_run, runs)
+    with mp.Pool(10) as p:
         returns = p.map(handle_run, runs)
     # returns = [handle_run(r) for r in runs]
     # returns = [handle_run("/home/lks/Documents/datastore/5g-masterarbeit/performance-tuning/54e0b2b3/54e0b2b3__d5bd4e7b__001")]
-    # returns = [handle_run("/mnt/ext1/5g-masterarbeit-daten/main_measurement/9ff091db/9ff091db__0a2cefea__000")]
 
 
     records = []
@@ -388,7 +650,6 @@ def main():
 
 
     print(final_df)
-
 
 
     final_df.to_parquet(f"{ansible_dump}/all_runs.parquet")

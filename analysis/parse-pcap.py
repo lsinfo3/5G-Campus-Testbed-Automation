@@ -23,8 +23,6 @@ def get_pcap_paths(root: str):
 iperf_udp_throughput = pp.validator(proto="udp", pl_min_len=1200, seq_num_first_byte=8, seq_num_last_byte=12, match_port=4455)
 scapy_ping_small = pp.validator(proto="udp", pl_min_len=8, pl_max_len=8, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
 scapy_ping_big = pp.validator(proto="udp", pl_min_len=1300, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
-# scapy_throughput = pp.validator(proto="udp", pl_min_len=1454, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
-# scapy_throughput = pp.validator(proto="udp", pl_min_len=1428, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
 scapy_throughput = pp.validator(proto="udp", pl_min_len=1300, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
 
 
@@ -52,6 +50,8 @@ def pp_wrapper(infile:str):
         v = iperf_udp_throughput
         v.match_port = run_config["traffic_config"]["target_port"]
         v.proto = run_config["traffic_config"]["proto"]
+    elif run_config["traffic_config"]["traffic_type"] == "idle":
+        v = scapy_ping_small
     else:
         raise RuntimeError("Unknown test specification!")
 
