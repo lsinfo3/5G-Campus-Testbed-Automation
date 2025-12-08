@@ -2,6 +2,7 @@
 
 # requires following variables:
 # srs_version
+# gnb_bandwidth
 # tdd_period
 # tdd_dl_slots
 # tdd_dl_symbols
@@ -45,6 +46,17 @@
     msg:
     - "{{ item.tdd_config.tdd_period }}"
 
+- name: "Set sampling rate"
+  block:
+  - ansible.builtin.set_fact:
+      gnb_sampling_rate: 0 # catch missing/undefined bandwidth
+  - ansible.builtin.set_fact:
+      gnb_sampling_rate: 23.04
+    when: item.gnb_bandwidth == "20"
+  - ansible.builtin.set_fact:
+      gnb_sampling_rate: 46.08
+    when: item.gnb_bandwidth == "40"
+
     # Update fact is fucked, better try this: https://stackoverflow.com/a/67379573
 - name: "Edit srsRAN config: update config"
   ansible.utils.update_fact:
@@ -59,6 +71,10 @@
         value: "{{tdd_ul_slots}}"
       - path: gnb_srs_config.cell_cfg.tdd_ul_dl_cfg.nof_ul_symbols
         value: "{{ tdd_ul_symbols }}"
+      - path: gnb_srs_config.cell_cfg.channel_bandwidth_MHz
+        value: "{{ gnb_bandwidth }}"
+      - path: gnb_srs_config.ru_sdr.srate
+        value: "{{ gnb_sampling_rate }}"
   register: gnb_srs_config_updated
   vars:  # temporary variables so we can actually cast to int # INFO: well, it doesn't work..
      # INFO: try these options next: https://stackoverflow.com/questions/69109062/cant-set-ansible-fact-as-integer https://serverfault.com/questions/1030350/converting-string-to-integer-in-ansible-playbook/1165629#1165629
@@ -67,6 +83,7 @@
     tdd_dl_symbols:      "{{ item.tdd_config.tdd_dl_symbols |int }}"
     tdd_ul_slots:        "{{ item.tdd_config.tdd_ul_slots |int }}"
     tdd_ul_symbols:      "{{ item.tdd_config.tdd_ul_symbols |int }}"
+    gnb_bandwidth:       "{{ item.gnb_bandwidth |int }}"
 - ansible.builtin.set_fact:
     gnb_srs_config: "{{ gnb_srs_config_updated.gnb_srs_config }}"
 

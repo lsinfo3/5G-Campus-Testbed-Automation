@@ -1,53 +1,114 @@
 ---
 
+- name: Set arfcn configs to variables
+  ansible.builtin.set_fact:
+    bandwidth_20MHz:
+      arfcn_sbb: 650688
+      arfcn_pointa: 650000
+      carrier_bandwidth_rb: 51
+      initalBWPlocationAndBandwidth: 13750
+    bandwidth_40MHz:
+      arfcn_sbb: 649920
+      arfcn_pointa: 649224
+      carrier_bandwidth_rb: 106
+      initalBWPlocationAndBandwidth: 28875
+
+
 - name: Get default config
   ansible.builtin.copy:
     src: ../config/gnb_oai.conf
     dest: "{{ gnb_oai_config_path }}"
 
+- name: Load configuration for current bandwidth
+  block:
+  - ansible.builtin.set_fact:
+      oai_arfcn_cfg:
+        arfcn_sbb: 0
+        arfcn_pointa: 0
+  - ansible.builtin.set_fact:
+      oai_arfcn_cfg: "{{ bandwidth_20MHz }}"
+    when: item.gnb_bandwidth == "20"
+  - ansible.builtin.set_fact:
+      oai_arfcn_cfg: "{{ bandwidth_40MHz }}"
+    when: item.gnb_bandwidth == "40"
+
+- ansible.builtin.debug:
+    msg:
+    - "{{ oai_arfcn_cfg }}"
+
+- name: "Set ARFCN values and other bandwidth dependent configuration"
+  block:
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '        absoluteFrequencySSB'
+      line: "        absoluteFrequencySSB = {{ oai_arfcn_cfg.arfcn_sbb |int }};"
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '        dl_absoluteFrequencyPointA'
+      line: "        dl_absoluteFrequencyPointA = {{ oai_arfcn_cfg.arfcn_pointa |int }};"
+
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '        dl_carrierBandwidth'
+      line: "        dl_carrierBandwidth = {{ oai_arfcn_cfg.carrier_bandwidth_rb |int }};"
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '        ul_carrierBandwidth'
+      line: "        ul_carrierBandwidth = {{ oai_arfcn_cfg.carrier_bandwidth_rb |int }};"
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '        initialDLBWPlocationAndBandwidth'
+      line: "        initialDLBWPlocationAndBandwidth = {{ oai_arfcn_cfg.initalBWPlocationAndBandwidth }}; # 6366 12925 12956 28875 12952;"
+  - ansible.builtin.lineinfile:
+      path: "{{ gnb_oai_config_path }}"
+      search_string: '        initialULBWPlocationAndBandwidth'
+      line: "        initialULBWPlocationAndBandwidth = {{ oai_arfcn_cfg.initalBWPlocationAndBandwidth }}; # 6366 12925 12956 28875 12952;"
+
+
+
 - name: "Edit OAI RAN config:"
   block:
   - ansible.builtin.lineinfile:
       path: "{{ gnb_oai_config_path }}"
-      search_string: '      nrofDownlinkSlots'
-      line: "      nrofDownlinkSlots                                             = {{ item.tdd_config.tdd_dl_slots |int }};"
+      search_string: '        nrofDownlinkSlots'
+      line: "        nrofDownlinkSlots = {{ item.tdd_config.tdd_dl_slots |int }};"
   - ansible.builtin.lineinfile:
       path: "{{ gnb_oai_config_path }}"
-      search_string: '      nrofDownlinkSymbols'
-      line: "      nrofDownlinkSymbols                                           = {{ item.tdd_config.tdd_dl_symbols |int }};"
+      search_string: '        nrofDownlinkSymbols'
+      line: "        nrofDownlinkSymbols = {{ item.tdd_config.tdd_dl_symbols |int }};"
   - ansible.builtin.lineinfile:
       path: "{{ gnb_oai_config_path }}"
-      search_string: '      nrofUplinkSlots'
-      line: "      nrofUplinkSlots                                               = {{ item.tdd_config.tdd_ul_slots |int }};"
+      search_string: '        nrofUplinkSlots'
+      line: "        nrofUplinkSlots = {{ item.tdd_config.tdd_ul_slots |int }};"
   - ansible.builtin.lineinfile:
       path: "{{ gnb_oai_config_path }}"
-      search_string: '      nrofUplinkSymbols'
-      line: "      nrofUplinkSymbols                                             = {{ item.tdd_config.tdd_ul_symbols |int }};"
+      search_string: '        nrofUplinkSymbols'
+      line: "        nrofUplinkSymbols = {{ item.tdd_config.tdd_ul_symbols |int }};"
 
 - when: item.tdd_config.tdd_period == 5
   ansible.builtin.lineinfile:
     path: "{{ gnb_oai_config_path }}"
-    search_string: '      dl_UL_TransmissionPeriodicity'
-    line: "      dl_UL_TransmissionPeriodicity                                 = 5;"
+    search_string: '        dl_UL_TransmissionPeriodicity'
+    line: "        dl_UL_TransmissionPeriodicity = 5;"
 - when: item.tdd_config.tdd_period == 10
   ansible.builtin.lineinfile:
     path: "{{ gnb_oai_config_path }}"
-    search_string: '      dl_UL_TransmissionPeriodicity'
-    line: "      dl_UL_TransmissionPeriodicity                                 = 6;"
+    search_string: '        dl_UL_TransmissionPeriodicity'
+    line: "        dl_UL_TransmissionPeriodicity = 6;"
 - when: item.tdd_config.tdd_period == 20
   ansible.builtin.lineinfile:
     path: "{{ gnb_oai_config_path }}"
-    search_string: '      dl_UL_TransmissionPeriodicity'
-    line: "      dl_UL_TransmissionPeriodicity                                 = 7;"
+    search_string: '        dl_UL_TransmissionPeriodicity'
+    line: "        dl_UL_TransmissionPeriodicity = 7;"
 
 
 - when: item.rx_gain != None
   ansible.builtin.lineinfile:
     path: "{{ gnb_oai_config_path }}"
-    search_string: '  att_rx         = '
-    line: "  att_rx         = {{ 70.0 - item.rx_gain |int }};" # TODO: is this calculation correct? only for B210 if at all!
+    search_string: '    att_rx         = '
+    line: "    att_rx = {{ 70.0 - item.rx_gain |int }};" # TODO: is this calculation correct? only for B210 if at all!
 - when: item.tx_gain != None
   ansible.builtin.lineinfile:
     path: "{{ gnb_oai_config_path }}"
     search_string: '  att_tx         = '
-    line: "  att_tx         = {{ 89.75 - item.tx_gain |int }};" # TODO: is this calculation correct? only for B210 if at all!
+    line: "    att_tx = {{ 89.75 - item.tx_gain |int }};" # TODO: is this calculation correct? only for B210 if at all!

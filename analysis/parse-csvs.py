@@ -382,6 +382,10 @@ def calc_pkt_metrics(run_directory, relevant_stats, metrics, config):
 
     try:
         channel_msm = _get_channel_metrics(run_directory=run_directory, start=df["Timestamp"].min(), end=df["Timestamp"].max())
+        if not np.isnan(channel_msm["modem_snr"]):
+            metrics["ue_channelmetrics_failed"] = False
+        if not np.isnan(channel_msm["gnb_snr"]):
+            metrics["gnb_channelmetrics_failed"] = False
         metrics = { **metrics, **channel_msm }
 
         if config["traffic_config__traffic_type"] == "idle":
@@ -539,7 +543,13 @@ def handle_ping_run(run_directory: str):
     }
     relevant_stats = ["min", "max", "mean", "std", "5%", "25%", "50%", "75%", "95%"]
     # TODO: missing_pkts
-    metrics = {"direction":'XXX',"failed_run":False, "missing_pkts":np.nan, "sent_pkts":np.nan, "throughputin__mean": np.nan}
+    metrics = {
+            "direction":'XXX',"failed_run":False, "missing_pkts":np.nan, "sent_pkts":np.nan, "throughputin__mean": np.nan,
+            "ue_power_failed": True,
+            "sdr_power_failed": True,
+            "ue_channelmetrics_failed": True,
+            "gnb_channelmetrics_failed": True,
+            }
     for k,v in metrics_default.items():
         for s in relevant_stats:
             metrics[f"{k}__{s}"] = v

@@ -89,6 +89,19 @@ yaml2json() {
 }
 
 
+NR_OF_TASKS="$(cat "$1" | yaml2json | jq '.run_definitions[].identifier' | wc -l)"
+NR_OF_IDs="$(cat "$1" | yaml2json | jq '.run_definitions[].identifier' | uniq | wc -l)"
+if [[ $NR_OF_TASKS -ne $NR_OF_IDs ]]; then
+    echo "Scheduled $NR_OF_TASKS measurements but only $NR_OF_IDs unique IDs!!"
+    exit 1
+else
+    echo "Scheduled $NR_OF_TASKS measurements."
+fi
+
+
+
+
+
 if [[ $# -ne 1 ]] && [[ $# -ne 2 ]]; then
     echo "Requires path to test series definition and optionally the '--continuer' flag!" >&2
     exit 1

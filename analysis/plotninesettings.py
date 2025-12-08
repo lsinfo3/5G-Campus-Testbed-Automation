@@ -103,6 +103,9 @@ def GLOBAL_THEME(smallw:bool=False,smallh:bool=False):
                 # panel_border=element_line(color =PLOTCOLORS["bg2"],size=0.6), # WARN: broken in new version      # border around one subplot
                 plot_background=element_rect(fill=None, color=None),
 
+                figure_size=(PLOT_W/1.5 if smallw else PLOT_W , PLOT_H/1.5 if smallh else PLOT_H ),
+                dpi=450,
+
                 #plot_title=element_text(color="#f000f0"),
                 plot_title=element_blank(),
                 legend_position="right",

@@ -1,0 +1,208 @@
+description: check if bandwidth automation is working
+description_short: bandwidth test
+system:
+  pcap_dump: /storage/power_bandwidth_def_oai
+  identifier: 4433973f
+  fixed_params:
+    distance_floor: 1.0
+    distance_nearest_wall: 1.0
+    location: B205
+    distance_horizontal_in_m: 1.5
+    distance_vertical_in_m: 0.0
+    gnb_antenna_inclanation_in_degree: 90.0
+    gnb_antenna_rotation_in_degree: 0.0
+    ue_antenna_inclanation_in_degree: 90.0
+    ue_antenna_rotation_in_degree: 0.0
+    modem: SIM8200EA-M2 5G HAT
+    interface_ue: wwan0
+    interface_gnb: eno1
+    jammer: false
+    sdr: B210
+    performance_tuning: true
+run_definitions:
+- identifier: 4433973f__67970673__000
+  run: 0
+  gnb_bandwidth: '40'
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Dl
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 200M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 1
+    tdd_period: 5
+    tdd_dl_slots: 2
+    tdd_dl_symbols: 7
+    tdd_ul_slots: 2
+    tdd_ul_symbols: 6
+- identifier: 4433973f__acc40994__000
+  run: 0
+  gnb_bandwidth: '20'
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Dl
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 200M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 1
+    tdd_period: 5
+    tdd_dl_slots: 2
+    tdd_dl_symbols: 7
+    tdd_ul_slots: 2
+    tdd_ul_symbols: 6
+- identifier: 4433973f__67970673__001
+  run: 1
+  gnb_bandwidth: '40'
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Dl
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 200M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 1
+    tdd_period: 5
+    tdd_dl_slots: 2
+    tdd_dl_symbols: 7
+    tdd_ul_slots: 2
+    tdd_ul_symbols: 6
+- identifier: 4433973f__acc40994__001
+  run: 1
+  gnb_bandwidth: '20'
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Dl
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 200M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 1
+    tdd_period: 5
+    tdd_dl_slots: 2
+    tdd_dl_symbols: 7
+    tdd_ul_slots: 2
+    tdd_ul_symbols: 6
+- identifier: 4433973f__67970673__002
+  run: 2
+  gnb_bandwidth: '40'
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Dl
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 200M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 1
+    tdd_period: 5
+    tdd_dl_slots: 2
+    tdd_dl_symbols: 7
+    tdd_ul_slots: 2
+    tdd_ul_symbols: 6
+- identifier: 4433973f__acc40994__002
+  run: 2
+  gnb_bandwidth: '20'
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Dl
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 200M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 1
+    tdd_period: 5
+    tdd_dl_slots: 2
+    tdd_dl_symbols: 7
+    tdd_ul_slots: 2
+    tdd_ul_symbols: 6

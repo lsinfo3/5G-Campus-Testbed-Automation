@@ -1,6 +1,5 @@
 import importlib
 
-from scipy.linalg import bandwidth
 import plotninesettings
 import natsort
 import itertools

@@ -9,3 +9,4 @@ dumps/
 *.csv
 *.csv.gz
 .ccls-cache/
+.ipynb_checkpoints/
