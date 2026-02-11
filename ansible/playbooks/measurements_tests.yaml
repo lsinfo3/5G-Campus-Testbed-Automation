@@ -1,0 +1,34 @@
+---
+
+- name: Generate traffic
+  hosts: localhost
+  vars:
+    collected_logs: "/tmp/artefacts"
+    gnb_srs_config_path: "/tmp/gnb_srs.yml"
+    gnb_oai_config_path: "/tmp/gnb_oai.conf"
+    #gnb_srs_logfile_path: "/tmp/gnb.log"
+    #gnb_srs_binary: "/home/gnb/srsRAN_Project/build/apps/gnb/gnb"
+    #gnb_oai_logfile_path: "/tmp/gnb.log"
+    #gnb_oai_binary: "/home/gnb/openairinterface5g/cmake_targets/ran_build/build/nr-softmodem"
+    #snr_msm_script: "/home/gnb/read-snr.sh"
+    #snr_msm_script_output: "/tmp/snr_ue.csv"
+    #perf_output_csv: "/tmp/perfgnb.csv"
+
+  pre_tasks:
+    - name: include docker tags map
+      include_vars: ../config/gnb-versions.yaml
+    - name: include tinkerforge measurement points
+      include_vars: ../config/tinkerforge_measurement_points.yaml
+    - name: include radio config lookups
+      include_vars: ../config/bandwidth.yaml
+
+
+  tasks:
+     - name: iterate over test definition
+       ansible.builtin.include_role:
+          name: loop_test
+        # provided by testseries definition (--include_vars "@file.yaml")
+       loop: "{{ run_definitions }}"
+       vars:
+         docker_tags_map: "{{docker_tags}}"
+         tinkerforge: "{{ tinkerforge_powermsm_points }}"

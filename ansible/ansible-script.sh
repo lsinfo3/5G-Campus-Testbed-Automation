@@ -16,12 +16,8 @@
 
 
 
-# ansible_log="/storage/power_new_2xtinker_1xperf/ansible_task.log"
-# ansible_log="/storage/power_new_2xtinker_1xperf_02/ansible_task.log"
-
 
 Ansible_Playbook_Extra_Vars=""
-# Ansible_Playbook_Extra_Vars=""
 
 
 
@@ -90,7 +86,7 @@ yaml2json() {
 
 
 NR_OF_TASKS="$(cat "$1" | yaml2json | jq '.run_definitions[].identifier' | wc -l)"
-NR_OF_IDs="$(cat "$1" | yaml2json | jq '.run_definitions[].identifier' | uniq | wc -l)"
+NR_OF_IDs="$(cat "$1" | yaml2json | jq '.run_definitions[].identifier' | sort | uniq | wc -l)"
 if [[ $NR_OF_TASKS -ne $NR_OF_IDs ]]; then
     echo "Scheduled $NR_OF_TASKS measurements but only $NR_OF_IDs unique IDs!!"
     exit 1
@@ -103,11 +99,11 @@ fi
 
 
 if [[ $# -ne 1 ]] && [[ $# -ne 2 ]]; then
-    echo "Requires path to test series definition and optionally the '--continuer' flag!" >&2
+    echo "Requires path to test series definition and optionally the '--continue' flag!" >&2
     exit 1
 fi
 if [[ $# -eq 2 ]] && [[ $1 != "--continue" ]]; then
-    echo "Requires path to test series definition and optionally the '--continuer' flag!" >&2
+    echo "Requires path to test series definition and optionally the '--continue' flag!" >&2
     exit 1
 fi
 
@@ -140,7 +136,7 @@ fi
 
 # start_scapy_server_on_gnodeb &
 while true; do
-    ansible-playbook playbooks/traffic-gen.yaml --extra-vars "@${TEST_SERIES_DEFINIITON}" --extra-vars "$Ansible_Playbook_Extra_Vars"
+    ansible-playbook playbooks/measurements.yaml --extra-vars "@${TEST_SERIES_DEFINIITON}" --extra-vars "$Ansible_Playbook_Extra_Vars"
     ansible_return_code=$?
     if [ $ansible_return_code -eq 0 ]; then
         break

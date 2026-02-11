@@ -50,8 +50,8 @@ parse_oai() {
         cqi=""
         snr="$(echo -n "$line" | grep -oP " SNR \K(\d+.?\d+)(?= dB)")"
         rsrp="$(echo -n "$line" | grep -oP " RSRP \K(-?\d+.?\d+)(?= \()")"
-        mcs_dl="$(echo -n "$line" | grep -oP " dlsch_rounds .*\d\d\d MCS \([0,1]\) \K(\d+)")"
-        mcs_ul="$(echo -n "$line" | grep -oP " ulsch_rounds .*\d\d\d MCS \([0,1]\) \K(\d+)(?= \(Qm)")"
+        mcs_dl="$(echo -n "$line" | grep -oP " dlsch_rounds .*\d\d\d MCS \([0-1]+\) \K(\d+)")"
+        mcs_ul="$(echo -n "$line" | grep -oP " ulsch_rounds .*\d\d\d MCS \([0-1]+\) \K(\d+)(?= \(Qm)")"
 
         # 1745504694.380505 UE RNTI e7eb CU-UE-ID 1 in-sync PH 52 dB PCMAX 21 dBm, average RSRP -70 (31 meas)
         # 1745504694.380582 UE e7eb: dlsch_rounds 22637/3/1/0, dlsch_errors 0, pucch0_DTX 3, BLER 0.00000 MCS (1) 9
@@ -69,11 +69,16 @@ detect_gnb_type() {
     echo "$run  --- $gnb_type "
     gnb_log="$run/gnb.log.gz"
 
-    if [[ $gnb_type == "srsRAN" ]]; then
-        parse_srsran "$gnb_log" > "$run"/gnb_snr.csv
-    elif [[ $gnb_type == "OAI" ]]; then
-        parse_oai "$gnb_log" > "$run"/gnb_snr.csv
+    if [[ $SKIP_EXISTING == "true" && -f "$run"/snr_gnb.csv ]]; then
+        return
     fi
+
+    if [[ $gnb_type == "srsRAN" ]]; then
+        parse_srsran "$gnb_log" > "$run"/snr_gnb.csv
+    elif [[ $gnb_type == "OAI" ]]; then
+        parse_oai "$gnb_log" > "$run"/snr_gnb.csv
+    fi
+    gzip -f "$run"/snr_gnb.csv  # overwrite existing
 }
 
 

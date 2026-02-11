@@ -14,7 +14,7 @@
   when: srs_version == "release_24_10"
   block:
      - ansible.builtin.slurp:
-         path: ../config/gnb_srs.yml
+         path: ../config/gnb_config_baseline/srs.yml
        register: gnb_srs_config_content__24_10
        delegate_to: localhost
      - name: "Edit srsRAN config: parse variable to dict"
@@ -24,7 +24,7 @@
   when: srs_version != "release_24_10"
   block:
      - ansible.builtin.slurp:
-         path: ../config/gnb_srs_legacy.yml
+         path: ../config/gnb_config_baseline/srs_legacy.yml
        register: gnb_srs_config_content__legacy
        delegate_to: localhost
      - name: "Edit srsRAN config: parse variable to dict"
@@ -57,6 +57,26 @@
       gnb_sampling_rate: 46.08
     when: item.gnb_bandwidth == "40"
 
+- name: "Set MCS limits to temp variables"
+  block:
+    - ansible.builtin.set_fact:
+        min_dl_mcs: 0
+        max_dl_mcs: 28
+      when: item.dl_mcs == "None"
+    - ansible.builtin.set_fact:
+        min_dl_mcs: "{{ item.dl_mcs }}"
+        max_dl_mcs: "{{ item.dl_mcs }}"
+      when: item.dl_mcs != "None"
+    - ansible.builtin.set_fact:
+        min_ul_mcs: 0
+        max_ul_mcs: 28
+      when: item.ul_mcs == "None"
+    - ansible.builtin.set_fact:
+        min_ul_mcs: "{{ item.ul_mcs }}"
+        max_ul_mcs: "{{ item.ul_mcs }}"
+      when: item.ul_mcs != "None"
+
+
     # Update fact is fucked, better try this: https://stackoverflow.com/a/67379573
 - name: "Edit srsRAN config: update config"
   ansible.utils.update_fact:
@@ -75,6 +95,16 @@
         value: "{{ gnb_bandwidth }}"
       - path: gnb_srs_config.ru_sdr.srate
         value: "{{ gnb_sampling_rate }}"
+      - path: gnb_srs_config.cell_cfg.dl_arfcn
+        value: "{{ bandwidth_definitions[item.gnb_bandwidth].srsRAN.dl_arfcn }}"
+      - path: gnb_srs_config.cell_cfg.pusch.min_ue_mcs
+        value: "{{ min_ul_mcs }}"
+      - path: gnb_srs_config.cell_cfg.pusch.max_ue_mcs
+        value: "{{ max_ul_mcs }}"
+      - path: gnb_srs_config.cell_cfg.pdsch.min_ue_mcs
+        value: "{{ min_dl_mcs }}"
+      - path: gnb_srs_config.cell_cfg.pdsch.max_ue_mcs
+        value: "{{ max_dl_mcs }}"
   register: gnb_srs_config_updated
   vars:  # temporary variables so we can actually cast to int # INFO: well, it doesn't work..
      # INFO: try these options next: https://stackoverflow.com/questions/69109062/cant-set-ansible-fact-as-integer https://serverfault.com/questions/1030350/converting-string-to-integer-in-ansible-playbook/1165629#1165629

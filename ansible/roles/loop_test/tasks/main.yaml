@@ -24,22 +24,16 @@
   when: is_running
   block:
 
-    - name: "{{ item.identifier }}: iterate over test definition!"
-      ansible.builtin.include_role:
-        name: measurement_main
-      # vars:
-      #   docker_tags_map: "{{docker_tags_map_outer}}"
-
-    # - name: "{{ item.identifier }}: log task completion"
-    #   ansible.builtin.lineinfile:
-    #     line: "{{ ansible_date_time.date }} {{ ansible_date_time.time }}  --  {{ item.identifier }}"
-    #     path: "{{ system.pcap_dump }}/ansible_task.log"
-    #     create: yes
-    #   delegate_to: localhost
-    - name: "{{ item.identifier }}: log task completion"
-      ansible.builtin.shell:
-        cmd: "echo \"$(date '+%F %T') -- {{ item.identifier }}\" >> \"{{ system.pcap_dump }}/ansible_task.log\""
-      delegate_to: localhost
+  - name: '"{{ item.identifier }}": Run role'
+    ansible.builtin.include_role:
+      name: SRS_config
+    vars:
+      srs_version: "{{ item.gnb_version.version }}"
+    when: item.gnb_version.type== 'srsRAN'
+  - name: '"{{ item.identifier }}": Run role'
+    ansible.builtin.include_role:
+      name: OAI_config
+    when: item.gnb_version.type== 'OAI'
 
 
 # Change is running when tag is passed

@@ -21,7 +21,7 @@
 
 - name: '"{{ item.identifier }}": create log dir'
   ansible.builtin.file:
-    path: "{{ collected_logs }}"
+    path: "{{ collected_artefacts }}"
     state: directory
 
 
@@ -38,13 +38,13 @@
 - name: '"{{ item.identifier }}": power off modem'
   ansible.builtin.shell:
     # cmd: "uhubctl --action off --location 2-3 --location 3-3 2>&1"
-    cmd: "uhubctl --action off --location 3-4.2 --location 2-4.2  > {{ collected_logs }}/uhubctl 2>&1"
+    cmd: "uhubctl --action off --location 3-4.2 --location 2-4.2  > {{ collected_artefacts }}/uhubctl 2>&1"
   become: true
 - wait_for:
     timeout: 2
 - name: '"{{ item.identifier }}": powercycle modem'
   ansible.builtin.shell:
-     cmd: "/home/gnb/usb_resetter --device 2109:0817 --reset-device > {{ collected_logs }}/usb_resetter 2>&1"
+     cmd: "/home/gnb/usb_resetter --device 2109:0817 --reset-device > {{ collected_artefacts }}/usb_resetter 2>&1"
   become: true
 - wait_for:
     timeout: 20
@@ -59,7 +59,7 @@
         dest: "srsran_performance"
         mode: "755"
     - name: Run script
-      ansible.builtin.shell: "bash /home/{{ ansible_user_id }}/srsran_performance > {{ collected_logs }}/srsran_performance 2>&1"
+      ansible.builtin.shell: "bash /home/{{ ansible_user_id }}/srsran_performance > {{ collected_artefacts }}/srsran_performance 2>&1"
       become: true
 
 # INFO: edit config and start gnb application and wait!
@@ -75,7 +75,7 @@
     gnb_srs_binary: "/home/gnb/gnb_versions/{{ item.gnb_version.uhd_version }}/SRS--{{ item.gnb_version.version }}--{{ item.gnb_version.commit }}/build/apps/gnb/gnb"
   when: item.gnb_version.type== 'srsRAN' and item.dockerization != true
 - name: Launch SRS gNB (non-docker)
-  shell: "perf stat -I 20 -e cycles,instructions,cache-misses,dTLB-load-misses --delay=5000 -o {{ perf_output_csv }} -- {{ gnb_srs_binary }} -c {{ gnb_srs_config_path }} 2>&1 | ts '%.s' > {{ collected_logs }}/srsran"
+  shell: "perf stat -I 20 -e cycles,instructions,cache-misses,dTLB-load-misses --delay=5000 -o {{ perf_output_csv }} -- {{ gnb_srs_binary }} -c {{ gnb_srs_config_path }} 2>&1 | ts '%.s' > {{ collected_artefacts }}/srsran"
   become: true
   async: 900
   poll: 0
@@ -155,9 +155,9 @@
 
 # INFO: get ip for modem
 - name: '"{{ item.identifier }}": Acquire IP for modem'
-  # shell: "bash /home/gnb/setip.sh 2>&1 | ts '%.s' > {{ collected_logs }}/setip "
-  # shell: " ( f(){ \"$@\" 2>&1 | ts %.s; return ${PIPESTATUS[0]}; }; f bash /home/gnb/setip.sh > {{ collected_logs }}/setip ) "  # If we pipe, the first returncode get's swalloed. Therefore we wrap it in a function and use the PIPESTATUS array which stores return code
-  shell: "bash -c  '( f(){ \"$@\" 2>&1 | ts %.s; return ${PIPESTATUS[0]}; }; f bash /home/gnb/setip.sh > {{ collected_logs }}/setip )' "  # If we pipe, the first returncode get's swalloed. Therefore we wrap it in a function and use the PIPESTATUS array which stores return code
+  # shell: "bash /home/gnb/setip.sh 2>&1 | ts '%.s' > {{ collected_artefacts }}/setip "
+  # shell: " ( f(){ \"$@\" 2>&1 | ts %.s; return ${PIPESTATUS[0]}; }; f bash /home/gnb/setip.sh > {{ collected_artefacts }}/setip ) "  # If we pipe, the first returncode get's swalloed. Therefore we wrap it in a function and use the PIPESTATUS array which stores return code
+  shell: "bash -c  '( f(){ \"$@\" 2>&1 | ts %.s; return ${PIPESTATUS[0]}; }; f bash /home/gnb/setip.sh > {{ collected_artefacts }}/setip )' "  # If we pipe, the first returncode get's swalloed. Therefore we wrap it in a function and use the PIPESTATUS array which stores return code
   register: get_ip_shell_script
   ignore_errors: true
   become: true
@@ -177,7 +177,7 @@
     mode: "755"
 - block:
   - name: Start power msm script for ue
-    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.ue.host }} --uid={{ tinkerforge.ue.uid }} --path={{ tinkerforge.ue.output }} --duration={{ 898 }}  > {{ collected_logs }}/tinker_ue 2>&1"
+    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.ue.host }} --uid={{ tinkerforge.ue.uid }} --path={{ tinkerforge.ue.output }} --duration={{ 898 }}  > {{ collected_artefacts }}/tinker_ue 2>&1"
     become: true
     async: 900
     poll: 0
@@ -185,7 +185,7 @@
   when: tinkerforge is defined and tinkerforge.ue is defined
 - block:
   - name: Start power msm script for sdr
-    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.sdr.host }} --uid={{ tinkerforge.sdr.uid }} --path={{ tinkerforge.sdr.output }} --duration={{ 898 }}  > {{ collected_logs }}/tinker_sdr 2>&1"
+    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.sdr.host }} --uid={{ tinkerforge.sdr.uid }} --path={{ tinkerforge.sdr.output }} --duration={{ 898 }}  > {{ collected_artefacts }}/tinker_sdr 2>&1"
     become: true
     async: 900
     poll: 0
@@ -197,7 +197,7 @@
 # INFO: log SNR,SiNR,PSRP, etc
 - name: copy qmi SNR monitor
   ansible.builtin.copy:
-    src: "../config/read-snr.sh"
+    src: "../scripts/read-snr.sh"
     dest: "{{ snr_msm_script }}"
     mode: "755"
   become: true
@@ -372,9 +372,12 @@
     delegate_to: localhost
     when: gnb_job_failed
 
+  - community.general.archive:
+       path: "{{ snr_msm_script_output }}"
+       unsafe_writes: false
   - name: '"{{ item.identifier }}": Copy SNR measurements'
     ansible.builtin.fetch:
-       src: "{{ snr_msm_script_output }}"
+       src: "{{ snr_msm_script_output }}.gz"
        dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
        flat: true
        validate_checksum: false
@@ -389,15 +392,15 @@
 
   - name: "{{ item.identifier }}: Copy shell output to local: compress"
     community.general.archive:
-       path: "{{ collected_logs }}"
-       dest: "{{ collected_logs }}.tar.gz"
+       path: "{{ collected_artefacts }}"
+       dest: "{{ collected_artefacts }}.tar.gz"
        format: gz
        force_archive: true
        unsafe_writes: false
   - name: "{{ item.identifier }}: Copy shell output to local: copy"
     ansible.builtin.fetch:
-       src: "{{ collected_logs }}.tar.gz"
-       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/shell_output.tar.gz"
+       src: "{{ collected_artefacts }}.tar.gz"
+       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/artefacts.tar.gz"
        flat: true
        validate_checksum: false
     become: true
@@ -406,7 +409,7 @@
   # TODO: fails for some reason, using shell for now
   - name: "{{ item.identifier }}: Copy shell output to local: remove old"
     ansible.builtin.file:
-       path: "{{ collected_logs }}"
+       path: "{{ collected_artefacts }}"
        state: absent
     become: true
 
@@ -415,9 +418,12 @@
       pkill -9 -f /[h]ome/{{ ansible_user_id }}/tinkerforge_power.py || true
     become: true
   - block:
+    - community.general.archive:
+        path: "{{ tinkerforge.ue.output }}"
+        unsafe_writes: false
     - name: "{{ item.identifier }}: Copy ue power measurements to local"
       ansible.builtin.fetch:
-        src: "{{ tinkerforge.ue.output }}"
+        src: "{{ tinkerforge.ue.output }}.gz"
         dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
         flat: true
         validate_checksum: false
@@ -429,9 +435,12 @@
     #   become: true
     when: tinkerforge is defined and tinkerforge.ue is defined
   - block:
+    - community.general.archive:
+        path: "{{ tinkerforge.sdr.output }}"
+        unsafe_writes: false
     - name: "{{ item.identifier }}: Copy sdr power measurements to local"
       ansible.builtin.fetch:
-        src: "{{ tinkerforge.sdr.output }}"
+        src: "{{ tinkerforge.sdr.output }}.gz"
         dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
         flat: true
         validate_checksum: false
@@ -503,8 +512,11 @@
   - name: "{{ item.identifier }}: Handle pcaps, etc."
     when: not gnb_job_failed
     block:
+    - community.general.archive:
+         path: "{{ perf_output_csv }}"
+         unsafe_writes: false
     - ansible.builtin.fetch:
-         src: "{{ perf_output_csv }}"
+         src: "{{ perf_output_csv }}.gz"
          dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
          flat: true
       become: true

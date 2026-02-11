@@ -1,0 +1,53 @@
+cell_cfg:
+    band: 78
+    channel_bandwidth_MHz: 20
+    common_scs: 30
+    dl_arfcn: 640000
+    nof_antennas_dl: 1
+    nof_antennas_ul: 1
+    pci: 1
+    plmn: '99903'
+    ssb:
+        ssb_period: 10
+    tac: 7
+    tdd_ul_dl_cfg:
+        dl_ul_tx_period: '20'
+        nof_dl_slots: '15'
+        nof_dl_symbols: '12'
+        nof_ul_slots: '4'
+        nof_ul_symbols: '0'
+    pusch:
+        mcs_table: qam256
+        min_ue_mcs: 0
+        max_ue_mcs: 28
+    pdsch:
+        mcs_table: qam256
+        min_ue_mcs: 0
+        max_ue_mcs: 28
+cu_cp:
+    amf:
+        addr: 172.16.32.51
+        bind_addr: 172.16.32.50
+        port: 38412
+        supported_tracking_areas:
+        -   plmn_list:
+            -   plmn: '99903'
+                tai_slice_support_list:
+                -   sst: 1
+            tac: 7
+log:
+    all_level: info
+    filename: /tmp/gnb.log
+pcap:
+    mac_enable: true
+    mac_filename: /tmp/5ggnb-logs/gnb_mac.pcap
+    ngap_enable: true
+    ngap_filename: /tmp/5ggnb-logs/gnb_ngap.pcap
+
+ru_sdr:
+    device_args: type=b200,num_recv_frames=64,num_send_frames=64
+    device_driver: uhd
+    otw_format: sc12
+    rx_gain: 38
+    srate: 23.04
+    tx_gain: 80

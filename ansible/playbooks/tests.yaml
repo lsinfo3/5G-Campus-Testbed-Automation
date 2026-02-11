@@ -1,0 +1,25 @@
+---
+
+- name: Generate traffic
+  hosts: localhost
+  vars:
+    # mcs: "None"
+    mcs: 15
+
+  tasks:
+    - ansible.builtin.set_fact:
+        min_ue_mcs: 0
+        max_ue_mcs: 28
+      when: mcs == "None"
+    - ansible.builtin.set_fact:
+        min_ue_mcs: "{{ mcs }}"
+        max_ue_mcs: "{{ mcs }}"
+      when: mcs != "None"
+
+    - ansible.builtin.debug:
+        msg:
+          - "{{min_ue_mcs}}"
+          - "{{max_ue_mcs}}"
+
+
+

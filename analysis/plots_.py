@@ -1,1 +1,0 @@
-/home/lks/.local/share/templates/python/plotnine/plots.py

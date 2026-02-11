@@ -1,0 +1,418 @@
+description: ''
+description_short: ''
+system:
+  pcap_dump: /storage/automation_tests
+  identifier: ac11
+  fixed_params:
+    distance_floor: 1.0
+    distance_nearest_wall: 2.0
+    location: B205
+    distance_horizontal_in_m: 3.0
+    distance_vertical_in_m: 4.0
+    gnb_antenna_inclanation_in_degree: 5.0
+    gnb_antenna_rotation_in_degree: 0.0
+    ue_antenna_inclanation_in_degree: 0.0
+    ue_antenna_rotation_in_degree: 0.0
+    modem: Quectel RM520N-GL
+    interface_ue: wwan0
+    interface_gnb: eno1
+    jammer: false
+    sdr: B210
+    performance_tuning: true
+run_definitions:
+- identifier: ac11__iperfUl_OAI_TDD20-2_Bw40__000_cce899ef
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: None
+  ul_mcs: None
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.3.0
+    commit: 8bf6d5d7da8c0a8384e4022fd4872e6d3d550921
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_OAI_TDD20-2_Bw40__000_030543bd
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: None
+  ul_mcs: 15
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.3.0
+    commit: 8bf6d5d7da8c0a8384e4022fd4872e6d3d550921
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_OAI_TDD20-2_Bw40__000_70fbe4a0
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: 15
+  ul_mcs: None
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.3.0
+    commit: 8bf6d5d7da8c0a8384e4022fd4872e6d3d550921
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_OAI_TDD20-2_Bw40__000_16357e30
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: 15
+  ul_mcs: 15
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.3.0
+    commit: 8bf6d5d7da8c0a8384e4022fd4872e6d3d550921
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_OAI_TDD20-2_Bw40__000_5aa303d1
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: None
+  ul_mcs: None
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_OAI_TDD20-2_Bw40__000_c08b0e42
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: None
+  ul_mcs: 15
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_OAI_TDD20-2_Bw40__000_7b0f9f92
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: 15
+  ul_mcs: None
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_OAI_TDD20-2_Bw40__000_bc82e8bb
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: 15
+  ul_mcs: 15
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: OAI
+    uhd_version: UHD-4.0
+    version: v2.2.0
+    commit: 68191088ab4cdcd47d6c0764ac5cf2483f4b3d29
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_srsRAN_TDD20-2_Bw40__000_5be68ef2
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: None
+  ul_mcs: None
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: srsRAN
+    uhd_version: UHD-4.0
+    version: release_24_10
+    commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_srsRAN_TDD20-2_Bw40__000_4b4da849
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: None
+  ul_mcs: 15
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: srsRAN
+    uhd_version: UHD-4.0
+    version: release_24_10
+    commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_srsRAN_TDD20-2_Bw40__000_9da4eeb8
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: 15
+  ul_mcs: None
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: srsRAN
+    uhd_version: UHD-4.0
+    version: release_24_10
+    commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_srsRAN_TDD20-2_Bw40__000_e9cb5b65
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: 15
+  ul_mcs: 15
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: srsRAN
+    uhd_version: UHD-4.0
+    version: release_24_10
+    commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8

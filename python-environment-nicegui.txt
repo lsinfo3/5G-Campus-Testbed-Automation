@@ -1,0 +1,11 @@
+Package       Version
+------------- -------
+httptools     0.7.1
+natsort       8.4.0
+neovim        0.3.1
+nicegui       3.1.0
+pip           25.2
+python-dotenv 1.2.1
+PyYAML        6.0.3
+uvloop        0.22.1
+websockets    15.0.1

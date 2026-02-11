@@ -5,6 +5,9 @@ import multiprocessing as mp
 import yaml
 import argparse
 
+
+SKIP_EXISTING = False
+
 """ Read ansible pcap dump. Parse pcaps and extract relevant data. Write csvs back """
 
 
@@ -20,7 +23,8 @@ def get_pcap_paths(root: str):
 
 
 
-iperf_udp_throughput = pp.validator(proto="udp", pl_min_len=1200, seq_num_first_byte=8, seq_num_last_byte=12, match_port=4455)
+# iperf_udp_throughput = pp.validator(proto="udp", pl_min_len=1200, seq_num_first_byte=8, seq_num_last_byte=12, match_port=4455)
+iperf_udp_throughput = pp.validator(proto="udp", pl_min_len=350, seq_num_first_byte=8, seq_num_last_byte=12, match_port=4455)
 scapy_ping_small = pp.validator(proto="udp", pl_min_len=8, pl_max_len=8, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
 scapy_ping_big = pp.validator(proto="udp", pl_min_len=1300, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
 scapy_throughput = pp.validator(proto="udp", pl_min_len=1300, seq_num_first_byte=4, seq_num_last_byte=8, match_port=3344)
@@ -64,8 +68,12 @@ def pp_wrapper(infile:str):
     outfile = outfile[:-5] # strip .pcap
 
     if infile.endswith("gnb.pcap") or infile.endswith("gnb.pcap.gz"):
+        if SKIP_EXISTING and os.path.isfile(outfile+".csv.gz"):
+            return
         return pp.parse_pcap_gtp(infile=infile, outfile=outfile+".csv.gz", validator=v)
     elif infile.endswith("ue.pcap") or infile.endswith("ue.pcap.gz"):
+        if SKIP_EXISTING and os.path.isfile(outfile+".csv.gz"):
+            return
         return pp.parse_pcap_ip(infile=infile, outfile=outfile+".csv.gz", validator=v)
     else:
         raise ValueError(f"Wrong pcap format: {infile}")
@@ -85,6 +93,8 @@ def main():
     with mp.Pool(8) as p:
         with open(f"{ansible_dump}/parse_pcap.log", "w") as f:
             for log in p.imap_unordered(pp_wrapper,get_pcap_paths(ansible_dump)):
+                if log is None:
+                    continue
                 f.write(log+"\n")
                 print(log)
 
@@ -96,9 +106,11 @@ if __name__ == "__main__":
         prog="parse pcap recordings to csv",
         description="Scan given dir and"
             )
+    parser.add_argument("--skip", action='store_true')
     parser.add_argument("filename")
     args = parser.parse_args()
     ansible_dump = args.filename
+    SKIP_EXISTING = args.skip
     main()
 
 

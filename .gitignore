@@ -1,8 +1,5 @@
 __pycache__
 venv
-data/
-dumps*/
-dumps/
 *.parquet
 *.pcap
 *.pcap.gz

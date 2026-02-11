@@ -1,0 +1,29 @@
+# Lists radio configuration lookups per configured bandwidth
+
+bandwidth_definitions:
+  '20':
+    srsRAN:
+      dl_arfcn: 640000
+    OAI:
+      arfcn_sbb: 640608
+      arfcn_pointa: 639960
+      carrier_bandwidth_rb: 51
+      initalBWPlocationAndBandwidth: 13750
+  '40':
+    srsRAN:
+      dl_arfcn: 640000
+    OAI:
+      arfcn_sbb: 641184
+      arfcn_pointa: 640128
+      carrier_bandwidth_rb: 106
+      initalBWPlocationAndBandwidth: 28875
+
+  '40_tests':
+    srsRAN:
+      dl_arfcn: 123456
+    OAI:
+      arfcn_sbb: 654321
+      arfcn_pointa: 655443
+      carrier_bandwidth_rb: 111
+      initalBWPlocationAndBandwidth: 12345
+

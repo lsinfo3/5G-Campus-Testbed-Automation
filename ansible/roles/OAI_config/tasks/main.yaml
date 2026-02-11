@@ -1,36 +1,19 @@
 ---
 
-- name: Set arfcn configs to variables
-  ansible.builtin.set_fact:
-    bandwidth_20MHz:
-      arfcn_sbb: 650688
-      arfcn_pointa: 650000
-      carrier_bandwidth_rb: 51
-      initalBWPlocationAndBandwidth: 13750
-    bandwidth_40MHz:
-      arfcn_sbb: 649920
-      arfcn_pointa: 649224
-      carrier_bandwidth_rb: 106
-      initalBWPlocationAndBandwidth: 28875
-
 
 - name: Get default config
   ansible.builtin.copy:
-    src: ../config/gnb_oai.conf
+    src: ../config/gnb_config_baseline/oai.conf
     dest: "{{ gnb_oai_config_path }}"
 
+- ansible.builtin.debug:
+    msg:
+    - "{{ item.gnb_bandwidth }}"
+    - "{{ (item.gnb_bandwidth | type_debug) }}"
+
 - name: Load configuration for current bandwidth
-  block:
-  - ansible.builtin.set_fact:
-      oai_arfcn_cfg:
-        arfcn_sbb: 0
-        arfcn_pointa: 0
-  - ansible.builtin.set_fact:
-      oai_arfcn_cfg: "{{ bandwidth_20MHz }}"
-    when: item.gnb_bandwidth == "20"
-  - ansible.builtin.set_fact:
-      oai_arfcn_cfg: "{{ bandwidth_40MHz }}"
-    when: item.gnb_bandwidth == "40"
+  ansible.builtin.set_fact:
+    oai_arfcn_cfg: "{{ bandwidth_definitions[item.gnb_bandwidth].OAI }}"
 
 - ansible.builtin.debug:
     msg:
@@ -100,6 +83,43 @@
     path: "{{ gnb_oai_config_path }}"
     search_string: '        dl_UL_TransmissionPeriodicity'
     line: "        dl_UL_TransmissionPeriodicity = 7;"
+
+
+
+- name: "Set MCS limits to temp variables"
+  block:
+    - ansible.builtin.set_fact:
+        min_dl_mcs: 0
+        max_dl_mcs: 28
+      when: item.dl_mcs == "None"
+    - ansible.builtin.set_fact:
+        min_dl_mcs: "{{ item.dl_mcs }}"
+        max_dl_mcs: "{{ item.dl_mcs }}"
+      when: item.dl_mcs != "None"
+    - ansible.builtin.set_fact:
+        min_ul_mcs: 0
+        max_ul_mcs: 28
+      when: item.ul_mcs == "None"
+    - ansible.builtin.set_fact:
+        min_ul_mcs: "{{ item.ul_mcs }}"
+        max_ul_mcs: "{{ item.ul_mcs }}"
+      when: item.ul_mcs != "None"
+- ansible.builtin.lineinfile:
+    path: "{{ gnb_oai_config_path }}"
+    search_string: '    dl_min_mcs    '
+    line: "    dl_min_mcs = {{ min_dl_mcs }};"
+- ansible.builtin.lineinfile:
+    path: "{{ gnb_oai_config_path }}"
+    search_string: '    dl_max_mcs    '
+    line: "    dl_max_mcs = {{ max_dl_mcs }};"
+- ansible.builtin.lineinfile:
+    path: "{{ gnb_oai_config_path }}"
+    search_string: '    ul_min_mcs    '
+    line: "    ul_min_mcs = {{ min_ul_mcs }};"
+- ansible.builtin.lineinfile:
+    path: "{{ gnb_oai_config_path }}"
+    search_string: '    ul_max_mcs    '
+    line: "    ul_max_mcs = {{ max_ul_mcs }};"
 
 
 - when: item.rx_gain != None
