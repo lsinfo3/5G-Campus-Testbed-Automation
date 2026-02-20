@@ -4,7 +4,7 @@
 
 DEV_PATH="/dev/cdc-wdm0"
 
-CSV_DEST="/tmp/snr_ue.csv"
+CSV_DEST="$1"
 
 
 echo "TIMESTAMP,SNR,RSRP,RSRQ,SINR" > "$CSV_DEST"

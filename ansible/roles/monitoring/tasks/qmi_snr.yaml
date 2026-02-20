@@ -1,0 +1,25 @@
+---
+# INFO: log SNR,SiNR,PSRP, etc
+# requires:
+# outputfile
+
+
+- name: kill existing processes
+  ansible.builtin.shell:
+     pkill -9 -f /[h]ome/{{ ansible_user_id }}/read-snr.sh || true
+  become: true
+
+- name: copy qmi SNR monitor
+  ansible.builtin.copy:
+    src: "../scripts/read-snr.sh"
+    dest: "/home/{{ ansible_user_id }}/read-snr.sh"
+    mode: "755"
+  become: true
+
+- name: Launch qmi SNR monitor
+  ansible.builtin.shell: "/home/{{ ansible_user_id }}/read-snr.sh \"{{ outputfile }}\""
+  become: true
+  async: 120
+  poll: 0
+  register: snr_job
+

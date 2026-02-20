@@ -1,0 +1,16 @@
+
+
+- name: "{{ item.identifier }}:({{ module.name }}) Print(tdd_config)"
+  ansible.builtin.debug:
+    msg:
+    - "simple print:"
+    # - "all_artefacts: {{ all_artefacts }}"
+    - "module.artefacts: {{ module.artefacts }}"
+    - "variable_array: {{ variable_array }}"
+    - "variable_variable: {{ variable_variable }}"
+    - "{{ module }}"
+
+
+# - name: "{{ item.identifier }}:({{ module.name }}) combine artefacts"
+#   ansible.builtin.set_fact:
+#     all_artefacts: "{{ (all_artefacts | default([])) + module.artefacts | unique }}"

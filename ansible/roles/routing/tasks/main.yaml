@@ -1,0 +1,14 @@
+---
+
+# INFO: ensure route to core is set? wrong routes were set before
+# requires:
+# address_range
+- name: Delete old route
+  ansible.builtin.shell: |
+     ip route del {{ address_range }} dev {{ system.fixed_params.interface_ue }} || true
+  become: true
+- name: Create new route
+  ansible.builtin.shell: |
+     ip route add {{ address_range }} dev {{ system.fixed_params.interface_ue }}
+  become: true
+

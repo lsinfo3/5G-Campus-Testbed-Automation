@@ -1,0 +1,29 @@
+---
+
+# INFO: powercycle USB hub and wait!
+# requires:
+# usb_paths: ["3-4.2", "2-1.3"]
+# usb_hub_id: "2109:0817"
+
+
+# - ansible.builtin.fail:
+#   when: usb_paths is not defined or usb_paths is not community.general.ansible_type('list[str]') or usb_paths | length <= 0
+# - ansible.builtin.fail:
+#   when: usb_hub_id is not defined
+
+- name: '"{{ item.identifier }}": construct uhubctl command'
+  ansible.builtin.set_fact:
+    uhubctl_cmd: "uhubctl --action off --location {{ usb_paths | join(' --location ') }}"
+
+- name: '"{{ item.identifier }}": power off modem'
+  ansible.builtin.shell:
+    cmd: "{{ uhubctl_cmd }} > {{ collected_artefacts }}/uhubctl 2>&1"
+  become: true
+- wait_for:
+    timeout: 3
+- name: '"{{ item.identifier }}": powercycle modem'
+  ansible.builtin.shell:
+     cmd: "/home/gnb/usb_resetter --device {{ usb_hub_id }} --reset-device > {{ collected_artefacts }}/usb_resetter 2>&1"
+  become: true
+- wait_for:
+    timeout: 20

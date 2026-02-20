@@ -23,6 +23,10 @@
     iperf_direction: ""
   when: tg_direction == 'Ul'
 
+- name: Debug
+  debug:
+    msg: "timeout {{ tg_duration + 10 }} iperf3 {{ iperf_udp }} {{ iperf_direction }} --port {{ tg_port }} --client {{ tg_ip }} --time {{ tg_duration }} --bitrate {{ tg_rate }} > {{ iperf_shell_output }} 2>&1"
+
 - name: Iperf3 traffic gen
   ansible.builtin.shell:
      cmd: "timeout {{ tg_duration + 10 }} iperf3 {{ iperf_udp }} {{ iperf_direction }} --port {{ tg_port }} --client {{ tg_ip }} --time {{ tg_duration }} --bitrate {{ tg_rate }} > {{ iperf_shell_output }} 2>&1"

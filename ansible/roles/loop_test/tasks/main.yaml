@@ -35,6 +35,14 @@
       name: OAI_config
     when: item.gnb_version.type== 'OAI'
 
+- name: handle dynamically defined modules
+  ansible.builtin.include_role:
+    name: module_handler
+  loop: "{{ modules.pre_gnb_start }}"
+  loop_control:
+    loop_var: module
+  #vars:
+
 
 # Change is running when tag is passed
 - name: "{{ item.identifier }}: check for id"

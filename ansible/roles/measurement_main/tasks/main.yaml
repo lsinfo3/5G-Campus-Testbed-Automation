@@ -1,16 +1,18 @@
 
+# FIXME: pre_cleanup
+- name: "{{ item.identifier }}: MODULE: PRE_CLEANUP"
+  ansible.builtin.include_role:
+    name: module_handler
+  loop: "{{ modules.pre_cleanup }}"
+  loop_control:
+    loop_var: module
 
-
-
-
-# INFO: kill running OAI/SRS instances
+# INFO: kill all possible interfering processes
 - name: '"{{ item.identifier }}": killall running gnb instances'
   # Pkill requires "[]"-matching shenanigans to prevent matching itself...
   ansible.builtin.shell: |
      killall gnb 2>/dev/null || true
      killall nr-softmodem 2>/dev/null || true
-     killall read-snr.sh 2>/dev/null || true
-     pkill -9 -f /[h]ome/{{ ansible_user_id }}/tinkerforge_power.py || true
   become: true
 - name:  '"{{ item.identifier }}": killall running gnb instances in docker containers'
   ansible.builtin.systemd:
@@ -18,12 +20,20 @@
     state: restarted
   become: true
 
-
 - name: '"{{ item.identifier }}": create log dir'
   ansible.builtin.file:
     path: "{{ collected_artefacts }}"
     state: directory
 
+
+# FIXME: pre_uhd_switch
+- name: "{{ item.identifier }}: MODULE: PRE_UHD_SWITCH"
+  ansible.builtin.include_role:
+    name: module_handler
+  loop: "{{ modules.pre_uhd_switch }}"
+  loop_control:
+    loop_var: module
+#
 
   # TODO: is this required?
 - name: '"{{ item.identifier }}": Switch UHD version'
@@ -32,22 +42,6 @@
   vars:
     version: "{{ item.gnb_version.uhd_version }}"
   when: item.dockerization != true
-
-
-# INFO: powercycle USB hub and wait!
-- name: '"{{ item.identifier }}": power off modem'
-  ansible.builtin.shell:
-    # cmd: "uhubctl --action off --location 2-3 --location 3-3 2>&1"
-    cmd: "uhubctl --action off --location 3-4.2 --location 2-4.2  > {{ collected_artefacts }}/uhubctl 2>&1"
-  become: true
-- wait_for:
-    timeout: 2
-- name: '"{{ item.identifier }}": powercycle modem'
-  ansible.builtin.shell:
-     cmd: "/home/gnb/usb_resetter --device 2109:0817 --reset-device > {{ collected_artefacts }}/usb_resetter 2>&1"
-  become: true
-- wait_for:
-    timeout: 20
 
 
 - name: '"{{ item.identifier }}": Enable performance tuning options if wanted'
@@ -61,6 +55,15 @@
     - name: Run script
       ansible.builtin.shell: "bash /home/{{ ansible_user_id }}/srsran_performance > {{ collected_artefacts }}/srsran_performance 2>&1"
       become: true
+
+# FIXME: pre_gnb_start
+- name: "{{ item.identifier }}: MODULE: PRE_GNB_START"
+  ansible.builtin.include_role:
+    name: module_handler
+  loop: "{{ modules.pre_gnb_start }}"
+  loop_control:
+    loop_var: module
+
 
 # INFO: edit config and start gnb application and wait!
 # TODO: this block is to big, break it up, move it to role or do whatever but dont keep it
@@ -126,6 +129,8 @@
     gnb_job: "{{ gnb_job_oai_docker if gnb_job_oai_docker.ansible_job_id is defined else gnb_job_srs_docker }}"
   when: item.dockerization == true
 
+- debug:
+    msg: "{{ item.identifier }}: Wait for 60 seconds until gNB becomes ready"
 - name: '"{{ item.identifier }}": Wait for 60 seconds until gNB becomes ready'
   wait_for:
     timeout: 60
@@ -153,6 +158,19 @@
    #   ansible.builtin.meta: end_play
   when: gnb_job_failed
 
+
+
+
+
+# FIXME: pre_ue_connect
+- name: "{{ item.identifier }}: MODULE: PRE_UE_CONNECT"
+  ansible.builtin.include_role:
+    name: module_handler
+  loop: "{{ modules.pre_ue_connect }}"
+  loop_control:
+    loop_var: module
+#
+#
 # INFO: get ip for modem
 - name: '"{{ item.identifier }}": Acquire IP for modem'
   # shell: "bash /home/gnb/setip.sh 2>&1 | ts '%.s' > {{ collected_artefacts }}/setip "
@@ -169,45 +187,7 @@
     gnb_job_failed: true
 
 
-# INFO: start power measurement
-- name: copy power msm script
-  ansible.builtin.copy:
-    src: "../scripts/tinkerforge_power.py"
-    dest: "/home/{{ ansible_user_id }}/tinkerforge_power.py"
-    mode: "755"
-- block:
-  - name: Start power msm script for ue
-    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.ue.host }} --uid={{ tinkerforge.ue.uid }} --path={{ tinkerforge.ue.output }} --duration={{ 898 }}  > {{ collected_artefacts }}/tinker_ue 2>&1"
-    become: true
-    async: 900
-    poll: 0
-    register: pwr_ue_job
-  when: tinkerforge is defined and tinkerforge.ue is defined
-- block:
-  - name: Start power msm script for sdr
-    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.sdr.host }} --uid={{ tinkerforge.sdr.uid }} --path={{ tinkerforge.sdr.output }} --duration={{ 898 }}  > {{ collected_artefacts }}/tinker_sdr 2>&1"
-    become: true
-    async: 900
-    poll: 0
-    register: pwr_sdr_job
-  when: tinkerforge is defined and tinkerforge.sdr is defined
 
-
-
-# INFO: log SNR,SiNR,PSRP, etc
-- name: copy qmi SNR monitor
-  ansible.builtin.copy:
-    src: "../scripts/read-snr.sh"
-    dest: "{{ snr_msm_script }}"
-    mode: "755"
-  become: true
-
-- name: Launch qmi SNR monitor
-  ansible.builtin.shell: "{{ snr_msm_script }}"
-  become: true
-  async: 120
-  poll: 0
-  register: snr_job
 
 
 
@@ -223,7 +203,7 @@
   # TODO: track failed runs in evaluation?
   - name: '"{{ item.identifier }}": tcpdump on gnb'
     ansible.builtin.command:
-      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_gnb }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_gnb.pcap udp port 2152
+      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 20 }} tcpdump -ni {{ system.fixed_params.interface_gnb }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_gnb.pcap udp port 2152
     async: "{{ item.traffic_config.traffic_duration * 2 }}"
     poll: 0
     become: true
@@ -231,7 +211,7 @@
 
   - name: '"{{ item.identifier }}": tcpdump on ue'
     ansible.builtin.command:
-      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_ue }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_ue.pcap
+      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 20 }} tcpdump -ni {{ system.fixed_params.interface_ue }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_ue.pcap
     async: "{{ item.traffic_config.traffic_duration * 2 }}"
     poll: 0
     become: true
@@ -243,16 +223,15 @@
     become: false
 
 
-  # INFO: ensure route to core is set? wrong routes were set before
-  # TODO: hardcoded ip addr :/
-  - name: Delete old route
-    ansible.builtin.shell: |
-       ip route del 10.45.0.0/24 dev {{ system.fixed_params.interface_ue }} || true
-    become: true
-  - name: Create new route
-    ansible.builtin.shell: |
-       ip route add 10.45.0.0/24 dev {{ system.fixed_params.interface_ue }}
-    become: true
+
+# FIXME: pre_traffic_start
+  - name: "{{ item.identifier }}: MODULE: PRE_TRAFFIC_START"
+    ansible.builtin.include_role:
+      name: module_handler
+    loop: "{{ modules.pre_traffic_start }}"
+    loop_control:
+      loop_var: module
+
 
 
   - name: '"{{ item.identifier }}": run ping role'
@@ -315,15 +294,23 @@
       tg_duration: "{{ item.traffic_config.traffic_duration }}"
       tg_rate: "{{ item.traffic_config.rate }}"
     when: item.traffic_config.traffic_type == 'iperfthroughput'
-  # - name: '"{{ item.identifier }}": check for iperf errors'
-  #   ansible.builtin.debug:
-  #     msg: "{{iperf_ret}}"
-  #   when: item.traffic_config.traffic_type == 'iperfthroughput'
   - name: '"{{ item.identifier }}": check for iperf errors'
     ansible.builtin.set_fact:
       gnb_job_failed_cause: "broken pipe"
       gnb_job_failed: true
     when: item.traffic_config.traffic_type == 'iperfthroughput' and iperf_ret.rc != 0
+
+
+
+  # FIXME: post_traffic_start
+  - name: "{{ item.identifier }}: MODULE: POST_TRAFFIC_START"
+    ansible.builtin.include_role:
+      name: module_handler
+    loop: "{{ modules.post_traffic_start }}"
+    loop_control:
+      loop_var: module
+
+
 
   - name: '"{{ item.identifier }}": wait for gnb tcpdump'
     ansible.builtin.async_status:
@@ -347,6 +334,16 @@
 
 
 
+  # FIXME: post_traffic_end
+  - name: "{{ item.identifier }}: MODULE: POST_TRAFFIC_END"
+    ansible.builtin.include_role:
+      name: module_handler
+    loop: "{{ modules.post_traffic_end }}"
+    loop_control:
+      loop_var: module
+
+
+
 # INFO: cleanup block
 - name: "{{ item.identifier }}: cleanup tasks"
   block:
@@ -357,12 +354,13 @@
        state: directory
     delegate_to: localhost
 
-  - name: "{{ item.identifier }}: Remove perf stats counter"
-    ansible.builtin.file:
-       path: "{{ perf_output_csv }}"
-       state: absent
-    become: true
+  - name: '"{{ item.identifier }}": Remove perf stats counter'
+    ansible.builtin.include_role:
+      name: cleanup
+      tasks_from: archive_fetch_and_rm
     ignore_errors: true
+    vars:
+      filepath: "{{ perf_output_csv }}"
     when: gnb_job_failed
 
   - name: "{{ item.identifier }}: Write FAILED label"
@@ -372,24 +370,13 @@
     delegate_to: localhost
     when: gnb_job_failed
 
-  - community.general.archive:
-       path: "{{ snr_msm_script_output }}"
-       unsafe_writes: false
-  - name: '"{{ item.identifier }}": Copy SNR measurements'
-    ansible.builtin.fetch:
-       src: "{{ snr_msm_script_output }}.gz"
-       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-       flat: true
-       validate_checksum: false
-    become: false
-
-  # TODO: include start and end timestamp in yaml!!
   - name: "{{ item.identifier }}: Copy config to local: copy"
     ansible.builtin.copy:
-       content: "{{ system.fixed_params | ansible.builtin.combine( item ) }}"
+       content: "{{ system.fixed_params | ansible.builtin.combine( item ) | to_nice_json }}"
        dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/{{ item.identifier }}.yaml"
     delegate_to: localhost
 
+  # Collected artefacts dir
   - name: "{{ item.identifier }}: Copy shell output to local: compress"
     community.general.archive:
        path: "{{ collected_artefacts }}"
@@ -404,161 +391,156 @@
        flat: true
        validate_checksum: false
     become: true
-    # delegate_to: localhost
 
-  # TODO: fails for some reason, using shell for now
   - name: "{{ item.identifier }}: Copy shell output to local: remove old"
     ansible.builtin.file:
        path: "{{ collected_artefacts }}"
        state: absent
     become: true
 
-  - name: "{{ item.identifier }}: Stop power measurements"
-    ansible.builtin.shell: |
-      pkill -9 -f /[h]ome/{{ ansible_user_id }}/tinkerforge_power.py || true
-    become: true
-  - block:
-    - community.general.archive:
-        path: "{{ tinkerforge.ue.output }}"
-        unsafe_writes: false
-    - name: "{{ item.identifier }}: Copy ue power measurements to local"
-      ansible.builtin.fetch:
-        src: "{{ tinkerforge.ue.output }}.gz"
-        dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-        flat: true
-        validate_checksum: false
-      become: true
-    # - name: "{{ item.identifier }}: Copy shell output to local: remove old pwr"
-    #   ansible.builtin.file:
-    #      path: "{{ tinkerforge.ue.output }}"
-    #      state: absent
-    #   become: true
-    when: tinkerforge is defined and tinkerforge.ue is defined
-  - block:
-    - community.general.archive:
-        path: "{{ tinkerforge.sdr.output }}"
-        unsafe_writes: false
-    - name: "{{ item.identifier }}: Copy sdr power measurements to local"
-      ansible.builtin.fetch:
-        src: "{{ tinkerforge.sdr.output }}.gz"
-        dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-        flat: true
-        validate_checksum: false
-      become: true
-    when: tinkerforge is defined and tinkerforge.sdr is defined
+
+  # Artefacts from modules
+  - ansible.builtin.include_role:
+      name: cleanup
+      tasks_from: archive_fetch_and_rm
+    vars:
+      filepath: "{{ loopartefact }}"
+    loop: "{{all_artefacts}}"
+    loop_control:
+      loop_var: loopartefact
 
   - name: '"{{ item.identifier }}": Copy gnb config'
-    ansible.builtin.fetch:
-       src: "{{ gnb_srs_config_path }}"
-       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-       flat: true
-    become: false
+    ansible.builtin.include_role:
+      name: cleanup
+      tasks_from: archive_fetch_and_rm
+    vars:
+      filepath: "{{ gnb_srs_config_path }}"
+      archive: false
     when: item.gnb_version.type== 'srsRAN'
   - name: '"{{ item.identifier }}": Copy gnb config'
-    ansible.builtin.fetch:
-       src: "{{ gnb_oai_config_path }}"
-       dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-       flat: true
-    become: false
+    ansible.builtin.include_role:
+      name: cleanup
+      tasks_from: archive_fetch_and_rm
+    vars:
+      filepath: "{{ gnb_oai_config_path }}"
+      archive: false
     when: item.gnb_version.type== 'OAI'
 
-  - block:
-     - name: '"{{ item.identifier }}": Compress log'
-       community.general.archive:
-          path: "{{ gnb_srs_logfile_path }}"
-          unsafe_writes: false
-     - name: '"{{ item.identifier }}": Copy gnb log'
-       ansible.builtin.fetch:
-          src: "{{ gnb_srs_logfile_path }}.gz"
-          dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-          flat: true
-          validate_checksum: false
-       become: false
-     - name: '"{{ item.identifier }}": Remove remote gnb log'
-       ansible.builtin.file:
-          path: "{{ gnb_srs_logfile_path }}"
-          state: absent
-       become: true
-     - name: '"{{ item.identifier }}": Remove remote gnb log archive'
-       ansible.builtin.file:
-          path: "{{ gnb_srs_logfile_path }}.gz"
-          state: absent
-       become: true
+  - name: '"{{ item.identifier }}": SRS log'
+    ansible.builtin.include_role:
+      name: cleanup
+      tasks_from: archive_fetch_and_rm
+    vars:
+      filepath: "{{ gnb_srs_logfile_path }}"
     when: item.gnb_version.type== 'srsRAN'
-  - block:
-     - name: '"{{ item.identifier }}": Compress log'
-       community.general.archive:
-          path: "{{ gnb_oai_logfile_path }}"
-          unsafe_writes: false
-     - name: '"{{ item.identifier }}": Copy gnb log'
-       ansible.builtin.fetch:
-          src: "{{ gnb_oai_logfile_path }}.gz"
-          dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-          flat: true
-          validate_checksum: false
-       become: false
-     - name: '"{{ item.identifier }}": Remove remote gnb log'
-       ansible.builtin.file:
-          path: "{{ gnb_oai_logfile_path }}"
-          state: absent
-       become: true
-     - name: '"{{ item.identifier }}": Remove remote gnb log archive'
-       ansible.builtin.file:
-          path: "{{ gnb_oai_logfile_path }}.gz"
-          state: absent
-       become: true
+  - name: '"{{ item.identifier }}": SRS log'
+    ansible.builtin.include_role:
+      name: cleanup
+      tasks_from: archive_fetch_and_rm
+    vars:
+      filepath: "{{ gnb_oai_logfile_path }}"
     when: item.gnb_version.type== 'OAI'
 
-  - name: "{{ item.identifier }}: Handle pcaps, etc."
+  - name: '"{{ item.identifier }}": Handle PCAPs'
     when: not gnb_job_failed
-    block:
-    - community.general.archive:
-         path: "{{ perf_output_csv }}"
-         unsafe_writes: false
-    - ansible.builtin.fetch:
-         src: "{{ perf_output_csv }}.gz"
-         dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-         flat: true
-      become: true
-    - name: "{{ item.identifier }}: Remove perf stats counter"
-      ansible.builtin.file:
-         path: "{{ perf_output_csv }}"
-         state: absent
-      become: true
-      ignore_errors: true
-    - name: '"{{ item.identifier }}": Compress pcaps'
-      block:
-      - community.general.archive:
-           path: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap
-           unsafe_writes: false
-           remove: true
-           owner: "{{ ansible_user_id }}"
-        become: true
-      - community.general.archive:
-           path: /home/{{ ansible_user_id }}/tcpdump_ue.pcap
-           unsafe_writes: false
-           remove: true
-           owner: "{{ ansible_user_id }}"
-        become: true
-    - name: '"{{ item.identifier }}": Copy pcaps'
-      block:
-      - ansible.builtin.fetch:
-           src: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap.gz
-           dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-           flat: true
-        become: false
-      - ansible.builtin.fetch:
-           src: /home/{{ ansible_user_id }}/tcpdump_ue.pcap.gz
-           dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
-           flat: true
-        become: false
-    - name: '"{{ item.identifier }}": Cleanup pcaps'
-      block:
-      - ansible.builtin.file:
-           path: /home/{{ ansible_user_id }}/tcpdump_gnb.pcap.gz
-           state: absent
-        become: true
-      - ansible.builtin.file:
-           path: /home/{{ ansible_user_id }}/tcpdump_ue.pcap.gz
-           state: absent
-        become: true
+    ansible.builtin.include_role:
+      name: cleanup
+      tasks_from: archive_fetch_and_rm
+    vars:
+      filepath: "{{ loopartefact }}"
+    loop: ["/home/{{ ansible_user_id }}/tcpdump_gnb.pcap", "/home/{{ ansible_user_id }}/tcpdump_ue.pcap"]
+    loop_control:
+      loop_var: loopartefact
+
+- name: '"{{ item.identifier }}": Save state of all variables'
+  delegate_to: localhost
+  vars:
+    internal_fact_patterns:
+      - '^ansible_'
+      - '^ansible_local$'
+      - '^ansible_facts$'
+      - '^apparmor$'
+      - '^architecture$'
+      - '^processor'
+      - '^all_ipv4_'
+      - '^all_ipv6_'
+      - '^bios_'
+      - '^board_'
+      - '^chassis_'
+      - '^cmdline$'
+      - '^default_ipv4'
+      - '^default_ipv6'
+      - '^device_links$'
+      - '^devices$'
+      - '^distribution'
+      - '^dns$'
+      - '^docker0$'
+      - '^env$'
+      - '^flags$'
+
+      - ^fibre_channel_wwn$
+      - ^fips$
+      - ^form_factor$
+      - ^fqdn$
+      - ^gather_subset$
+      - ^hostname$
+      - ^hostnqn$
+      - ^is_chroot$
+      - ^iscsi_iqn$
+      - ^lo$
+      - ^locally_reachable_ips$
+      - ^lsb$
+      - ^lvm$
+      - ^machine$
+      - ^machine_id$
+      - ^memfree_mb$
+      - ^memory_mb$
+      - ^memtotal_mb$
+      - ^module_setup$
+      - ^mounts$
+      - ^nodename$
+      - ^os_family$
+      - ^pkg_mgr$
+      - ^proc_cmdline$
+      - ^product_name$
+      - ^product_serial$
+      - ^product_uuid$
+      - ^product_version$
+      - ^python$
+      - ^real_group_id$
+      - ^real_user_id$
+      - ^selinux$
+      - ^selinux_python_present$
+      - ^service_mgr$
+      - ^swapfree_mb$
+      - ^swaptotal_mb$
+      - ^system$
+      - ^system_capabilities$
+      - ^system_capabilities_enforced$
+      - ^system_vendor$
+      - ^systemd$
+      - ^uptime_seconds$
+      - ^user_dir$
+      - ^user_gecos$
+      - ^user_gid$
+      - ^user_id$
+      - ^user_shell$
+      - ^user_uid$
+      - ^userspace_architecture$
+      - ^userspace_bits$
+      - ^virtualization_role$
+      - ^virtualization_tech_guest$
+      - ^virtualization_tech_host$
+      - ^virtualization_type$
+
+      - '^ssh_host'
+  copy:
+    dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/ansible_variables.yaml"
+    content: >-
+      {{
+        hostvars[inventory_hostname]
+        | dict2items
+        | rejectattr('key','match', internal_fact_patterns | join('|'))
+        | items2dict
+        | to_nice_json
+      }}

@@ -10,8 +10,8 @@
     gnb_oai_config_path: "/home/gnb/OAI-configs/gnb_oai.conf"
     gnb_oai_logfile_path: "/tmp/gnb.log"
     gnb_oai_binary: "/home/gnb/openairinterface5g/cmake_targets/ran_build/build/nr-softmodem"
-    snr_msm_script: "/home/gnb/read-snr.sh"
-    snr_msm_script_output: "/tmp/snr_ue.csv"
+    # snr_msm_script: "/home/gnb/read-snr.sh"
+    # snr_msm_script_output: "/tmp/snr_ue.csv"
     perf_output_csv: "/tmp/perf_gnb.csv"
 
   pre_tasks:
@@ -21,6 +21,8 @@
       include_vars: ../config/tinkerforge_measurement_points.yaml
     - name: include radio config lookups
       include_vars: ../config/bandwidth.yaml
+    - name: include radio config lookups
+      include_vars: ../config/ansible_modules.yaml
 
 
   tasks:

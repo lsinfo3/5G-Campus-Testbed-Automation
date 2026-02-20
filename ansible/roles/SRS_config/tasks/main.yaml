@@ -146,5 +146,5 @@
 
 - name: Write config back
   ansible.builtin.copy:
-     content: "{{ gnb_srs_config | to_nice_yaml }}"
-     dest: "{{ gnb_srs_config_path }}"
+    content: "{{ gnb_srs_config | to_nice_yaml }}"
+    dest: "{{ gnb_srs_config_path }}"

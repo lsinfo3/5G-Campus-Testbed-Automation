@@ -1,0 +1,44 @@
+---
+
+# requires:
+# filepath
+# archive
+
+- name: '"{{ item.identifier }}": Compress {{ filepath }}'
+  community.general.archive:
+     path: "{{ filepath }}"
+     unsafe_writes: false
+  become: true
+  when: archive | default(true)
+
+- name: '"{{ item.identifier }}": Fetch {{ filepath }}'
+  when: archive | default(true)
+  ansible.builtin.fetch:
+     src: "{{ loopfile }}"
+     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+     flat: true
+     validate_checksum: false
+  become: false
+  ignore_errors: true
+  # loop: ["{{ filepath }}.gz","{{ filepath }}.tar.gz"]
+  loop: ["{{ filepath }}.gz"]
+  loop_control:
+    loop_var: loopfile
+
+- name: '"{{ item.identifier }}": Fetch {{ filepath }}'
+  when: not (archive | default(true))
+  ansible.builtin.fetch:
+     src: "{{ filepath }}"
+     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+     flat: true
+     validate_checksum: false
+  become: false
+
+- name: '"{{ item.identifier }}": Remove fetched archives {{ filepath }}'
+  ansible.builtin.file:
+     path: "{{ loopfile }}"
+     state: absent
+  become: true
+  loop: ["{{ filepath }}","{{ filepath }}.gz","{{ filepath }}.tar.gz"]
+  loop_control:
+    loop_var: loopfile

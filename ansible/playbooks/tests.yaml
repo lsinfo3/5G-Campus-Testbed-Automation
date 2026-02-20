@@ -5,6 +5,11 @@
   vars:
     # mcs: "None"
     mcs: 15
+    list_of_paths:
+      - 3-3.1
+      - 3-3.2
+    f1: "/path/to/file"
+    f2: "/path/to/file.gz"
 
   tasks:
     - ansible.builtin.set_fact:
@@ -20,6 +25,172 @@
         msg:
           - "{{min_ue_mcs}}"
           - "{{max_ue_mcs}}"
+
+    - ansible.builtin.set_fact:
+        uhubctl_cmd: "uhubctl --action off --location {{ list_of_paths | join(' --location ') }}"
+    - ansible.builtin.debug:
+        msg:
+          - "{{ uhubctl_cmd }}"
+
+
+    - ansible.builtin.debug:
+        msg:
+          -"{{ file }}"
+      loop: ["{{ f1 }}", "{{ f2 }}"]
+      loop_control:
+        loop_var: file
+
+
+    - name: "Edit srsRAN config: read config to variable"
+      ansible.builtin.slurp:
+        path: ../config/gnb_config_baseline/srs.yml
+      register: gnb_srs_config_content__24_10
+      delegate_to: localhost
+    - name: "Edit srsRAN config: parse variable to dict"
+      ansible.builtin.set_fact:
+        gnb_srs_config: "{{ gnb_srs_config_content__24_10['content'] | b64decode | from_yaml }}"
+
+
+    - name: Export only user-defined facts (set via set_fact / include_vars)
+      vars:
+        internal_fact_patterns:
+          - '^ansible_'
+          - '^ansible_local$'
+          - '^ansible_facts$'
+          - '^apparmor$'
+          - '^architecture$'
+          - '^processor'
+          - '^all_ipv4_'
+          - '^all_ipv6_'
+          - '^bios_'
+          - '^board_'
+          - '^chassis_'
+          - '^cmdline$'
+          - '^default_ipv4'
+          - '^default_ipv6'
+          - '^device_links$'
+          - '^devices$'
+          - '^distribution'
+          - '^dns$'
+          - '^docker0$'
+          - '^env$'
+          - '^flags$'
+
+          - ^fibre_channel_wwn$
+          - ^fips$
+          - ^form_factor$
+          - ^fqdn$
+          - ^gather_subset$
+          - ^hostname$
+          - ^hostnqn$
+          - ^is_chroot$
+          - ^iscsi_iqn$
+          - ^lo$
+          - ^locally_reachable_ips$
+          - ^lsb$
+          - ^lvm$
+          - ^machine$
+          - ^machine_id$
+          - ^memfree_mb$
+          - ^memory_mb$
+          - ^memtotal_mb$
+          - ^module_setup$
+          - ^mounts$
+          - ^nodename$
+          - ^os_family$
+          - ^pkg_mgr$
+          - ^proc_cmdline$
+          - ^product_name$
+          - ^product_serial$
+          - ^product_uuid$
+          - ^product_version$
+          - ^python$
+          - ^real_group_id$
+          - ^real_user_id$
+          - ^selinux$
+          - ^selinux_python_present$
+          - ^service_mgr$
+          - ^swapfree_mb$
+          - ^swaptotal_mb$
+          - ^system$
+          - ^system_capabilities$
+          - ^system_capabilities_enforced$
+          - ^system_vendor$
+          - ^systemd$
+          - ^uptime_seconds$
+          - ^user_dir$
+          - ^user_gecos$
+          - ^user_gid$
+          - ^user_id$
+          - ^user_shell$
+          - ^user_uid$
+          - ^userspace_architecture$
+          - ^userspace_bits$
+          - ^virtualization_role$
+          - ^virtualization_tech_guest$
+          - ^virtualization_tech_host$
+          - ^virtualization_type$
+
+          - '^ssh_host'
+      copy:
+        dest: /tmp/ansible_environment.yaml
+        # hostvars[inventory_hostname]
+        # lookup('vars')
+        content: >-
+          {{
+            hostvars[inventory_hostname]
+            | dict2items
+            | rejectattr('key','match', internal_fact_patterns | join('|'))
+            | items2dict
+            | to_nice_yaml
+          }}
+
+    - copy:
+        dest: /tmp/ansible_environment2.yaml
+        content: "{{ hostvars[inventory_hostname] | to_nice_yaml }}"
+
+    # - name: "Copy all registered variables"
+    #   ansible.builtin.copy:
+    #     content: "{{ ansible_facts | to_nice_yaml }}"
+    #     dest: /tmp/ansible_environment.yaml
+
+
+    #- name: "{{ item.identifier }}: Copy all registered variables"
+    #  ansible.builtin.copy:
+    #     # content: "{{ hostvars[inventory_hostname] | to_nice_yaml }}"
+    #     # content: "{{ lookup('vars','*') | to_nice_yaml }}"
+    #        #| rejectattr('^ansible_','defined')
+    #        #| rejectattr('key','match','^ansible_')
+    #    # All variables which are set in roles/playbooks
+    #    # content: >-
+    #    #   {{
+    #    #     hostvars[inventory_hostname]
+    #    #     | dict2items
+    #    #     | rejectattr('key','match','^ansible_')
+    #    #     | items2dict
+    #    #     | to_nice_yaml
+    #    #   }}
+    #    content: >-
+    #      {{
+    #        hostvars[inventory_hostname]
+    #        | dict2items
+    #        | rejectattr('key','match', internal_var_patterns | join('|'))
+    #        | items2dict
+    #        | to_nice_yaml
+    #      }}
+    #    dest: "/tmp/ansible_environment.yaml"
+    #  vars:
+    #    internal_var_patterns:
+    #      - '^ansible_'
+    #      - '^ansible_local'
+    #      - '^groups$'
+    #      - '^inventory_hostname$'
+    #      - '^hostvars$'
+    #      - '^omit$'
+
+    - community.general.archive:
+         path: "/tmp/ansible_environment.yaml"
+         unsafe_writes: false
 
 
 

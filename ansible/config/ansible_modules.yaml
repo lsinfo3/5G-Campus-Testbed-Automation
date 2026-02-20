@@ -1,0 +1,85 @@
+timepoints:
+  - pre_cleanup
+  - pre_uhd_switch
+  - pre_gnb_start
+  - pre_ue_connect
+  - pre_traffic_start
+  - post_traffic_start
+  - post_traffic_end
+
+
+modules:
+  pre_cleanup_example:
+    # Name is placed in role task name
+    - name: Power Cycle Modem
+      # At each time point, a list of all modules is checked. Maybe use different lists instead? e.g.? modules__pre_cleanup
+      time: pre_uhd_switch
+      # Link to task in role
+      role: powercycle_task/main.yaml
+      # Artefacts are 1) copied to the ansible host 2) deleted from the gnodeb server
+      # artefacts are collected during execution (combine lists) and handled at the end ( “combined”: [ “{{first_list | union(second_list) | join('”, “')}}”] )
+      # artefacts which are put inside the {{ collected_artefacts }} directory don't have to be handled since the hole dir is already archived and removed
+      artefacts: []
+      # extra vars are provided to the role
+      extra_vars:
+        usb_paths:
+          - 3-3.1
+          - 3-3.1
+        usb_hub_id: 4a3e:11c1
+
+
+  pre_cleanup: []
+
+  pre_uhd_switch: []
+
+  pre_gnb_start:
+    # - name: Debug Print all vars
+    #   role: ../roles/debug/tasks/simple_print.yaml
+    #   artefacts: []
+    #   extra_vars:
+    #     variable_array:
+    #       - entry1
+    #       - entry2
+    #     variable_variable: some_var
+    - name: Power Cycle UE
+      role: ../roles/powercycle/tasks/disable_and_reset.yaml
+      artefacts: []
+      extra_vars:
+        usb_paths:
+          - 3-4.2
+          - 2-4.2
+        usb_hub_id: 2109:0817
+
+  pre_ue_connect: []
+
+  pre_traffic_start:
+    - name: Set required routes
+      role: ../roles/routing/tasks/main.yaml
+      artefacts: []
+      extra_vars:
+        address_range: "10.45.0.0/24"
+    - name: Track modem SNR
+      role: ../roles/monitoring/tasks/qmi_snr.yaml
+      artefacts: ["/tmp/snr_ue.csv"]
+      extra_vars:
+        outputfile: "/tmp/snr_ue.csv"
+    - name: Start UE power msm
+      role: ../roles/tinkerforge_power_meter/tasks/main.yaml
+      artefacts:
+        - "/tmp/power_ue.csv"
+      extra_vars:
+        master_brickelt_ip: "172.16.32.5"
+        voltage_bricklet_uid: "21hP"
+        output_file: "/tmp/power_ue.csv"
+    - name: Start SDR power msm
+      role: ../roles/tinkerforge_power_meter/tasks/main.yaml
+      artefacts:
+        - "/tmp/power_sdr.csv"
+      extra_vars:
+        master_brickelt_ip: "172.16.32.6"
+        voltage_bricklet_uid: "21hK"
+        output_file: "/tmp/power_sdr.csv"
+
+  post_traffic_start: []
+
+  post_traffic_end: []

@@ -21,6 +21,8 @@
       include_vars: ../config/tinkerforge_measurement_points.yaml
     - name: include radio config lookups
       include_vars: ../config/bandwidth.yaml
+    - name: include radio config lookups
+      include_vars: ../config/ansible_modules.yaml
 
 
   tasks:

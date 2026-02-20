@@ -1,0 +1,36 @@
+---
+
+# INFO: role to handle power measurements with tinkerforge voltage bricklets
+# requires:
+# master_brickelt_ip
+# voltage_bricklet_uid
+# output_file
+
+
+- name: kill existing processes
+  ansible.builtin.shell:
+     pkill -9 -f /[h]ome/{{ ansible_user_id }}/tinkerforge_power.py || true
+  become: true
+
+# INFO: start power measurement
+- name: copy power msm script
+  ansible.builtin.copy:
+    src: "../scripts/tinkerforge_power.py"
+    dest: "/home/{{ ansible_user_id }}/tinkerforge_power.py"
+    mode: "755"
+- block:
+  - name: Start power msm script for ue
+    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.ue.host }} --uid={{ tinkerforge.ue.uid }} --path={{ tinkerforge.ue.output }} --duration={{ 898 }}  > {{ collected_artefacts }}/tinker_ue 2>&1"
+    become: true
+    async: 900
+    poll: 0
+    register: pwr_ue_job
+  when: tinkerforge is defined and tinkerforge.ue is defined
+- block:
+  - name: Start power msm script for sdr
+    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.sdr.host }} --uid={{ tinkerforge.sdr.uid }} --path={{ tinkerforge.sdr.output }} --duration={{ 898 }}  > {{ collected_artefacts }}/tinker_sdr 2>&1"
+    become: true
+    async: 900
+    poll: 0
+    register: pwr_sdr_job
+  when: tinkerforge is defined and tinkerforge.sdr is defined
