@@ -68,7 +68,8 @@ build_ansible_playbook_extra_vars() {
         echo ""
         gotify "playbook status" "$(( ($(date +%s)- $Start_Date) /60 ))min, Ansible log has not been found."
     fi
-    last_id=$(cat "$ansible_log" | tail -n 1 | awk '{print $4}')
+    # awk selects specific columns, then prints last field
+    last_id=$(cat "$ansible_log" | awk '$2 == "COMPLETED"' | tail -n 1 | awk '{print $NF}')
     if [ "$last_id" == "" ]; then
         echo ""
         gotify "playbook status" "$(( ($(date +%s)- $Start_Date) /60 ))min, Empty task read."
@@ -124,7 +125,7 @@ else
     echo "Provided file must be existent and provide full definition!" >&2
     exit 1
 fi
-ansible_log="$TEST_SERIES_PCAPDUMP/ansible_task.log"
+ansible_log="$TEST_SERIES_PCAPDUMP/measurements.log"
 
 # $# == 2 ==> '--continue'
 if [[ $# -eq 2 ]]; then

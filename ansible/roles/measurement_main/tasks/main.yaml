@@ -1,5 +1,17 @@
 
+# We not onli want to init, but reset the existing array to not endlessly collect filepaths
+- ansible.builtin.set_fact:
+    all_artefacts: []
+
+
 # FIXME: pre_cleanup
+- name: Logging
+  ansible.builtin.include_role:
+    name: monitoring
+    tasks_from: logging.yaml
+  vars:
+    log_prefix: "PRE_CLEANUP"
+    log_message: "{{ item.identifier }}"
 - name: "{{ item.identifier }}: MODULE: PRE_CLEANUP"
   ansible.builtin.include_role:
     name: module_handler
@@ -27,6 +39,13 @@
 
 
 # FIXME: pre_uhd_switch
+- name: Logging
+  ansible.builtin.include_role:
+    name: monitoring
+    tasks_from: logging.yaml
+  vars:
+    log_prefix: "PRE_UHD_SWITCH"
+    log_message: "{{ item.identifier }}"
 - name: "{{ item.identifier }}: MODULE: PRE_UHD_SWITCH"
   ansible.builtin.include_role:
     name: module_handler
@@ -57,6 +76,13 @@
       become: true
 
 # FIXME: pre_gnb_start
+- name: Logging
+  ansible.builtin.include_role:
+    name: monitoring
+    tasks_from: logging.yaml
+  vars:
+    log_prefix: "PRE_GNB_START"
+    log_message: "{{ item.identifier }}"
 - name: "{{ item.identifier }}: MODULE: PRE_GNB_START"
   ansible.builtin.include_role:
     name: module_handler
@@ -130,10 +156,10 @@
   when: item.dockerization == true
 
 - debug:
-    msg: "{{ item.identifier }}: Wait for 60 seconds until gNB becomes ready"
-- name: '"{{ item.identifier }}": Wait for 60 seconds until gNB becomes ready'
+    msg: "{{ item.identifier }}: Wait until gNB becomes ready"
+- name: '"{{ item.identifier }}": Wait until gNB becomes ready'
   wait_for:
-    timeout: 60
+    timeout: 50
 
 # INFO: Check if gnb is running
 - name: '"{{ item.identifier }}": get gnb_job status'
@@ -163,6 +189,13 @@
 
 
 # FIXME: pre_ue_connect
+- name: Logging
+  ansible.builtin.include_role:
+    name: monitoring
+    tasks_from: logging.yaml
+  vars:
+    log_prefix: "PRE_UE_CONNECT"
+    log_message: "{{ item.identifier }}"
 - name: "{{ item.identifier }}: MODULE: PRE_UE_CONNECT"
   ansible.builtin.include_role:
     name: module_handler
@@ -195,15 +228,15 @@
 - name: "{{ item.identifier }}: Main routine"
   when: not gnb_job_failed
   block:
-  - name: '"{{ item.identifier }}": Wait for 10 seconds after obtaining IP'
+  - name: '"{{ item.identifier }}": Wait for 5 seconds after obtaining IP'
     wait_for:
-      timeout: 10
+      timeout: 5
   # TODO: save gnb stdout/stderr on failure
   # TODO: on failure: save stdout/stderr and gnb.log
   # TODO: track failed runs in evaluation?
   - name: '"{{ item.identifier }}": tcpdump on gnb'
     ansible.builtin.command:
-      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 20 }} tcpdump -ni {{ system.fixed_params.interface_gnb }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_gnb.pcap udp port 2152
+      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 5 }} tcpdump -ni {{ system.fixed_params.interface_gnb }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_gnb.pcap udp port 2152
     async: "{{ item.traffic_config.traffic_duration * 2 }}"
     poll: 0
     become: true
@@ -211,7 +244,7 @@
 
   - name: '"{{ item.identifier }}": tcpdump on ue'
     ansible.builtin.command:
-      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 20 }} tcpdump -ni {{ system.fixed_params.interface_ue }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_ue.pcap
+      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 5 }} tcpdump -ni {{ system.fixed_params.interface_ue }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_ue.pcap
     async: "{{ item.traffic_config.traffic_duration * 2 }}"
     poll: 0
     become: true
@@ -219,12 +252,19 @@
 
   - name: '"{{ item.identifier }}": sleep'
     ansible.builtin.command:
-       cmd: sleep 10
+       cmd: sleep 5
     become: false
 
 
 
 # FIXME: pre_traffic_start
+  - name: Logging
+    ansible.builtin.include_role:
+      name: monitoring
+      tasks_from: logging.yaml
+    vars:
+      log_prefix: "PRE_TRAFFIC_START"
+      log_message: "{{ item.identifier }}"
   - name: "{{ item.identifier }}: MODULE: PRE_TRAFFIC_START"
     ansible.builtin.include_role:
       name: module_handler
@@ -303,6 +343,13 @@
 
 
   # FIXME: post_traffic_start
+  - name: Logging
+    ansible.builtin.include_role:
+      name: monitoring
+      tasks_from: logging.yaml
+    vars:
+      log_prefix: "POST_TRAFFIC_START"
+      log_message: "{{ item.identifier }}"
   - name: "{{ item.identifier }}: MODULE: POST_TRAFFIC_START"
     ansible.builtin.include_role:
       name: module_handler
@@ -318,8 +365,8 @@
     register: tcpdump_gnb_result
     until: tcpdump_gnb_result.finished
     failed_when: tcpdump_gnb_result.rc != 0 and tcpdump_gnb_result.rc != 124
-    retries: 10
-    delay: 5
+    retries: 15
+    delay: 4
     become: true
 
   - name: '"{{ item.identifier }}": wait for ue tcpdump'
@@ -328,13 +375,20 @@
     register: tcpdump_ue_result
     until: tcpdump_ue_result.finished
     failed_when: tcpdump_gnb_result.rc != 0 and tcpdump_gnb_result.rc != 124
-    retries: 10
-    delay: 5
+    retries: 15
+    delay: 4
     become: true
 
 
 
   # FIXME: post_traffic_end
+  - name: Logging
+    ansible.builtin.include_role:
+      name: monitoring
+      tasks_from: logging.yaml
+    vars:
+      log_prefix: "POST_TRAFFIC_END"
+      log_message: "{{ item.identifier }}"
   - name: "{{ item.identifier }}: MODULE: POST_TRAFFIC_END"
     ansible.builtin.include_role:
       name: module_handler

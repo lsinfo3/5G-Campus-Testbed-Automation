@@ -30,17 +30,13 @@
       # vars:
       #   docker_tags_map: "{{docker_tags_map_outer}}"
 
-    # - name: "{{ item.identifier }}: log task completion"
-    #   ansible.builtin.lineinfile:
-    #     line: "{{ ansible_date_time.date }} {{ ansible_date_time.time }}  --  {{ item.identifier }}"
-    #     path: "{{ system.pcap_dump }}/ansible_task.log"
-    #     create: yes
-    #   delegate_to: localhost
     - name: "{{ item.identifier }}: log task completion"
-      ansible.builtin.shell:
-        cmd: "echo \"$(date '+%F %T') -- {{ item.identifier }}\" >> \"{{ system.pcap_dump }}/ansible_task.log\""
-      delegate_to: localhost
-
+      ansible.builtin.include_role:
+        name: monitoring
+        tasks_from: logging.yaml
+      vars:
+        log_prefix: "COMPLETED"
+        log_message: "{{ item.identifier }}"
 
 # Change is running when tag is passed
 - name: "{{ item.identifier }}: check for id"

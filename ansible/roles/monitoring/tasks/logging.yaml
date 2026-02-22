@@ -1,0 +1,9 @@
+---
+
+# INFO: Adds a logging entry, takes 2 args
+# log_prefix
+# log_message
+
+- name: Logging
+  ansible.builtin.shell: "mkdir -p {{ system.pcap_dump }} && printf \"$(date --iso-8601=s) %-24s {{ log_message | default('') }}\n\" \"{{ log_prefix | default('') }}\" >> \"{{ system.pcap_dump }}/measurements.log\""
+  delegate_to: localhost
