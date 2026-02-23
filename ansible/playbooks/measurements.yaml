@@ -21,6 +21,8 @@
       include_vars: ../config/tinkerforge_measurement_points.yaml
     - name: include radio config lookups
       include_vars: ../config/bandwidth.yaml
+    #- name: include test definition
+    #  include_vars: /mnt/darius/5G_data/config/run_definition.yaml
 
 
   tasks:

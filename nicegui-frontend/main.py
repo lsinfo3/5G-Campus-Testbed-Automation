@@ -404,6 +404,7 @@ class MeasurementRunDefinition(Baseclass):
     identifier: str
     run: int
     gnb_bandwidth: str
+    individual_mcs: bool
     dl_mcs: int|str
     ul_mcs: int|str
     dockerization: bool
@@ -585,6 +586,7 @@ class NiceGUIInputMask():
                         chip_lookups[e] = ui.chip(str(e), color="#8babf1",
                               removable=True, on_value_change=lambda key=e :__chip_rm_callback(key)).classes("m-0")
                 print(f"Initial rendering of {data_entry}")
+                return recieved_input
 
     def print_system(self):
         print("System:")
@@ -688,12 +690,16 @@ class NiceGUIInputMask():
                 ui.number(label="Repetitions").bind_value(self.runs, "run").on_value_change(self.print_runs)
                 ui.label("Bandwidth").classes(self.label_classes)
                 self.__create_chips_elements(chips_data_container=self.runs, data_entry="gnb_bandwidth", options=["20", "40"], label="bandwidth")
+                ui.label("Individual MCS vlaues").classes(self.label_classes)
+                enable_checkbox =ui.checkbox().bind_value(self.runs, "individual_mcs").on_value_change(self.print_runs)
                 ui.label("fixed DL MCS").classes(self.label_classes)
-                self.__create_chips_elements(chips_data_container=self.runs, data_entry="dl_mcs", options=["None", *range(28)], label="DL MCS")
+                self.__create_chips_elements(chips_data_container=self.runs, data_entry="dl_mcs", options=["None", *range(28)], label="DL MCS").bind_enabled_from(enable_checkbox, 'value')
                 # ui.label("DL MCS max").classes(self.label_classes)
                 # self.__create_chips_elements(chips_data_container=self.runs, data_entry="dl_mcs_max", options=["None", *range(28)], label="DL MCS")
                 ui.label("fixed UL MCS").classes(self.label_classes)
-                self.__create_chips_elements(chips_data_container=self.runs, data_entry="ul_mcs", options=["None", *range(28)], label="UL MCS")
+                self.__create_chips_elements(chips_data_container=self.runs, data_entry="ul_mcs", options=["None", *range(28)], label="UL MCS").bind_enabled_from(enable_checkbox, 'value')
+                ui.label("fixed MCS").classes(self.label_classes)
+                self.__create_chips_elements(chips_data_container=self.runs, data_entry="dl_mcs", options=["None", *range(28)], label="MCS").bind_enabled_from(enable_checkbox, strict=False)
                 # ui.label("UL MCS max").classes(self.label_classes)
                 # self.__create_chips_elements(chips_data_container=self.runs, data_entry="ul_mcs_max", options=["None", *range(28)], label="UL MCS")
                 ui.label("Dockerization").classes(self.label_classes)
@@ -778,6 +784,9 @@ class NiceGUIInputMask():
         d = construct_full_dict(self.runs)
         # then distribute inner lists to form a list of dicts
         run_definitions = expand_dict(d)
+        for i,rd in enumerate(run_definitions):
+            if run_definitions[i]["individual_mcs"] == False:
+                run_definitions[i]['ul_mcs'] = rd['dl_mcs']
         # For multiple parts, the definitions are not complete, i.e. only ratio&period for tdd, fix that
         completed_definitions = cast_dicts(run_definitions)
 
@@ -793,15 +802,16 @@ class NiceGUIInputMask():
             elif d["traffic_config"]["traffic_type"] == "scapyudpping":
                 traffic_naming = "scaping"
             elif d["traffic_config"]["traffic_type"] == "iperfthroughput":
-                traffic_naming = "iperf"+d["traffic_config"]["direction"]
+                traffic_naming = "iperf_"+d["traffic_config"]["direction"]
             else:
                 raise ValueError(f"Unknown type of traffic: { d["traffic_config"] }")
 
             gnb_naming = d["gnb_version"]["type"]
             tdd_naming = f"TDD{d["tdd_config"]["tdd_period"]}-{d["tdd_config"]["tdd_ratio"]}"
             bw_naming = f"Bw{d["gnb_bandwidth"]}"
+            mcs_naming= f"{d["ul_mcs"]}UL-MCS_{d["dl_mcs"]}DL-MCS"
 
-            cd["identifier"] = f"{fixed_param_hash}__{traffic_naming}_{gnb_naming}" + \
+            cd["identifier"] = f"{fixed_param_hash}__{traffic_naming}_{mcs_naming}_{gnb_naming}" + \
                                 f"_{tdd_naming}_{bw_naming}__{cd["run"]:03d}_{dict_to_hash(d, 8)}"
 
         # now construct both parts,
@@ -858,8 +868,9 @@ def construct_full_dict(runs):
         "tx_gain": None,
         **runs
             }
-
     constructed_dict["run"] = [i for i in range(int(constructed_dict["run"]))]
+    if runs["individual_mcs"] == False:
+        constructed_dict['ul_mcs'] = "None"
     constructed_dict.pop("traffic_config_iperf")
     constructed_dict.pop("traffic_config_idle")
     constructed_dict.pop("traffic_config_scapyping")
