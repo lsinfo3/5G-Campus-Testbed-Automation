@@ -15,7 +15,7 @@ This repository presents the current state of the 5G testbed automation framewor
   * [Structure of one measurement run](#structure-of-one-measurement-run)
 * [Additional Tooling](#additional-tooling)
   * [WebUI for configuration creation](#webui-for-configuration-creation)
-  * [Analysis of aquired results](#analysis-of-aquired-results)
+  * [Analysis of acquired results](#analysis-of-acquired-results)
 
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
 
@@ -211,7 +211,7 @@ based on the cartesian product of all selected parameters can be downloaded.
 
 ![webui](./.res/webui.jpg)
 
-### Analysis of aquired results
+### Analysis of acquired results
 The following tools can be used to process the acquired data. In all cases, `<measurement-path>` is the path from the YAML measurement definition and optional cli parameter or environment variables can be set to stop reprocessing of already processed runs.
 1. `analysis/parse-pcap.py [--skip] <measurement-path>` parses the pcaps and drops all unimportant information. CSVs are created for each pcap.
 1. `[SKIP_EXISTING=true] analysis/parse-gnblog.sh <measurement-path>` parses the gNB logs and extracts SNR,MCS and other channel metrics.
