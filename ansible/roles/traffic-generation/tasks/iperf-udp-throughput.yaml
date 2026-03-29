@@ -7,7 +7,7 @@
 # {{ collected_logs }}/usb 2>&1"
 
 - ansible.builtin.set_fact:
-    iperf_shell_output: "{{ collected_logs | default('/tmp') }}/iperf"
+    iperf_shell_output: "{{ collected_artefacts | default('/tmp') }}/iperf"
 
 - ansible.builtin.set_fact:
     iperf_udp: "--udp"

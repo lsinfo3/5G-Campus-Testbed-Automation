@@ -1,5 +1,17 @@
 
-- name: Install dependencies
+- name: Add tinkerforge APT repo
+  block:
+    - ansible.builtin.apt_key:
+        url: https://download.tinkerforge.com/apt/ubuntu/tinkerforge.asc
+        #dest: /etc/apt/trusted.gpg.d/tinkerforge.arc
+        state: present
+      become: true
+    - ansible.builtin.apt_repository:
+        repo: deb https://download.tinkerforge.com/apt/ubuntu noble main
+        filename: tinkerforge
+        state: present
+      become: true
+- name: Install apt packages
   ansible.builtin.apt:
     install_recommends: false
     pkg:
@@ -9,6 +21,7 @@
       - python3-tinkerforge
       - lm-sensors
     state: present
+    update_cache: true
   become: true
 
 - name: Remove unattended upgrades

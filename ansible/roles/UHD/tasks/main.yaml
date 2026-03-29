@@ -26,8 +26,8 @@
       - git
       - inetutils-tools
       - libboost-all-dev
-      - libncurses5
-      - libncurses5-dev
+      # - libncurses5
+      # - libncurses5-dev
       - libusb-1.0-0
       - libusb-1.0-0-dev
       - libusb-dev
