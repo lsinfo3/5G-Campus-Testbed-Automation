@@ -21,14 +21,14 @@
     mode: "755"
 - block:
   - ansible.builtin.shell:
-      cmd: echo "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ master_brickelt_ip }} --uid={{ voltage_bricklet_uid }} --path={{ output_file }} --duration={{ 898 }}  > {{ collected_artefacts }}/{{ log_name }} 2>&1" >> "{{ collected_artefacts }}/{{ log_name }}" 2>>&1
+      cmd: echo "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ master_brickelt_ip }} --uid={{ voltage_bricklet_uid }} --path={{ output_file }} --duration={{ 898 }}  > {{ collected_artefacts }}/{{ log_name }} 2>&1" >> "{{ collected_artefacts }}/{{ log_name }}" 2>&1
     become: true
   - name: Start power msm script for {{ log_name }}
     ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ master_brickelt_ip }} --uid={{ voltage_bricklet_uid }} --path={{ output_file }} --duration={{ 898 }}  >> {{ collected_artefacts }}/{{ log_name }} 2>>&1"
     become: true
     async: 900
     poll: 0
-    register: "pwr_job_{{ log_name }}"
+    #register: "pwr_job_{{ log_name }}"
   #when: tinkerforge is defined and tinkerforge.ue is defined
 #- block:
 #  - name: Start power msm script for sdr

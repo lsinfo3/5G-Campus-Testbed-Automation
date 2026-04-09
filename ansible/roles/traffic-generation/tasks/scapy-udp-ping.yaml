@@ -13,7 +13,7 @@
 
 - name: Python traffic gen
   ansible.builtin.shell:
-    cmd: "/home/{{ ansible_user_id }}/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ tg_ip }} {{ tg_port }} {{ tg_burst }} {{ tg_duration }} > {{ collected_logs }}/traffic_scapy 2>&1"
+    cmd: "/home/{{ ansible_user_id }}/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ tg_ip }} {{ tg_port }} {{ tg_burst }} {{ tg_duration }} > {{ collected_artefacts }}/traffic_scapy 2>&1"
   become: true
 
 

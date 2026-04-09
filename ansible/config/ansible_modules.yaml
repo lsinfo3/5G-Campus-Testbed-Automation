@@ -102,6 +102,8 @@ modules:
   post_traffic_end:
     - name: Stop Jammer routine
       role: ../roles/jammer/tasks/stop.yaml
+      extra_vars:
+        sdr: "X310"
       artefacts: []
   # post_traffic_end:
   #   - name: Get spectrum monitor output (not on gnb host, therefore we can't use the artefacts)
