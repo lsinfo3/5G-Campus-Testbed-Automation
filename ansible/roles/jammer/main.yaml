@@ -1,0 +1,34 @@
+- name: '"{{ item.identifier }}": killall running jammer instances'
+  ansible.builtin.shell: |
+     sudo systemctl stop jammer_api.service
+  become: true
+  ignore_errors: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": start jammer api'
+  ansible.builtin.shell: |
+     sudo systemctl start jammer_api.service
+  become: true
+  ignore_errors: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": copy wrapper files'
+  ansible.builtin.copy:
+   src: "../scripts/jammer-wrapper.py"
+   dest: "jammer-wrapper.py"
+   mode: "755"
+  become: true
+  ignore_errors: true
+  delegate_to: 5g-core
+
+
+  - name: '"{{ item.identifier }}": jammer wrapper'
+  ansible.builtin.shell: |
+     sudo python3 jammer-wrapper.py --start_gain {{ jammer.start_gain }} --end_gain {{ jammer.end_gain }} --steps {{ jammer.steps }} --on {{ jammer.on }} --off {{ jammer.off }}
+  become: true
+  async: 900
+  poll: 0
+  ignore_errors: true
+  when: jammer is defined
+  register: jammer_job
+  delegate_to: 5g-core
