@@ -40,6 +40,16 @@ modules:
           - 3-4.2
           - 2-4.2
         usb_hub_id: 2109:0817
+    - name: Start Jammer routine
+      role: ../roles/jammer/tasks/main.yaml
+      extra_vars:
+        sdr: "X310"
+        #start_gain: "60"
+        #end_gain: "60"
+        #steps: "0"
+        #jammer_on: "10"
+        #jammer_off: "10"
+      artefacts: []
 
   pre_ue_connect: []
   # pre_ue_connect:
@@ -85,13 +95,11 @@ modules:
         voltage_bricklet_uid: "21hK"
         output_file: "/tmp/power_sdr.csv"
         log_name: "power_sdr"
-    - name: Start Jammer routine
-      role: ../roles/jammer/tasks/main.yaml
-      artefacts: []
+
 
   post_traffic_start: []
 
-  post_traffic_end: []
+  post_traffic_end:
     - name: Stop Jammer routine
       role: ../roles/jammer/tasks/stop.yaml
       artefacts: []

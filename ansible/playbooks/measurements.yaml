@@ -24,11 +24,17 @@
 
 
   tasks:
-     - name: iterate over test definition
-       ansible.builtin.include_role:
-          name: loop-control
-        # provided by testseries definition (--include_vars "@file.yaml")
-       loop: "{{ run_definitions }}"
-       vars:
-         docker_tags_map: "{{docker_tags}}"
-         tinkerforge: "{{ tinkerforge_powermsm_points }}"
+    - block:
+      - name: iterate over test definition
+        ansible.builtin.include_role:
+            name: loop-control
+          # provided by testseries definition (--include_vars "@file.yaml")
+        loop: "{{ run_definitions }}"
+        vars:
+          docker_tags_map: "{{docker_tags}}"
+          tinkerforge: "{{ tinkerforge_powermsm_points }}"
+      always:
+        - name: Execute the jammer stop tasks
+          ansible.builtin.include_role:
+            name: jammer
+            tasks_from: stop.yaml

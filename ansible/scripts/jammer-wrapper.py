@@ -32,8 +32,8 @@ def ramp_gain_loop(start_gain, end_gain, steps, active_time, quiet_time):
     
     try:
         while True:
-            for i in range(steps):
-                current_gain = round(start_gain + (increment * i), 2)
+            if steps <= 0:
+                current_gain = start_gain
                 
                 # 1. Active Period
                 set_gain(current_gain)
@@ -42,6 +42,17 @@ def ramp_gain_loop(start_gain, end_gain, steps, active_time, quiet_time):
                 # 2. Quiet Period (Reset to 0)
                 set_gain(0)
                 time.sleep(quiet_time)
+            else:
+                for i in range(steps):
+                    current_gain = round(start_gain + (increment * i), 2)
+                    
+                    # 1. Active Period
+                    set_gain(current_gain)
+                    time.sleep(active_time)
+                    
+                    # 2. Quiet Period (Reset to 0)
+                    set_gain(0)
+                    time.sleep(quiet_time)
                 
     except KeyboardInterrupt:
         print("\nStopping... Resetting gain to 0.")

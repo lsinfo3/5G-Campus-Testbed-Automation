@@ -22,13 +22,12 @@
   delegate_to: 5g-core
 
 
-  - name: '"{{ item.identifier }}": jammer wrapper'
+- name: '"{{ item.identifier }}": jammer wrapper'
   ansible.builtin.shell: |
-     sudo python3 jammer-wrapper.py --start_gain {{ jammer.start_gain }} --end_gain {{ jammer.end_gain }} --steps {{ jammer.steps }} --on {{ jammer.on }} --off {{ jammer.off }}
+     sudo python3 jammer-wrapper.py --start_gain {{ item.jammer_config.start_gain }} --end_gain {{ item.jammer_config.end_gain }} --steps {{ item.jammer_config.steps }} --on {{ item.jammer_config.on_duration }} --off {{ item.jammer_config.off_duration }}
   become: true
   async: 900
   poll: 0
   ignore_errors: true
-  when: jammer is defined
   register: jammer_job
   delegate_to: 5g-core

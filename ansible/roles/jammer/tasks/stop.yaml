@@ -1,0 +1,16 @@
+- name: 'Stop Jammer Wrapper'
+  ansible.builtin.shell: |
+      pkill -9 -f jammer-wrapper.py || true
+  become: true
+  ignore_errors: true
+  register: pkill_result
+  failed_when: false
+  changed_when: pkill_result.rc == 0
+  delegate_to: 5g-core
+
+- name: 'Stop Jammer Service'
+  ansible.builtin.shell: |
+     sudo systemctl stop jammer_api.service
+  become: true
+  ignore_errors: true
+  delegate_to: 5g-core
