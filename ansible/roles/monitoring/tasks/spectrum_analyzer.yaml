@@ -1,0 +1,25 @@
+---
+# INFO: record samples on an additional SDR
+# requires:
+# center_freq
+# rate
+# window_function
+# duration
+# batch_ms
+# interval_ms
+# outputfile
+# logfile
+
+
+- name: Start spectrum analyzer
+  ansible.builtin.shell:
+    "/home/core/.local/bin/micromamba run -n spectrummonitor python analyzer.py -f {{ center_freq }} -r {{ rate }} -n 8192 -w {{ window_function }} -d {{ duration }} -o {{ outputfile }} --batch_ms {{ batch_ms }} --interval_ms {{ interval_ms }} 2>&1 | ts '%.s' > {{ logfile }} "
+  args:
+    executable: '/bin/bash'
+    chdir: 'spectrummonitor/'
+  delegate_to: 5g-core
+  async: 120
+  poll: 0
+  register: sdr_spectrum_monitor
+
+    #"bash -c 'eval \"$(/home/core/.local/bin/micromamba shell hook --shell zsh)\" && /home/core/.local/bin/micromamba activate spectrummonitor && python analyzer.py -f {{ center_freq }} -r {{ rate }} -n 8192 -w {{ window_function }} -d {{ duration }} -o {{ outputfile }} --batch_ms {{ batch_ms }} --interval_ms {{ interval_ms }}' 1>> {{ logfile }} 2>&1 "

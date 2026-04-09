@@ -4,9 +4,9 @@
 
 
 - ansible.builtin.set_fact:
-    install_path: "/home/gnb/gnb_versions/{{ version }}/UHD--{{ version }}"
+    install_path_uhd: "/home/gnb/gnb_versions/{{ version }}/UHD--{{ version }}"
 - ansible.builtin.file:
-    path: "{{ install_path }}"
+    path: "{{ install_path_uhd }}"
     state: directory
 
 
@@ -41,55 +41,91 @@
     state: present
   become: true
 
+- name: '("{{version}}"): Remove old version'
+  ansible.builtin.file:
+    path: "{{ install_path_uhd }}"
+    state: absent
+  become: true
+
 - name: '("{{version}}"): Clone USRP Hardware Driver'
   ansible.builtin.git:
     repo: "https://github.com/EttusResearch/uhd.git"
     clone: true
-    dest: "{{ install_path }}"
+    dest: "{{ install_path_uhd }}"
     version: "{{ version }}"
   become: false
 
 - name: '("{{version}}"): Compile UHD - prepare build'
   ansible.builtin.file:
-    dest: "{{ install_path }}/host/build"
+    dest: "{{ install_path_uhd }}/host/build"
     state: directory
   become: false
 
 - name: '("{{version}}"): Compile UHD - cmake'
   ansible.builtin.shell:
-    chdir: "{{ install_path }}/host/build"
-    cmd: cmake ../
+    chdir: "{{ install_path_uhd }}/host/build"
+    cmd: cmake .. -DENABLE_DOXYGEN=OFF -DENABLE_MANUAL=OFF -DENABLE_MAN_PAGES=OFF -DENABLE_PYTHON_API=OFF
   become: true
   ignore_errors: true
 # WARN: not an error: cmake fails for the first time for UHD-3.15.LTS in ansible (for some bizzare reason)
 #  second time works
 - name: '("{{version}}"): Compile UHD - cmake'
   ansible.builtin.shell:
-    chdir: "{{ install_path }}/host/build"
-    cmd: cmake ../
+    chdir: "{{ install_path_uhd }}/host/build"
+    cmd: cmake .. -DENABLE_DOXYGEN=OFF -DENABLE_MANUAL=OFF -DENABLE_MAN_PAGES=OFF -DENABLE_PYTHON_API=OFF
   become: true
+
+# INFO: register patch variable depending on UHD version
+- name: Select path file if applicable
+  ansible.builtin.set_fact:
+    uhd_patch_file: >-
+      {{
+        '../../../patches/fix_missing_includes__UHD4.0__ubuntu24.patch' if ansible_facts['lsb']['id'] == 'Ubuntu' and ansible_facts['lsb']['major_release'] == '24' and version == 'UHD-4.0' else
+        None
+      }}
+
+- ansible.builtin.copy:
+    src: "{{ uhd_patch_file }}"
+    dest: /tmp/uhd.patch
+  become: true
+  when: uhd_patch_file is not none
+
+- name: Apply patches
+  ansible.builtin.shell:
+    cmd: "git apply --3way --ignore-space-change --ignore-whitespace /tmp/uhd.patch"
+    chdir: "{{ install_path_uhd }}"
+  become: true
+  when: uhd_patch_file is not none
+
+- ansible.builtin.debug:
+    msg:
+      - "{{ ansible_facts['lsb'] }}"
+      - "{{ ansible_facts['lsb']['id'] == 'Ubuntu' and ansible_facts['lsb']['major_release'] == '24' }}"
+      - "{{ (patch_uhd_ubuntu_24.changed | default(false)) }}"
+      - "{{ (patch_uhd_ubuntu_24 is defined and not patch_uhd_ubuntu_24.skipped) }}"
+      - "{{ uhd_patch_file }}"
 
 - name: '("{{version}}"): Compile UHD - make (takes multiple minutes)'
   ansible.builtin.make:
-    chdir: "{{ install_path }}/host/build"
+    chdir: "{{ install_path_uhd }}/host/build"
     jobs: "{{ ansible_facts['processor_vcpus'] }}"
   become: true
 
 - name: '("{{version}}"): Compile UHD - make test'
   ansible.builtin.make:
-    chdir: "{{ install_path }}/host/build"
+    chdir: "{{ install_path_uhd }}/host/build"
     target: test
     jobs: "{{ ansible_facts['processor_vcpus'] }}"
   become: true
 
 - name: '("{{version}}"): Compile UHD - make install'
   ansible.builtin.make:
-    chdir: "{{ install_path }}/host/build"
+    chdir: "{{ install_path_uhd }}/host/build"
     target: install
   become: true
 
 - name: '("{{version}}"): Compile UHD - setup library path'
   ansible.builtin.command:
-    chdir: "{{ install_path }}/host/build"
+    chdir: "{{ install_path_uhd }}/host/build"
     cmd: ldconfig
   become: true

@@ -1,0 +1,72 @@
+diff --git a/host/include/uhd/cal/database.hpp b/host/include/uhd/cal/database.hpp
+index b6abbb6df..44edf1e63 100644
+--- a/host/include/uhd/cal/database.hpp
++++ b/host/include/uhd/cal/database.hpp
+@@ -11,6 +11,7 @@
+ #include <string>
+ #include <vector>
+ #include <functional>
++#include <cstdint>
+ 
+ namespace uhd { namespace usrp { namespace cal {
+ 
+diff --git a/host/include/uhd/rfnoc/defaults.hpp b/host/include/uhd/rfnoc/defaults.hpp
+index 1b9cb5016..5d17bd1f3 100644
+--- a/host/include/uhd/rfnoc/defaults.hpp
++++ b/host/include/uhd/rfnoc/defaults.hpp
+@@ -9,6 +9,7 @@
+ #pragma once
+ 
+ #include <string>
++#include <cstdint>
+ 
+ namespace uhd { namespace rfnoc {
+ 
+diff --git a/host/lib/usrp/dboard/magnesium/magnesium_constants.hpp b/host/lib/usrp/dboard/magnesium/magnesium_constants.hpp
+index 8de62743d..9bb330e68 100644
+--- a/host/lib/usrp/dboard/magnesium/magnesium_constants.hpp
++++ b/host/lib/usrp/dboard/magnesium/magnesium_constants.hpp
+@@ -11,6 +11,7 @@
+ #include <cstddef>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ static constexpr size_t TOTAL_RADIO_PORTS       = 4;
+ static constexpr double AD9371_RX_MIN_BANDWIDTH = 20.0e6; // HZ
+diff --git a/host/lib/usrp/dboard/rhodium/rhodium_constants.hpp b/host/lib/usrp/dboard/rhodium/rhodium_constants.hpp
+index cc6a70dc3..ec7907a4c 100644
+--- a/host/lib/usrp/dboard/rhodium/rhodium_constants.hpp
++++ b/host/lib/usrp/dboard/rhodium/rhodium_constants.hpp
+@@ -11,6 +11,7 @@
+ #include <cstddef>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ static constexpr double RHODIUM_FREQ_COMPARE_EPSILON = 1e-5;
+ 
+diff --git a/host/lib/utils/serial_number.cpp b/host/lib/utils/serial_number.cpp
+index 61296a913..a36e7848b 100644
+--- a/host/lib/utils/serial_number.cpp
++++ b/host/lib/utils/serial_number.cpp
+@@ -7,6 +7,7 @@
+ #include <uhdlib/utils/serial_number.hpp>
+ #include <stdexcept>
+ #include <string>
++#include <cstdint>
+ 
+ namespace uhd { namespace utils {
+    bool serial_numbers_match(const std::string& serial_a, const std::string& serial_b)
+diff --git a/host/tests/tx_streamer_test.cpp b/host/tests/tx_streamer_test.cpp
+index be89fa215..6841ae07c 100644
+--- a/host/tests/tx_streamer_test.cpp
++++ b/host/tests/tx_streamer_test.cpp
+@@ -9,6 +9,7 @@
+ #include <boost/test/unit_test.hpp>
+ #include <iostream>
+ #include <memory>
++#include <complex>
+ 
+ namespace uhd { namespace transport {
+ 

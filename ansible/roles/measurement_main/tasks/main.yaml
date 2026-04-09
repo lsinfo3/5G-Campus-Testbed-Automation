@@ -54,10 +54,10 @@
     loop_var: module
 #
 
-  # TODO: is this required?
 - name: '"{{ item.identifier }}": Switch UHD version'
   ansible.builtin.include_role:
     name: UHD
+    tasks_from: switch_version.yaml
   vars:
     version: "{{ item.gnb_version.uhd_version }}"
   when: item.dockerization != true

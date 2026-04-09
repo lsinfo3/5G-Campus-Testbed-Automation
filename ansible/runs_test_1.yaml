@@ -1,7 +1,7 @@
 description: ''
 description_short: ''
 system:
-  pcap_dump: /storage/automation_tests_1
+  pcap_dump: /storage/test_after_distupgrade
   identifier: ac11
   fixed_params:
     distance_floor: 1.0
@@ -66,6 +66,39 @@ run_definitions:
     uhd_version: UHD-4.0
     version: v2.3.0
     commit: 8bf6d5d7da8c0a8384e4022fd4872e6d3d550921
+  traffic_config:
+    traffic_type: iperfthroughput
+    traffic_duration: 60
+    count: '0'
+    direction: Ul
+    target_ip: 10.45.0.1
+    target_port: '4455'
+    proto: udp
+    rate: 100M
+    dist: det
+    iat: '0'
+    size: none
+    burst: '1'
+  tdd_config:
+    tdd_ratio: 2
+    tdd_period: 20
+    tdd_dl_slots: 13
+    tdd_dl_symbols: 5
+    tdd_ul_slots: 6
+    tdd_ul_symbols: 8
+- identifier: ac11__iperfUl_srsRAN_TDD20-2_Bw40__000_5be68ef2
+  run: 0
+  gnb_bandwidth: '40'
+  dl_mcs: None
+  ul_mcs: None
+  dockerization: false
+  rx_gain: null
+  tx_gain: null
+  gnb_version:
+    type: srsRAN
+    uhd_version: UHD-4.0
+    version: release_24_10
+    commit: 9d5dd742a70e82c0813c34f57982f9507f1b6d5d
   traffic_config:
     traffic_type: iperfthroughput
     traffic_duration: 60

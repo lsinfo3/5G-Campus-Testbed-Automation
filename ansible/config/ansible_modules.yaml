@@ -27,20 +27,11 @@ modules:
           - 3-3.1
         usb_hub_id: 4a3e:11c1
 
-
   pre_cleanup: []
 
   pre_uhd_switch: []
 
   pre_gnb_start:
-    # - name: Debug Print all vars
-    #   role: ../roles/debug/tasks/simple_print.yaml
-    #   artefacts: []
-    #   extra_vars:
-    #     variable_array:
-    #       - entry1
-    #       - entry2
-    #     variable_variable: some_var
     - name: Power Cycle UE
       role: ../roles/powercycle/tasks/disable_and_reset.yaml
       artefacts: []
@@ -50,19 +41,20 @@ modules:
           - 2-4.2
         usb_hub_id: 2109:0817
 
-  pre_ue_connect:
-    - name: Start spectrum monitor
-      role: ../roles/monitoring/tasks/spectrum_analyzer.yaml
-      artefacts: []
-      extra_vars:
-        center_freq: 3620000000
-        rate: 100000000
-        window_function: "hann"
-        duration: 100
-        batch_ms: 10
-        interval_ms: 100
-        outputfile: "/home/core/freq_dump.h5"
-        logfile: "/home/core/freq.log"
+  pre_ue_connect: []
+  # pre_ue_connect:
+  #   - name: Start spectrum monitor
+  #     role: ../roles/monitoring/tasks/spectrum_analyzer.yaml
+  #     artefacts: []
+  #     extra_vars:
+  #       center_freq: 3620000000
+  #       rate: 100000000
+  #       window_function: "hann"
+  #       duration: 100
+  #       batch_ms: 10
+  #       interval_ms: 100
+  #       outputfile: "/home/core/freq_dump.h5"
+  #       logfile: "/home/core/freq.log"
 
   pre_traffic_start:
     - name: Set required routes
@@ -83,6 +75,7 @@ modules:
         master_brickelt_ip: "172.16.32.5"
         voltage_bricklet_uid: "21hP"
         output_file: "/tmp/power_ue.csv"
+        log_name: "power_ue"
     - name: Start SDR power msm
       role: ../roles/tinkerforge_power_meter/tasks/main.yaml
       artefacts:
@@ -91,13 +84,15 @@ modules:
         master_brickelt_ip: "172.16.32.6"
         voltage_bricklet_uid: "21hK"
         output_file: "/tmp/power_sdr.csv"
+        log_name: "power_sdr"
 
   post_traffic_start: []
 
-  post_traffic_end:
-    - name: Get spectrum monitor output (not on gnb host, therefore we can't use the artefacts)
-      role: ../roles/monitoring/tasks/spectrum_analyzer_artefacts.yaml
-      artefacts: []
-      extra_vars:
-        outputfile: "/home/core/freq_dump.h5"
-        logfile: "/home/core/freq.log"
+  post_traffic_end: []
+  # post_traffic_end:
+  #   - name: Get spectrum monitor output (not on gnb host, therefore we can't use the artefacts)
+  #     role: ../roles/monitoring/tasks/spectrum_analyzer_artefacts.yaml
+  #     artefacts: []
+  #     extra_vars:
+  #       outputfile: "/home/core/freq_dump.h5"
+  #       logfile: "/home/core/freq.log"

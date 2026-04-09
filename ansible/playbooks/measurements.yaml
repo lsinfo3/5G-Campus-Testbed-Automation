@@ -17,8 +17,6 @@
   pre_tasks:
     - name: include docker tags map
       include_vars: ../config/gnb-versions.yaml
-    - name: include tinkerforge measurement points
-      include_vars: ../config/tinkerforge_measurement_points.yaml
     - name: include radio config lookups
       include_vars: ../config/bandwidth.yaml
     - name: include radio config lookups

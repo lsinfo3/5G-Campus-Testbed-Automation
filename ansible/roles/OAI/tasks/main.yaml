@@ -29,6 +29,7 @@
     state: directory
 - ansible.builtin.include_role:
     name: UHD
+    tasks_from: switch_version.yaml
   vars:
     version: "{{ uhd }}"
 

@@ -1,0 +1,51 @@
+---
+# INFO: record samples on an additional SDR
+# requires:
+# outputfile
+# logfile
+
+
+
+# register: sdr_spectrum_monitor
+- name: '"{{ item.identifier }}": wait for spectrum analyzer'
+  ansible.builtin.async_status:
+     jid: "{{ sdr_spectrum_monitor.ansible_job_id }}"
+  register: sdr_spectrum_monitor_res
+  until: sdr_spectrum_monitor_res.finished
+  failed_when: sdr_spectrum_monitor.rc != 0
+  retries: 12
+  delay: 10
+  become: true
+
+
+- name: '"{{ item.identifier }}": Fetch freq_dump.h5'
+  ansible.builtin.fetch:
+     src: "{{ outputfile }}"
+     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+     flat: true
+     validate_checksum: false
+  become: false
+  ignore_errors: true
+  delegate_to:
+    5g-core
+- name: '"{{ item.identifier }}": Fetch freq_dump.h5'
+  ansible.builtin.fetch:
+     src: "{{ logfile }}"
+     dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+     flat: true
+     validate_checksum: false
+  become: false
+  ignore_errors: true
+  delegate_to:
+    5g-core
+
+- name: '"{{ item.identifier }}": Remove fetched files'
+  ansible.builtin.file:
+     path: "{{ loopfile }}"
+     state: absent
+  become: true
+  loop: ["{{ outputfile }}","{{ logfile }}"]
+  loop_control:
+    loop_var: loopfile
+  delegate_to:
+    5g-core

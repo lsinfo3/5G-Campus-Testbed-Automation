@@ -7,7 +7,7 @@ machines:
       ansible_host: '172.16.32.50'
       ansible_user: 'gnb'
       uhd_version: 'UHD-4.0'
-      ansible_python_interpreter: /usr/bin/python3.10
+      #ansible_python_interpreter: /usr/bin/python3.10
     testbed5ggnb:
       ansible_host: '172.16.32.32'
       ansible_user: 'gnb'

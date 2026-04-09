@@ -5,6 +5,7 @@
 # master_brickelt_ip
 # voltage_bricklet_uid
 # output_file
+# log_name: also serves as istance id to prevent overwriting variables
 
 
 - name: kill existing processes
@@ -19,18 +20,21 @@
     dest: "/home/{{ ansible_user_id }}/tinkerforge_power.py"
     mode: "755"
 - block:
-  - name: Start power msm script for ue
-    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.ue.host }} --uid={{ tinkerforge.ue.uid }} --path={{ tinkerforge.ue.output }} --duration={{ 898 }}  > {{ collected_artefacts }}/tinker_ue 2>&1"
+  - ansible.builtin.shell:
+      cmd: echo "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ master_brickelt_ip }} --uid={{ voltage_bricklet_uid }} --path={{ output_file }} --duration={{ 898 }}  > {{ collected_artefacts }}/{{ log_name }} 2>&1" >> "{{ collected_artefacts }}/{{ log_name }}" 2>>&1
+    become: true
+  - name: Start power msm script for {{ log_name }}
+    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ master_brickelt_ip }} --uid={{ voltage_bricklet_uid }} --path={{ output_file }} --duration={{ 898 }}  >> {{ collected_artefacts }}/{{ log_name }} 2>>&1"
     become: true
     async: 900
     poll: 0
-    register: pwr_ue_job
-  when: tinkerforge is defined and tinkerforge.ue is defined
-- block:
-  - name: Start power msm script for sdr
-    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.sdr.host }} --uid={{ tinkerforge.sdr.uid }} --path={{ tinkerforge.sdr.output }} --duration={{ 898 }}  > {{ collected_artefacts }}/tinker_sdr 2>&1"
-    become: true
-    async: 900
-    poll: 0
-    register: pwr_sdr_job
-  when: tinkerforge is defined and tinkerforge.sdr is defined
+    register: "pwr_job_{{ log_name }}"
+  #when: tinkerforge is defined and tinkerforge.ue is defined
+#- block:
+#  - name: Start power msm script for sdr
+#    ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ tinkerforge.sdr.host }} --uid={{ tinkerforge.sdr.uid }} --path={{ tinkerforge.sdr.output }} --duration={{ 898 }}  > {{ collected_artefacts }}/tinker_sdr 2>&1"
+#    become: true
+#    async: 900
+#    poll: 0
+#    register: pwr_sdr_job
+#  when: tinkerforge is defined and tinkerforge.sdr is defined

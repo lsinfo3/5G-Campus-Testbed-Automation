@@ -1,0 +1,17 @@
+---
+# Is only executed to switch the preinstalled version
+
+- ansible.builtin.set_fact:
+    install_path_uhd: "/home/gnb/gnb_versions/{{ version }}/UHD--{{ version }}"
+
+- name: '("{{version}}"): Compile UHD - make install'
+  ansible.builtin.make:
+    chdir: "{{ install_path_uhd }}/host/build"
+    target: install
+  become: true
+
+- name: '("{{version}}"): Compile UHD - setup library path'
+  ansible.builtin.command:
+    chdir: "{{ install_path_uhd }}/host/build"
+    cmd: ldconfig
+  become: true
