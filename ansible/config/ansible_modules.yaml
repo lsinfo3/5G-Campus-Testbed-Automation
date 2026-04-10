@@ -40,16 +40,6 @@ modules:
           - 3-4.2
           - 2-4.2
         usb_hub_id: 2109:0817
-    - name: Start Jammer routine
-      role: ../roles/jammer/tasks/main.yaml
-      extra_vars:
-        sdr: "X310"
-        #start_gain: "60"
-        #end_gain: "60"
-        #steps: "0"
-        #jammer_on: "10"
-        #jammer_off: "10"
-      artefacts: []
 
   pre_ue_connect: []
   # pre_ue_connect:
@@ -67,6 +57,16 @@ modules:
   #       logfile: "/home/core/freq.log"
 
   pre_traffic_start:
+    - name: Start Jammer routine
+      role: ../roles/jammer/tasks/main.yaml
+      extra_vars:
+        sdr: "X310"
+        #start_gain: "60"
+        #end_gain: "60"
+        #steps: "0"
+        #jammer_on: "10"
+        #jammer_off: "10"
+      artefacts: []
     - name: Set required routes
       role: ../roles/routing/tasks/main.yaml
       artefacts: []
