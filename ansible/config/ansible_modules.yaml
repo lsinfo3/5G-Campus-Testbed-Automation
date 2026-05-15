@@ -57,16 +57,11 @@ modules:
   #       logfile: "/home/core/freq.log"
 
   pre_traffic_start:
-    - name: Start Jammer routine
-      role: ../roles/jammer/tasks/main.yaml
-      extra_vars:
-        sdr: "X310"
-        #start_gain: "60"
-        #end_gain: "60"
-        #steps: "0"
-        #jammer_on: "10"
-        #jammer_off: "10"
-      artefacts: []
+    # - name: Start Jammer routine
+    #   role: ../roles/jammer/tasks/main.yaml
+    #   extra_vars:
+    #     sdr: "X310"
+    #   artefacts: []
     - name: Set required routes
       role: ../roles/routing/tasks/main.yaml
       artefacts: []

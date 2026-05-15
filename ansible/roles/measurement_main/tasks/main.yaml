@@ -288,7 +288,11 @@
       tasks_from: idle.yaml
     vars:
       tg_duration: "{{ item.traffic_config.traffic_duration }}"
-    when: item.traffic_config.traffic_type== 'idle'
+  - name: '"{{ item.identifier }}": run emulator role'
+    ansible.builtin.include_role:
+      name: traffic-generation
+      tasks_from: emulator-test.yaml
+    when: item.traffic_config.traffic_type== 'emulator'
   - name: '"{{ item.identifier }}": run udp scapy ping traffic gen role'
     ansible.builtin.include_role:
       name: traffic-generation

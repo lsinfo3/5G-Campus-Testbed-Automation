@@ -1,0 +1,6 @@
+- name: 'Stop Emulator Wrapper'
+  ansible.builtin.shell: |
+     tmux kill-session -t emulator
+  become: true
+  become_user: gnb
+  ignore_errors: true

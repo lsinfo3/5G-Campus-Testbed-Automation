@@ -1,0 +1,40 @@
+---
+
+# INFO: this task runs the python traffic generation
+# WARNING: this requires a traffic sink to be set up on the target(=core), traffic sink should NOT answer (-a false)
+
+- name: Run emulator traffig gen
+  block:
+  # - name: copy scapy server
+  #   delegate_to: core
+  #   ansible.builtin.copy:
+  #     src: ../../../scripts/udp-server.py
+  #   # TODO: homedir should be read from ansible_user_id of core
+  #     dest: /home/core/udp-server.py
+  #     mode: '755'
+  #   become: false
+  # - name: copy script
+  #   ansible.builtin.copy:
+  #     src: ../../../scripts/emulator-tmux.sh
+  #     dest: /home/{{ ansible_user_id }}/emulator-tmux.sh
+  #     mode: '755'
+  #   become: false
+
+  - name: Python emulator script
+    ansible.builtin.shell:
+      cmd: "loginctl enable-linger {{ ansible_user_id }}"
+    become: true
+
+  - name: Python emulator script
+    ansible.builtin.shell:
+      cmd: "/home/{{ ansible_user_id }}/emulator-tmux.sh"
+      executable: /bin/bash
+    become: true
+    become_user: gnb
+    environment:
+      TERM: xterm-256color
+
+  - name: Python emulator script
+    ansible.builtin.shell:
+      cmd: "/home/{{ ansible_user_id }}/emulator_start.sh"
+    become: false
