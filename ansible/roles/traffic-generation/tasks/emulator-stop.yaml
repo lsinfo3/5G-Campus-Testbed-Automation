@@ -1,6 +1,9 @@
-- name: 'Stop Emulator Wrapper'
-  ansible.builtin.shell: |
-     tmux kill-session -t emulator
-  become: true
-  become_user: gnb
-  ignore_errors: true
+# ── Start adb now ───────────────────────────────────────
+- name: Stop emulator-appium service
+  ansible.builtin.systemd:
+     name: "emulator-appium"
+     state: stopped
+- name: Start emulator-appium service
+  ansible.builtin.shell:
+     cmd: "/home/{{ ansible_user_id }}/adb-wrapper.sh stop"
+  become: false

@@ -1,0 +1,24 @@
+[Unit]
+Description=Android Emulator + Appium
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Wait for emulator to fully boot before starting appium
+ExecStartPre=/bin/sleep 2
+ExecStart=/usr/lib/systemd/system/start-emulator-appium.sh
+
+# Give emulator 60s to boot before appium tries to connect
+Environment=EMULATOR_BOOT_TIMEOUT=60
+
+# Don't restart during user logout (optional — remove if you want it to survive logout)
+# RemainExtentions=DBus
+
+[Install]
+WantedBy=multi-user.target

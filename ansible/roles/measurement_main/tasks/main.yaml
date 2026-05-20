@@ -288,6 +288,7 @@
       tasks_from: idle.yaml
     vars:
       tg_duration: "{{ item.traffic_config.traffic_duration }}"
+    when: item.traffic_config.traffic_type== 'idle'
   - name: '"{{ item.identifier }}": run emulator role'
     ansible.builtin.include_role:
       name: traffic-generation
