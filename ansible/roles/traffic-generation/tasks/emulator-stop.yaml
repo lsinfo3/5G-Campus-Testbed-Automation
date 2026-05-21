@@ -3,7 +3,7 @@
   ansible.builtin.systemd:
      name: "emulator-appium"
      state: stopped
-- name: Start emulator-appium service
+- name: Stop emulator-appium service
   ansible.builtin.shell:
      cmd: "/home/{{ ansible_user_id }}/adb-wrapper.sh stop"
   become: false
