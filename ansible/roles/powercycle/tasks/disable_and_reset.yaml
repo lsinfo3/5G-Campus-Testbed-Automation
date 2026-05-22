@@ -20,10 +20,20 @@
     cmd: "{{ uhubctl_cmd }} > {{ collected_artefacts }}/uhubctl 2>&1"
   become: true
 - wait_for:
-    timeout: 3
+    timeout: 2
 - name: '"{{ item.identifier }}": powercycle modem'
   ansible.builtin.shell:
      cmd: "/home/gnb/usb_resetter --device {{ usb_hub_id }} --reset-device > {{ collected_artefacts }}/usb_resetter 2>&1"
   become: true
 - wait_for:
-    timeout: 20
+    timeout: 2
+
+- name: '"{{ item.identifier }}": construct uhubctl command'
+  ansible.builtin.set_fact:
+    uhubctl_cmd_on: "uhubctl --action on --location {{ usb_paths | join(' --location ') }}"
+- name: '"{{ item.identifier }}": power on modem (should be powered on already)'
+  ansible.builtin.shell:
+    cmd: "{{ uhubctl_cmd_on }} > {{ collected_artefacts }}/uhubctl_on 2>&1"
+  become: true
+- wait_for:
+    timeout: 2
