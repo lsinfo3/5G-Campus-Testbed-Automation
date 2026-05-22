@@ -8,6 +8,8 @@ from typing import List
 from tinkerforge.ip_connection import IPConnection
 from tinkerforge.bricklet_voltage_current_v2 import BrickletVoltageCurrentV2
 import argparse
+import signal
+import atexit
 
 class DataType(str, Enum):
     VOLTAGE = "voltage"
@@ -40,6 +42,7 @@ class TinkerforgeModule(ModuleBase):
         self.uid = uid
         self.port = port
         self._ipcon = IPConnection()
+        #self._ipcon.set_timeout(50)
         self.vc = BrickletVoltageCurrentV2(self.uid, self._ipcon)
         self._ipcon.connect(self.host, self.port)
         self.vc.set_configuration(0, 0, 0)
@@ -99,12 +102,61 @@ def main(host:str, uid:str, dir:str, duration:int|float):
     handler.cleanup()
 
 
+def kill_old_process(pid_file: str):
+    if not os.path.exists(pid_file):
+        return
+
+    try:
+        with open(pid_file, "r") as f:
+            old_pid = int(f.read().strip())
+    except (ValueError, OSError):
+        os.remove(pid_file)
+        return
+
+    # Do not kill ourselves
+    if old_pid == os.getpid():
+        return
+
+    try:
+        # Check if process exists
+        os.kill(old_pid, 0)
+        # Graceful stop
+        os.kill(old_pid, signal.SIGTERM)
+        time.sleep(1)
+
+        # Force kill if still alive
+        try:
+            os.kill(old_pid, 0)
+            os.kill(old_pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+
+    except ProcessLookupError:
+        pass
+    finally:
+        remove_pid_file(pid_file)
+
+def write_pid_file(pid_file: str):
+    with open(pid_file, "w") as f:
+        f.write(str(os.getpid()))
+
+def remove_pid_file(pid_file: str):
+    try:
+        os.remove(pid_file)
+    except FileNotFoundError:
+        pass
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="Tinkerforge Power Measurement")
     parser.add_argument("--host", help="IP of tinkerforge masterbrick", required=True)
     parser.add_argument("--uid", help="UID of the Voltage/Current Bricklet", required=True)
     parser.add_argument("--path", help="Storage path for .csv", required=True)
+    #parser.add_argument("--pidfile", help="Write process ID to file", required=True)
     parser.add_argument("--duration", help="How long the measurement should run", type=float, required=True)
     args = parser.parse_args()
+    PID_FILE = f"/tmp/tk_pwr_{args.uid}.pid"
+    kill_old_process(PID_FILE)
+    write_pid_file(PID_FILE)
     main(host=args.host, uid=args.uid, duration=args.duration, dir=args.path)
 

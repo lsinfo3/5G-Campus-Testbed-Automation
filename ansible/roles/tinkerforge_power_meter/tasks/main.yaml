@@ -8,10 +8,10 @@
 # log_name: also serves as istance id to prevent overwriting variables
 
 
-- name: kill existing processes, but limit to current output_file
-  ansible.builtin.shell:
-     pkill -9 -f -- "/[h]ome/{{ ansible_user_id }}/tinkerforge_power.py .*--path={{ output_file | regex_escape }}" || true
-  become: true
+#- name: kill existing processes, but limit to current output_file
+#  ansible.builtin.shell:
+#     pkill -9 -f -- "/[h]ome/{{ ansible_user_id }}/tinkerforge_power.py .*--path={{ output_file | regex_escape }}" || true
+#  become: true
 
 # INFO: start power measurement
 - name: copy power msm script
@@ -26,7 +26,7 @@
   - name: Start power msm script for {{ log_name }}
     ansible.builtin.shell: "/home/{{ ansible_user_id }}/tinkerforge_power.py --host={{ master_brickelt_ip }} --uid={{ voltage_bricklet_uid }} --path={{ output_file }} --duration={{ 180 }}  >> {{ collected_artefacts }}/{{ log_name }} 2>&1"
     become: true
-    async: 900
+    async: 300
     poll: 0
     register: pwr_job
   - name: Store async job by log name
