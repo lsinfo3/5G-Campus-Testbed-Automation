@@ -1,9 +1,12 @@
 # ── Start adb now ───────────────────────────────────────
-- name: Stop emulator-appium service
-  ansible.builtin.systemd:
-     name: "emulator-appium"
-     state: stopped
+
+- name: Ensure adb wrapper is executable
+  ansible.builtin.file:
+    path: /home/{{ ansible_user_id }}/adb-wrapper.sh
+    mode: '0755'
+  become: false
 - name: Stop emulator-appium service
   ansible.builtin.shell:
      cmd: "/home/{{ ansible_user_id }}/adb-wrapper.sh stop"
   become: false
+#  when: item.traffic_config.traffic_type== 'emulator'

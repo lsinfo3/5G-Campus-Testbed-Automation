@@ -1,0 +1,26 @@
+- name: Run emulator traffic gen
+  block:
+  - name: copy adb wrapper
+    ansible.builtin.copy:
+      src: ../../../scripts/adb-wrapper.sh
+      dest: /home/{{ ansible_user_id }}/adb-wrapper.sh
+      mode: '0755'
+    become: false
+
+  # - name: copy emulator start
+  #   ansible.builtin.copy:
+  #     src: ../../../scripts/emulator_start.sh"
+  #     dest: /home/{{ ansible_user_id }}/emulator_start.sh
+  #     mode: '0755'
+  #   become: false
+
+  - name: Start emulator-appium service
+    ansible.builtin.command:
+      argv:
+        - /home/{{ ansible_user_id }}/adb-wrapper.sh
+        - daemon
+    environment:
+      DAEMON_START_TIMEOUT: "20"
+    become: false
+    when: item.traffic_config.traffic_type== 'emulator'
+

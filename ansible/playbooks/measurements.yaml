@@ -40,5 +40,6 @@
             tasks_from: stop.yaml
         - name: Execute the emulator stop tasks
           ansible.builtin.include_role:
-            name: traffic-generation
+            name: emulator
             tasks_from: emulator-stop.yaml
+

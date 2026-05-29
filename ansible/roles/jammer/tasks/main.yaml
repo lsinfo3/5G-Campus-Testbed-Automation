@@ -5,16 +5,9 @@
   ignore_errors: true
   delegate_to: 5g-core
 
-- name: Sleep for 10 seconds and continue with play
-  wait_for:
-   timeout: 10
-
-- name: '"{{ item.identifier }}": start jammer api'
-  ansible.builtin.shell: |
-     sudo systemctl start jammer_api.service
-  become: true
-  ignore_errors: true
-  delegate_to: 5g-core
+# - name: Sleep for 1 seconds and continue with play
+#   wait_for:
+#    timeout: 1
 
 - name: '"{{ item.identifier }}": copy wrapper files'
   ansible.builtin.copy:
@@ -25,6 +18,12 @@
   ignore_errors: true
   delegate_to: 5g-core
 
+- name: '"{{ item.identifier }}": start jammer api'
+  ansible.builtin.shell: |
+     sudo systemctl start jammer_api.service
+  become: true
+  ignore_errors: true
+  delegate_to: 5g-core
 
 - name: '"{{ item.identifier }}": jammer wrapper'
   ansible.builtin.shell: |

@@ -293,6 +293,13 @@
     ansible.builtin.include_role:
       name: traffic-generation
       tasks_from: emulator-test.yaml
+    vars:
+      tg_duration: "{{ item.traffic_config.traffic_duration }}"
+      tg_stream_service: "{{ item.traffic_config.stream_service }}"
+      tg_stream_playlist: "{{ item.traffic_config.stream_playlist }}"
+      tg_adaptation: "{{ item.traffic_config.adaptation }}"
+      tg_preloading: "{{ item.traffic_config.preloading }}"
+      tg_swiping: "{{ item.traffic_config.swiping }}"
     when: item.traffic_config.traffic_type== 'emulator'
   - name: '"{{ item.identifier }}": run udp scapy ping traffic gen role'
     ansible.builtin.include_role:

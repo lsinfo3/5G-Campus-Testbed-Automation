@@ -3,29 +3,24 @@
 # INFO: this task runs the python traffic generation
 # WARNING: this requires a traffic sink to be set up on the target(=core), traffic sink should NOT answer (-a false)
 
-- name: Run emulator traffic gen
-  block:
-  - name: copy adb wrapper
+  - name: copy emulator_start.sh
     ansible.builtin.copy:
-      src: ../../../scripts/adb-wrapper.sh
-      dest: /home/{{ ansible_user_id }}/adb-wrapper.sh
+      src: ../../../scripts/emulator_start.sh
+      dest: /home/{{ ansible_user_id }}/emulator_start.sh
       mode: '0755'
     become: false
 
-  # - name: copy emulator start
-  #   ansible.builtin.copy:
-  #     src: ../../../scripts/emulator_start.sh"
-  #     dest: /home/{{ ansible_user_id }}/emulator_start.sh
-  #     mode: '0755'
-  #   become: false
-
-  - name: Start emulator-appium service
-    ansible.builtin.shell:
-      cmd: "/home/{{ ansible_user_id }}/adb-wrapper.sh start"
-    become: false
-
-
   - name: Python emulator script
-    ansible.builtin.shell:
-      cmd: "/home/{{ ansible_user_id }}/emulator_start.sh"
+    ansible.builtin.command:
+      argv:
+        - /home/{{ ansible_user_id }}/emulator_start.sh
+        - "{{ tg_stream_service }}"
+        - "{{ tg_stream_playlist }}"
+        - "{{ tg_adaptation }}"
+        - "{{ tg_preloading }}"
+        - "{{ tg_swiping }}"
+      chdir: /home/{{ ansible_user_id }}
+    environment:
+      EMULATOR_APP_DIR: /home/{{ ansible_user_id }}/streamingapp
+      EMULATOR_LOG_FILE: /home/{{ ansible_user_id }}/emulator.log
     become: false
