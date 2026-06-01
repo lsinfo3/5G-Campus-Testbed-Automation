@@ -3,26 +3,23 @@
 # INFO: Export all defined variables and call the specified collection of tasks
 #
 
+- name: "{{ item.identifier }}: maybe run module {{ module.name }}"
+  when:
+    - "not (module.requires_jammer_config | default(false) | bool) or ((system.fixed_params.jammer | default(false) |
+      bool) and (item.jammer_config is defined))"
+    - "module.requires_traffic_type is not defined or item.traffic_config.traffic_type == module.requires_traffic_type"
+  block:
+    - name: "{{ item.identifier }}: Set vars for {{ module.name }}"
+      ansible.builtin.set_fact:
+        "{{ new_var.key }}": "{{ new_var.value }}"
+      loop: "{{ module.extra_vars | dict2items }}"
+      loop_control:
+        loop_var: new_var
 
-# - name: "Show all new_vars"
-#   ansible.builtin.debug:
-#     msg: "{{ module.extra_vars | dict2items }}"
+    - name: "{{ item.identifier }}:Call specified role for ({{ module.name }})"
+      ansible.builtin.include_tasks:
+        file: "{{ module.role }}"
 
-- name: "{{ item.identifier }}: Set vars for {{ module.name }}"
-  ansible.builtin.set_fact:
-    "{{ new_var.key }}": "{{ new_var.value }}"
-  loop: "{{ module.extra_vars | dict2items }}"
-  loop_control:
-    loop_var: new_var
-
-# - name: Set test array
-#   ansible.builtin.set_fact:
-#     all_artefacts: ["default_entry"]
-
-- name: "{{ item.identifier }}:Call specified role for ({{ module.name }})"
-  ansible.builtin.include_tasks:
-    file: "{{ module.role }}"
-
-- name: "{{ item.identifier }}:({{ module.name }}) combine artefacts"
-  ansible.builtin.set_fact:
-    all_artefacts: "{{ (all_artefacts | default([])) + module.artefacts | unique }}"
+    - name: "{{ item.identifier }}:({{ module.name }}) combine artefacts"
+      ansible.builtin.set_fact:
+        all_artefacts: "{{ (all_artefacts | default([])) + module.artefacts | unique }}"
