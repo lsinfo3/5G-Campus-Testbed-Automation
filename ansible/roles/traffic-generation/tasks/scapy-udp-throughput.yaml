@@ -23,7 +23,7 @@
 
   - name: Python traffic gen
     ansible.builtin.shell:
-      cmd: "/home/{{ ansible_user_id }}/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ tg_ip }} {{ tg_port }} {{ tg_burst }} {{ tg_duration }} > {{ collected_logs }}/traffic_scapy 2>&1"
+      cmd: "/home/{{ ansible_user_id }}/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ tg_ip }} {{ tg_port }} {{ tg_burst }} {{ tg_duration + 10 }} > {{ collected_logs }}/traffic_scapy 2>&1"
     become: true
     # register: scapy_udp_throughput_result
     # failed_when: scapy_udp_throughput_result.rc != 0 and scapy_udp_throughput_result.rc != 124  # 124 is return code after timeout
@@ -67,7 +67,7 @@
   - name: Python traffic gen
     delegate_to: core
     ansible.builtin.shell:
-      cmd: "/home/core/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ ansible_wwan0.ipv4.address }} {{ tg_port }} {{ tg_burst }} {{ tg_duration }}  > {{ collected_logs }}/traffic_scapy_core 2>&1"
+      cmd: "/home/core/5g-scapy-client.py {{ tg_proto }} {{ tg_dist }} {{ tg_iat }} {{ tg_size }} {{ tg_count }} {{ ansible_wwan0.ipv4.address }} {{ tg_port }} {{ tg_burst }} {{ tg_duration + 10 }}  > {{ collected_logs }}/traffic_scapy_core 2>&1"
     become: true
   # - name: Debug print
   #   ansible.builtin.debug:

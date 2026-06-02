@@ -159,7 +159,7 @@
     msg: "{{ item.identifier }}: Wait until gNB becomes ready"
 - name: '"{{ item.identifier }}": Wait until gNB becomes ready'
   wait_for:
-    timeout: 50
+    timeout: 60
 
 # INFO: Check if gnb is running
 - name: '"{{ item.identifier }}": get gnb_job status'
@@ -208,7 +208,7 @@
 - name: '"{{ item.identifier }}": Acquire IP for modem'
   # shell: "bash /home/gnb/setip.sh 2>&1 | ts '%.s' > {{ collected_artefacts }}/setip "
   # shell: " ( f(){ \"$@\" 2>&1 | ts %.s; return ${PIPESTATUS[0]}; }; f bash /home/gnb/setip.sh > {{ collected_artefacts }}/setip ) "  # If we pipe, the first returncode get's swalloed. Therefore we wrap it in a function and use the PIPESTATUS array which stores return code
-  shell: "bash -c  '( f(){ \"$@\" 2>&1 | ts %.s; return ${PIPESTATUS[0]}; }; f bash /home/gnb/setip.sh > {{ collected_artefacts }}/setip )' "  # If we pipe, the first returncode get's swalloed. Therefore we wrap it in a function and use the PIPESTATUS array which stores return code
+  shell: "timeout 60 bash -c  '( f(){ \"$@\" 2>&1 | ts %.s; return ${PIPESTATUS[0]}; }; f bash /home/gnb/setip.sh > {{ collected_artefacts }}/setip )' "  # If we pipe, the first returncode get's swalloed. Therefore we wrap it in a function and use the PIPESTATUS array which stores return code
   register: get_ip_shell_script
   ignore_errors: true
   become: true
@@ -230,21 +230,23 @@
   block:
   - name: '"{{ item.identifier }}": Wait for 5 seconds after obtaining IP'
     wait_for:
-      timeout: 5
+      timeout: 15
   # TODO: save gnb stdout/stderr on failure
   # TODO: on failure: save stdout/stderr and gnb.log
   # TODO: track failed runs in evaluation?
+
+  # WARN: keep in mind, that most of ansible is running in series. Having multiple 'pre_traffic_start' tasks delays
+  #       the traffic start, therefore the tcpdump timeout must be adjusted accordingly
   - name: '"{{ item.identifier }}": tcpdump on gnb'
     ansible.builtin.command:
-      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 5 }} tcpdump -ni {{ system.fixed_params.interface_gnb }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_gnb.pcap udp port 2152
+      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_gnb }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_gnb.pcap udp port 2152
     async: "{{ item.traffic_config.traffic_duration * 2 }}"
     poll: 0
     become: true
     register: tcpdump_gnb
-
   - name: '"{{ item.identifier }}": tcpdump on ue'
     ansible.builtin.command:
-      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 5 }} tcpdump -ni {{ system.fixed_params.interface_ue }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_ue.pcap
+      cmd: sudo timeout {{ item.traffic_config.traffic_duration + 15 }} tcpdump -ni {{ system.fixed_params.interface_ue }} --time-stamp-precision=nano -w /home/{{ ansible_user_id }}/tcpdump_ue.pcap
     async: "{{ item.traffic_config.traffic_duration * 2 }}"
     poll: 0
     become: true
@@ -450,7 +452,7 @@
     ignore_errors: true
     vars:
       filepath: "{{ perf_output_csv }}"
-    when: gnb_job_failed
+    #when: gnb_job_failed
 
   - name: "{{ item.identifier }}: Write FAILED label"
     ansible.builtin.copy:
