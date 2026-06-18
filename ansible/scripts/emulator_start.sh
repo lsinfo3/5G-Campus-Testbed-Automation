@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ "$#" -ne 5 ]; then
+if [ "$#" -ne 6 ]; then
   echo "Usage: $0 <service> <playlist> <adaptation> <preloading> <swiping>" >&2
   exit 2
 fi
 
 LOG_FILE="${EMULATOR_LOG_FILE:-$HOME/emulator.log}"
 APP_DIR="${EMULATOR_APP_DIR:-$HOME/streamingapp}"
-LOGS_DIR="${STREAM_LOGS_DIR:-logs}"
+#LOGS_DIR="${STREAM_LOGS_DIR:-logs}"
+LOGS_DIR="${6}"
 
 mkdir -p "$(dirname "$LOG_FILE")"
 exec >> "$LOG_FILE" 2>&1

@@ -1,18 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""
-UHD Siggen with a tiny runtime HTTP API.
 
-Endpoints:
-  GET /health
-  GET /status
-  GET /setgain?gain=<dB>        # forces gain path if available
-  GET /setpower?dbm=<dBm>       # uses power mode path (amplitude-corrected)
-
-Examples:
-  ./uhd_siggen_rest -f 3619200000 --gaussian -s 20M -g 1 -m 1 --ctrl-port 5678
-  curl 'http://127.0.0.1:5678/setgain?gain=70'
-"""
+"""UHD siggen with a small runtime HTTP control API."""
 
 import json
 import threading
@@ -24,137 +13,174 @@ try:
 except ImportError:
     from gnuradio.uhd import uhd_siggen_base as base
 
-# We’ll extend the base parser with control-plane args.
+
 def build_args():
-    parser = base.setup_argparser()  # provided by your base
+    parser = base.setup_argparser()
     group = parser.add_argument_group("REST control")
-    group.add_argument("--ctrl-host", default="127.0.0.1",
-                       help="HTTP control host (default: 127.0.0.1)")
-    group.add_argument("--ctrl-port", type=int, default=5678,
-                       help="HTTP control port (default: 5678)")
+    group.add_argument("--ctrl-host", default="127.0.0.1")
+    group.add_argument("--ctrl-port", type=int, default=5678)
     return parser.parse_args()
 
-def safe_set_gain(tb, val):
-    # Prefer explicit set_gain if available; otherwise fall back to set_gain_or_power
+
+def locked(tb, operation):
     if hasattr(tb, "lock"):
         tb.lock()
     try:
-        if hasattr(tb, "set_gain"):
-            print("using set_gain")
-            # FIXME
-            # tb.set_gain(val)
-            tb.set_gain_or_power(val)
-        else:
-            print("using set_gain_or_power")
-            tb.set_gain_or_power(val)  # base decides per gain_type
+        return operation()
     finally:
         if hasattr(tb, "unlock"):
             tb.unlock()
 
-def safe_set_power(tb, dbm):
-    # Let the base convert requested dBm to power reference using amplitude offset
-    if hasattr(tb, "lock"):
-        tb.lock()
-    try:
-        tb.set_gain_or_power(dbm)
-    finally:
-        if hasattr(tb, "unlock"):
-            tb.unlock()
-			
-def get_status(tb):
-    # Minimal, robust status snapshot
-    status = {"ok": True}
-    # Current effective gain-or-power (base reports gain or power depending on mode)
+
+def get_gain(tb):
     if hasattr(tb, "get_gain_or_power"):
-        status["gain_or_power"] = float(tb.get_gain_or_power())
-    # Try to expose some common bits if present
-    status["mode"] = getattr(tb, "gain_type", "unknown")
-    # Frequency & amplitude if accessible via pubsub mapping
-    try:
-        status["tx_freq"] = float(tb[base.TX_FREQ_KEY])
-        status["amplitude"] = float(tb[base.AMPLITUDE_KEY])
-    except Exception:
-        pass
-    return status
+        return float(tb.get_gain_or_power())
+    return None
+
+
+def set_gain(tb, value):
+    locked(tb, lambda: tb.set_gain_or_power(value))
+
+
+def get_amplitude(tb):
+    return float(tb[base.AMPLITUDE_KEY])
+
+
+def set_amplitude(tb, value):
+    def operation():
+        tb[base.AMPLITUDE_KEY] = value
+
+    locked(tb, operation)
+
+
+class JammerState:
+    def __init__(self, tb):
+        self.tb = tb
+        self.lock = threading.RLock()
+        self.target_gain = get_gain(tb) or 0.0
+        self.target_amplitude = get_amplitude(tb)
+        if self.target_amplitude <= 0:
+            raise ValueError("configured siggen amplitude must be greater than zero")
+        self.muted = False
+
+    def off(self):
+        with self.lock:
+            set_amplitude(self.tb, 0.0)
+            set_gain(self.tb, 0.0)
+            self.muted = True
+            return self.status()
+
+    def on(self, gain):
+        with self.lock:
+            self.target_gain = float(gain)
+            set_gain(self.tb, self.target_gain)
+            set_amplitude(self.tb, self.target_amplitude)
+            self.muted = False
+            return self.status()
+
+    def status(self):
+        status = {
+            "ok": True,
+            "muted": self.muted,
+            "target_gain": self.target_gain,
+            "target_amplitude": self.target_amplitude,
+            "gain_or_power": get_gain(self.tb),
+            "amplitude": get_amplitude(self.tb),
+            "mode": getattr(self.tb, "gain_type", "unknown"),
+        }
+        try:
+            status["tx_freq"] = float(self.tb[base.TX_FREQ_KEY])
+        except Exception:
+            pass
+        return status
+
 
 class CtrlHandler(BaseHTTPRequestHandler):
-    def _ok(self, obj):
-        data = json.dumps(obj).encode()
-        self.send_response(200)
+    def _reply(self, status_code, payload):
+        data = json.dumps(payload).encode()
+        self.send_response(status_code)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
         self.wfile.write(data)
 
-    def _bad(self, code, msg):
-        data = json.dumps({"ok": False, "error": msg}).encode()
-        self.send_response(code)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(data)))
-        self.end_headers()
-        self.wfile.write(data)
+    def _ok(self, payload):
+        self._reply(200, payload)
+
+    def _bad(self, status_code, message):
+        self._reply(status_code, {"ok": False, "error": message})
 
     def do_GET(self):
         try:
             parsed = urlparse(self.path)
-            qs = parse_qs(parsed.query)
+            query = parse_qs(parsed.query)
             if parsed.path == "/health":
                 return self._ok({"ok": True})
             if parsed.path == "/status":
-                return self._ok(get_status(self.server.tb))
-            if parsed.path == "/setgain":
-                if "gain" not in qs:
+                return self._ok(self.server.jammer.status())
+            if parsed.path == "/off":
+                return self._ok(self.server.jammer.off())
+            if parsed.path == "/on":
+                if "gain" not in query:
                     return self._bad(400, "missing query param 'gain'")
-                try:
-                    gain = float(qs["gain"][0])
-                except Exception:
-                    return self._bad(400, "invalid 'gain' value")
-                safe_set_gain(self.server.tb, gain)
+                return self._ok(self.server.jammer.on(float(query["gain"][0])))
+            if parsed.path == "/setgain":
+                if "gain" not in query:
+                    return self._bad(400, "missing query param 'gain'")
+                gain = float(query["gain"][0])
+                set_gain(self.server.jammer.tb, gain)
+                self.server.jammer.target_gain = gain
                 return self._ok({"ok": True, "applied_gain": gain})
             if parsed.path == "/setpower":
-                if "dbm" not in qs:
+                if "dbm" not in query:
                     return self._bad(400, "missing query param 'dbm'")
-                try:
-                    dbm = float(qs["dbm"][0])
-                except Exception:
-                    return self._bad(400, "invalid 'dbm' value")
-                safe_set_power(self.server.tb, dbm)
+                dbm = float(query["dbm"][0])
+                set_gain(self.server.jammer.tb, dbm)
                 return self._ok({"ok": True, "applied_power_dbm": dbm})
             return self._bad(404, "unknown endpoint")
-        except Exception as e:
-            return self._bad(500, f"{type(e).__name__}: {e}")
-			
-    def log_message(self, *_args, **_kwargs):
-        # keep console quiet; comment out to enable HTTP logs
-        pass			
-			
+        except (TypeError, ValueError) as exc:
+            return self._bad(400, str(exc))
+        except Exception as exc:
+            return self._bad(500, f"{type(exc).__name__}: {exc}")
 
-def start_http(tb, host, port):
+    def log_message(self, *_args, **_kwargs):
+        pass
+
+
+def start_http(jammer, host, port):
     httpd = HTTPServer((host, port), CtrlHandler)
-    httpd.tb = tb
-    t = threading.Thread(target=httpd.serve_forever, daemon=True)
-    t.start()
+    httpd.jammer = jammer
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
     return httpd
+
 
 def main():
     args = build_args()
-    # Build the flowgraph using the base’s USRPSiggen
-    tb = base.USRPSiggen(args)  # sets up USRP, publishers, etc.
-    httpd = start_http(tb, args.ctrl_host, args.ctrl_port)
-    print(f"[REST] HTTP control at http://{args.ctrl_host}:{args.ctrl_port} "
-          "(endpoints: /health /status /setgain /setpower)")
+    tb = base.USRPSiggen(args)
+    jammer = JammerState(tb)
+    jammer.off()
+    httpd = start_http(jammer, args.ctrl_host, args.ctrl_port)
+    print(
+        f"[REST] HTTP control at http://{args.ctrl_host}:{args.ctrl_port} "
+        "(endpoints: /health /status /on /off /setgain /setpower)"
+    )
     try:
         tb.start()
         tb.wait()
     except KeyboardInterrupt:
         pass
     finally:
-        httpd.shutdown()
         try:
-            tb.stop()
-        except Exception:
-            pass
-        tb.wait()
+            jammer.off()
+        finally:
+            httpd.shutdown()
+            try:
+                tb.stop()
+            except Exception:
+                pass
+            tb.wait()
+
 
 if __name__ == "__main__":
     main()

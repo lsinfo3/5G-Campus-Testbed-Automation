@@ -1,16 +1,25 @@
-- name: 'Stop Jammer Wrapper'
-  ansible.builtin.shell: |
-      pkill -9 -f jammer-wrapper.py || true
+---
+
+- name: Stop jammer wrapper service
+  ansible.builtin.systemd:
+    name: jammer-wrapper.service
+    state: stopped
   become: true
-  ignore_errors: true
-  register: pkill_result
   failed_when: false
-  changed_when: pkill_result.rc == 0
   delegate_to: 5g-core
 
-- name: 'Stop Jammer Service'
-  ansible.builtin.shell: |
-     sudo systemctl stop jammer_api.service
+- name: Force jammer off
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:5678/off"
+    method: GET
+    timeout: 2
+  failed_when: false
+  delegate_to: 5g-core
+
+- name: Stop jammer API service
+  ansible.builtin.systemd:
+    name: jammer_api.service
+    state: stopped
   become: true
-  ignore_errors: true
+  failed_when: false
   delegate_to: 5g-core

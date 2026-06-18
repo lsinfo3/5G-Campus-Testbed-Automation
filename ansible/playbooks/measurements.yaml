@@ -38,17 +38,9 @@
           ansible.builtin.include_role:
             name: jammer
             tasks_from: stop.yaml
-        - name: Execute the jammer stop tasks
-          ansible.builtin.include_role:
-            name: jammer
-            tasks_from: stop.yaml
-          when:
-            - system.fixed_params.jammer | default(false) | bool
-            - run_definitions | selectattr('jammer_config', 'defined') | list | length > 0
         - name: Execute the emulator stop tasks
           ansible.builtin.include_role:
             name: emulator
             tasks_from: emulator-stop.yaml
           when:
             - run_definitions | selectattr('traffic_config.traffic_type', 'equalto', 'emulator') | list | length > 0
-

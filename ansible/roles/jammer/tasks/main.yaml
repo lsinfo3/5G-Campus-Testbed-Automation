@@ -1,15 +1,100 @@
-- name: '"{{ item.identifier }}": stop running jammer services'
-  ansible.builtin.shell: |
-     systemctl stop jammer-wrapper.service || true
-     systemctl stop jammer_api.service || true
+---
+
+- name: '"{{ item.identifier }}": derive jammer runtime values'
+  ansible.builtin.set_fact:
+    jammer_mode: "{{ item.jammer_config.mode | default('ramp') }}"
+    jammer_run_id: "{{ item.identifier | regex_replace('[^A-Za-z0-9_.-]+', '_') | regex_replace('^[._]+|[._]+$', '') }}"
+
+- name: '"{{ item.identifier }}": validate jammer configuration'
+  ansible.builtin.assert:
+    that:
+      - jammer_mode in ['ramp', 'pulse_train', 'continuous']
+      - item.jammer_config.start_delay_ms | default(0) | int >= 0
+      - jammer_mode != 'ramp' or item.jammer_config.start_gain | float >= 0
+      - jammer_mode != 'ramp' or item.jammer_config.end_gain | float >= 0
+      - jammer_mode != 'ramp' or item.jammer_config.steps | int >= 0
+      - jammer_mode != 'ramp' or item.jammer_config.on_duration | float > 0
+      - jammer_mode != 'ramp' or item.jammer_config.off_duration | float > 0
+      - jammer_mode == 'ramp' or item.jammer_config.gain | float >= 0
+      - jammer_mode != 'pulse_train' or item.jammer_config.pulse_count | int >= 1
+      - jammer_mode != 'pulse_train' or item.jammer_config.on_duration_ms | int >= 1
+      - jammer_mode != 'pulse_train' or item.jammer_config.off_duration_ms | int >= 1
+      - jammer_mode != 'pulse_train' or item.jammer_config.end_delay_ms | int >= 0
+    fail_msg: "Invalid {{ jammer_mode }} jammer configuration"
+
+- name: '"{{ item.identifier }}": stop previous jammer wrapper'
+  ansible.builtin.systemd:
+    name: jammer-wrapper.service
+    state: stopped
   become: true
-  ignore_errors: true
+  failed_when: false
   delegate_to: 5g-core
 
-- name: '"{{ item.identifier }}": copy wrapper files'
+- name: '"{{ item.identifier }}": reject an independently running stale wrapper'
+  ansible.builtin.shell:
+    cmd: >-
+      test ! -f /run/jammer-wrapper/{{ jammer_run_id }}.json ||
+      ! kill -0 "$(python3 -c 'import json; print(json.load(open("/run/jammer-wrapper/{{ jammer_run_id }}.json"))["pid"])')" 2>/dev/null
+  args:
+    executable: /bin/bash
+  changed_when: false
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": deploy jammer API'
+  ansible.builtin.copy:
+    src: "../scripts/uhd_siggen_rest.py"
+    dest: "/home/core/jammer-api.py"
+    owner: core
+    group: core
+    mode: "0755"
+  register: jammer_api_script
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": restart changed jammer API'
+  ansible.builtin.systemd:
+    name: jammer_api.service
+    state: restarted
+  when: jammer_api_script.changed
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": ensure jammer API is running'
+  ansible.builtin.systemd:
+    name: jammer_api.service
+    state: started
+  when: not jammer_api_script.changed
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": wait for jammer API health'
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:5678/health"
+    method: GET
+    status_code: 200
+    timeout: 2
+  register: jammer_api_health
+  until: jammer_api_health.status == 200
+  retries: 30
+  delay: 1
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": force jammer off before arming'
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:5678/off"
+    method: GET
+    status_code: 200
+    timeout: 2
+  failed_when: false
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": deploy jammer wrapper'
   ansible.builtin.copy:
     src: "../scripts/jammer-wrapper.py"
     dest: "/home/core/jammer-wrapper.py"
+    owner: core
+    group: core
     mode: "0755"
   become: true
   delegate_to: 5g-core
@@ -28,10 +113,12 @@
 
       [Service]
       Type=simple
+      User=core
       WorkingDirectory=/home/core
       EnvironmentFile=/etc/jammer-wrapper.env
-      ExecStart=/usr/bin/python3 -u /home/core/jammer-wrapper.py --start_gain=${START_GAIN} --end_gain=${END_GAIN} --steps=${STEPS} --on=${ON_DURATION} --off=${OFF_DURATION}
-      ExecStop=-/usr/bin/curl -fsS http://127.0.0.1:5678/setgain?gain=0
+      ExecStart=/usr/bin/python3 -u /home/core/jammer-wrapper.py --mode=${MODE} --run-id=${RUN_ID} --start_gain=${START_GAIN} --end_gain=${END_GAIN} --steps=${STEPS} --on=${ON_DURATION} --off=${OFF_DURATION} --gain=${GAIN} --pulse-count=${PULSE_COUNT} --start-delay-ms=${START_DELAY_MS} --on-duration-ms=${ON_DURATION_MS} --off-duration-ms=${OFF_DURATION_MS} --end-delay-ms=${END_DELAY_MS} --state-file=${STATE_FILE} --log-file=${LOG_FILE}
+      ExecStop=-/usr/bin/curl -fsS http://127.0.0.1:5678/off
+      ExecStopPost=-/usr/bin/curl -fsS http://127.0.0.1:5678/off
       KillSignal=SIGINT
       TimeoutStopSec=5
       Restart=no
@@ -41,104 +128,94 @@
   become: true
   delegate_to: 5g-core
 
-- name: '"{{ item.identifier }}": start jammer api'
-  ansible.builtin.systemd:
-    name: jammer_api.service
-    state: started
+- name: '"{{ item.identifier }}": create jammer runtime directory'
+  ansible.builtin.file:
+    path: /run/jammer-wrapper
+    state: directory
+    owner: core
+    group: core
+    mode: "0755"
   become: true
   delegate_to: 5g-core
 
-- name: '"{{ item.identifier }}": wait for jammer api health'
+- name: '"{{ item.identifier }}": remove stale jammer runtime files'
+  ansible.builtin.file:
+    path: "{{ jammer_runtime_file }}"
+    state: absent
+  loop:
+    - "/run/jammer-wrapper/{{ jammer_run_id }}.json"
+    - "/tmp/jammer-{{ jammer_run_id }}.csv"
+  loop_control:
+    loop_var: jammer_runtime_file
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": write jammer wrapper environment'
+  ansible.builtin.copy:
+    dest: /etc/jammer-wrapper.env
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      MODE={{ jammer_mode }}
+      RUN_ID={{ jammer_run_id }}
+      START_GAIN={{ item.jammer_config.start_gain | default(item.jammer_config.gain | default(0)) }}
+      END_GAIN={{ item.jammer_config.end_gain | default(item.jammer_config.gain | default(0)) }}
+      STEPS={{ item.jammer_config.steps | default(0) }}
+      ON_DURATION={{ item.jammer_config.on_duration | default(1) }}
+      OFF_DURATION={{ item.jammer_config.off_duration | default(1) }}
+      GAIN={{ item.jammer_config.gain | default(item.jammer_config.start_gain | default(0)) }}
+      PULSE_COUNT={{ item.jammer_config.pulse_count | default(1) }}
+      START_DELAY_MS={{ item.jammer_config.start_delay_ms | default(0) }}
+      ON_DURATION_MS={{ item.jammer_config.on_duration_ms | default(10) }}
+      OFF_DURATION_MS={{ item.jammer_config.off_duration_ms | default(10) }}
+      END_DELAY_MS={{ item.jammer_config.end_delay_ms | default(0) }}
+      STATE_FILE=/run/jammer-wrapper/{{ jammer_run_id }}.json
+      LOG_FILE=/tmp/jammer-{{ jammer_run_id }}.csv
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": reload systemd for jammer wrapper'
+  ansible.builtin.systemd:
+    daemon_reload: true
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": start jammer wrapper'
+  ansible.builtin.systemd:
+    name: jammer-wrapper.service
+    state: started
+    enabled: false
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": wait for jammer wrapper to arm'
+  ansible.builtin.slurp:
+    src: "/run/jammer-wrapper/{{ jammer_run_id }}.json"
+  register: jammer_wrapper_state
+  until: >
+    jammer_wrapper_state.content is defined and
+    (jammer_wrapper_state.content | b64decode | from_json).status
+    in ['armed', 'running', 'completed']
+  retries: 50
+  delay: 0.1
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": confirm continuous jammer is on'
   ansible.builtin.uri:
-    url: "http://127.0.0.1:5678/health"
+    url: "http://127.0.0.1:5678/status"
     method: GET
     status_code: 200
+    return_content: true
     timeout: 2
-  register: jammer_api_health
-  until: jammer_api_health.status == 200
-  retries: 30
-  delay: 1
-  become: true
-  delegate_to: 5g-core
-
-- name: '"{{ item.identifier }}": configure and start jammer wrapper'
-  block:
-    - name: '"{{ item.identifier }}": write jammer wrapper env'
-      ansible.builtin.copy:
-        dest: /etc/jammer-wrapper.env
-        owner: root
-        group: root
-        mode: "0644"
-        content: |
-          START_GAIN={{ item.jammer_config.start_gain }}
-          END_GAIN={{ item.jammer_config.end_gain }}
-          STEPS={{ item.jammer_config.steps }}
-          ON_DURATION={{ item.jammer_config.on_duration }}
-          OFF_DURATION={{ item.jammer_config.off_duration }}
-
-    - name: '"{{ item.identifier }}": reload systemd'
-      ansible.builtin.systemd:
-        daemon_reload: true
-
-    - name: '"{{ item.identifier }}": start jammer wrapper service'
-      ansible.builtin.systemd:
-        name: jammer-wrapper.service
-        state: restarted
-        enabled: false
-
-    - name: '"{{ item.identifier }}": wait briefly for jammer wrapper startup'
-      ansible.builtin.pause:
-        seconds: 2
-
-    - name: '"{{ item.identifier }}": check jammer wrapper service is active'
-      ansible.builtin.command:
-        cmd: systemctl is-active --quiet jammer-wrapper.service
-      changed_when: false
-
-    - name: '"{{ item.identifier }}": check jammer api health'
-      ansible.builtin.uri:
-        url: "http://127.0.0.1:5678/health"
-        method: GET
-        status_code: 200
-        timeout: 2
-
-    - name: '"{{ item.identifier }}": wait until jammer gain is applied'
-      ansible.builtin.uri:
-        url: "http://127.0.0.1:5678/status"
-        method: GET
-        status_code: 200
-        return_content: true
-        timeout: 2
-      register: jammer_status
-      until: >
-        jammer_status.json.gain_or_power is defined and
-        jammer_status.json.gain_or_power | float == item.jammer_config.start_gain | float
-      retries: 10
-      delay: 1
-
-  rescue:
-    - name: '"{{ item.identifier }}": show jammer wrapper status'
-      ansible.builtin.command:
-        cmd: systemctl status jammer-wrapper.service --no-pager
-      changed_when: false
-      failed_when: false
-      register: jammer_wrapper_status
-
-    - name: '"{{ item.identifier }}": show jammer wrapper journal'
-      ansible.builtin.command:
-        cmd: journalctl -u jammer-wrapper.service -n 80 --no-pager
-      changed_when: false
-      failed_when: false
-      register: jammer_wrapper_journal
-
-    - name: '"{{ item.identifier }}": print jammer diagnostics'
-      ansible.builtin.debug:
-        msg:
-          - "{{ jammer_wrapper_status.stdout_lines }}"
-          - "{{ jammer_wrapper_journal.stdout_lines }}"
-
-    - name: '"{{ item.identifier }}": fail because jammer wrapper is not running'
-      ansible.builtin.fail:
-        msg: "jammer-wrapper.service is not active"
-  become: true
+  register: jammer_status
+  until: >
+    jammer_status.json.muted is defined and
+    not jammer_status.json.muted and
+    jammer_status.json.gain_or_power | float == item.jammer_config.gain | float
+  retries: 20
+  delay: 0.1
+  ignore_errors: true
+  when: jammer_mode == 'continuous'
   delegate_to: 5g-core

@@ -1,0 +1,84 @@
+---
+
+- name: '"{{ item.identifier }}": calculate pulse train wait timeout'
+  ansible.builtin.set_fact:
+    jammer_wait_timeout_seconds: >-
+      {{
+        (
+          (
+            item.jammer_config.start_delay_ms | int
+            + ((item.jammer_config.pulse_count | int) * (item.jammer_config.on_duration_ms | int))
+            + (((item.jammer_config.pulse_count | int) - 1) * (item.jammer_config.off_duration_ms | int))
+            + item.jammer_config.end_delay_ms | int
+          ) / 1000
+        ) | round(0, 'ceil') | int + 5
+      }}
+  when: jammer_mode | default(item.jammer_config.mode | default('ramp')) == 'pulse_train'
+
+- name: '"{{ item.identifier }}": wait for pulse train completion'
+  ansible.builtin.command:
+    cmd: systemctl is-active jammer-wrapper.service
+  register: jammer_wrapper_activity
+  until: jammer_wrapper_activity.stdout in ['inactive', 'failed']
+  retries: "{{ jammer_wait_timeout_seconds | int }}"
+  delay: 1
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+  when: jammer_mode | default(item.jammer_config.mode | default('ramp')) == 'pulse_train'
+  become: true
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": stop jammer wrapper'
+  ansible.builtin.systemd:
+    name: jammer-wrapper.service
+    state: stopped
+  become: true
+  failed_when: false
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": force jammer off after traffic'
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:5678/off"
+    method: GET
+    status_code: 200
+    timeout: 2
+  failed_when: false
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": ensure local jammer artifact directory exists'
+  ansible.builtin.file:
+    path: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/"
+    state: directory
+  delegate_to: localhost
+
+- name: '"{{ item.identifier }}": fetch jammer transition log'
+  ansible.builtin.fetch:
+    src: "/tmp/jammer-{{ jammer_run_id }}.csv"
+    dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/jammer-transitions.csv"
+    flat: true
+    validate_checksum: false
+  failed_when: false
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": fetch jammer state'
+  ansible.builtin.fetch:
+    src: "/run/jammer-wrapper/{{ jammer_run_id }}.json"
+    dest: "{{ system.pcap_dump }}/{{ system.identifier }}/{{ item.identifier }}/jammer-state.json"
+    flat: true
+    validate_checksum: false
+  failed_when: false
+  delegate_to: 5g-core
+
+- name: '"{{ item.identifier }}": remove jammer runtime files'
+  ansible.builtin.file:
+    path: "{{ jammer_runtime_file }}"
+    state: absent
+  loop:
+    - "/tmp/jammer-{{ jammer_run_id }}.csv"
+    - "/run/jammer-wrapper/{{ jammer_run_id }}.json"
+  loop_control:
+    loop_var: jammer_runtime_file
+  failed_when: false
+  become: true
+  delegate_to: 5g-core

@@ -19,6 +19,7 @@
         - "{{ tg_adaptation }}"
         - "{{ tg_preloading }}"
         - "{{ tg_swiping }}"
+        - "{{ stream_logs}}"
       chdir: /home/{{ ansible_user_id }}
     environment:
       EMULATOR_APP_DIR: /home/{{ ansible_user_id }}/streamingapp
