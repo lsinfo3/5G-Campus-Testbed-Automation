@@ -6,6 +6,17 @@
 
 This repository presents the current state of the 5G testbed automation framework of the Chair of Communication Networks of the University of Wuerzburg.
 
+This framework is still under active development. Significant changes are therefore to be expected, and the documentation is not yet complete.
+
+If you are interested in using the framework, please contact Lukas ([lukas_kilian.schumann@uni-wuerzburg.de](mailto:lukas_kilian.schumann@uni-wuerzburg.de))
+or Simon ([simon.raffeck@uni-wuerzburg.de](mailto:simon.raffeck@uni-wuerzburg.de)) directly.
+We are happy to provide an introduction to the framework and help with the initial setup.
+
+If you use this framework for your own work, please consider citing the associated publication once it becomes available in Q3 2026:
+
+*Schumann, Lukas Kilian; Raffeck, Simon; Geißler, Stefan; Hoßfeld, Tobias (2026): “Towards Repeatable 5G Research: An Automated Configuration Framework for Private Networks,” in Mobilkommunikation; 30. ITG-Fachtagung, 2026, pp. ???–???.*
+
+
 ## Table of contents
 
 * [Testbed description](#testbed-description)
